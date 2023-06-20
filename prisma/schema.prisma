@@ -1,0 +1,206 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String
+  description String
+  products Product[]
+
+  @@map("product_categories")
+}
+
+model Product {
+  id          Int             @id @default(autoincrement())
+  name        String
+  description String
+  category    Category        @relation(fields: [category_id], references: [id], onDelete: Cascade)
+  category_id Int
+  date_created DateTime @default(now())
+  sizes       ProductSizes[]
+  colors      ProductColors[]
+  color_sizes ProductColorSizes[]
+  cart_products CartProducts[]
+  order_items      OrderItem[]
+
+  @@map("products")
+}
+
+model ProductSizes {
+  id             Int             @id @default(autoincrement())
+  label           String
+  price          Int
+  product        Product         @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  product_id     Int
+  color_sizes ProductColorSizes[]
+  order_items OrderItem[]
+  cart_products CartProducts[]
+
+  @@map("product_sizes")
+}
+
+model ProductColors {
+  id         Int          @id @default(autoincrement())
+  name      String
+  image_url  String
+  quantity   Int
+  product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  product_id Int
+  color_sizes ProductColorSizes[]
+  order_items OrderItem[]
+  cart_products CartProducts[]
+  @@map("product_colors")
+}
+
+model ProductColorSizes {
+  product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  product_id Int
+  color ProductColors @relation(fields: [color_id], references: [id], onDelete: Cascade)
+  color_id Int
+  size ProductSizes @relation(fields: [size_id], references: [id], onDelete: Cascade)
+  size_id Int
+
+  @@id([product_id, color_id, size_id])
+  @@map("product_sizes_colors")
+}
+
+model User {
+  id           Int             @id @default(autoincrement())
+  first_name   String
+  last_name    String
+  username     String
+  email        String          @unique
+  contact_no   String
+  address      String
+  postal_code  String
+  is_admin     Boolean         @default(false)
+  date_created DateTime        @default(now())
+  verified     Boolean         @default(false)
+  image_url    String?
+  password     UserPassword?
+  otp          UserOtp?
+  orders       Order[]
+  user_actions UserActionLog[]
+  cart         Cart?
+  payments     Payment[]
+  sales        Sales[]
+
+  @@map("users")
+}
+
+model UserPassword {
+  id Int @id @default(autoincrement())
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id Int @unique
+  password String
+
+  @@map("user_passwords")
+}
+
+model UserOtp {
+  id Int @id @default(autoincrement())
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id Int @unique
+  otp String
+  created_at DateTime @default(now())
+  expires_at DateTime
+
+  @@map("user_otp")
+}
+
+model UserActionLog {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id   Int
+  user_type String
+  action    String
+  date      DateTime @default(now())
+
+  @@map("user_logs")
+}
+
+model Cart {
+  id        Int        @id @default(autoincrement())
+  user      User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id   Int        @unique
+  cart_item CartProducts[]
+
+  @@map("carts")
+}
+
+model CartProducts {
+  id      Int  @id @default(autoincrement())
+  cart    Cart @relation(fields: [cart_id], references: [id], onDelete: Cascade)
+  cart_id Int
+  product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  product_id Int
+  size ProductSizes @relation(fields: [size_id], references: [id], onDelete: Cascade)
+  size_id Int
+  color ProductColors @relation(fields: [color_id], references: [id], onDelete: Cascade)
+  color_id Int
+  quantity Int
+
+  @@map("cart_products")
+}
+
+model Order {
+  id         Int      @id @default(autoincrement())
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id    Int
+  status     String   @default("pending")
+  date_created   DateTime @default(now())
+  date_completed DateTime?
+  payment    Payment[]
+  order_items OrderItem[]
+  sale       Sales[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id Int @id @default(autoincrement())
+  order Order @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  order_id Int
+  product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  product_id Int
+  size ProductSizes @relation(fields: [size_id], references: [id], onDelete: Cascade)
+  size_id Int
+  color ProductColors @relation(fields: [color_id], references: [id], onDelete: Cascade)
+  color_id Int
+  quantity Int
+
+  @@map("order_items")
+}
+
+model Payment {
+  id       Int    @id @default(autoincrement())
+  order    Order @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  order_id Int
+  user     User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id  Int
+  method   String
+  amount   Int
+  date DateTime @default(now())
+
+  @@map("payments")
+}
+
+model Sales {
+  id         Int      @id @default(autoincrement())
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id    Int
+  order      Order    @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  order_id   Int      @unique
+  date       DateTime @default(now())
+
+  @@map("sales")
+}
