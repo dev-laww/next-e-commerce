@@ -69,6 +69,7 @@ Database structure of the project.
 | Field      | Type       | Description            |
 |------------|------------|------------------------|
 | id         | `int`      | Order id               |
+| user_id    | `int`      | Order user id          |
 | status     | `string`   | Order status           |
 | created_at | `datetime` | Order creation date    |
 | updated_at | `datetime` | Order last update date |
@@ -106,6 +107,7 @@ Database structure of the project.
 | Field           | Type       | Description                     |
 |-----------------|------------|---------------------------------|
 | id              | `int`      | Payment Method id               |
+| user_id         | `int`      | Payment Method user id          |
 | name            | `string`   | Payment Method name             |
 | card_number     | `string`   | Payment Method card number      |
 | expiration_date | `string`   | Payment Method expiration date  |
@@ -127,6 +129,7 @@ Database structure of the project.
 | Field      | Type       | Description           |
 |------------|------------|-----------------------|
 | id         | `int`      | Cart id               |
+| user_id    | `int`      | Cart user id          |
 | created_at | `datetime` | Cart creation date    |
 | updated_at | `datetime` | Cart last update date |
 
@@ -147,6 +150,7 @@ Database structure of the project.
 | Field      | Type       | Description               |
 |------------|------------|---------------------------|
 | id         | `int`      | Wishlist id               |
+| user_id    | `int`      | Wishlist user id          |
 | created_at | `datetime` | Wishlist creation date    |
 | updated_at | `datetime` | Wishlist last update date |
 
