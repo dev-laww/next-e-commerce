@@ -1,4 +1,5 @@
 # Endpoints
+List of all the endpoints in the API.
 
 ## Table of Contents
 - [Auth](#auth)
