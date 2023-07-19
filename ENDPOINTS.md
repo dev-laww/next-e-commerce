@@ -5,6 +5,7 @@ List of all the endpoints in the API.
 - [Auth](#auth)
 - [Account](#account)
 - [Address](#address)
+- [Payment Methods](#payment-methods)
 - [Products](#products)
 - [Variants](#variants)
 - [Categories](#categories)
@@ -282,7 +283,7 @@ List of all the endpoints in the API.
                 }]
             }
             ```
-- `GET /address/{id}`: Get the details of a specific address
+- `GET /address/:id`: Get the details of a specific address
    - **Request**
         ```http request
         GET /address/1
@@ -346,7 +347,7 @@ List of all the endpoints in the API.
                 }
             }
             ```
-- `PUT /address/{id}`: Update an existing address
+- `PUT /address/:id`: Update an existing address
     - **Request**
         ```http request
         PUT /address/1
@@ -384,7 +385,7 @@ List of all the endpoints in the API.
                 }
             }
             ```
-- `DELETE /address/{id}`: Delete a specific address.
+- `DELETE /address/:id`: Delete a specific address.
     - **Request**:
         ```http request
         DELETE /address/1
@@ -398,6 +399,151 @@ List of all the endpoints in the API.
             {
                 "status": "success",
                 "message": "Address deleted successfully"
+            } 
+            ```
+          
+## Payment Methods
+- `GET /payment-methods`: Get a list of all products.
+    - **Request**:
+        ```http request
+        GET /payment-methods
+      
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+              "status": "success",
+              "data": [{
+                "id": 1,
+                "userId": 1,
+                "name": "John Doe",
+                "cardNumber": "1234567890123456",
+                "expirationMonth": "01",
+                "expirationYear": "2020",
+                "cvv": "123"
+              }, {
+                "id": 2,
+                "userId": 1,
+                "name": "John Doe",
+                "cardNumber": "1234567890123456",
+                "expirationMonth": "01",
+                "expirationYear": "2020",
+                "cvv": "123"
+              }]
+            }
+            ```
+- `GET /payment-methods/:id`: Get the details of a specific payment method.
+    - **Request**:
+        ```http request
+        GET /payment-methods/1
+        ```
+    - **Response**:
+        - Status: 20O OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Payment method created successfully",
+                "data": {
+                    "id": 1,
+                    "userId": 1,
+                    "name": "John Doe",
+                    "cardNumber": "1234567890123456",
+                    "expirationMonth": "01",
+                    "expirationYear": "2020",
+                    "cvv": "123"
+                }
+            } 
+            ```
+- `POST /payment-methods`: Create a new product
+    - **Request**:
+        ```http request
+        POST /payment-methods
+      
+        Authorization: Bearer <access_token>
+        Content-Type: application/json
+        
+        {
+            "id": 1,
+            "userId": 1,
+            "name": "New Name",
+            "cardNumber": "1234567890123456",
+            "expirationMonth": "01",
+            "expirationYear": "2020",
+            "cvv": "123"
+        }
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Payment method created successfully",
+                "data": {
+                    "id": "<id>",
+                    "userId": 1,
+                    "name": "New Name",
+                    "cardNumber": "1234567890123456",
+                    "expirationMonth": "01",
+                    "expirationYear": "2020",
+                    "cvv": "123"
+                }
+            }
+            ```
+- `PUT /payment-methods/:id`: Update the details of a specific product.
+    - **Request**:
+        ```http request
+        PUT /payment-methods
+      
+        Authorization: Bearer <access_token>
+        Content-Type: application/json
+        
+        {
+            "id": 1,
+            "userId": 1,
+            "name": "Updated Name",
+            "cardNumber": "1234567890123456",
+            "expirationMonth": "01",
+            "expirationYear": "2020",
+            "cvv": "123"
+        }
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Payment method updated successfully",
+                "data": {
+                    "id": 1,
+                    "userId": 1,
+                    "name": "Updated Name",
+                    "cardNumber": "1234567890123456",
+                    "expirationMonth": "01",
+                    "expirationYear": "2020",
+                    "cvv": "123"
+                }
+            }
+            ```
+- `DELETE /payment-methods/:id`: Delete a specific product.
+    - **Request**:
+        ```http request
+        DELETE /payment-methods/1
+      
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Payment method deleted successfully"
             } 
             ```
 
@@ -428,7 +574,7 @@ List of all the endpoints in the API.
               ]
             }
             ```
-- `GET /products/{id}`: Get the details of a specific product.
+- `GET /products/:id`: Get the details of a specific product.
     - **Request**:
         ```http request
         GET /products/1
@@ -439,7 +585,7 @@ List of all the endpoints in the API.
             ```json
             {
                 "status": "success",
-                "message": "User created successfully",
+                "message": "Product created successfully",
                 "data": {
                     "id": "1",
                     "name": "Product 1",
@@ -476,7 +622,7 @@ List of all the endpoints in the API.
                 }
             }
             ```
-- `PUT /products/{id}`: Update the details of a specific product.
+- `PUT /products/:id`: Update the details of a specific product.
     - **Request**:
         ```http request
         PUT /products/1
@@ -504,7 +650,7 @@ List of all the endpoints in the API.
                 }
             } 
             ```
-- `DELETE /products/{id}`: Delete a specific product.
+- `DELETE /products/:id`: Delete a specific product.
     - **Request**:
         ```http request
         DELETE /products/1
@@ -552,7 +698,7 @@ List of all the endpoints in the API.
                 }]
             } 
             ```
-- `GET /variants/{id}`: Get the details of a specific variant.
+- `GET /variants/:id`: Get the details of a specific variant.
      - **Request**
          ```http request
             GET /variants/1
@@ -609,7 +755,7 @@ List of all the endpoints in the API.
                 }
             } 
             ```
-- `PUT /variants/{id}`: Update the details of a specific variant. (admin-only)
+- `PUT /variants/:id`: Update the details of a specific variant. (admin-only)
     - **Request**
         ```http request
         PUT /variants/1
@@ -644,7 +790,7 @@ List of all the endpoints in the API.
                 } 
             }
             ```
-- `DELETE /variants/{id}`: Delete a specific variant. (admin-only)
+- `DELETE /variants/:id`: Delete a specific variant. (admin-only)
     - **Request**
         ```http request
         DELETE /variants/1
@@ -682,7 +828,7 @@ List of all the endpoints in the API.
                }]
             } 
             ```
-- `GET /categories/{id}`: Get the details of a specific category.
+- `GET /categories/:id`: Get the details of a specific category.
     - **Request**:
         ```http request
         GET /categories/1
@@ -724,7 +870,7 @@ List of all the endpoints in the API.
                }
             }
             ```
-- `PUT /categories/{id}`: Update the details of a specific category. (admin-only)
+- `PUT /categories/:id`: Update the details of a specific category. (admin-only)
     - **Request**:
         ```http request
         PUT /categories/1
@@ -749,7 +895,7 @@ List of all the endpoints in the API.
                }
             }
             ```
-- `DELETE /categories/{id}`: Delete a specific category. (admin-only)
+- `DELETE /categories/:id`: Delete a specific category. (admin-only)
     - **Request**:
         ```http request
         DELETE /categories/1
@@ -793,7 +939,7 @@ List of all the endpoints in the API.
                 }]
             }
             ```
-- `GET /orders/{id}`: Get the details of a specific order.
+- `GET /orders/:id`: Get the details of a specific order.
     - **Request**:
         ```http request
         GET /orders/1
@@ -842,7 +988,7 @@ List of all the endpoints in the API.
                 }
             }
             ```
-- `PUT /orders/{id}`: Update the details of a specific order.
+- `PUT /orders/:id`: Update the details of a specific order.
     - **Request**:
         ```http request
         PUT /orders/1
@@ -869,7 +1015,7 @@ List of all the endpoints in the API.
                 }
             }
             ```
-- `PUT /orders/{id}/cancel`: Cancel a specific order.
+- `PUT /orders/:id/cancel`: Cancel a specific order.
     - **Request**:
         ```http request
         PUT /orders/1/cancel
@@ -891,7 +1037,7 @@ List of all the endpoints in the API.
                 }
             }
             ```
-- `DELETE /orders/{id}`: Delete a specific order. (admin-only)
+- `DELETE /orders/:id`: Delete a specific order. (admin-only)
     - **Request**:
         ```http request
         DELETE /orders/1
@@ -933,7 +1079,7 @@ List of all the endpoints in the API.
                 }]
             }
             ```
-- `GET /payments/{id}`: Get the details of a specific payment.
+- `GET /payments/:id`: Get the details of a specific payment.
     - **Request**:
         ```http request
         GET /payments/1
@@ -980,7 +1126,7 @@ List of all the endpoints in the API.
                 }
             }
             ```
-- `PUT /payments/{id}`: Update the details of a specific payment.
+- `PUT /payments/:id`: Update the details of a specific payment.
     - **Request**:
         ```http request
         PUT /payments/1
@@ -1007,7 +1153,7 @@ List of all the endpoints in the API.
                 }
             }
             ```
-- `DELETE /payments/{id}`: Delete a specific payment. (admin-only)
+- `DELETE /payments/:id`: Delete a specific payment. (admin-only)
     - **Request**:
         ```http request
         DELETE /payments/1
@@ -1049,7 +1195,7 @@ List of all the endpoints in the API.
                 }]
             }
             ```
-- `GET /reviews/{id}`: Get the details of a specific review.
+- `GET /reviews/:id`: Get the details of a specific review.
     - **Request**:
         ```http request
        GET /reviews/1
@@ -1097,7 +1243,7 @@ List of all the endpoints in the API.
                 }
             }
             ```
-- `PUT /reviews/{id}`: Update the details of a specific review.
+- `PUT /reviews/:id`: Update the details of a specific review.
     - **Request**:
         ```http request
         PUT /reviews/1
@@ -1125,7 +1271,7 @@ List of all the endpoints in the API.
                 }
             }
             ```
-- `DELETE /reviews/{id}`: Delete a specific review.
+- `DELETE /reviews/:id`: Delete a specific review.
     - **Request**:
         ```http request
         DELETE /reviews/1
@@ -1165,7 +1311,7 @@ List of all the endpoints in the API.
                 }]
             }
             ```
-- `GET /shipping/methods/{id}`: Get the details of a specific shipping method.
+- `GET /shipping/methods/:id`: Get the details of a specific shipping method.
     - **Request**:
         ```http request
          GET /shipping/methods/1
@@ -1210,7 +1356,7 @@ List of all the endpoints in the API.
                 }
             }
             ```
-- `PUT /shipping/methods/{id}`: Update the details of a specific shipping method. (admin-only)
+- `PUT /shipping/methods/:id`: Update the details of a specific shipping method. (admin-only)
     - **Request**:
         ```http request
         PUT /shipping/methods/1
@@ -1237,7 +1383,7 @@ List of all the endpoints in the API.
                 }
             } 
             ```
-- `DELETE /shipping/methods/{id}`: Delete a specific shipping method. (admin-only)****
+- `DELETE /shipping/methods/:id`: Delete a specific shipping method. (admin-only)****
     - **Request**:
         ```http request
         DELETE /shipping/methods/1
@@ -1257,9 +1403,9 @@ List of all the endpoints in the API.
 ## Admin
 - `GET /admin/dashboard`: Get the dashboard information for the admin.
 - `GET /admin/users`: Get a list of all users (admin-only).
-- `GET /admin/users/{id}`: Get the details of a specific user (admin-only).
-- `PUT /admin/users/{id}`: Update the details of a specific user (admin-only).
-- `DELETE /admin/users/{id}`: Delete a specific user (admin-only).
+- `GET /admin/users/:id`: Get the details of a specific user (admin-only).
+- `PUT /admin/users/:id`: Update the details of a specific user (admin-only).
+- `DELETE /admin/users/:id`: Delete a specific user (admin-only).
 
 
 ## Wishlist
@@ -1278,13 +1424,13 @@ List of all the endpoints in the API.
                     "id": 1,
                     "name": "Product 1",
                     "price": 9.99,
-                    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                    "description": "Lorem ipsum dolor sit amet",
                     "image": "https://via.placeholder.com/150"
                 }, {
                     "id": 2,
                     "name": "Product 2",
                     "price": 19.99,
-                    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                    "description": "Lorem ipsum dolor sit amet",
                     "image": "https://via.placeholder.com/150"
                 }]
             }
@@ -1319,7 +1465,7 @@ List of all the endpoints in the API.
                 "message": "Product already in wishlist"
             }
             ```
-- `GET /wishlist/{id}`: Check if a product is in the user's wishlist.
+- `GET /wishlist/:id`: Check if a product is in the user's wishlist.
     - **Request**:
         ```http request
         GET /wishlist/1
@@ -1334,12 +1480,12 @@ List of all the endpoints in the API.
                     "id": 1,
                     "name": "Product 1",
                     "price": 9.99,
-                    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                    "description": "Lorem ipsum dolor sit amet",
                     "image": "https://via.placeholder.com/150"
                 }
             }
             ```
-- `DELETE /wishlist/{id}`: Remove a product from the user's wishlist.
+- `DELETE /wishlist/:id`: Remove a product from the user's wishlist.
     - **Request**:
         ```http request
         DELETE /wishlist/1
@@ -1391,14 +1537,14 @@ List of all the endpoints in the API.
                     "name": "Product 1",
                     "price": 9.99,
                     "quantity": 1,
-                    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                    "description": "Lorem ipsum dolor sit amet",
                     "image": "https://via.placeholder.com/150"
                 }, {
                     "id": 2,
                     "name": "Product 2",
                     "price": 19.99,
                     "quantity": 2,
-                    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                    "description": "Lorem ipsum dolor sit amet",
                     "image": "https://via.placeholder.com/150"
                 }]
             }
@@ -1425,7 +1571,7 @@ List of all the endpoints in the API.
                 "message": "Product added to cart successfully"
             } 
             ```
-- `PUT /cart/{id}`: Update the quantity of a product in the user's shopping cart.
+- `PUT /cart/:id`: Update the quantity of a product in the user's shopping cart.
     - **Request**:
         ```http request
         PUT /cart/1
@@ -1449,12 +1595,12 @@ List of all the endpoints in the API.
                     "name": "Product 2",
                     "price": 19.99,
                     "quantity": 2,
-                    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                    "description": "Lorem ipsum dolor sit amet",
                     "image": "https://via.placeholder.com/150"
                 }
             } 
             ```
-- `DELETE /cart/{id}`: Remove a product from the user's shopping cart.
+- `DELETE /cart/:id`: Remove a product from the user's shopping cart.
     - **Request**:
         ```http request
         DELETE /cart/1
