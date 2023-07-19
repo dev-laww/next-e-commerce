@@ -4,18 +4,25 @@ List of all the endpoints in the API.
 ## Table of Contents
 - [Auth](#auth)
 - [Account](#account)
+- [Roles](#roles)
+- [Permissions](#permissions)
+- [Role Permissions](#role-permissions)
+- [User Roles ](#user-permissions)
 - [Address](#address)
 - [Payment Methods](#payment-methods)
 - [Products](#products)
-- [Variants](#variants)
+- [Product Variants](#product-variants)
 - [Categories](#categories)
 - [Orders](#orders)
+- [Order Items](#order-items)
 - [Payments](#payments)
 - [Reviews](#reviews)
 - [Shipping](#shipping)
 - [Admin](#admin)
 - [Wishlist](#wishlist)
+- [Wishlist Items](#wishlist-items)
 - [Cart](#cart)
+- [Cart Items](#cart-items)
 - [Coupons](#coupons)
 - [Common Response](#common-response)
 - [Notes](#notes)
@@ -31,6 +38,8 @@ List of all the endpoints in the API.
         {
             "name": "John Doe",
             "email": "john.doe@example.com",
+            "username": "johndoe",
+            "profile_picture": "https://example.com/profile.jpg",
             "password": "secretpassword"
         }
         ```
@@ -44,6 +53,8 @@ List of all the endpoints in the API.
                 "data": {
                     "id": "<id>",
                     "name": "John Doe",
+                    "username": "johndoe",
+                    "profile_picture": "https://example.com/profile.jpg",
                     "email": "johndoe@mail.com"
                 }
             } 
@@ -54,11 +65,12 @@ List of all the endpoints in the API.
             ```json
             {
               "status": "fail",
-              "message": "Email already exists"
+              "message": "Email or username already exists"
             }
             ```
     
 - `POST /auth/login`: Login to an existing user account.
+    - NOTE: Username can be used instead of email.
     - **Request**:
         ```http request
         POST /auth/login
@@ -105,6 +117,7 @@ List of all the endpoints in the API.
          }
         ```
 - `POST /auth/reset-password`: Send a password reset token to the user's email.
+    - NOTE: Username can be used instead of email.
     - **Request**:
         ```http request
         POST /auth/reset-password
@@ -667,11 +680,11 @@ List of all the endpoints in the API.
             } 
             ```
           
-## Variants
-- `GET /variants`: Get a list of all variants.
+## Product Variants
+- `GET /products/:id/variants`: Get a list of all variants.
     - **Request**:
         ```http request
-        GET /variants
+        GET /products/:id/variants
         ```
     - **Response**:
         - Status: 200 OK
@@ -698,10 +711,10 @@ List of all the endpoints in the API.
                 }]
             } 
             ```
-- `GET /variants/:id`: Get the details of a specific variant.
+- `GET /products/:id/variants/:variant_id`: Get the details of a specific variant.
      - **Request**
          ```http request
-            GET /variants/1
+         GET /products/:id/variants/1
          ```
      - **Response**
         - Status: 200 OK
@@ -720,10 +733,10 @@ List of all the endpoints in the API.
                 }
             } 
             ```
-- `POST /variants`: Create a new variant. (admin-only)
+- `POST /products/:id/variants`: Create a new variant. (admin-only)
     - **Request**
         ```http request
-        POST /variants
+        POST /products/:id/variants
         
         Authorization: Bearer <access_token>
         Content-Type: application/json
@@ -755,10 +768,10 @@ List of all the endpoints in the API.
                 }
             } 
             ```
-- `PUT /variants/:id`: Update the details of a specific variant. (admin-only)
+- `PUT /products/:id/variants/:variant_id`: Update the details of a specific variant. (admin-only)
     - **Request**
         ```http request
-        PUT /variants/1
+        PUT /products/:id/variants/1
         
         Authorization: Bearer <access_token>
         Content-Type: application/json
@@ -790,10 +803,10 @@ List of all the endpoints in the API.
                 } 
             }
             ```
-- `DELETE /variants/:id`: Delete a specific variant. (admin-only)
+- `DELETE /products/:id/variants/:variant_id`: Delete a specific variant. (admin-only)
     - **Request**
         ```http request
-        DELETE /variants/1
+        DELETE /products/:id/variants/1
       
         Authorization: Bearer <access_token>
         ```
@@ -929,11 +942,16 @@ List of all the endpoints in the API.
                 "data": [{
                     "id": 1,
                     "order_number": "ORD-001",
+                    "shipping_address_id": 1,
+                    "shipping_method_id": 1,
                     "total_amount": 99.99,
                     "status": "Processing"
                 }, {
                     "id": 2,
                     "order_number": "ORD-002",
+                    "payment_id": 2,
+                    "shipping_address_id": 2,
+                    "shipping_method_id": 2,
                     "total_amount": 79.99,
                     "status": "Delivered"
                 }]
@@ -955,6 +973,8 @@ List of all the endpoints in the API.
                 "data": {
                     "id": 1,
                     "order_number": "ORD-001",
+                    "shipping_address_id": 1,
+                    "shipping_method_id": 1,
                     "total_amount": 99.99,
                     "status": "Processing"
                 }
@@ -969,6 +989,9 @@ List of all the endpoints in the API.
         Content-Type: application/json
         
         {
+            "payment_id": 1,
+            "shipping_address_id": 1,
+            "shipping_method_id": 1,
             "total_amount": 119.99,
             "status": "Processing"
         }
@@ -983,6 +1006,8 @@ List of all the endpoints in the API.
                 "data": {
                     "id": 3,
                     "order_number": "ORD-003",
+                    "shipping_address_id": 1,
+                    "shipping_method_id": 1,
                     "total_amount": 119.99,
                     "status": "Processing"
                 }
@@ -1010,6 +1035,8 @@ List of all the endpoints in the API.
                 "data": {
                 "id": 1,
                     "order_number": "ORD-001",
+                    "shipping_address_id": 1,
+                    "shipping_method_id": 1,
                     "total_amount": 89.99,
                     "status": "Delivered"
                 }
@@ -1032,6 +1059,8 @@ List of all the endpoints in the API.
                 "data": {
                 "id": 1,
                     "order_number": "ORD-001",
+                    "shipping_address_id": 1,
+                    "shipping_method_id": 1,
                     "total_amount": 89.99,
                     "status": "Cancelled"
                 }
@@ -1148,6 +1177,8 @@ List of all the endpoints in the API.
                 "message": "Payment updated successfully",
                 "data": {
                       "id": 1,
+                      "orderId": 1,
+                      "method_id": 1,
                       "amount": 89.99,
                       "status": "Refunded"
                 }
@@ -1289,10 +1320,10 @@ List of all the endpoints in the API.
             ```
 
 ## Shipping
-- `GET /shipping/methods`: Get a list of available shipping methods.
+- `GET /shipping-methods`: Get a list of available shipping methods.
     - **Request**:
         ```http request
-        GET /shipping/methods
+        GET /shipping-methods
         ```
     - **Response**:
         - Status: 200 OK
@@ -1311,10 +1342,10 @@ List of all the endpoints in the API.
                 }]
             }
             ```
-- `GET /shipping/methods/:id`: Get the details of a specific shipping method.
+- `GET /shipping-methods/:id`: Get the details of a specific shipping method.
     - **Request**:
         ```http request
-         GET /shipping/methods/1
+         GET /shipping-methods/1
         ```
     - **Response**:
         - Status: 200 OK
@@ -1329,10 +1360,10 @@ List of all the endpoints in the API.
                 }
             } 
             ```
-- `POST /shipping/methods`: Create a new shipping method. (admin-only)
+- `POST /shipping-methods`: Create a new shipping method. (admin-only)
     - **Request**:
         ```http request
-        POST /shipping/methods
+        POST /shipping-methods
       
         Authorization: Bearer <access_token>
         Content-Type: application/json
@@ -1356,10 +1387,10 @@ List of all the endpoints in the API.
                 }
             }
             ```
-- `PUT /shipping/methods/:id`: Update the details of a specific shipping method. (admin-only)
+- `PUT /shipping-methods/:id`: Update the details of a specific shipping method. (admin-only)
     - **Request**:
         ```http request
-        PUT /shipping/methods/1
+        PUT /shipping-methods/1
       
         Authoriztion: Bearer <access_token>
         Content-Type: application/json
@@ -1383,10 +1414,10 @@ List of all the endpoints in the API.
                 }
             } 
             ```
-- `DELETE /shipping/methods/:id`: Delete a specific shipping method. (admin-only)****
+- `DELETE /shipping-methods/:id`: Delete a specific shipping method. (admin-only)****
     - **Request**:
         ```http request
-        DELETE /shipping/methods/1
+        DELETE /shipping-methods/1
       
         Authorization: Bearer <access_token>
         ```
@@ -1650,10 +1681,14 @@ List of all the endpoints in the API.
                 "data": [{
                     "id": 1,
                     "code": "COUPON1",
+                    "type": "percentage",
+                    "expired_at": "2021-01-01 00:00:00",
                     "discount": 10
                 }, {
                     "id": 2,
                     "code": "COUPON2",
+                    "type": "percentage",
+                    "expired_at": "2021-01-01 00:00:00",
                     "discount": 20
                 }]
             } 
@@ -1674,6 +1709,8 @@ List of all the endpoints in the API.
                 "data": {
                     "id": 1,
                     "code": "COUPON1",
+                    "type": "percentage",
+                    "expired_at": "2021-01-01 00:00:00",
                     "discount": 10
                 }
             }
@@ -1688,6 +1725,8 @@ List of all the endpoints in the API.
         
         {
             "code": "COUPON1",
+            "expired_at": "2021-01-01 00:00:00",
+            "type": "percentage",
             "discount": 10
         }
         ```
@@ -1701,6 +1740,8 @@ List of all the endpoints in the API.
                 "data": {
                     "id": 1,
                     "code": "COUPON1",
+                    "type": "percentage",
+                    "expired_at": "2021-01-01 00:00:00",
                     "discount": 10
                 }
             }
@@ -1714,6 +1755,8 @@ List of all the endpoints in the API.
         Content-Type: application/json
         
         {
+            "expired_at": "2021-01-01 00:00:00",
+            "type": "percentage",
             "discount": 20
         }
         ```
@@ -1727,6 +1770,8 @@ List of all the endpoints in the API.
                 "data": {
                     "id": 1,
                     "code": "COUPON1",
+                    "type": "percentage",
+                    "expired_at": "2021-01-01 00:00:00",
                     "discount": 20
                 }
             }
