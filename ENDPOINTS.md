@@ -3,7 +3,9 @@
 ## Table of Contents
 - [Auth](#auth)
 - [Account](#account)
+- [Address](#address)
 - [Products](#products)
+- [Variants](#variants)
 - [Categories](#categories)
 - [Orders](#orders)
 - [Payments](#payments)
@@ -13,6 +15,8 @@
 - [Wishlist](#wishlist)
 - [Cart](#cart)
 - [Coupons](#coupons)
+- [Common Response](#common-response)
+- [Notes](#notes)
 
 ## Auth
 - `POST /auth/signup`: Create a new user account.
@@ -98,15 +102,6 @@
              "message": "User logged out successfully"
          }
         ```
-    - **Error Response**
-        - Status: 401 UNAUTHORIZED
-        - Body:
-            ```json
-            {
-                "status": "fail",
-                "message": "Unauthorized. Please login"
-            }
-            ```
 - `POST /auth/reset-password`: Send a password reset token to the user's email.
     - **Request**:
         ```http request
@@ -248,6 +243,163 @@
             }
             ```
 
+## Address
+- `GET /address`: Get a list of all addresses for the current user
+    - NOTE: If the user is an admin, this will return all addresses for all users.
+    - **Request**
+        ```http request
+        GET /address
+        
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "data": [{
+                   "id": 1,
+                   "userId": 1,
+                   "name": "John Doe",
+                   "address": "123 Main St",
+                   "city": "New York",
+                   "state": "NY",
+                   "zip": "10001",
+                   "country": "US",
+                   "phone": "1234567890"
+                }, {
+                   "id": 2,
+                   "userId": 1,
+                   "name": "Jane Doe",
+                   "address": "123 Main St",
+                   "city": "New York",
+                   "state": "NY",
+                   "zip": "10001",
+                   "country": "US",
+                   "phone": "1234567890"
+                }]
+            }
+            ```
+- `GET /address/{id}`: Get the details of a specific address
+   - **Request**
+        ```http request
+        GET /address/1
+        
+        Authorization: Bearer <access_token>
+        ```
+   - **Response**
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "data": {
+                   "id": 1,
+                   "userId": 1,
+                   "name": "John Doe",
+                   "address": "123 Main St",
+                   "city": "New York",
+                   "state": "NY",
+                   "zip": "10001",
+                   "country": "US",
+                   "phone": "1234567890"
+                }
+            }
+            ```
+- `POST /address`: Create a new address
+    - **Request**
+        ```http request
+        POST /address
+        
+        Authorization: Bearer <access_token>
+        Content-Type: application/json
+      
+        {
+            "name": "John Doe",
+            "address": "123 Main St",
+            "city": "New York",
+            "state": "NY",
+            "zip": "10001",
+            "country": "US",
+            "phone": "1234567890"
+        }
+        ```
+    - **Response**
+        - Status: 201 CREATED
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Address created successfully",
+                "data": {
+                   "id": "<id>",
+                   "userId": 1,
+                   "name": "John Doe",
+                   "address": "123 Main St",
+                   "city": "New York",
+                   "state": "NY",
+                   "zip": "10001",
+                   "country": "US",
+                   "phone": "1234567890"
+                }
+            }
+            ```
+- `PUT /address/{id}`: Update an existing address
+    - **Request**
+        ```http request
+        PUT /address/1
+        
+        Authorization: Bearer <access_token>
+        Content-Type: application/json
+      
+        {
+            "name": "John Doe",
+            "address": "123 Main St",
+            "city": "New York",
+            "state": "NY",
+            "zip": "10001",
+            "country": "US",
+            "phone": "1234567890"
+        }
+        ```
+    - **Response**
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Address updated successfully",
+                "data": {
+                   "id": 1,
+                   "userId": 1,
+                   "name": "John Doe",
+                   "address": "123 Main St",
+                   "city": "New York",
+                   "state": "NY",
+                   "zip": "10001",
+                   "country": "US",
+                   "phone": "1234567890"
+                }
+            }
+            ```
+- `DELETE /address/{id}`: Delete a specific address.
+    - **Request**:
+        ```http request
+        DELETE /address/1
+      
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Address deleted successfully"
+            } 
+            ```
+
 ## Products
 - `GET /products`: Get a list of all products.
     - **Request**:
@@ -264,13 +416,11 @@
                {
                   "id": 1,
                   "name": "Product 1",
-                  "price": 29.99,
                   "description": "Sample description",
                   "image": "https://example.com/image.jpg"
                }, {
                   "id": 2,
                   "name": "Product 2",
-                  "price": 39.99,
                   "description": "Sample description",
                   "image": "https://example.com/image.jpg"
                }
@@ -292,13 +442,12 @@
                 "data": {
                     "id": "1",
                     "name": "Product 1",
-                    "price": 29.99,
                     "description": "Sample description",
                     "image": "https://example.com/image.jpg"
                 }
             } 
             ```
-- `POST /products`: Create a new product/
+- `POST /products`: Create a new product
     - **Request**:
         ```http request
         POST /products
@@ -308,7 +457,6 @@
         
         {
             "name": "New Product",
-            "price": 49.99,
             "description": "Sample description"
         }
         ```
@@ -322,7 +470,6 @@
                 "data": {
                     "id": "<id>",
                     "name": "Product 1",
-                    "price": 29.99,
                     "description": "Sample description",
                     "image": "https://example.com/image.jpg"
                 }
@@ -338,7 +485,6 @@
         
         {
            "name": "Updated Product",
-           "price": 39.99,
            "description": "Updated Description"
            "image": "https://example.com/image.jpg"
         }
@@ -348,14 +494,13 @@
         - Body:
             ```json
             {
-              "status": "success",
-              "message": "Product updated successfully",
-              "data": {
-                "id": "<id>",
-                "name": "Updated Product",
-                "price": 39.99,
-                "description": "Updated Description"
-              }
+                "status": "success",
+                "message": "Product updated successfully",
+                "data": {
+                    "id": "<id>",
+                    "name": "Updated Product",
+                    "description": "Updated Description"
+                }
             } 
             ```
 - `DELETE /products/{id}`: Delete a specific product.
@@ -370,8 +515,148 @@
         - Body:
             ```json
             {
-              "status": "success",
-              "message": "Product deleted successfully"
+                "status": "success",
+                "message": "Product deleted successfully"
+            } 
+            ```
+          
+## Variants
+- `GET /variants`: Get a list of all variants.
+    - **Request**:
+        ```http request
+        GET /variants
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "data": [{
+                    "id": 1,
+                    "name": "Variant 1",
+                    "price": 199.99,
+                    "rawPrice": 150.99,
+                    "productId": 1,
+                    "quantity": 10,
+                    "sold": 0
+                }, {
+                    "id": 2,
+                    "name": "Variant 2",
+                    "price": 199.99,
+                    "rawPrice": 150.99,
+                    "productId": 1,
+                    "quantity": 10,
+                    "sold": 0
+                }]
+            } 
+            ```
+- `GET /variants/{id}`: Get the details of a specific variant.
+     - **Request**
+         ```http request
+            GET /variants/1
+         ```
+     - **Response**
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "data": {
+                    "id": 1,
+                    "name": "Variant 1",
+                    "price": 199.99,
+                    "rawPrice": 150.99,
+                    "productId": 1,
+                    "quantity": 10,
+                    "sold": 0
+                }
+            } 
+            ```
+- `POST /variants`: Create a new variant. (admin-only)
+    - **Request**
+        ```http request
+        POST /variants
+        
+        Authorization: Bearer <access_token>
+        Content-Type: application/json
+      
+        {
+            "name": "Variant 1",
+            "price": 199.99,
+            "rawPrice": 150.99,
+            "productId": 1,
+            "quantity": 10,
+            "sold": 0
+        }
+        ```
+    - **Response**
+        - Status: 201 CREATED
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Variant created successfully",
+                "data": {
+                    "id": "<id>",
+                    "name": "Variant 1",
+                    "price": 199.99,
+                    "rawPrice": 150.99,
+                    "productId": 1,
+                    "quantity": 10,
+                    "sold": 0
+                }
+            } 
+            ```
+- `PUT /variants/{id}`: Update the details of a specific variant. (admin-only)
+    - **Request**
+        ```http request
+        PUT /variants/1
+        
+        Authorization: Bearer <access_token>
+        Content-Type: application/json
+      
+        {
+            "name": "Updated Variant",
+            "price": 199.99,
+            "rawPrice": 150.99,
+            "productId": 1,
+            "quantity": 10,
+            "sold": 0
+        }
+        ```
+    - **Response**
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Variant updated successfully",
+                "data": {
+                    "id": 1,
+                    "name": "Updated Variant",
+                    "price": 199.99,
+                    "rawPrice": 150.99,
+                    "productId": 1,
+                    "quantity": 10,
+                    "sold": 0
+                } 
+            }
+            ```
+- `DELETE /variants/{id}`: Delete a specific variant. (admin-only)
+    - **Request**
+        ```http request
+        DELETE /variants/1
+      
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Variant deleted successfully"
             } 
             ```
 
@@ -406,14 +691,14 @@
         - Body:
             ```json
             {
-              "status": "success",
-              "data": {
-                 "id": 1,
-                 "name": "Category 1"
-              }
+                "status": "success",
+                "data": {
+                   "id": 1,
+                   "name": "Category 1"
+                }
             } 
             ```
-- `POST /categories`: Create a new category. (admin)
+- `POST /categories`: Create a new category. (admin-only)
     - **Request**:
         ```http request
         POST /categories
@@ -438,7 +723,7 @@
                }
             }
             ```
-- `PUT /categories/{id}`: Update the details of a specific category. (admin)
+- `PUT /categories/{id}`: Update the details of a specific category. (admin-only)
     - **Request**:
         ```http request
         PUT /categories/1
@@ -451,7 +736,7 @@
         }
         ```
     - **Response**:
-        - Status: 201 CREATED
+        - Status: 200 OK
         - Body:
             ```json
             {
@@ -463,7 +748,7 @@
                }
             }
             ```
-- `DELETE /categories/{id}`: Delete a specific category. (admin)
+- `DELETE /categories/{id}`: Delete a specific category. (admin-only)
     - **Request**:
         ```http request
         DELETE /categories/1
@@ -605,7 +890,7 @@
                 }
             }
             ```
-- `DELETE /orders/{id}`: Delete a specific order. (admin)
+- `DELETE /orders/{id}`: Delete a specific order. (admin-only)
     - **Request**:
         ```http request
         DELETE /orders/1
@@ -721,7 +1006,7 @@
                 }
             }
             ```
-- `DELETE /payments/{id}`: Delete a specific payment. (admin)
+- `DELETE /payments/{id}`: Delete a specific payment. (admin-only)
     - **Request**:
         ```http request
         DELETE /payments/1
@@ -897,7 +1182,7 @@
                 }
             } 
             ```
-- `POST /shipping/methods`: Create a new shipping method. (admin)
+- `POST /shipping/methods`: Create a new shipping method. (admin-only)
     - **Request**:
         ```http request
         POST /shipping/methods
@@ -924,7 +1209,7 @@
                 }
             }
             ```
-- `PUT /shipping/methods/{id}`: Update the details of a specific shipping method. (admin)
+- `PUT /shipping/methods/{id}`: Update the details of a specific shipping method. (admin-only)
     - **Request**:
         ```http request
         PUT /shipping/methods/1
@@ -951,7 +1236,7 @@
                 }
             } 
             ```
-- `DELETE /shipping/methods/{id}`: Delete a specific shipping method. (admin)
+- `DELETE /shipping/methods/{id}`: Delete a specific shipping method. (admin-only)****
     - **Request**:
         ```http request
         DELETE /shipping/methods/1
@@ -1202,8 +1487,7 @@
             ```
 
 ## Coupons
-(Admin only)
-- `GET /coupons`: Get a list of all available coupons.
+- `GET /coupons`: Get a list of all available coupons. (admin-only)
     - **Request**:
         ```http request
         GET /coupons
@@ -1247,7 +1531,7 @@
                 }
             }
             ```
-- `POST /coupons`: Create a new coupon.
+- `POST /coupons`: Create a new coupon. (admin-only)
     - **Request**:
         ```http request
         POST /coupons
@@ -1274,7 +1558,7 @@
                 }
             }
             ```
-- `PUT /coupons/{code}`: Update the details of a specific coupon.
+- `PUT /coupons/{code}`: Update the details of a specific coupon. (admin-only)
     - **Request**:
         ```http request
         PUT /coupons/COUPON1
@@ -1300,7 +1584,7 @@
                 }
             }
             ```
-- `DELETE /coupons/{code}`: Delete a specific coupon.
+- `DELETE /coupons/{code}`: Delete a specific coupon. (admin-only)
     - **Request**:
         ```http request
         DELETE /coupons/COUPON1
@@ -1345,3 +1629,53 @@
                 }]
             }
             ```
+## Common Response
+- Status: 401 UNAUTHORIZED
+    ```json
+    {
+        "status": "error",
+        "message": "Unauthenticated. Please login"
+    }
+    ```
+- Status: 403 FORBIDDEN
+    ```json
+    {
+        "status": "error",
+        "message": "Forbidden"
+    }
+    ```
+- Status: 404 NOT FOUND
+    ```json
+    {
+        "status": "error",
+        "message": "Not found"
+    }
+    ```
+- Status: 422 UNPROCESSABLE ENTITY
+    ```json
+    {
+        "status": "error",
+        "message": "The given data was invalid.",
+        "errors": {
+            "email": [
+                "The email field is required."
+            ],
+            "password": [
+                "The password field is required."
+            ]
+        }
+    }
+    ```
+- Status: 500 INTERNAL SERVER ERROR
+    ```json
+    {
+        "status": "error",
+        "message": "Internal server error"
+    }
+    ```
+  
+## Notes
+- All endpoints are prefixed with `/api`.
+- All list endpoints are paginated.
+- All list endpoints must include filters and/or search.
+- All endpoints that require authentication must include the `Authorization` header with the value `Bearer <access_token>`.
