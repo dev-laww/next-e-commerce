@@ -54,3 +54,7 @@ pnpm dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 
+### NOTE: This project is still a work in progress. I will be adding more features and functionality in the future.
+- See [Documentation](./docs/README.md) for more information.
+
+
