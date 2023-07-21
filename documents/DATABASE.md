@@ -19,9 +19,8 @@ Database structure of the project.
 - [Order Item](#order-item)
 - [Payment](#payment)
 - [Category](#category)
-- [Cart](#cart)
+- [Product Category](#product-category)
 - [Cart Item](#cart-item)
-- [Wishlist](#wishlist)
 - [Wishlist Item](#wishlist-item)
 - [Coupon](#coupon)
 - [Log](#log)
@@ -41,12 +40,13 @@ Database structure of the project.
 
 ## Role
 
-| Field      | Type       | Description           |
-|------------|------------|-----------------------|
-| id         | `int`      | Role id               |
-| name       | `string`   | Role name             |
-| created_at | `datetime` | Role creation date    |
-| updated_at | `datetime` | Role last update date |
+| Field       | Type       | Description           |
+|-------------|------------|-----------------------|
+| id          | `int`      | Role id               |
+| name        | `string`   | Role name             |
+| description | `string`   | Role description      |
+| created_at  | `datetime` | Role creation date    |
+| updated_at  | `datetime` | Role last update date |
 
 ## User Role
 
@@ -60,12 +60,13 @@ Database structure of the project.
 
 ## Permission
 
-| Field      | Type       | Description                 |
-|------------|------------|-----------------------------|
-| id         | `int`      | Permission id               |
-| name       | `string`   | Permission name             |
-| created_at | `datetime` | Permission creation date    |
-| updated_at | `datetime` | Permission last update date |
+| Field       | Type       | Description                 |
+|-------------|------------|-----------------------------|
+| id          | `int`      | Permission id               |
+| name        | `string`   | Permission name             |
+| description | `string`   | Permission description      |
+| created_at  | `datetime` | Permission creation date    |
+| updated_at  | `datetime` | Permission last update date |
 
 ## Role Permission
 
@@ -81,6 +82,7 @@ Database structure of the project.
 | Field      | Type       | Description              |
 |------------|------------|--------------------------|
 | id         | `int`      | Address id               |
+| user_id    | `int`      | Address user id          |
 | name       | `string`   | Address name             |
 | address    | `string`   | Address address          |
 | city       | `string`   | Address city             |
@@ -142,6 +144,9 @@ Database structure of the project.
 | Field      | Type       | Description             |
 |------------|------------|-------------------------|
 | id         | `int`      | Review id               |
+| user_id    | `int`      | Review user id          |
+| product_id | `int`      | Review product id       |
+| variant_id | `int`      | Review variant id       |
 | rating     | `int`      | Review rating           |
 | comment    | `string`   | Review comment          |
 | created_at | `datetime` | Review creation date    |
@@ -195,14 +200,15 @@ Database structure of the project.
 | created_at | `datetime` | Category creation date    |
 | updated_at | `datetime` | Category last update date |
 
-## Cart
+## Product Category
 
-| Field      | Type       | Description           |
-|------------|------------|-----------------------|
-| id         | `int`      | Cart id               |
-| user_id    | `int`      | Cart user id          |
-| created_at | `datetime` | Cart creation date    |
-| updated_at | `datetime` | Cart last update date |
+| Field       | Type       | Description                       |
+|-------------|------------|-----------------------------------|
+| id          | `int`      | Product Category id               |
+| product_id  | `int`      | Product Category product id       |
+| category_id | `int`      | Product Category category id      |
+| created_at  | `datetime` | Product Category creation date    |
+| updated_at  | `datetime` | Product Category last update date |
 
 ## Cart Item
 
@@ -211,29 +217,20 @@ Database structure of the project.
 | id         | `int`      | Cart Item id               |
 | quantity   | `int`      | Cart Item quantity         |
 | product_id | `int`      | Cart Item product id       |
-| cart_id    | `int`      | Cart Item cart id          |
+| user_id    | `int`      | Cart Item user id          |
 | variant_id | `int`      | Cart Item variant id       |
 | created_at | `datetime` | Cart Item creation date    |
 | updated_at | `datetime` | Cart Item last update date |
 
-## Wishlist
-
-| Field      | Type       | Description               |
-|------------|------------|---------------------------|
-| id         | `int`      | Wishlist id               |
-| user_id    | `int`      | Wishlist user id          |
-| created_at | `datetime` | Wishlist creation date    |
-| updated_at | `datetime` | Wishlist last update date |
-
 ## Wishlist Item
 
-| Field       | Type       | Description                    |
-|-------------|------------|--------------------------------|
-| id          | `int`      | Wishlist Item id               |
-| product_id  | `int`      | Wishlist Item product id       |
-| wishlist_id | `int`      | Wishlist Item wishlist id      |
-| created_at  | `datetime` | Wishlist Item creation date    |
-| updated_at  | `datetime` | Wishlist Item last update date |
+| Field      | Type       | Description                    |
+|------------|------------|--------------------------------|
+| id         | `int`      | Wishlist Item id               |
+| product_id | `int`      | Wishlist Item product id       |
+| user_id    | `int`      | Wishlist Item user id          |
+| created_at | `datetime` | Wishlist Item creation date    |
+| updated_at | `datetime` | Wishlist Item last update date |
 
 ## Coupon
 
@@ -252,5 +249,6 @@ Database structure of the project.
 | Field      | Type       | Description       |
 |------------|------------|-------------------|
 | id         | `int`      | Log id            |
+| level      | `string`   | Log level         |
 | message    | `string`   | Log message       |
 | created_at | `datetime` | Log creation date |
