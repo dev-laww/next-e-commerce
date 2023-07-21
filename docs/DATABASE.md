@@ -30,10 +30,11 @@ Database structure of the project.
 | Field      | Type       | Description                    |
 |------------|------------|--------------------------------|
 | id         | `int`      | User id                        |
+| first_name | `string`   | User first name                |
+| last_name  | `string`   | User last name                 |
 | username   | `string`   | User username                  |
 | email      | `string`   | User email                     |
 | password   | `string`   | User password                  |
-| role       | `string`   | User role                      |
 | confirmed  | `boolean`  | User email confirmation status |
 | created_at | `datetime` | User creation date             |
 | updated_at | `datetime` | User last update date          |
@@ -122,6 +123,7 @@ Database structure of the project.
 |------------|------------|----------------------------------|
 | id         | `int`      | Product variant id               |
 | name       | `string`   | Product variant name             |
+| image      | `string`   | Product variant image            |
 | stock      | `int`      | Product variant stock            |
 | product_id | `int`      | Product variant product id       |
 | price      | `real`     | Product variant price            |
@@ -185,6 +187,7 @@ Database structure of the project.
 |------------|------------|--------------------------|
 | id         | `int`      | Payment id               |
 | amount     | `real`     | Payment amount           |
+| user_id    | `int`      | Payment user id          |
 | order_id   | `int`      | Payment order id         |
 | method_id  | `int`      | Payment method id        |
 | status     | `string`   | Payment status           |
@@ -212,15 +215,16 @@ Database structure of the project.
 
 ## Cart Item
 
-| Field      | Type       | Description                |
-|------------|------------|----------------------------|
-| id         | `int`      | Cart Item id               |
-| quantity   | `int`      | Cart Item quantity         |
-| product_id | `int`      | Cart Item product id       |
-| user_id    | `int`      | Cart Item user id          |
-| variant_id | `int`      | Cart Item variant id       |
-| created_at | `datetime` | Cart Item creation date    |
-| updated_at | `datetime` | Cart Item last update date |
+| Field       | Type       | Description                |
+|-------------|------------|----------------------------|
+| id          | `int`      | Cart Item id               |
+| quantity    | `int`      | Cart Item quantity         |
+| total_price | `real`     | Cart Item total price      |
+| product_id  | `int`      | Cart Item product id       |
+| user_id     | `int`      | Cart Item user id          |
+| variant_id  | `int`      | Cart Item variant id       |
+| created_at  | `datetime` | Cart Item creation date    |
+| updated_at  | `datetime` | Cart Item last update date |
 
 ## Wishlist Item
 
