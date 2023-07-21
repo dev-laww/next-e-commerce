@@ -7,22 +7,19 @@ List of all the endpoints in the API.
 - [Roles](#roles)
 - [Permissions](#permissions)
 - [Role Permissions](#role-permissions)
-- [User Roles ](#user-permissions)
+- [User Roles](#user-roles)
 - [Address](#address)
 - [Payment Methods](#payment-methods)
 - [Products](#products)
 - [Product Variants](#product-variants)
 - [Categories](#categories)
 - [Orders](#orders)
-- [Order Items](#order-items)
 - [Payments](#payments)
 - [Reviews](#reviews)
 - [Shipping](#shipping)
 - [Admin](#admin)
 - [Wishlist](#wishlist)
-- [Wishlist Items](#wishlist-items)
 - [Cart](#cart)
-- [Cart Items](#cart-items)
 - [Coupons](#coupons)
 - [Common Response](#common-response)
 - [Notes](#notes)
@@ -108,14 +105,14 @@ List of all the endpoints in the API.
         Authorization: Bearer <access_token>
         ```
     - **Response**:
-      - Status: 200 OK
-      - Body:
-        ```json
-         {
-             "status": "success",
-             "message": "User logged out successfully"
-         }
-        ```
+        - Status: 200 OK
+        - Body:
+          ```json
+           {
+               "status": "success",
+               "message": "User logged out successfully"
+           }
+          ```
 - `POST /auth/reset-password`: Send a password reset token to the user's email.
     - NOTE: Username can be used instead of email.
     - **Request**:
@@ -188,6 +185,48 @@ List of all the endpoints in the API.
             ```
       
 ## Account
+- `GET /accounts`: Get a list of all users. (admin-only)
+    - **Request**:
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "data": [{
+                    "id": 1,
+                    "name": "John Doe",
+                    "username": "johndoe",
+                    "email": "johndoe@mail.com"
+                }, {
+                    "id": 2,
+                    "name": "Jane Doe",
+                    "username": "janedoe",
+                    "email": "janedoe@mail.com"
+                }]
+            }
+            ```
+- `GET /account/:id`: Get the details of a specific user. (admin-only)
+    - **Request**:
+        ```http request
+        GET /account/1
+      
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "data": {
+                    "id": 1,
+                    "name": "John Doe",
+                    "username": "johndoe",
+                    "email": "johndoe@mail.com"
+                }
+            }
+            ```
 - `GET /account/profile`: Get the user's profile information.
     - **Request**:
         ```http request
@@ -204,6 +243,7 @@ List of all the endpoints in the API.
                 "data": {
                     "id": "<id>",
                     "name": "John Doe",
+                    "username": "johndoe",
                     "email": "johndoe@mail.com"
                 }
             } 
@@ -218,6 +258,7 @@ List of all the endpoints in the API.
 
         {
             "name": "John Doe",
+            "username": "johndoe",
             "email": "john.doe@example.com",
         }
         ```
@@ -231,6 +272,7 @@ List of all the endpoints in the API.
                 "data": {
                     "id": "<id>",
                     "name": "John Doe",
+                    "username": "johndoe",
                     "email": "johndoe@mail.com"
                 }
             } 
@@ -257,6 +299,549 @@ List of all the endpoints in the API.
                 "message": "Password changed successfully"
             }
             ```
+- `GET /accounts/:id/roles`: Get the list current user's roles (admin-only)
+    - **Request**:
+        ```http request
+        GET /accounts/:id/roles
+        
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "data": [{
+                    "id": 1,
+                    "name": "Admin",
+                    "description": "Admin role"
+                }, {
+                    "id": 2,
+                    "name": "User",
+                    "description": "User role"
+                }]
+            }
+            ```
+- `PUT /accounts/:id/roles`: Update the current user's roles (admin-only)
+     - **Request**
+        ```http request
+        PUT /accounts/:id/roles
+       
+        Authorization: Bearer <access_token>
+        Content-Type: application/json
+      
+        {
+            "roles": [1, 2]
+        }
+        ```
+     - **Response**
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "User roles updated successfully",
+                "data": [{
+                    "id": 1,
+                    "name": "Admin",
+                    "description": "Admin role"
+                }, {
+                    "id": 2,
+                    "name": "User",
+                    "description": "User role"
+                }]
+            }
+            ```
+- NOTE: Provide endpoints for the following. See equivalent endpoints on their respective sections.
+    - **Payment Methods**
+        - Format: `REQ /accounts/:id/payment-methods`
+            - `GET`: Get a list of all payment methods for a specific user.
+            - `POST`: Create a new payment method for a specific user.
+            - `DELETE`: Delete payment methods for a specific user.
+        - Format: `REQ /accounts/:id/payment-methods/:id`
+            - `PUT`: Update a specific payment method for a specific user.
+            - `DELETE`: Delete a specific payment method for a specific user.
+    - **Addresses**
+        - Format: `REQ /accounts/:id/addresses`
+            - `GET`: Get a list of all addresses for a specific user.
+            - `POST`: Create a new address for a specific user.
+            - `DELETE`: Delete addresses for a specific user.
+        - Format: `REQ /accounts/:id/addresses/:id`
+            - `PUT`: Update a specific address for a specific user.
+            - `DELETE`: Delete a specific address for a specific user.
+    - **Orders**
+        - Format: `REQ /accounts/:id/orders`
+            - `GET`: Get a list of all orders for a specific user.
+            - `POST`: Create a new order for a specific user.
+            - `DELETE`: Delete orders for a specific user.
+        - Format: `REQ /accounts/:id/orders/:id`
+            - `PUT`: Cancels a specific order for a specific user.
+    - **Wishlist**
+        - Format: `REQ /accounts/:id/wishlist`
+            - `GET`: Get a list of all wishlist items for a specific user.
+            - `POST`: Create a new wishlist item for a specific user.
+            - `DELETE`: Delete wishlist items for a specific user.
+        - Format: `REQ /accounts/:id/wishlist/:id`
+            - `PUT`: Update a specific wishlist item for a specific user.
+            - `DELETE`: Delete a specific wishlist item for a specific user.
+    - **Cart**
+        - Format: `REQ /accounts/:id/cart`
+            - `GET`: Get a list of all cart items for a specific user.
+            - `POST`: Create a new cart item for a specific user.
+            - `DELETE`: Delete cart items for a specific user.
+        - Format: `REQ /accounts/:id/cart/:id`
+            - `PUT`: Update a specific cart item for a specific user.
+            - `DELETE`: Delete a specific cart item for a specific user.
+    - **Reviews**
+        - Format: `REQ /accounts/:id/reviews`
+            - `GET`: Get a list of all reviews for a specific user.
+            - `POST`: Create a new review for a specific user.
+            - `DELETE`: Delete reviews for a specific user.
+        - Format: `REQ /accounts/:id/reviews/:id`
+            - `PUT`: Update a specific review for a specific user.
+            - `DELETE`: Delete a specific review for a specific user.
+
+
+## Roles
+- `GET /roles`: Get a list of all roles. (admin-only)
+    - **Request**
+        ```http request
+        GET /roles
+        ```
+    - **Response**
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+              "status": "success",
+              "data": [{
+                "id": 1,
+                "name": "Admin",
+                "description": "Admin role"
+              }, {
+                "id": 2,
+                "name": "User",
+                "description": "User role"
+              }]
+            }
+            ```
+- `GET /roles/:id`: Get the details of a specific role. (admin-only)
+    - **Request**
+        ```http request
+        GET /roles/1
+        
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "data": {
+                    "id": 1,
+                    "name": "Admin",
+                    "description": "Admin role"
+                }
+            }
+            ```
+- `POST /roles`: Create a new role. (admin-only)
+    - **Request**
+        ```http request
+        POST /roles
+        
+        Authorization: Bearer <access_token>
+        Content-Type: application/json
+      
+        {
+            "name": "New Role",
+            "description": "New role description"
+        }
+        ```
+    - **Response**
+        - Status: 201 CREATED
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Role created successfully",
+                "data": {
+                    "id": "<id>",
+                    "name": "New Role",
+                    "description": "New role description"
+                }
+            }
+            ```
+- `PUT /roles/:id`: Update an existing role. (admin-only)
+    - **Request**
+        ```http request
+        PUT /roles/1
+      
+        Authorization: Bearer <access_token>
+        Content-Type: application/json
+      
+        {
+            "name": "Updated Role",
+            "description": "Updated role description"
+        }
+        ```
+    - **Response**
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Role updated successfully",
+                "data": {
+                    "id": 1,
+                    "name": "Updated Role",
+                    "description": "Updated role description"
+                }
+            }
+            ```
+- `DELETE /roles/:id`: Delete an existing role. (admin-only)
+    - **Request**
+        ```http request
+        DELETE /roles/1
+      
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Role deleted successfully"
+            }
+            ```
+- NOTE: Provide endpoints for the following. See equivalent endpoints on their respective sections.
+    - **Permissions**
+        - Format: `REQ /roles/:id/permissions`
+        - `GET`: Get a list of all permissions for a specific role.
+        - `POST`: Create a new permission for a specific role.
+        - `PUT`: Update a specific permission for a specific role.
+    - **Users**
+        - Format: `REQ /roles/:id/users`
+        - `GET`: Get a list of all users for a specific role.
+        - `POST`: Create a new user for a specific role.
+        - `PUT`: Update a specific user for a specific role.
+
+          
+## Permissions
+- `GET /permissions`: Get list of all permissions (admin-only)
+    - **Request**
+        ```http request
+        GET /permissions
+        
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "data": [{
+                    "id": 1,
+                    "name": "CLIENT_VIEW_ACCOUNTS",
+                    "description": "View accounts"
+                }, {
+                    "id": 2,
+                    "name": "CLIENT_CREATE_ACCOUNTS",
+                    "description": "Create accounts"
+                }]
+            }
+            ```
+- `GET /permissions/:id`: Get details of specific permission. (admin-only)
+    - **Request**
+        ```http request
+        GET /permissions/1
+      
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+              "status": "success",
+              "data": {
+                "id": 1,
+                "name": "CLIENT_VIEW_ACCOUNTS",
+                "description": "View accounts"
+              }
+            }
+            ```
+- `POST /permissions`: Create a new permission. (admin-only)
+    - **Request**
+        ```http request
+        POST /permissions
+        
+        Authorization: Bearer <access_token>
+        Content-Type: application/json
+      
+        {
+            "name": "New Permission",
+            "description": "New permission description"
+        }
+        ```
+    - **Response**
+        - Status: 201 CREATED
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Permission created successfully",
+                "data": {
+                    "id": "<id>",
+                    "name": "CLIENT_VIEW_ACCOUNTS",
+                    "description": "View accounts"
+                }
+            }
+            ```
+- `PUT /permissions/:id`: Update an existing permission (admin-only)
+    - **Request**
+        ```http request
+        PUT /permissions/1
+      
+        Authorization: Bearer <access_token>
+        Content-Type: application/json
+      
+        {
+            "name": "Updated Permission",
+            "description": "Updated permission description"
+        }
+        ```
+    - **Response**
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Permission updated successfully",
+                "data": {
+                    "id": 1,
+                    "name": "Updated Permission",
+                    "description": "Updated permission description"
+                }
+            }
+            ```
+- `DELETE /permissions/:id`: Delete an existing permission (admin-only)
+    - **Request**
+        ```http request
+        DELETE /permissions/1
+      
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Permission deleted successfully"
+            }
+            ```
+- NOTE: Provide endpoints for the following. See equivalent endpoints on their respective sections.
+    - **Roles**
+        - Format: `REQ /permissions/:id/roles`
+        - `GET`: Get a list of all roles for a specific permission.
+        - `POST`: Create a new role for a specific permission.
+        - `PUT`: Update a specific role for a specific permission.
+
+## Role Permissions
+(admin-only)
+- `GET /role-permission`: Get a list of all roles
+    - **Request**
+        ```http request
+        GET /role-permission
+      
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "data": [{
+                    "id": 1,
+                    "roleId": 1,
+                    "permissionId": 1
+                }, {
+                    "id": 2,
+                    "roleId": 2,
+                    "permissionId": 1
+                }]
+            }
+            ```
+- `GET /role-permission/:id`: Get the details of a specific role
+    - **Request**
+        ```http request
+        GET /role-permission/:id
+      
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "data": {
+                    "id": 1,
+                    "roleId": 1,
+                    "permissionId": 1
+                }
+            }
+            ```
+- `POST /role-permission`: Create a new role
+    - **Request**
+        ```http request
+        POST /role-permission
+      
+        Authorization: Bearer <access_token>
+        Content-Type: application/json
+      
+        {
+            "roleId": 1,
+            "permissionId": 1
+        }
+        ```
+    - **Response**
+        - Status: 201 CREATED
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "data": {
+                    "id": "<id>",
+                    "roleId": 1,
+                    "permissionId": 1
+                }
+            }
+            ```
+- `DELETE /role-permission/:id`: Delete an existing role
+    - **Request**
+         ```http request
+         DELETE /user-roles/:id
+       
+         Authorization: Bearer <access_token>
+         ```
+    - **Response**
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Role deleted successfully"
+            }
+            ```
+- NOTE: Provide endpoints for the following. See equivalent endpoints on their respective sections.
+    - **Roles**
+        - Format: `REQ /user-roles/:id/roles`
+        - `GET`: Get a list of all roles for a specific role.
+    - **Permissions**
+        - Format: `REQ /user-roles/:id/users`
+        - `GET`: Get a list of all users for a specific role.
+
+## User Roles
+(admin-only)
+- `GET /user-roles`: Get a list of all roles
+    - **Request**
+        ```http request
+        GET /user-roles
+      
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "data": [{
+                    "id": 1,
+                    "userId": 1,
+                    "roleId": 1
+                }, {
+                    "id": 2,
+                    "userId": 1,
+                    "roleId": 2
+                }]
+            }
+            ```
+- `GET /user-roles/:id`: Get the details of a specific role
+    - **Request**
+        ```http request
+        GET /user-roles/:id
+      
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "data": {
+                    "id": 1,
+                    "userId": 1,
+                    "roleId": 1
+                }
+            }
+            ```
+- `POST /user-roles`: Create a new role
+    - **Request**
+        ```http request
+        POST /user-roles
+      
+        Authorization: Bearer <access_token>
+        Content-Type: application/json
+      
+        {
+            "userId": 1,
+            "roleId": 1
+        }
+        ```
+    - **Response**
+        - Status: 201 CREATED
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "data": {
+                    "id": "<id>",
+                    "userId": 1,
+                    "roleId": 1
+                }
+            }
+            ```
+- `DELETE /user-roles/:id`: Delete an existing role
+    - **Request**
+         ```http request
+         DELETE /user-roles/:id
+       
+         Authorization: Bearer <access_token>
+         ```
+    - **Response**
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Role deleted successfully"
+            }
+            ```
+- NOTE: Provide endpoints for the following. See equivalent endpoints on their respective sections.
+    - **Users**
+        - Format: `REQ /user-roles/:id/users`
+        - `GET`: Get a list of all users for a specific role.
+    - **Roles**
+        - Format: `REQ /user-roles/:id/roles`
+        - `GET`: Get a list of all roles for a specific role.
 
 ## Address
 - `GET /address`: Get a list of all addresses for the current user
@@ -414,9 +999,14 @@ List of all the endpoints in the API.
                 "message": "Address deleted successfully"
             } 
             ```
+- NOTE: Provide endpoints for the following. See equivalent endpoints on their respective sections.
+    - **User**
+        - Format: `REQ /address/:id/user`
+        - `GET`: Get the user details for a specific address.
           
 ## Payment Methods
-- `GET /payment-methods`: Get a list of all products.
+- `GET /payment-methods`: Get a list of current user's payment methods.
+    - NOTE: If the user is an admin, this will return all payment methods for all users.
     - **Request**:
         ```http request
         GET /payment-methods
@@ -428,30 +1018,33 @@ List of all the endpoints in the API.
         - Body:
             ```json
             {
-              "status": "success",
-              "data": [{
-                "id": 1,
-                "userId": 1,
-                "name": "John Doe",
-                "cardNumber": "1234567890123456",
-                "expirationMonth": "01",
-                "expirationYear": "2020",
-                "cvv": "123"
-              }, {
-                "id": 2,
-                "userId": 1,
-                "name": "John Doe",
-                "cardNumber": "1234567890123456",
-                "expirationMonth": "01",
-                "expirationYear": "2020",
-                "cvv": "123"
-              }]
+                "status": "success",
+                "data": [{
+                    "id": 1,
+                    "userId": 1,
+                    "name": "John Doe",
+                    "cardNumber": "1234567890123456",
+                    "expirationMonth": "01",
+                    "expirationYear": "2020",
+                    "cvv": "123"
+                }, {
+                    "id": 2,
+                    "userId": 1,
+                    "name": "John Doe",
+                    "cardNumber": "1234567890123456",
+                    "expirationMonth": "01",
+                    "expirationYear": "2020",
+                    "cvv": "123"
+                }]
             }
             ```
 - `GET /payment-methods/:id`: Get the details of a specific payment method.
+    - NOTE: If the user is an admin, this will return all payment methods for all users.
     - **Request**:
         ```http request
         GET /payment-methods/1
+      
+        Authorization: Bearer <access_token>
         ```
     - **Response**:
         - Status: 20O OK
@@ -471,8 +1064,24 @@ List of all the endpoints in the API.
                 }
             } 
             ```
-- `POST /payment-methods`: Create a new product
-    - **Request**:
+- `POST /payment-methods`: Create a new payment method
+    - **Request (admin)**:
+        ```http request
+        POST /payment-methods
+      
+        Authorization: Bearer <access_token>
+        Content-Type: application/json
+        
+        {
+            "userId": 1,
+            "name": "New Name",
+            "cardNumber": "1234567890123456",
+            "expirationMonth": "01",
+            "expirationYear": "2020",
+            "cvv": "123"
+        }
+        ```
+    - **Request (client)**:
         ```http request
         POST /payment-methods
       
@@ -559,6 +1168,10 @@ List of all the endpoints in the API.
                 "message": "Payment method deleted successfully"
             } 
             ```
+- NOTE: Provide endpoints for the following. See equivalent endpoints on their respective sections.
+    - **User**
+        - Format: `REQ /payment-methods/:id/user`
+        - `GET`: Get the user details for a specific payment method.
 
 ## Products
 - `GET /products`: Get a list of all products.
@@ -679,12 +1292,35 @@ List of all the endpoints in the API.
                 "message": "Product deleted successfully"
             } 
             ```
+- NOTE: Provide endpoints for the following. See equivalent endpoints on their respective sections.
+    - **Variants**
+        - Format: `REQ /products/:id/variants`
+             - `GET`: Get a list of all variants for a specific product.
+             - `POST`: Create a new variant for a specific product.
+             - `DELETE`: Delete all variant for a specific product.
+        - Format: `REQ /products/:id/variants/:id`
+             - `PUT`: Update a specific variant for a specific product.
+             - `DELETE`: Delete a specific variant for a specific product.
+    - **Categories**
+        - Format: `REQ /products/:id/categories`
+            - `GET`: Get a list of all categories for a specific product.
+            - `POST`: Create a new category for a specific product.
+            - `PUT`: Update a specific category.
+    - **Reviews**
+        - Format: `REQ /products/:id/reviews`
+            - `GET`: Get a list of all reviews for a specific product.
+            - `POST`: Create a new review for a specific product.
+            - `DELETE`: Delete all reviews for a specific product.
+        - Format: `REQ /products/:id/reviews/:id`
+            - `PUT`: Update a specific review for a specific product.
+            - `DELETE`: Delete a specific review for a specific product.
+    
           
 ## Product Variants
-- `GET /products/:id/variants`: Get a list of all variants.
+- `GET /variants`: Get a list of all variants. (admin-only)
     - **Request**:
         ```http request
-        GET /products/:id/variants
+        GET /variants
         ```
     - **Response**:
         - Status: 200 OK
@@ -705,16 +1341,16 @@ List of all the endpoints in the API.
                     "name": "Variant 2",
                     "price": 199.99,
                     "rawPrice": 150.99,
-                    "productId": 1,
+                    "productId": 2,
                     "quantity": 10,
                     "sold": 0
                 }]
             } 
             ```
-- `GET /products/:id/variants/:variant_id`: Get the details of a specific variant.
+- `GET variants/:id`: Get the details of a specific variant.
      - **Request**
          ```http request
-         GET /products/:id/variants/1
+         GET /variants/1
          ```
      - **Response**
         - Status: 200 OK
@@ -733,10 +1369,10 @@ List of all the endpoints in the API.
                 }
             } 
             ```
-- `POST /products/:id/variants`: Create a new variant. (admin-only)
+- `POST /variants`: Create a new variant. (admin-only)
     - **Request**
         ```http request
-        POST /products/:id/variants
+        POST /variants
         
         Authorization: Bearer <access_token>
         Content-Type: application/json
@@ -768,10 +1404,10 @@ List of all the endpoints in the API.
                 }
             } 
             ```
-- `PUT /products/:id/variants/:variant_id`: Update the details of a specific variant. (admin-only)
+- `PUT /variants/:id`: Update the details of a specific variant. (admin-only)
     - **Request**
         ```http request
-        PUT /products/:id/variants/1
+        PUT /variants/1
         
         Authorization: Bearer <access_token>
         Content-Type: application/json
@@ -803,10 +1439,10 @@ List of all the endpoints in the API.
                 } 
             }
             ```
-- `DELETE /products/:id/variants/:variant_id`: Delete a specific variant. (admin-only)
+- `DELETE /variants/:id`: Delete a specific variant. (admin-only)
     - **Request**
         ```http request
-        DELETE /products/:id/variants/1
+        DELETE /variants/1
       
         Authorization: Bearer <access_token>
         ```
@@ -819,6 +1455,18 @@ List of all the endpoints in the API.
                 "message": "Variant deleted successfully"
             } 
             ```
+- NOTE: Provide endpoints for the following. See equivalent endpoints on their respective sections.
+    - **Product**
+        - Format: `REQ /variants/:id/product`
+            - `GET`: Get the product details for a specific variant.
+    - **Reviews**
+        - Format: `REQ /variants/:id/reviews`
+            - `GET`: Get a list of all reviews for a specific variant.
+            - `POST`: Create a new review for a specific variant.
+            - `DELETE`: Delete all reviews for a specific variant.
+        - Format: `REQ /variants/:id/reviews/:id`
+            - `PUT`: Update a specific review for a specific variant.
+            - `DELETE`: Delete a specific review for a specific variant.
 
 ## Categories
 - `GET /categories`: Get a list of all categories.
@@ -1202,7 +1850,7 @@ List of all the endpoints in the API.
             ```
 
 ## Reviews
-- `GET /reviews`: Get a list of all reviews.
+- `GET /reviews`: Get a list of all reviews. (admin-only)
     - **Request**:
         ```http request
         GET /reviews
@@ -1215,12 +1863,16 @@ List of all the endpoints in the API.
                 "status": "success",
                 "data": [{
                     "id": 1,
+                    "userId": 1,
                     "productId": 1,
+                    "variantId": 1,
                     "rating": 4,
                     "comment": "Great product"
                 }, {
                     "id": 2,
+                    "userId": 1,
                     "productId": 2,
+                    "variantId": 2,
                     "rating": 5,
                     "comment": "Excellent product"
                 }]
@@ -1239,7 +1891,9 @@ List of all the endpoints in the API.
                 "status": "success",
                 "data": {
                     "id": 1,
+                    "userId": 1,
                     "productId": 1,
+                    "variantId": 1,
                     "rating": 4,
                     "comment": "Great product"
                 }
@@ -1254,7 +1908,9 @@ List of all the endpoints in the API.
         Content-Type: application/json
         
         {
+            "userId": 1,
             "productId": 1,
+            "variantId": 1,
             "rating": 4,
             "comment": "Great product"
         }
@@ -1268,6 +1924,7 @@ List of all the endpoints in the API.
                 "message": "Review created successfully",
                 "data": {
                     "id": 3,
+                    "userId": 1,
                     "productId": 1,
                     "rating": 4,
                     "comment": "Great product"
@@ -1296,7 +1953,9 @@ List of all the endpoints in the API.
                 "message": "Review created successfully",
                 "data": {
                     "id": 1,
+                    "userId": 1,
                     "productId": 1,
+                    "variantId": 1,
                     "rating": 5,
                     "comment": "Excellent product"
                 }
@@ -1432,11 +2091,7 @@ List of all the endpoints in the API.
             ```
 
 ## Admin
-- `GET /admin/dashboard`: Get the dashboard information for the admin.
-- `GET /admin/users`: Get a list of all users (admin-only).
-- `GET /admin/users/:id`: Get the details of a specific user (admin-only).
-- `PUT /admin/users/:id`: Update the details of a specific user (admin-only).
-- `DELETE /admin/users/:id`: Delete a specific user (admin-only).
+
 
 
 ## Wishlist
@@ -1548,6 +2203,12 @@ List of all the endpoints in the API.
                 "message": "Wishlist cleared successfully"
             }
             ```
+- NOTE: Provide endpoints for the following. See equivalent endpoints on their respective sections.
+    - **Product**
+        - Format: `REQ /wishlist/:id/product/:id`
+            - `GET`: Check if a product is in the user's wishlist.
+            - `POST`: Add a product to the user's wishlist.
+            - `DELETE`: Remove a product from the user's wishlist.
 
 ## Cart
 - `GET /cart`: Get the user's shopping cart.
@@ -1693,7 +2354,7 @@ List of all the endpoints in the API.
                 }]
             } 
             ```
-- `GET /coupons/{code}`: Get the details of a specific coupon.
+- `GET /coupons/:code`: Get the details of a specific coupon.
     - **Request**:
         ```http request
         GET /coupons/COUPON1
@@ -1746,7 +2407,7 @@ List of all the endpoints in the API.
                 }
             }
             ```
-- `PUT /coupons/{code}`: Update the details of a specific coupon. (admin-only)
+- `PUT /coupons/:code`: Update the details of a specific coupon. (admin-only)
     - **Request**:
         ```http request
         PUT /coupons/COUPON1
@@ -1776,7 +2437,7 @@ List of all the endpoints in the API.
                 }
             }
             ```
-- `DELETE /coupons/{code}`: Delete a specific coupon. (admin-only)
+- `DELETE /coupons/:code`: Delete a specific coupon. (admin-only)
     - **Request**:
         ```http request
         DELETE /coupons/COUPON1
@@ -1810,17 +2471,19 @@ List of all the endpoints in the API.
                 "status": "success",
                 "data": [{
                     "id": 1,
-                    "user_id": 1,
-                    "action": "login",
+                    "message": "User logged in with email: <email>",
+                    "level": "info",
                     "created_at": "2021-01-01 00:00:00"
                 }, {
-                    "id": 2,
-                    "user_id": 1,
-                    "action": "logout",
+                    "id": 2,     
+                    "message": "User logged out with email: <email>",
+                    "level": "info",
                     "created_at": "2021-01-01 00:00:00"
                 }]
             }
             ```
+- 
+
 ## Common Response
 - Status: 401 UNAUTHORIZED
     ```json
