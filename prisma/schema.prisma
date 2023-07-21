@@ -9,3 +9,289 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id              Int             @id @default(autoincrement())
+  firstName       String
+  lastName        String
+  image           String
+  email           String          @unique
+  username        String          @unique
+  password        String
+  created_at      DateTime        @default(now())
+  updated_at      DateTime        @updatedAt
+  confirmed       Boolean         @default(false)
+  addresses       Address[]
+  payment_methods PaymentMethod[]
+  cart            CartItem[]
+  orders          Order[]
+  whishlist       WishlistItem[]
+  reviews         Review[]
+  payments        Payment[]
+  roles           UserRole[]
+
+  @@map("user")
+}
+
+model Role {
+  id          Int              @id @default(autoincrement())
+  name        String
+  created_at  DateTime         @default(now())
+  updated_at  DateTime         @updatedAt
+  permissions RolePermission[]
+  user_roles  UserRole[]
+
+  @@map("role")
+}
+
+model UserRole {
+  id         Int      @id @default(autoincrement())
+  role_id    Int
+  user_id    Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  user       User     @relation(fields: [user_id], references: [id])
+  role       Role     @relation(fields: [role_id], references: [id])
+
+  @@map("user_role")
+}
+
+model Permission {
+  id             Int              @id @default(autoincrement())
+  name           String
+  description    String
+  created_at     DateTime         @default(now())
+  updated_at     DateTime         @updatedAt
+  RolePermission RolePermission[]
+
+  @@map("permission")
+}
+
+model RolePermission {
+  id            Int        @id @default(autoincrement())
+  role_id       Int
+  permission_id Int
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @updatedAt
+  role          Role       @relation(fields: [role_id], references: [id])
+  permission    Permission @relation(fields: [permission_id], references: [id])
+
+  @@map("role_permission")
+}
+
+model Address {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  address    String
+  city       String
+  state      String
+  country    String
+  zip        String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  user       User     @relation(fields: [user_id], references: [id])
+  Order      Order[]
+
+  @@map("address")
+}
+
+model PaymentMethod {
+  id              Int       @id @default(autoincrement())
+  user_id         Int
+  name            String
+  card_number     String
+  expiration_date String
+  cvv             String
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+  user            User      @relation(fields: [user_id], references: [id])
+  Order           Order[]
+  Payment         Payment[]
+
+  @@map("payment_method")
+}
+
+model Product {
+  id              Int               @id @default(autoincrement())
+  name            String
+  description     String
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  ProductVariant  ProductVariant[]
+  Review          Review[]
+  OrderItem       OrderItem[]
+  ProductCategory ProductCategory[]
+  CartItem        CartItem[]
+  WishlistItem    WishlistItem[]
+
+  @@map("product")
+}
+
+model ProductVariant {
+  id         Int         @id @default(autoincrement())
+  product_id Int
+  name       String
+  image      String
+  stock      Int
+  price      Float
+  rawPrice   Float
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+  product    Product     @relation(fields: [product_id], references: [id])
+  Review     Review[]
+  OrderItem  OrderItem[]
+  CartItem   CartItem[]
+
+  @@map("product_variant")
+}
+
+model ShippingMethod {
+  id         Int      @id @default(autoincrement())
+  name       String
+  price      Float
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  Order      Order[]
+
+  @@map("shipping_method")
+}
+
+model Review {
+  id         Int            @id @default(autoincrement())
+  user_id    Int
+  product_id Int
+  variant_id Int
+  rating     Int
+  comment    String
+  created_at DateTime       @default(now())
+  updated_at DateTime       @updatedAt
+  user       User           @relation(fields: [user_id], references: [id])
+  product    Product        @relation(fields: [product_id], references: [id])
+  variant    ProductVariant @relation(fields: [variant_id], references: [id])
+
+  @@map("review")
+}
+
+model Order {
+  id          Int            @id @default(autoincrement())
+  user_id     Int
+  shipping_id Int
+  payment_id  Int
+  address_id  Int
+  orderNumber String
+  status      String
+  total       Float
+  created_at  DateTime       @default(now())
+  updated_at  DateTime       @updatedAt
+  order_items OrderItem[]
+  user        User           @relation(fields: [user_id], references: [id])
+  shipping    ShippingMethod @relation(fields: [shipping_id], references: [id])
+  payment     PaymentMethod  @relation(fields: [payment_id], references: [id])
+  address     Address        @relation(fields: [address_id], references: [id])
+  Payment     Payment[]
+
+  @@map("order")
+}
+
+model OrderItem {
+  id         Int            @id @default(autoincrement())
+  order_id   Int
+  product_id Int
+  variant_id Int
+  quantity   Int
+  price      Float
+  created_at DateTime       @default(now())
+  updated_at DateTime       @updatedAt
+  order      Order          @relation(fields: [order_id], references: [id])
+  product    Product        @relation(fields: [product_id], references: [id])
+  variant    ProductVariant @relation(fields: [variant_id], references: [id])
+
+  @@map("order_item")
+}
+
+model Payment {
+  id         Int           @id @default(autoincrement())
+  user_id    Int
+  order_id   Int
+  method_id  Int
+  amount     Float
+  status     String
+  created_at DateTime      @default(now())
+  updated_at DateTime      @updatedAt
+  user       User          @relation(fields: [user_id], references: [id])
+  order      Order         @relation(fields: [order_id], references: [id])
+  method     PaymentMethod @relation(fields: [method_id], references: [id])
+
+  @@map("payment")
+}
+
+model Category {
+  id              Int               @id @default(autoincrement())
+  name            String
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  ProductCategory ProductCategory[]
+
+  @@map("category")
+}
+
+model ProductCategory {
+  id          Int      @id @default(autoincrement())
+  product_id  Int
+  category_id Int
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  product     Product  @relation(fields: [product_id], references: [id])
+  category    Category @relation(fields: [category_id], references: [id])
+
+  @@map("product_category")
+}
+
+model CartItem {
+  id          Int            @id @default(autoincrement())
+  user_id     Int
+  product_id  Int
+  variant_id  Int
+  total_price Float
+  quantity    Int
+  created_at  DateTime       @default(now())
+  updated_at  DateTime       @updatedAt
+  user        User           @relation(fields: [user_id], references: [id])
+  product     Product        @relation(fields: [product_id], references: [id])
+  variant     ProductVariant @relation(fields: [variant_id], references: [id])
+
+  @@map("cart_item")
+}
+
+model WishlistItem {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  product_id Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  user       User     @relation(fields: [user_id], references: [id])
+  product    Product  @relation(fields: [product_id], references: [id])
+
+  @@map("wishlist_item")
+}
+
+model Coupon {
+  id         Int      @id @default(autoincrement())
+  code       String
+  type       String
+  discount   Float
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("coupon")
+}
+
+model Log {
+  id         Int      @id @default(autoincrement())
+  level      String
+  message    String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("log")
+}
