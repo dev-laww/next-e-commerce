@@ -33,11 +33,11 @@ List of all API endpoints.
         Content-Type: application/json
       
         {
-            "name": "John Doe",
-            "email": "john.doe@example.com",
+            "firstName": "John",
+            "lastName": "Doe",
             "username": "johndoe",
-            "profile_picture": "https://example.com/profile.jpg",
-            "password": "secretpassword"
+            "imageUrl": "https://example.com/profile.jpg",
+            "email": "johndoe@mail.com"
         }
         ```
     - **Response**:
@@ -49,9 +49,10 @@ List of all API endpoints.
                 "message": "User created successfully",
                 "data": {
                     "id": "<id>",
-                    "name": "John Doe",
+                    "firstName": "John",
+                    "lastName": "Doe",
                     "username": "johndoe",
-                    "profile_picture": "https://example.com/profile.jpg",
+                    "imageUrl": "https://example.com/profile.jpg",
                     "email": "johndoe@mail.com"
                 }
             } 
@@ -195,14 +196,18 @@ List of all API endpoints.
                 "status": "success",
                 "data": [{
                     "id": 1,
-                    "name": "John Doe",
+                    "firstName": "John",
+                    "lastName": "Doe",
                     "username": "johndoe",
+                    "imageUrl": "https://example.com/profile.jpg",
                     "email": "johndoe@mail.com"
                 }, {
                     "id": 2,
-                    "name": "Jane Doe",
-                    "username": "janedoe",
-                    "email": "janedoe@mail.com"
+                    "firstName": "Jane",
+                    "lastName": "Smith",
+                    "username": "janesmith",
+                    "imageUrl": "https://example.com/profile.jpg",
+                    "email": "janesmith@mail.com"
                 }]
             }
             ```
@@ -221,8 +226,10 @@ List of all API endpoints.
                 "status": "success",
                 "data": {
                     "id": 1,
-                    "name": "John Doe",
+                    "firstName": "John",
+                    "lastName": "Doe",
                     "username": "johndoe",
+                    "imageUrl": "https://example.com/profile.jpg",
                     "email": "johndoe@mail.com"
                 }
             }
@@ -241,9 +248,11 @@ List of all API endpoints.
             {
                 "status": "success",
                 "data": {
-                    "id": "<id>",
-                    "name": "John Doe",
+                    "id": 1,
+                    "firstName": "John",
+                    "lastName": "Doe",
                     "username": "johndoe",
+                    "imageUrl": "https://example.com/profile.jpg",
                     "email": "johndoe@mail.com"
                 }
             } 
@@ -257,9 +266,11 @@ List of all API endpoints.
         Content-Type: application/json
 
         {
-            "name": "John Doe",
+            "firstName": "John",
+            "lastName": "Doe",
             "username": "johndoe",
-            "email": "john.doe@example.com",
+            "imageUrl": "https://example.com/profile.jpg",
+            "email": "johndoe@mail.com"
         }
         ```
     - **Response**:
@@ -270,9 +281,11 @@ List of all API endpoints.
                 "status": "success",
                 "message": "User profile updated successfully",
                 "data": {
-                    "id": "<id>",
-                    "name": "John Doe",
+                    "id": 1,
+                    "firstName": "John",
+                    "lastName": "Doe",
                     "username": "johndoe",
+                    "imageUrl": "https://example.com/profile.jpg",
                     "email": "johndoe@mail.com"
                 }
             } 
@@ -2530,6 +2543,7 @@ List of all API endpoints.
     ```
   
 ## Notes
+- May be edited as needed.
 - All endpoints are prefixed with `/api`.
 - All list endpoints are paginated.
 - All list endpoints must include filters and/or search.

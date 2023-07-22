@@ -32,6 +32,7 @@ Database structure of the project.
 | id         | `int`      | User id                        |
 | first_name | `string`   | User first name                |
 | last_name  | `string`   | User last name                 |
+| image_url  | `string`   | User profile image url         |
 | username   | `string`   | User username                  |
 | email      | `string`   | User email                     |
 | password   | `string`   | User password                  |
