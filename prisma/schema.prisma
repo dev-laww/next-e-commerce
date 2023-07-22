@@ -134,7 +134,7 @@ model ProductVariant {
   image_url  String
   stock      Int
   price      Float
-  rawPrice   Float
+  raw_price  Float
   created_at DateTime    @default(now())
   updated_at DateTime    @updatedAt
   product    Product     @relation(fields: [product_id], references: [id])

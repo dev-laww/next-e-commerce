@@ -105,7 +105,7 @@ CREATE TABLE "product_variant" (
     "image_url" TEXT NOT NULL,
     "stock" INTEGER NOT NULL,
     "price" DOUBLE PRECISION NOT NULL,
-    "rawPrice" DOUBLE PRECISION NOT NULL,
+    "raw_price" DOUBLE PRECISION NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
