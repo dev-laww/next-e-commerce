@@ -50,8 +50,8 @@ model UserRole {
   user_id    Int
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  user       User     @relation(fields: [user_id], references: [id])
-  role       Role     @relation(fields: [role_id], references: [id])
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  role       Role     @relation(fields: [role_id], references: [id], onDelete: Cascade)
 
   @@map("user_role")
 }
@@ -73,8 +73,8 @@ model RolePermission {
   permission_id Int
   created_at    DateTime   @default(now())
   updated_at    DateTime   @updatedAt
-  role          Role       @relation(fields: [role_id], references: [id])
-  permission    Permission @relation(fields: [permission_id], references: [id])
+  role          Role       @relation(fields: [role_id], references: [id], onDelete: Cascade)
+  permission    Permission @relation(fields: [permission_id], references: [id], onDelete: Cascade)
 
   @@map("role_permission")
 }
@@ -89,7 +89,7 @@ model Address {
   zip        String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  user       User     @relation(fields: [user_id], references: [id])
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   Order      Order[]
 
   @@map("address")
@@ -99,13 +99,14 @@ model PaymentMethod {
   id              Int       @id @default(autoincrement())
   user_id         Int
   name            String
-  card_number     String
-  expiration_date String
-  cvv             String
+  email           String?
+  phone_number    String?
+  card_number     String?
+  expiration_date String?
+  cvv             String?
   created_at      DateTime  @default(now())
   updated_at      DateTime  @updatedAt
-  user            User      @relation(fields: [user_id], references: [id])
-  Order           Order[]
+  user            User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
   Payment         Payment[]
 
   @@map("payment_method")
@@ -121,7 +122,6 @@ model Product {
   Review          Review[]
   OrderItem       OrderItem[]
   ProductCategory ProductCategory[]
-  CartItem        CartItem[]
   WishlistItem    WishlistItem[]
 
   @@map("product")
@@ -137,7 +137,7 @@ model ProductVariant {
   raw_price  Float
   created_at DateTime    @default(now())
   updated_at DateTime    @updatedAt
-  product    Product     @relation(fields: [product_id], references: [id])
+  product    Product     @relation(fields: [product_id], references: [id], onDelete: Cascade)
   Review     Review[]
   OrderItem  OrderItem[]
   CartItem   CartItem[]
@@ -165,30 +165,28 @@ model Review {
   comment    String
   created_at DateTime       @default(now())
   updated_at DateTime       @updatedAt
-  user       User           @relation(fields: [user_id], references: [id])
-  product    Product        @relation(fields: [product_id], references: [id])
-  variant    ProductVariant @relation(fields: [variant_id], references: [id])
+  user       User           @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  product    Product        @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  variant    ProductVariant @relation(fields: [variant_id], references: [id], onDelete: Cascade)
 
   @@map("review")
 }
 
 model Order {
-  id          Int            @id @default(autoincrement())
-  user_id     Int
-  shipping_id Int
-  payment_id  Int
-  address_id  Int
-  orderNumber String
-  status      String
-  total       Float
-  created_at  DateTime       @default(now())
-  updated_at  DateTime       @updatedAt
-  order_items OrderItem[]
-  user        User           @relation(fields: [user_id], references: [id])
-  shipping    ShippingMethod @relation(fields: [shipping_id], references: [id])
-  payment     PaymentMethod  @relation(fields: [payment_id], references: [id])
-  address     Address        @relation(fields: [address_id], references: [id])
-  Payment     Payment[]
+  id           Int            @id @default(autoincrement())
+  user_id      Int
+  shipping_id  Int
+  address_id   Int
+  order_number String
+  status       String
+  total        Float
+  created_at   DateTime       @default(now())
+  updated_at   DateTime       @updatedAt
+  order_items  OrderItem[]
+  user         User           @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  shipping     ShippingMethod @relation(fields: [shipping_id], references: [id], onDelete: Cascade)
+  address      Address        @relation(fields: [address_id], references: [id], onDelete: Cascade)
+  Payment      Payment[]
 
   @@map("order")
 }
@@ -202,9 +200,9 @@ model OrderItem {
   price      Float
   created_at DateTime       @default(now())
   updated_at DateTime       @updatedAt
-  order      Order          @relation(fields: [order_id], references: [id])
-  product    Product        @relation(fields: [product_id], references: [id])
-  variant    ProductVariant @relation(fields: [variant_id], references: [id])
+  order      Order          @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  product    Product        @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  variant    ProductVariant @relation(fields: [variant_id], references: [id], onDelete: Cascade)
 
   @@map("order_item")
 }
@@ -218,9 +216,9 @@ model Payment {
   status     String
   created_at DateTime      @default(now())
   updated_at DateTime      @updatedAt
-  user       User          @relation(fields: [user_id], references: [id])
-  order      Order         @relation(fields: [order_id], references: [id])
-  method     PaymentMethod @relation(fields: [method_id], references: [id])
+  user       User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  order      Order         @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  method     PaymentMethod @relation(fields: [method_id], references: [id], onDelete: Cascade)
 
   @@map("payment")
 }
@@ -241,8 +239,8 @@ model ProductCategory {
   category_id Int
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
-  product     Product  @relation(fields: [product_id], references: [id])
-  category    Category @relation(fields: [category_id], references: [id])
+  product     Product  @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  category    Category @relation(fields: [category_id], references: [id], onDelete: Cascade)
 
   @@map("product_category")
 }
@@ -256,9 +254,8 @@ model CartItem {
   quantity    Int
   created_at  DateTime       @default(now())
   updated_at  DateTime       @updatedAt
-  user        User           @relation(fields: [user_id], references: [id])
-  product     Product        @relation(fields: [product_id], references: [id])
-  variant     ProductVariant @relation(fields: [variant_id], references: [id])
+  user        User           @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  variant     ProductVariant @relation(fields: [variant_id], references: [id], onDelete: Cascade)
 
   @@map("cart_item")
 }
@@ -269,8 +266,8 @@ model WishlistItem {
   product_id Int
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  user       User     @relation(fields: [user_id], references: [id])
-  product    Product  @relation(fields: [product_id], references: [id])
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  product    Product  @relation(fields: [product_id], references: [id], onDelete: Cascade)
 
   @@map("wishlist_item")
 }
