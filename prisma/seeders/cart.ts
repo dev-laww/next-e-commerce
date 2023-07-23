@@ -595,7 +595,7 @@ const cart = [
         "id": 1074,
         "user_id": 1014,
         "product_id": 1000,
-        "variant_id": 1004,
+        "variant_id": 1000,
         "total_price": 7.50,
         "quantity": 1
     }

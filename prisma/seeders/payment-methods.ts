@@ -22,8 +22,8 @@ const paymentMethods = [
     {
         "id": 1003,
         "user_id": 1003,
-        "name": "Apple Pay",
-        "token": "token_abcdefg12345"
+        "name": "Google Pay",
+        "email": "user2@example.com"
     },
     {
         "id": 1004,
