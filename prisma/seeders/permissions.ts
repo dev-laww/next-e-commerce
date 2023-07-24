@@ -178,6 +178,14 @@ const permissions = [
     {
         id: 1046,
         name: "VIEW_ORDER"
+    },
+    {
+        id: 1047,
+        name: "VIEW_PAYMENTS"
+    },
+    {
+        id: 1048,
+        name: "VIEW_USER_PAYMENTS"
     }
 ]
 
