@@ -24,7 +24,7 @@ Database structure of the project.
 - [Wishlist Item](#wishlist-item)
 - [Coupon](#coupon)
 - [Log](#log)
-- [Token](#token)
+- [TokenOTP](#tokenotp)
 
 ## User
 
@@ -259,11 +259,12 @@ Database structure of the project.
 | message    | `string`   | Log message       |
 | created_at | `datetime` | Log creation date |
 
-## Token
+## TokenOTP
 
-| Field      | Type       | Description       |
-|------------|------------|-------------------|
-| id         | `int`      | Token id          |
-| token      | `string`   | Token string      |
-| user_id    | `int`      | User id           |
-| type       | `string`   | Token type        |
+| Field      | Type       | Description         |
+|------------|------------|---------------------|
+| id         | `int`      | Token id            |
+| token      | `string`   | Token string        |
+| user_id    | `int`      | User id             |
+| type       | `string`   | Token type          |
+| created_at | `datetime` | Token creation date |
