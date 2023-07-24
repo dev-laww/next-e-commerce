@@ -29,6 +29,7 @@ model User {
   reviews         Review[]
   payments        Payment[]
   roles           UserRole[]
+  token           Token?
 
   @@map("user")
 }
@@ -291,4 +292,12 @@ model Log {
   updated_at DateTime @updatedAt
 
   @@map("log")
+}
+
+model Token {
+  id        Int       @id @default(autoincrement())
+  token     String
+  user_id   Int       @unique
+  type      String
+  user      User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
