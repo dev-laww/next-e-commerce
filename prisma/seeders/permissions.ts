@@ -1,186 +1,182 @@
 const permissions = [
     {
-        id: 1,
+        id: 1001,
         name: "CREATE_USER"
     },
     {
-        id: 2,
+        id: 1002,
         name: "UPDATE_USER"
     },
     {
-        id: 3,
+        id: 1003,
         name: "DELETE_USER"
     },
     {
-        id: 4,
+        id: 1004,
         name: "VIEW_USER"
     },
     {
-        id: 5,
+        id: 1005,
         name: "CREATE_PRODUCT"
     },
     {
-        id: 6,
+        id: 1006,
         name: "UPDATE_PRODUCT"
     },
     {
-        id: 7,
+        id: 1007,
         name: "DELETE_PRODUCT"
     },
     {
-        id: 8,
+        id: 1008,
         name: "VIEW_PRODUCT"
     },
     {
-        id: 9,
+        id: 1009,
         name: "CREATE_ROLE"
     },
     {
-        id: 10,
+        id: 1010,
         name: "UPDATE_ROLE"
     },
     {
-        id: 11,
+        id: 1011,
         name: "DELETE_ROLE"
     },
     {
-        id: 12,
+        id: 1012,
         name: "VIEW_ROLE"
     },
     {
-        id: 13,
+        id: 1013,
         name: "ASSIGN_ROLE"
     },
     {
-        id: 14,
+        id: 1014,
         name: "ADD_ADDRESS"
     },
     {
-        id: 15,
+        id: 1015,
         name: "UPDATE_ADDRESS"
     },
     {
-        id: 16,
+        id: 1016,
         name: "DELETE_ADDRESS"
     },
     {
-        id: 17,
+        id: 1017,
         name: "CREATE_CATEGORY"
     },
     {
-        id: 18,
+        id: 1018,
         name: "UPDATE_CATEGORY"
     },
     {
-        id: 19,
+        id: 1019,
         name: "DELETE_CATEGORY"
     },
     {
-        id: 20,
+        id: 1020,
         name: "VIEW_CATEGORY"
     },
     {
-        id: 21,
+        id: 1021,
         name: "CREATE_COUPON"
     },
     {
-        id: 22,
+        id: 1022,
         name: "UPDATE_COUPON"
     },
     {
-        id: 23,
+        id: 1023,
         name: "DELETE_COUPON"
     },
     {
-        id: 24,
+        id: 1024,
         name: "VIEW_COUPON"
     },
     {
-        id: 25,
+        id: 1025,
         name: "VIEW_LOGS"
     },
     {
-        id: 26,
-        name: "DELETE_LOGS"
-    },
-    {
-        id: 27,
+        id: 1027,
         name: "CREATE_REVIEWS"
     },
     {
-        id: 28,
+        id: 1028,
         name: "UPDATE_REVIEWS"
     },
     {
-        id: 29,
+        id: 1029,
         name: "DELETE_REVIEWS"
     },
     {
-        id: 30,
+        id: 1030,
         name: "VIEW_REVIEWS"
     },
     {
-        id: 31,
+        id: 1031,
         name: "ADD_PAYMENT_METHOD"
     },
     {
-        id: 32,
+        id: 1032,
         name: "UPDATE_PAYMENT_METHOD"
     },
     {
-        id: 33,
+        id: 1033,
         name: "DELETE_PAYMENT_METHOD"
     },
     {
-        id: 34,
+        id: 1034,
         name: "VIEW_PAYMENT_METHOD"
     },
     {
-        id: 35,
+        id: 1035,
         name: "ADD_WISHLIST"
     },
     {
-        id: 36,
+        id: 1036,
         name: "UPDATE_WISHLIST"
     },
     {
-        id: 37,
+        id: 1037,
         name: "DELETE_WISHLIST"
     },
     {
-        id: 38,
+        id: 1038,
         name: "VIEW_WISHLIST"
     },
     {
-        id: 39,
+        id: 1039,
         name: "ADD_SHIPPING_METHOD"
     },
     {
-        id: 40,
+        id: 1040,
         name: "UPDATE_SHIPPING_METHOD"
     },
     {
-        id: 41,
+        id: 1041,
         name: "DELETE_SHIPPING_METHOD"
     },
     {
-        id: 42,
+        id: 1042,
         name: "VIEW_SHIPPING_METHOD"
     },
     {
-        id: 43,
+        id: 1043,
         name: "CREATE_ORDER"
     },
     {
-        id: 44,
+        id: 1044,
         name: "UPDATE_ORDER"
     },
     {
-        id: 45,
+        id: 1045,
         name: "DELETE_ORDER"
     },
     {
-        id: 46,
+        id: 1046,
         name: "VIEW_ORDER"
     }
 ]
