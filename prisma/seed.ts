@@ -28,6 +28,8 @@ async function seedEntity(entityName: string, findCondition: any, data: any[]): 
         'users': prisma.user,
         'reviews': prisma.review,
         'wishlists': prisma.wishlistItem,
+        'roles': prisma.role,
+        'permissions': prisma.permission,
     }
 
     const func = seedMap[entityName];
@@ -37,10 +39,14 @@ async function seedEntity(entityName: string, findCondition: any, data: any[]): 
         return;
     }
 
+    const entity = await func.findMany({
+        take: 1
+    });
 
-    const entity = await func.findFirst({where: findCondition});
+    console.log(`Seeding ${entityName} ...`);
+    if (entity.length === 1) return;
 
-    if (entity) return;
+    console.log(entity)
 
     await func.createMany({data: data});
 }
@@ -56,6 +62,8 @@ async function main() {
         seeders.coupons,
         seeders.logs,
         seeders.shippingMethods,
+        seeders.roles,
+        seeders.permissions
     ];
 
     for (const [entityName, data] of Object.entries(seeders)) {

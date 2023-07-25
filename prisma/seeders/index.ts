@@ -14,6 +14,8 @@ import reviews from './reviews';
 import shippingMethods from './shipping-methods';
 import users from './users';
 import wishlists from './wishlist';
+import roles from './roles';
+import permissions from './permissions';
 
 
 export default {
@@ -32,6 +34,8 @@ export default {
     payments,
     reviews,
     carts,
-    wishlists
+    wishlists,
+    roles,
+    permissions,
 }
 
