@@ -29,6 +29,7 @@ model User {
   reviews         Review[]
   payments        Payment[]
   roles           UserRole[]
+  token           TokenOTP?
 
   @@map("user")
 }
@@ -291,4 +292,14 @@ model Log {
   updated_at DateTime @updatedAt
 
   @@map("log")
+}
+
+model TokenOTP {
+  id         Int       @id @default(autoincrement())
+  token      String
+  user_id    Int       @unique
+  type       String
+  created_at DateTime  @default(now())
+  update_at  DateTime  @updatedAt
+  user       User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
