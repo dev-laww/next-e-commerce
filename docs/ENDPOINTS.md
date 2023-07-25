@@ -53,7 +53,9 @@ List of all API endpoints.
                     "lastName": "Doe",
                     "username": "johndoe",
                     "imageUrl": "https://example.com/profile.jpg",
-                    "email": "johndoe@mail.com"
+                    "email": "johndoe@mail.com",
+                    "accessToken": "<access_token>",
+                    "refreshToken": "<refresh_token>"
                 }
             } 
             ```
@@ -86,7 +88,17 @@ List of all API endpoints.
            ```json
            {
               "status": "success",
-              "message": "User logged in successfully"
+              "message": "User logged in successfully",
+              "data": {
+                    "id": "<id>",
+                    "firstName": "John",
+                    "lastName": "Doe",
+                    "username": "johndoe",
+                    "imageUrl": "https://example.com/profile.jpg",
+                    "email": "johndoe@mail.com",
+                    "accessToken": "<access_token>",
+                    "refreshToken": "<refresh_token>"
+              }
            }
            ```
     - **Error Response**
@@ -172,7 +184,8 @@ List of all API endpoints.
         Content-Type: application/json
       
         {
-            "email": "johndoe@mail.com"
+            "email": "johndoe@mail.com",
+            "type": "otp" // or "token"
         }
         ```
     - **Response**:
@@ -182,6 +195,28 @@ List of all API endpoints.
             {
                 "status": "success",
                 "message": "Confirmation email sent successfully"
+            }
+            ```
+- `POST /auth/refresh`: Gets new access token for the user
+    - **Request**:
+        ```http request
+        POST /auth/refresh
+      
+        Content-Type: application/json
+      
+        {
+            "refreshToken": "<refresh_token>"
+        }
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "data": {
+                    "accessToken": "<access_token>"
+                } 
             }
             ```
       
