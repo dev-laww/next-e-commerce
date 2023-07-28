@@ -6,7 +6,7 @@ const users = [
         "image_url": "https://example.com/user1.jpg",
         "email": "john.doe@example.com",
         "username": "johndoe",
-        "password": "hashed_password_1",
+        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu_1",
         "confirmed": true
     },
     {
@@ -16,7 +16,7 @@ const users = [
         "image_url": "https://example.com/user2.jpg",
         "email": "alice.smith@example.com",
         "username": "alicesmith",
-        "password": "hashed_password_2",
+        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu_2",
         "confirmed": true
     },
     {
@@ -26,7 +26,7 @@ const users = [
         "image_url": "https://example.com/user101.jpg",
         "email": "emma.brown@example.com",
         "username": "emmabrown",
-        "password": "hashed_password_101",
+        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu_101",
         "confirmed": true
     },
     {
@@ -36,7 +36,7 @@ const users = [
         "image_url": "https://example.com/user102.jpg",
         "email": "michael.davis@example.com",
         "username": "michaeldavis",
-        "password": "hashed_password_102",
+        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu",
         "confirmed": true
     },
     {
@@ -46,7 +46,7 @@ const users = [
         "image_url": "https://example.com/user3.jpg",
         "email": "sophia.garcia@example.com",
         "username": "sophiagarcia",
-        "password": "hashed_password_3",
+        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu",
         "confirmed": true
     },
     {
@@ -56,7 +56,7 @@ const users = [
         "image_url": "https://example.com/user4.jpg",
         "email": "james.wilson@example.com",
         "username": "jameswilson",
-        "password": "hashed_password_4",
+        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu",
         "confirmed": true
     },
     {
@@ -66,7 +66,7 @@ const users = [
         "image_url": "https://example.com/user5.jpg",
         "email": "olivia.johnson@example.com",
         "username": "oliviajohnson",
-        "password": "hashed_password_5",
+        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu",
         "confirmed": true
     },
     {
@@ -76,7 +76,7 @@ const users = [
         "image_url": "https://example.com/user6.jpg",
         "email": "william.smith@example.com",
         "username": "williamsmith",
-        "password": "hashed_password_6",
+        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu",
         "confirmed": true
     },
     {
@@ -86,7 +86,7 @@ const users = [
         "image_url": "https://example.com/user7.jpg",
         "email": "isabella.davis@example.com",
         "username": "isabelladavis",
-        "password": "hashed_password_7",
+        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu",
         "confirmed": true
     },
     {
@@ -96,7 +96,7 @@ const users = [
         "image_url": "https://example.com/user8.jpg",
         "email": "benjamin.anderson@example.com",
         "username": "benjaminanderson",
-        "password": "hashed_password_8",
+        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu",
         "confirmed": true
     },
     {
@@ -106,7 +106,7 @@ const users = [
         "image_url": "https://example.com/user9.jpg",
         "email": "mia.martinez@example.com",
         "username": "miamartinez",
-        "password": "hashed_password_9",
+        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu",
         "confirmed": true
     },
     {
@@ -116,7 +116,7 @@ const users = [
         "image_url": "https://example.com/user10.jpg",
         "email": "ethan.gonzalez@example.com",
         "username": "ethangonzalez",
-        "password": "hashed_password_10",
+        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu",
         "confirmed": true
     },
     {
@@ -126,7 +126,7 @@ const users = [
         "image_url": "https://example.com/user11.jpg",
         "email": "camila.miller@example.com",
         "username": "camilamiller",
-        "password": "hashed_password_11",
+        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu",
         "confirmed": true
     },
     {
@@ -136,7 +136,7 @@ const users = [
         "image_url": "https://example.com/user12.jpg",
         "email": "alexander.lopez@example.com",
         "username": "alexanderlopez",
-        "password": "hashed_password_12",
+        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu",
         "confirmed": true
     },
     {
@@ -146,7 +146,7 @@ const users = [
         "image_url": "https://example.com/user13.jpg",
         "email": "abigail.hernandez@example.com",
         "username": "abigailhernandez",
-        "password": "hashed_password_13",
+        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu",
         "confirmed": true
     },
     {
@@ -156,7 +156,7 @@ const users = [
         "image_url": "https://example.com/user14.jpg",
         "email": "daniel.moore@example.com",
         "username": "danielmoore",
-        "password": "hashed_password_14",
+        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu",
         "confirmed": true
     },
     {
@@ -166,7 +166,7 @@ const users = [
         "image_url": "https://example.com/user15.jpg",
         "email": "emily.gonzalez@example.com",
         "username": "emilygonzalez",
-        "password": "hashed_password_15",
+        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu",
         "confirmed": true
     },
     {
@@ -176,7 +176,7 @@ const users = [
         "image_url": "https://example.com/user16.jpg",
         "email": "matthew.garcia@example.com",
         "username": "matthewgarcia",
-        "password": "hashed_password_16",
+        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu",
         "confirmed": true
     },
     {
@@ -186,7 +186,7 @@ const users = [
         "image_url": "https://example.com/user17.jpg",
         "email": "harper.martinez@example.com",
         "username": "harpermartinez",
-        "password": "hashed_password_17",
+        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu",
         "confirmed": true
     },
     {
@@ -196,7 +196,7 @@ const users = [
         "image_url": "https://example.com/user18.jpg",
         "email": "aiden.taylor@example.com",
         "username": "aidentaylor",
-        "password": "hashed_password_18",
+        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu",
         "confirmed": true
     },
     {
@@ -206,7 +206,7 @@ const users = [
         "image_url": "https://example.com/user19.jpg",
         "email": "sofia.hernandez@example.com",
         "username": "sofiahernandez",
-        "password": "hashed_password_19",
+        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu",
         "confirmed": true
     },
     {
@@ -216,7 +216,7 @@ const users = [
         "image_url": "https://example.com/user20.jpg",
         "email": "elijah.garcia@example.com",
         "username": "elijahgarcia",
-        "password": "hashed_password_20",
+        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu",
         "confirmed": true
     },
     {
@@ -226,7 +226,7 @@ const users = [
         "image_url": "https://example.com/user21.jpg",
         "email": "scarlett.johnson@example.com",
         "username": "scarlettjohnson",
-        "password": "hashed_password_21",
+        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu",
         "confirmed": true
     },
     {
@@ -236,7 +236,7 @@ const users = [
         "image_url": "https://example.com/user22.jpg",
         "email": "grayson.brown@example.com",
         "username": "graysonbrown",
-        "password": "hashed_password_22",
+        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu",
         "confirmed": true
     },
     {
@@ -246,7 +246,7 @@ const users = [
         "image_url": "https://example.com/user23.jpg",
         "email": "madison.lopez@example.com",
         "username": "madisonlopez",
-        "password": "hashed_password_23",
+        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu",
         "confirmed": true
     }
 ]

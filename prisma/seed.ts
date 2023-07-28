@@ -43,10 +43,7 @@ async function seedEntity(entityName: string, findCondition: any, data: any[]): 
         take: 1
     });
 
-    console.log(`Seeding ${entityName} ...`);
     if (entity.length === 1) return;
-
-    console.log(entity)
 
     await func.createMany({data: data});
 }
