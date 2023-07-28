@@ -3,7 +3,7 @@ import prisma from "../lib/prisma";
 import { hashPassword } from "@src/lib/utils/hashing";
 
 
-class UserRepository {
+export default class UserRepository {
     prismaClient = prisma;
     user = this.prismaClient.user;
 
@@ -22,6 +22,12 @@ class UserRepository {
     async getUserByEmail(email: string) {
         return this.user.findUnique({
             where: {email: email}
+        });
+    }
+
+    async getUserByUsername(username: string) {
+        return this.user.findUnique({
+            where: {username: username}
         });
     }
 
@@ -49,6 +55,7 @@ class UserRepository {
         });
     }
 
+    // TODO: Add pagination
     async getAllUsers(filter: Prisma.UserWhereInput) {
         return this.user.findMany({
             where: filter
