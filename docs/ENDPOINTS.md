@@ -37,7 +37,9 @@ List of all API endpoints.
             "lastName": "Doe",
             "username": "johndoe",
             "imageUrl": "https://example.com/profile.jpg",
-            "email": "johndoe@mail.com"
+            "email": "johndoe@mail.com",
+            "password": "secretpassword",
+            "confirmPassword": "secretpassword"
         }
         ```
     - **Response**:
