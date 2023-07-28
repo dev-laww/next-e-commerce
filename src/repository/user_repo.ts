@@ -1,6 +1,6 @@
 import { Prisma, User } from "@prisma/client";
 import prisma from "../lib/prisma";
-import { hashPassword } from "@src/lib/utils/hashing";
+import { hash } from "@src/lib/utils/hashing";
 
 
 export default class UserRepository {
@@ -39,12 +39,12 @@ export default class UserRepository {
     }
 
     async changePassword(id: number, password: string) {
-        const hash = await hashPassword(password);
+        const hashed = await hash(password);
 
         return this.user.update({
             where: {id: id},
             data: {
-                password: hash
+                password: hashed
             }
         });
     }

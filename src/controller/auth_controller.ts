@@ -1,11 +1,14 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest } from "next";
 import { User } from "@prisma/client";
 
 import z from "zod";
 
 import * as Constants from "@src/lib/constants";
-import UserRepository from "@src/repository/user_repo";
 import { hash } from "@src/lib/utils/hashing";
+import { UserSession } from "@src/lib/types";
+import UserRepository from "@src/repository/user_repo";
+import { generateAccessTooken, generateRefreshToken } from "@src/lib/utils/token";
+import { objectToSnake } from "@src/lib/utils/string_case";
 
 const registerSchema = z.object({
     "firstName": z.string({ required_error: "First name is required" })
@@ -29,20 +32,27 @@ const registerSchema = z.object({
 export default class AuthController {
     userRepo = new UserRepository();
 
-    async registerUser(req: NextApiRequest, res: NextApiResponse) {
+    async registerUser(req: NextApiRequest) {
         if (req.method !== 'POST')
-            return res.status(Constants.STATUS_CODE.BAD_REQUEST)
-                .json({message: 'Invalid request method'});
+            return {
+                statusCode: Constants.STATUS_CODE.BAD_REQUEST,
+                response: {
+                    status: Constants.STATUS.FAILED,
+                    message: "Invalid request method"
+                }
+            }
 
         const requestData = registerSchema.safeParse(req.body || {});
 
         if (!requestData.success) {
-            return res.status(Constants.STATUS_CODE.BAD_REQUEST)
-                .json({
+            return {
+                statusCode: Constants.STATUS_CODE.BAD_REQUEST,
+                response: {
                     status: Constants.STATUS.FAILED,
-                    message: Constants.ERROR_CODE.VALIDATION_ERROR,
-                    data: requestData.error?.errors
-                })
+                    message: "Invalid request data",
+                    data: requestData.error.errors
+                }
+            }
         }
 
         delete req.body.confirmPassword;
@@ -51,29 +61,40 @@ export default class AuthController {
         const userExistsByUsername = await this.userRepo.getUserByUsername(req.body.username);
 
         if (userExistsByEmail || userExistsByUsername) {
-            return res.status(Constants.STATUS_CODE.BAD_REQUEST)
-                .json({
+            return {
+                statusCode: Constants.STATUS_CODE.BAD_REQUEST,
+                response: {
                     status: Constants.STATUS.FAILED,
-                    message: "Email or username already exists",
-                    data: null
-                })
+                    message: "User already exists"
+                }
+            }
         }
 
         req.body.password = await hash(req.body.password);
 
-        // TODO: implement jwt
-        const user = await this.userRepo.createUser(req.body as User)
 
-        delete req.body.password;
+        const user = await this.userRepo.createUser(objectToSnake(req.body) as User)
 
+        const userSession: UserSession = {
+            id: user.id,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            email: user.email,
+            username: user.username,
+            image_url: user.image_url
+        }
 
-        return res.status(Constants.STATUS_CODE.CREATED)
-            .json({
+        return {
+            statusCode: Constants.STATUS_CODE.CREATED,
+            response: {
                 status: Constants.STATUS.SUCCESS,
                 message: "User created successfully",
                 data: {
-                    ...req.body
+                    ...userSession,
+                    refresh_token: generateRefreshToken(userSession),
+                    access_token: generateAccessTooken(userSession)
                 }
-            })
+            }
+        }
     }
 }
