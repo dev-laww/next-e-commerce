@@ -34,7 +34,8 @@ export const verifyToken = (
                 resolve(userSession)
             })
         } catch (err) {
-            reject(err)
+            console.log(err)
+            resolve({} as UserSession)
         }
     })
 }
