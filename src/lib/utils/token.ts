@@ -1,7 +1,8 @@
 import { UserSession } from "@src/lib/types";
 import { generateToken, verifyToken } from "@src/lib/utils/jwt";
+import { encrypt, decrypt } from "@src/lib/utils/encryption";
 
-export const generateAccessTooken = (
+export const generateAccessToken = (
     payload: UserSession,
 ) => {
     if (!process.env.ACCESS_TOKEN_SECRET) {
@@ -37,6 +38,16 @@ export const generateRefreshToken = (
     );
 }
 
+export const generateConfirmationToken = async (
+    payload: UserSession,
+) => {
+    if (!process.env.ENCRYPTION_KEY) {
+        throw new Error('ENCRYPTION_KEY not found');
+    }
+
+    return await encrypt(JSON.stringify(payload));
+}
+
 export const verifyAccessToken = (
     token: string,
 ) => {
@@ -61,4 +72,27 @@ export const verifyRefreshToken = (
         token,
         process.env.REFRESH_TOKEN_SECRET,
     );
+}
+
+export const verifyConfirmationToken = async (
+    token: string,
+) => {
+    if (!process.env.ENCRYPTION_KEY) {
+        throw new Error('ENCRYPTION_KEY not found');
+    }
+
+    try {
+        const decrypted = await decrypt(token);
+
+        return {
+            success: true,
+            data: JSON.parse(decrypted) as UserSession,
+        };
+    } catch (err) {
+        console.log(err);
+        return {
+            success: false,
+            data: {} as UserSession,
+        };
+    }
 }
