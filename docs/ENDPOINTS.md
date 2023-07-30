@@ -112,22 +112,6 @@ List of all API endpoints.
                 "message": "Invalid email or password"
             }
             ```
-- `POST /auth/logout`: Logout from an existing user account.
-    - **Request**:
-        ```http request
-        POST /auth/logout
-      
-        Authorization: Bearer <access_token>
-        ```
-    - **Response**:
-        - Status: 200 OK
-        - Body:
-          ```json
-           {
-               "status": "success",
-               "message": "User logged out successfully"
-           }
-          ```
 - `POST /auth/reset-password`: Send a password reset token to the user's email.
     - NOTE: Username can be used instead of email.
     - **Request**:
