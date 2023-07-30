@@ -102,6 +102,7 @@ export default class AuthController {
         }
 
         const confirmationToken = await generateConfirmationToken(userSession);
+        // TODO: Send confirmation email
 
         return {
             statusCode: Constants.STATUS_CODE.CREATED,
@@ -191,6 +192,7 @@ export default class AuthController {
         }
     }
 
+    // TODO: Implement
     async confirmEmail(req: NextApiRequest) {
         if (req.method !== 'POST')
             return {
