@@ -31,7 +31,7 @@ export default class UserRepository {
         });
     }
 
-    async updateUserById(id: number, data: User) {
+    async updateUser(id: number, data: Prisma.UserUpdateInput) {
         return this.user.update({
             where: {id: id},
             data: data
