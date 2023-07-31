@@ -9,9 +9,7 @@ import { UserSession } from "@src/lib/types";
 import UserRepository from "@src/repository/user_repo";
 import {
     generateAccessToken,
-    generateRefreshToken,
-    generateConfirmationToken,
-    verifyConfirmationToken
+    generateRefreshToken
 } from "@src/lib/utils/token";
 import { objectToSnake } from "@src/lib/utils/string_case";
 
@@ -101,7 +99,7 @@ export default class AuthController {
             image_url: user.image_url
         }
 
-        const confirmationToken = await generateConfirmationToken(userSession);
+        const confirmationToken = await this.userRepo.generateConfirmationToken(user.id);
         // TODO: Send confirmation email
 
         return {
@@ -216,7 +214,8 @@ export default class AuthController {
             }
         }
 
-        const {success, data} = await verifyConfirmationToken(req.body.token);
+        // TODO: fix this 
+        const {success, data} = await this.userRepo.verifyConfirmationToken(requestData.data.token);
 
         if (!success) {
             return {
@@ -260,6 +259,4 @@ export default class AuthController {
             }
         }
     }
-
-
 }
