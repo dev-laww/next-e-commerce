@@ -1,7 +1,6 @@
 import { Prisma, User } from "@prisma/client";
 import { hash } from "@src/lib/utils/hashing";
 import prisma from "../lib/prisma";
-import crypto from "crypto"
 
 
 export default class UserRepository {
@@ -62,29 +61,29 @@ export default class UserRepository {
             where: filter
         });
     }
-
-    async generateConfirmationToken(id: number) {
+    async generateTokenOTP(id: number, token: string, type: string) {
         return prisma.tokenOTP.create({
             data: {
-                token: crypto.randomBytes(16).toString('hex'),
-                type: "email_confirmation",
-                user_id: id
-            }
-        })
+                token: token,
+                type: type,
+                user_id: id,
+            },
+        });
     }
 
-    async verifyConfirmationToken(id: number, tokenStr: string) {
-        const token = await prisma.tokenOTP.findFirst({
+    async verifyTokenOTP(id: number, token: string, type: string) {
+        const tokenRecord = await prisma.tokenOTP.findFirst({
             where: {
-                user_id: id
-            }
-        })
+                user_id: id,
+                token: token,
+                type: type,
+            },
+        });
 
-        if (token!.token != tokenStr)
-            return false
+        if (!tokenRecord) return false;
 
-        // todo implement expiry thing using created_at
+        // TODO: Implement expiry check using created_at
 
-        return true
+        return true;
     }
 }

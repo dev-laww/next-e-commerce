@@ -8,8 +8,9 @@ import { hash, compare } from "@src/lib/utils/hashing";
 import { UserSession } from "@src/lib/types";
 import UserRepository from "@src/repository/user_repo";
 import {
-    generateAccessToken,
-    generateRefreshToken
+    generateAccessToken, verifyAccessToken,
+    generateRefreshToken, verifyRefreshToken,
+    generateRandomToken
 } from "@src/lib/utils/token";
 import { objectToSnake } from "@src/lib/utils/string_case";
 
@@ -99,7 +100,12 @@ export default class AuthController {
             image_url: user.image_url
         }
 
-        const confirmationToken = await this.userRepo.generateConfirmationToken(user.id);
+        const token = generateRandomToken();
+        const confirmationToken = await this.userRepo.generateTokenOTP(
+            user.id,
+            token,
+            Constants.TOKEN_TYPE.EMAIL_CONFIRMATION_TOKEN
+        );
         // TODO: Send confirmation email
 
         return {
@@ -190,7 +196,7 @@ export default class AuthController {
         }
     }
 
-    // TODO: Implement
+    // TODO: make this accept otp
     async confirmEmail(req: NextApiRequest) {
         if (req.method !== 'POST')
             return {
@@ -200,6 +206,32 @@ export default class AuthController {
                     message: "Invalid request method"
                 }
             }
+
+        const token = req.headers.authorization?.split(" ")[1];
+
+        if (!token) {
+            return {
+                statusCode: Constants.STATUS_CODE.UNAUTHORIZED,
+                response: {
+                    status: Constants.STATUS.FAILED,
+                    message: "Invalid token"
+                }
+            }
+        }
+
+        let data: UserSession
+
+        try {
+            data = await verifyAccessToken(token);
+        } catch (error) {
+            return {
+                statusCode: Constants.STATUS_CODE.UNAUTHORIZED,
+                response: {
+                    status: Constants.STATUS.FAILED,
+                    message: "Invalid token"
+                }
+            }
+        }
 
         const requestData = confirmEmailSchema.safeParse(req.body || {});
 
@@ -214,10 +246,13 @@ export default class AuthController {
             }
         }
 
-        // TODO: fix this 
-        const {success, data} = await this.userRepo.verifyConfirmationToken(requestData.data.token);
+        const verifyToken = await this.userRepo.verifyTokenOTP(
+            data.id,
+            requestData.data.token,
+            Constants.TOKEN_TYPE.EMAIL_CONFIRMATION_TOKEN
+        );
 
-        if (!success) {
+        if (!verifyToken) {
             return {
                 statusCode: Constants.STATUS_CODE.UNAUTHORIZED,
                 response: {

@@ -1,5 +1,6 @@
 import { UserSession } from "@src/lib/types";
 import { generateToken, verifyToken } from "@src/lib/utils/jwt";
+import crypto from "crypto";
 
 export const generateAccessToken = (
     payload: UserSession,
@@ -62,3 +63,8 @@ export const verifyRefreshToken = (
         process.env.REFRESH_TOKEN_SECRET,
     );
 }
+
+export const generateRandomToken  = () => crypto.randomBytes(32).toString('hex');
+
+export const generateOTP = () => Math.floor(100000 + Math.random() * 900000);
+
