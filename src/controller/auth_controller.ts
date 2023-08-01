@@ -1,48 +1,22 @@
 import { NextApiRequest } from "next";
 import { User } from "@prisma/client";
 
-import z from "zod";
-
-import * as Constants from "@src/lib/constants";
-import { hash, compare } from "@src/lib/utils/hashing";
-import { UserSession } from "@src/lib/types";
-import UserRepository from "@src/repository/user_repo";
+import * as Constants from "@lib/constants";
+import { hash, compare } from "@utils/hashing";
+import { UserSession } from "@lib/types";
+import UserRepository from "@repository/user_repo";
 import {
     generateAccessToken, verifyAccessToken,
     generateRefreshToken, verifyRefreshToken,
     generateRandomToken
 } from "@src/lib/utils/token";
 import { objectToSnake } from "@src/lib/utils/string_case";
-
-const registerSchema = z.object({
-    "firstName": z.string({required_error: "First name is required"})
-        .min(3, "First name must be at least 3 characters")
-        .max(50, "First name must be at most 50 characters"),
-    "lastName": z.string({required_error: "Last name is required"})
-        .min(3, "Last name must be at least 3 characters")
-        .max(50, "Last name must be at most 50 characters"),
-    "email": z.string({required_error: "Email is required"})
-        .email("Invalid email address"),
-    "imageUrl": z.optional(z.string().url("Invalid image url")),
-    "password": z.string({required_error: "Password is required"})
-        .min(8, "Password must be at least 8 characters")
-        .max(50, "Password must be at most 50 characters"),
-    "confirmPassword": z.string({required_error: "Confirm password is required"})
-        .min(8, "Password must be at least 8 characters")
-        .max(50, "Password must be at most 50 characters"),
-})
-
-const loginSchema = z.object({
-    "email": z.string({required_error: "Email is required"})
-        .email("Invalid email address"),
-    "password": z.string({required_error: "Password is required"})
-        .min(8, "Password must be at least 8 characters")
-        .max(50, "Password must be at most 50 characters")
-})
-
-const confirmEmailSchema = z.object({
-    "token": z.string({required_error: "Token is required"})
-})
+import {
+    registerSchema,
+    loginSchema,
+    confirmEmailSchema,
+    refreshTokenSchema
+} from "@lib/validator/auth";
 
 
 export default class AuthController {

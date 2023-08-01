@@ -1,6 +1,6 @@
 import { Prisma, User } from "@prisma/client";
-import { hash } from "@src/lib/utils/hashing";
-import prisma from "../lib/prisma";
+import { hash } from "@utils/hashing";
+import prisma from "@lib/prisma";
 
 
 export default class UserRepository {

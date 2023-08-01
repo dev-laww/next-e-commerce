@@ -1,5 +1,5 @@
-import { UserSession } from "@src/lib/types";
-import { generateToken, verifyToken } from "@src/lib/utils/jwt";
+import { UserSession } from "@lib/types";
+import { generateToken, verifyToken } from "@utils/jwt";
 import crypto from "crypto";
 
 export const generateAccessToken = (
