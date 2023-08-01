@@ -58,7 +58,158 @@ export default class UserRepository {
     // TODO: Add pagination
     async getAllUsers(filter: Prisma.UserWhereInput) {
         return this.user.findMany({
-            where: filter
+            where: filter,
+            include: {
+                _count: true
+            }
+        });
+    }
+
+    async getUserRoles(id: number) {
+        const user = await this.user.findUnique({
+            where: {id: id},
+            select: {
+                roles: true
+            }
+        });
+
+        return user ? user.roles : [];
+    }
+
+    async updateUserRoles(id: number, roles: number[]) {
+        return this.user.update({
+            where: {id: id},
+            data: {
+                roles: {
+                    set: roles.map(role => ({id: role}))
+                }
+            }
+        });
+    }
+
+    async getUserPermissions(id: number) {
+        const roles = await this.getUserRoles(id);
+
+        if (!roles) return null;
+
+        return this.prismaClient.role.findMany({
+            where: {
+                id: {
+                    in: roles.map(role => role.id)
+                }
+            }
+        });
+    }
+
+    async getUserPaymentMethods(id: number) {
+        const user = await this.user.findUnique({
+            where: {id: id},
+            select: {
+                payment_methods: true
+            }
+        });
+
+        return user ? user.payment_methods : [];
+    }
+
+    async deleteUserPaymentMethods(id: number) {
+        return this.prismaClient.paymentMethod.deleteMany({
+            where: {
+                user_id: id
+            }
+        });
+    }
+
+    async getUserAddreses(id: number) {
+        const user = await this.user.findUnique({
+            where: {id: id},
+            select: {
+                addresses: true
+            }
+        });
+
+        return user ? user.addresses : [];
+    }
+
+    async deleteUserAddresses(id: number) {
+        return this.prismaClient.address.deleteMany({
+            where: {
+                user_id: id
+            }
+        });
+    }
+
+    async getUserOrders(id: number) {
+        const user = await this.user.findUnique({
+            where: {id: id},
+            select: {
+                orders: true
+            }
+        });
+
+        return user ? user.orders : [];
+    }
+
+    async deleteUserOrders(id: number) {
+        return this.prismaClient.order.deleteMany({
+            where: {
+                user_id: id
+            }
+        });
+    }
+
+    async getUserReviews(id: number) {
+        const user = await this.user.findUnique({
+            where: {id: id},
+            select: {
+                reviews: true
+            }
+        })
+
+        return user ? user.reviews : [];
+    }
+
+    async deleteAllUserReviews(id: number) {
+        return this.prismaClient.review.deleteMany({
+            where: {
+                user_id: id
+            }
+        });
+    }
+
+    async getUserWishlist(id: number) {
+        const user = await this.user.findUnique({
+            where: {id: id},
+            select: {
+                wishlist: true
+            }
+        });
+    }
+
+    async deleteUserWishlist(id: number) {
+        return this.prismaClient.wishlistItem.deleteMany({
+            where: {
+                user_id: id
+            }
+        });
+    }
+
+    async getUserCart(id: number) {
+        const user = await this.user.findUnique({
+            where: {id: id},
+            select: {
+                cart: true
+            }
+        });
+
+        return user ? user.cart : [];
+    }
+
+    async deleteUserCart(id: number) {
+        return this.prismaClient.cartItem.deleteMany({
+            where: {
+                user_id: id
+            }
         });
     }
     async generateTokenOTP(id: number, token: string, type: string) {

@@ -34,8 +34,17 @@
         "./src/app/*"
       ],
       "@utils/*": [
-        "./src/utils/*"
-      ]
+        "./src/lib/utils/*"
+      ],
+      "@lib/*": [
+        "./src/lib/*"
+      ],
+      "@repository/*": [
+        "./src/repository/*"
+      ],
+      "@controller/*": [
+        "./src/controller/*"
+      ],
     }
   },
   "include": [
