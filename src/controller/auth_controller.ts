@@ -15,6 +15,7 @@ import {
 import { objectToSnake } from "@utils/string_case";
 import Validators from "@lib/validator/auth";
 import Response from "@lib/http"
+import Email from "@utils/email";
 
 
 export default class AuthController {
@@ -52,7 +53,10 @@ export default class AuthController {
             token,
             Constants.TOKEN_TYPE.EMAIL_CONFIRMATION_TOKEN
         );
-        // TODO: Send confirmation email
+
+        if (!confirmationToken) return Response.internalServerError("Failed to generate confirmation token");
+
+        await Email.sendToken(user.email, token)
 
         return Response.success("User created successfully", {
             ...userSession,
@@ -109,13 +113,7 @@ export default class AuthController {
         if (!user) {
             user = await this.userRepo.getUserByUsername(requestData.data.email);
 
-            if (!user) return {
-                statusCode: Constants.STATUS_CODE.BAD_REQUEST,
-                response: {
-                    status: Constants.STATUS.FAILED,
-                    message: "User does not exist"
-                }
-            }
+            if (!user) return Response.invalidCredentials("Email or username is invalid");
         }
 
         const token = generateRandomToken();
@@ -126,13 +124,7 @@ export default class AuthController {
             Constants.TOKEN_TYPE.PASSWORD_RESET_TOKEN
         );
 
-        return {
-            statusCode: Constants.STATUS_CODE.SUCCESS,
-            response: {
-                status: Constants.STATUS.SUCCESS,
-                message: "Password reset link has been sent to email"
-            }
-        }
+        return Response.success("Password reset successful");
     }
 
     async confirmResetPassword(req: NextApiRequest) {
@@ -201,7 +193,12 @@ export default class AuthController {
             requestData.data.type === "token" ? Constants.TOKEN_TYPE.EMAIL_CONFIRMATION_TOKEN : Constants.TOKEN_TYPE.EMAIL_CONFIRMATION_OTP
         );
 
-        // TODO: Send email
+        if (!emailConfirmationToken) return Response.internalServerError("Failed to generate confirmation token");
+
+        requestData.data.type === "token" ?
+            await Email.sendToken(user.email, token) :
+            await Email.sendOTP(user.email, token);
+
 
         return Response.success("Email confirmation sent successfully");
     }
