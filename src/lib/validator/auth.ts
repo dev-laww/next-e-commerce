@@ -35,10 +35,31 @@ const refreshTokenSchema = z.object({
     "token": z.string({required_error: "Token is required"})
 })
 
+const resetPasswordSchema = z.object({
+    "email": z.string({required_error: "Token is required"})
+        .email("Invalid email address")
+});
+
+const confirmResetPasswordSchema = z.object({
+    "token": z.string({required_error: "Token is required"}),
+    "password": z.string({required_error: "Password is required"})
+        .min(8, "Password must be at least 8 characters")
+        .max(50, "Password must be at most 50 characters"),
+})
+
+const resendEmailSchema = z.object({
+    "email": z.string({required_error: "Email is required"})
+        .email("Invalid email address"),
+    "type": z.enum(["otp", "token"], {required_error: "Type is required"})
+});
+
 
 export default {
     registerSchema,
     loginSchema,
     confirmEmailSchema,
-    refreshTokenSchema
+    refreshTokenSchema,
+    resetPasswordSchema,
+    confirmResetPasswordSchema,
+    resendEmailSchema
 }
