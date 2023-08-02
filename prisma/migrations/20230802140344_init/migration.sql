@@ -3,7 +3,7 @@ CREATE TABLE "user" (
     "id" SERIAL NOT NULL,
     "first_name" TEXT NOT NULL,
     "last_name" TEXT NOT NULL,
-    "image_url" TEXT NOT NULL,
+    "image_url" TEXT NOT NULL DEFAULT '',
     "email" TEXT NOT NULL,
     "username" TEXT NOT NULL,
     "password" TEXT NOT NULL,

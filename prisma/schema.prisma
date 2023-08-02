@@ -14,7 +14,7 @@ model User {
   id              Int             @id @default(autoincrement())
   first_name      String
   last_name       String
-  image_url       String
+  image_url       String          @default("")
   email           String          @unique
   username        String          @unique
   password        String
