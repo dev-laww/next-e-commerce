@@ -34,3 +34,21 @@ export const confirmEmailSchema = z.object({
 export const refreshTokenSchema = z.object({
     "token": z.string({required_error: "Token is required"})
 })
+
+export const resetPasswordSchema = z.object({
+    "email": z.string({required_error: "Email is required"})
+        .email("Invalid email address")
+})
+
+export const confirmResetPasswordSchema = z.object({
+    "token": z.string({required_error: "Token is required"}),
+    "password": z.string({required_error: "Password is required"})
+        .min(8, "Password must be at least 8 characters")
+        .max(50, "Password must be at most 50 characters"),
+})
+
+export const resendEmailSchema = z.object({
+    "email": z.string({required_error: "Email is required"})
+        .email("Invalid email address"),
+    "type": z.enum(["otp", "token"], {required_error: "Type is required"})
+})
