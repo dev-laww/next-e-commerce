@@ -13,7 +13,7 @@
     "studio": "prisma studio"
   },
   "dependencies": {
-    "@prisma/client": "^5.0.0",
+    "@prisma/client": "^5.1.0",
     "autoprefixer": "10.4.14",
     "bcryptjs": "^2.4.3",
     "crypto-js": "^4.1.1",
@@ -33,7 +33,7 @@
     "@types/react-dom": "18.2.6",
     "eslint": "8.44.0",
     "eslint-config-next": "13.4.9",
-    "prisma": "^5.0.0",
+    "prisma": "^5.1.0",
     "tailwindcss": "3.3.2",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6"
