@@ -1,6 +1,6 @@
 import { Prisma, User } from "@prisma/client";
-import prisma from "../lib/prisma";
-import { hash } from "@src/lib/utils/hashing";
+import { hash } from "@utils/hashing";
+import prisma from "@lib/prisma";
 
 
 export default class UserRepository {
@@ -211,5 +211,30 @@ export default class UserRepository {
                 user_id: id
             }
         });
+    }
+    async generateTokenOTP(id: number, token: string, type: string) {
+        return prisma.tokenOTP.create({
+            data: {
+                token: token,
+                type: type,
+                user_id: id,
+            },
+        });
+    }
+
+    async verifyTokenOTP(id: number, token: string, type: string) {
+        const tokenRecord = await prisma.tokenOTP.findFirst({
+            where: {
+                user_id: id,
+                token: token,
+                type: type,
+            },
+        });
+
+        if (!tokenRecord) return false;
+
+        // TODO: Implement expiry check using created_at
+
+        return true;
     }
 }

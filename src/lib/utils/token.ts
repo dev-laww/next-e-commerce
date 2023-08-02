@@ -1,6 +1,6 @@
-import { UserSession } from "@src/lib/types";
-import { generateToken, verifyToken } from "@src/lib/utils/jwt";
-import { encrypt, decrypt } from "@src/lib/utils/encryption";
+import { UserSession } from "@lib/types";
+import { generateToken, verifyToken } from "@utils/jwt";
+import crypto from "crypto";
 
 export const generateAccessToken = (
     payload: UserSession,
@@ -38,16 +38,6 @@ export const generateRefreshToken = (
     );
 }
 
-export const generateConfirmationToken = async (
-    payload: UserSession,
-) => {
-    if (!process.env.ENCRYPTION_KEY) {
-        throw new Error('ENCRYPTION_KEY not found');
-    }
-
-    return await encrypt(JSON.stringify(payload));
-}
-
 export const verifyAccessToken = (
     token: string,
 ) => {
@@ -74,25 +64,7 @@ export const verifyRefreshToken = (
     );
 }
 
-export const verifyConfirmationToken = async (
-    token: string,
-) => {
-    if (!process.env.ENCRYPTION_KEY) {
-        throw new Error('ENCRYPTION_KEY not found');
-    }
+export const generateRandomToken  = () => crypto.randomBytes(32).toString('hex');
 
-    try {
-        const decrypted = await decrypt(token);
+export const generateOTP = () => Math.floor(100000 + Math.random() * 900000);
 
-        return {
-            success: true,
-            data: JSON.parse(decrypted) as UserSession,
-        };
-    } catch (err) {
-        console.log(err);
-        return {
-            success: false,
-            data: {} as UserSession,
-        };
-    }
-}

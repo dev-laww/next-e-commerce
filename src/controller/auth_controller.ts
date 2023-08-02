@@ -2,23 +2,22 @@ import { NextApiRequest } from "next";
 import { User } from "@prisma/client";
 
 import * as Constants from "@lib/constants";
+import { hash, compare } from "@utils/hashing";
 import { UserSession } from "@lib/types";
 import UserRepository from "@repository/user_repo";
-import { hash, compare } from "@utils/hashing";
-import { objectToSnake } from "@utils/string_case";
 import {
-    generateAccessToken,
-    generateRefreshToken,
-    generateConfirmationToken,
-    verifyConfirmationToken,
-    verifyRefreshToken
-} from "@utils/token";
+    generateAccessToken, verifyAccessToken,
+    generateRefreshToken, verifyRefreshToken,
+    generateRandomToken
+} from "@src/lib/utils/token";
+import { objectToSnake } from "@src/lib/utils/string_case";
 import {
     registerSchema,
     loginSchema,
     confirmEmailSchema,
     refreshTokenSchema
 } from "@lib/validator/auth";
+
 
 export default class AuthController {
     userRepo = new UserRepository();
@@ -75,7 +74,12 @@ export default class AuthController {
             image_url: user.image_url
         }
 
-        const confirmationToken = await generateConfirmationToken(userSession);
+        const token = generateRandomToken();
+        const confirmationToken = await this.userRepo.generateTokenOTP(
+            user.id,
+            token,
+            Constants.TOKEN_TYPE.EMAIL_CONFIRMATION_TOKEN
+        );
         // TODO: Send confirmation email
 
         return {
@@ -166,7 +170,7 @@ export default class AuthController {
         }
     }
 
-    // TODO: Implement
+    // TODO: make this accept otp
     async confirmEmail(req: NextApiRequest) {
         if (req.method !== 'POST')
             return {
@@ -176,6 +180,32 @@ export default class AuthController {
                     message: "Invalid request method"
                 }
             }
+
+        const token = req.headers.authorization?.split(" ")[1];
+
+        if (!token) {
+            return {
+                statusCode: Constants.STATUS_CODE.UNAUTHORIZED,
+                response: {
+                    status: Constants.STATUS.FAILED,
+                    message: "Invalid token"
+                }
+            }
+        }
+
+        let data: UserSession
+
+        try {
+            data = await verifyAccessToken(token);
+        } catch (error) {
+            return {
+                statusCode: Constants.STATUS_CODE.UNAUTHORIZED,
+                response: {
+                    status: Constants.STATUS.FAILED,
+                    message: "Invalid token"
+                }
+            }
+        }
 
         const requestData = confirmEmailSchema.safeParse(req.body || {});
 
@@ -190,9 +220,13 @@ export default class AuthController {
             }
         }
 
-        const {success, data} = await verifyConfirmationToken(req.body.token);
+        const verifyToken = await this.userRepo.verifyTokenOTP(
+            data.id,
+            requestData.data.token,
+            Constants.TOKEN_TYPE.EMAIL_CONFIRMATION_TOKEN
+        );
 
-        if (!success) {
+        if (!verifyToken) {
             return {
                 statusCode: Constants.STATUS_CODE.UNAUTHORIZED,
                 response: {
@@ -231,56 +265,6 @@ export default class AuthController {
             response: {
                 status: Constants.STATUS.SUCCESS,
                 message: "Email confirmed successfully"
-            }
-        }
-    }
-
-    async refreshToken(req: NextApiRequest) {
-        if (req.method !== 'POST')
-            return {
-                statusCode: Constants.STATUS_CODE.BAD_REQUEST,
-                response: {
-                    status: Constants.STATUS.FAILED,
-                    message: "Invalid request method"
-                }
-            }
-
-        const requestData = refreshTokenSchema.safeParse(req.body || {});
-
-        if (!requestData.success) {
-            return {
-                statusCode: Constants.STATUS_CODE.BAD_REQUEST,
-                response: {
-                    status: Constants.STATUS.FAILED,
-                    message: "Invalid request data",
-                    data: requestData.error.errors
-                }
-            }
-        }
-
-        let userSession: UserSession;
-
-        try {
-            userSession = await verifyRefreshToken(requestData.data.token);
-
-        } catch (error) {
-            return {
-                statusCode: Constants.STATUS_CODE.UNAUTHORIZED,
-                response: {
-                    status: Constants.STATUS.FAILED,
-                    message: "Invalid token"
-                }
-            }
-        }
-
-        return {
-            statusCode: Constants.STATUS_CODE.SUCCESS,
-            response: {
-                status: Constants.STATUS.SUCCESS,
-                message: "Token refreshed successfully",
-                data: {
-                    accessToken: generateAccessToken(userSession)
-                }
             }
         }
     }
