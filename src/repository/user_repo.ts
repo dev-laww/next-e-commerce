@@ -222,19 +222,27 @@ export default class UserRepository {
         });
     }
 
-    async verifyTokenOTP(id: number, token: string, type: string) {
+    async verifyTokenOTP(token: string, type: string) {
         const tokenRecord = await prisma.tokenOTP.findFirst({
             where: {
-                user_id: id,
                 token: token,
                 type: type,
             },
+            select: {
+                user: true,
+            }
         });
 
-        if (!tokenRecord) return false;
+        if (!tokenRecord) return {
+            success: false,
+            data: {} as User
+        };
 
         // TODO: Implement expiry check using created_at
 
-        return true;
+        return {
+            success: true,
+            data: tokenRecord.user
+        };
     }
 }

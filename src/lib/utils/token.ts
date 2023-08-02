@@ -66,5 +66,5 @@ export const verifyRefreshToken = (
 
 export const generateRandomToken  = () => crypto.randomBytes(32).toString('hex');
 
-export const generateOTP = () => Math.floor(100000 + Math.random() * 900000);
+export const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 
