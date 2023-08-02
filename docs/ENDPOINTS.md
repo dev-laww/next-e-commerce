@@ -133,6 +133,28 @@ List of all API endpoints.
                 "message": "Password reset token sent to email"
             }
             ```
+- `POST /auth/confirm-reset-password`: Send a password reset token to the user's email.
+    - NOTE: Username can be used instead of email.
+    - **Request**:
+        ```http request
+        POST /auth/confirm-reset-password
+      
+        Content-Type: application/json
+    
+       {
+            "token": "<reset_token>",
+            "password": "newpassword",
+       }
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Password changed successfully"
+            }
+            ```
 - `POST /auth/confirm-email`: Confirm a user's email address.
     - **Request**:
         ```http request
@@ -191,7 +213,7 @@ List of all API endpoints.
         Content-Type: application/json
       
         {
-            "refreshToken": "<refresh_token>"
+            "token": "<refresh_token>"
         }
         ```
     - **Response**:
