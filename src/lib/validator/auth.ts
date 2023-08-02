@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const registerSchema = z.object({
+const registerSchema = z.object({
     "firstName": z.string({required_error: "First name is required"})
         .min(3, "First name must be at least 3 characters")
         .max(50, "First name must be at most 50 characters"),
@@ -18,7 +18,7 @@ export const registerSchema = z.object({
         .max(50, "Password must be at most 50 characters"),
 })
 
-export const loginSchema = z.object({
+const loginSchema = z.object({
     "email": z.string({required_error: "Email is required"})
         .email("Invalid email address"),
     "password": z.string({required_error: "Password is required"})
@@ -26,11 +26,19 @@ export const loginSchema = z.object({
         .max(50, "Password must be at most 50 characters")
 })
 
-export const confirmEmailSchema = z.object({
+const confirmEmailSchema = z.object({
     "token": z.string({required_error: "Token is required"})
 })
 
 
-export const refreshTokenSchema = z.object({
+const refreshTokenSchema = z.object({
     "token": z.string({required_error: "Token is required"})
 })
+
+
+export default {
+    registerSchema,
+    loginSchema,
+    confirmEmailSchema,
+    refreshTokenSchema
+}

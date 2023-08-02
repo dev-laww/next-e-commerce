@@ -11,12 +11,7 @@ import {
     generateRandomToken
 } from "@src/lib/utils/token";
 import { objectToSnake } from "@src/lib/utils/string_case";
-import {
-    registerSchema,
-    loginSchema,
-    confirmEmailSchema,
-    refreshTokenSchema
-} from "@lib/validator/auth";
+import Validators from "@lib/validator/auth";
 
 
 export default class AuthController {
@@ -32,7 +27,7 @@ export default class AuthController {
                 }
             }
 
-        const requestData = registerSchema.safeParse(req.body || {});
+        const requestData = Validators.registerSchema.safeParse(req.body || {});
 
         if (!requestData.success) {
             return {
@@ -106,7 +101,7 @@ export default class AuthController {
                 }
             }
 
-        const requestData = loginSchema.safeParse(req.body || {});
+        const requestData = Validators.loginSchema.safeParse(req.body || {});
 
         if (!requestData.success) {
             return {
@@ -207,7 +202,7 @@ export default class AuthController {
             }
         }
 
-        const requestData = confirmEmailSchema.safeParse(req.body || {});
+        const requestData = Validators.confirmEmailSchema.safeParse(req.body || {});
 
         if (!requestData.success) {
             return {
