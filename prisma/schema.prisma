@@ -29,7 +29,7 @@ model User {
   reviews         Review[]
   payments        Payment[]
   roles           UserRole[]
-  token           TokenOTP?
+  token           TokenOTP[]
 
   @@map("user")
 }
@@ -297,7 +297,7 @@ model Log {
 model TokenOTP {
   id         Int      @id @default(autoincrement())
   token      String
-  user_id    Int      @unique
+  user_id    Int
   type       String
   created_at DateTime @default(now())
   update_at  DateTime @updatedAt

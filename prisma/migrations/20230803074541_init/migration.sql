@@ -269,9 +269,6 @@ CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
 -- CreateIndex
 CREATE UNIQUE INDEX "user_username_key" ON "user"("username");
 
--- CreateIndex
-CREATE UNIQUE INDEX "TokenOTP_user_id_key" ON "TokenOTP"("user_id");
-
 -- AddForeignKey
 ALTER TABLE "user_role" ADD CONSTRAINT "user_role_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
