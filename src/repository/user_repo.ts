@@ -1,6 +1,8 @@
 import { Prisma, User } from "@prisma/client";
-import { hash } from "@utils/hashing";
+
+import { TOKEN_OTP_EXPIRY} from "@lib/constants";
 import prisma from "@lib/prisma";
+import { hash } from "@utils/hashing";
 
 
 export default class UserRepository {
@@ -238,7 +240,15 @@ export default class UserRepository {
             data: {} as User
         };
 
-        // TODO: Implement expiry check using created_at
+        const tokenCreatedAt = new Date(tokenRecord.created_at);
+        const now = new Date();
+
+        if (now.getTime() - tokenCreatedAt.getTime() < TOKEN_OTP_EXPIRY) {
+            return {
+                success: false,
+                data: {} as User
+            };
+        }
 
         await prisma.tokenOTP.delete({
             where: {
