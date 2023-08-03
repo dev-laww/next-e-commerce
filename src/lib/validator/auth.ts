@@ -19,14 +19,12 @@ const registerSchema = z.object({
 })
 
 const loginSchema = z.object({
-    "email": z.string({required_error: "Email is required"})
-        .email("Invalid email address"),
+    "email": z.string({required_error: "Email or username is required"}),
     "password": z.string({required_error: "Password is required"})
-        .min(8, "Password must be at least 8 characters")
-        .max(50, "Password must be at most 50 characters")
 })
 
 const confirmEmailSchema = z.object({
+    "type": z.enum(["otp", "token"], {required_error: "Type is required"}),
     "token": z.string({required_error: "Token is required"})
 })
 
