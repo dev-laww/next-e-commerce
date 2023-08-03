@@ -133,7 +133,7 @@ List of all API endpoints.
                 "message": "Password reset token sent to email"
             }
             ```
-- `POST /auth/confirm-reset-password`: Send a password reset token to the user's email.
+- `PUT /auth/confirm-reset-password`: Send a password reset token to the user's email.
     - NOTE: Username can be used instead of email.
     - **Request**:
         ```http request
