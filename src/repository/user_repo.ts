@@ -228,7 +228,7 @@ export default class UserRepository {
                 token: token,
                 type: type,
             },
-            select: {
+            include: {
                 user: true,
             }
         });
@@ -239,6 +239,12 @@ export default class UserRepository {
         };
 
         // TODO: Implement expiry check using created_at
+
+        await prisma.tokenOTP.delete({
+            where: {
+                id: tokenRecord.id
+            }
+        });
 
         return {
             success: true,
