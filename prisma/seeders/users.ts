@@ -1,12 +1,11 @@
 const users = [
     {
         "id": 1000,
-        "first_name": "John",
-        "last_name": "Doe",
-        "image_url": "https://example.com/user1.jpg",
-        "email": "john.doe@example.com",
-        "username": "johndoe",
-        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu_1",
+        "first_name": "Admin",
+        "last_name": "",
+        "email": process.env.EMAIL_USERNAME,
+        "username": "admin",
+        "password": "$2a$10$zCIfV2tmfH//ix8CcIuZEOeWmxwvDheMLKZqsZS/61fG2kQpLVKDW",
         "confirmed": true
     },
     {
