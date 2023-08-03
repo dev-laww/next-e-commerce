@@ -35,7 +35,8 @@ const refreshTokenSchema = z.object({
 
 const resetPasswordSchema = z.object({
     "email": z.string({required_error: "Token is required"})
-        .email("Invalid email address")
+        .email("Invalid email address"),
+    "type": z.enum(["otp", "token"], {required_error: "Type is required"})
 });
 
 const confirmResetPasswordSchema = z.object({

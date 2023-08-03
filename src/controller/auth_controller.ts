@@ -109,7 +109,6 @@ export default class AuthController {
         });
     }
 
-    // TODO: make this accept otp
     async resetPassword(req: NextApiRequest) {
         if (req.method !== 'POST') return Response.badRequest("Invalid request method");
 
@@ -122,10 +121,10 @@ export default class AuthController {
         if (!user) {
             user = await this.userRepo.getUserByUsername(requestData.data.email);
 
-            if (!user) return Response.invalidCredentials("Email or username is invalid");
+            if (!user) return Response.badRequest("Email or username is invalid");
         }
 
-        const token = generateRandomToken();
+        const token = requestData.data.type === "otp" ? generateOTP() : generateRandomToken();
 
         const resetPasswordToken = await this.userRepo.generateTokenOTP(
             user.id,
@@ -136,10 +135,12 @@ export default class AuthController {
         if (!resetPasswordToken) return Response.internalServerError("Failed to generate reset password token");
 
         try {
-            await Email.sendPasswordResetEmail(user.email, token)
+            requestData.data.type === "token" ?
+                await Email.sendToken(user.email, token) :
+                await Email.sendOTP(user.email, token);
         } catch (error) {
             console.log(error);
-            return Response.internalServerError("Failed to send password reset email");
+            return Response.internalServerError("Failed to send confirmation email");
         }
 
         return Response.success("Password reset sent successfully");
