@@ -40,6 +40,7 @@ const resetPasswordSchema = z.object({
 });
 
 const confirmResetPasswordSchema = z.object({
+    "type": z.enum(["otp", "token"], {required_error: "Type is required"}),
     "token": z.string({required_error: "Token is required"}),
     "password": z.string({required_error: "Password is required"})
         .min(8, "Password must be at least 8 characters")

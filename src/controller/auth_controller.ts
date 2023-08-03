@@ -129,7 +129,9 @@ export default class AuthController {
         const resetPasswordToken = await this.userRepo.generateTokenOTP(
             user.id,
             token,
-            Constants.TOKEN_TYPE.PASSWORD_RESET_TOKEN
+            requestData.data.type === "otp" ?
+                Constants.TOKEN_TYPE.PASSWORD_RESET_OTP :
+                Constants.TOKEN_TYPE.PASSWORD_RESET_TOKEN
         );
 
         if (!resetPasswordToken) return Response.internalServerError("Failed to generate reset password token");
@@ -155,7 +157,9 @@ export default class AuthController {
 
         const {success, data} = await this.userRepo.verifyTokenOTP(
             requestData.data.token,
-            Constants.TOKEN_TYPE.PASSWORD_RESET_TOKEN
+            requestData.data.type === "otp" ?
+                Constants.TOKEN_TYPE.PASSWORD_RESET_OTP :
+                Constants.TOKEN_TYPE.PASSWORD_RESET_TOKEN
         );
 
         if (!success) return Response.unauthorized("Invalid token");
