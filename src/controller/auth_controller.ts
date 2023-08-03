@@ -21,7 +21,7 @@ import Email from "@utils/email";
 export default class AuthController {
     userRepo = new UserRepository();
 
-    async signUp(req: NextApiRequest) {
+    async signup(req: NextApiRequest) {
         if (req.method !== 'POST') return Response.badRequest("Invalid request method");
 
         const requestData = Validators.registerSchema.safeParse(req.body || {});
@@ -33,7 +33,7 @@ export default class AuthController {
         const userExistsByEmail = await this.userRepo.getUserByEmail(req.body.email);
         const userExistsByUsername = await this.userRepo.getUserByUsername(req.body.username);
 
-        if (userExistsByEmail || userExistsByUsername) Response.badRequest("User already exists");
+        if (userExistsByEmail || userExistsByUsername) return Response.badRequest("User already exists");
 
         req.body.password = await hash(req.body.password);
 
@@ -54,9 +54,18 @@ export default class AuthController {
             Constants.TOKEN_TYPE.EMAIL_CONFIRMATION_TOKEN
         );
 
-        if (!confirmationToken) return Response.internalServerError("Failed to generate confirmation token");
+        if (!confirmationToken) {
+            await this.userRepo.deleteUserById(user.id);
+            return Response.internalServerError("Failed to generate confirmation token");
+        }
 
-        await Email.sendToken(user.email, token)
+        try {
+            await Email.sendToken(user.email, token)
+        } catch (error) {
+            console.log(error);
+            await this.userRepo.deleteUserById(user.id);
+            return Response.internalServerError("Failed to send confirmation email");
+        }
 
         return Response.success("User created successfully", {
             ...userSession,
@@ -124,7 +133,16 @@ export default class AuthController {
             Constants.TOKEN_TYPE.PASSWORD_RESET_TOKEN
         );
 
-        return Response.success("Password reset successful");
+        if (!resetPasswordToken) return Response.internalServerError("Failed to generate reset password token");
+
+        try {
+            await Email.sendPasswordResetEmail(user.email, token)
+        } catch (error) {
+            console.log(error);
+            return Response.internalServerError("Failed to send password reset email");
+        }
+
+        return Response.success("Password reset sent successfully");
     }
 
     async confirmResetPassword(req: NextApiRequest) {
@@ -149,14 +167,15 @@ export default class AuthController {
     async confirmEmail(req: NextApiRequest) {
         if (req.method !== 'POST') return Response.badRequest("Invalid request method");
 
-
         const requestData = Validators.confirmEmailSchema.safeParse(req.body || {});
 
         if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
 
         const {success, data} = await this.userRepo.verifyTokenOTP(
             requestData.data.token,
-            Constants.TOKEN_TYPE.EMAIL_CONFIRMATION_TOKEN
+            requestData.data.type === "otp" ?
+                Constants.TOKEN_TYPE.EMAIL_CONFIRMATION_OTP :
+                Constants.TOKEN_TYPE.EMAIL_CONFIRMATION_TOKEN
         );
 
         if (!success) return Response.unauthorized("Invalid token");
@@ -195,10 +214,14 @@ export default class AuthController {
 
         if (!emailConfirmationToken) return Response.internalServerError("Failed to generate confirmation token");
 
-        requestData.data.type === "token" ?
-            await Email.sendToken(user.email, token) :
-            await Email.sendOTP(user.email, token);
-
+        try {
+            requestData.data.type === "token" ?
+                await Email.sendToken(user.email, token) :
+                await Email.sendOTP(user.email, token);
+        } catch (error) {
+            console.log(error);
+            return Response.internalServerError("Failed to send confirmation email");
+        }
 
         return Response.success("Email confirmation sent successfully");
     }
