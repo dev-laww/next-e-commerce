@@ -1,4 +1,5 @@
 import { ERROR_CODE, STATUS, STATUS_CODE } from "@lib/constants";
+import { ZodIssue } from "zod";
 
 type Response = {
     statusCode: STATUS_CODE,
@@ -79,21 +80,22 @@ const internalServerError = (message: string): Response => {
     }
 }
 
-const validationError = (message: string, errors: any): Response => {
+const validationError = (message: string, errors: ZodIssue[]): Response => {
+    const errorMessages = errors.map(error => error.message).join(", ");
     return {
         statusCode: STATUS_CODE.BAD_REQUEST,
         response: {
             code: ERROR_CODE.VALIDATION_ERROR,
             status: STATUS.FAILED,
+            errors: errorMessages,
             message,
-            errors
         }
     }
 }
 
 const invalidCredentials = (message: string): Response => {
     return {
-        statusCode: STATUS_CODE.BAD_REQUEST,
+        statusCode: STATUS_CODE.UNAUTHORIZED,
         response: {
             code: ERROR_CODE.INVALID_CREDENTIALS,
             status: STATUS.FAILED,

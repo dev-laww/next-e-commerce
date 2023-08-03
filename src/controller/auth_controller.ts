@@ -67,7 +67,7 @@ export default class AuthController {
             return Response.internalServerError("Failed to send confirmation email");
         }
 
-        return Response.success("User created successfully", {
+        return Response.created("User created successfully", {
             ...userSession,
             accessToken: generateAccessToken(userSession),
             refreshToken: generateRefreshToken(userSession),
@@ -147,7 +147,7 @@ export default class AuthController {
     }
 
     async confirmResetPassword(req: NextApiRequest) {
-        if (req.method !== 'POST') return Response.badRequest("Invalid request method");
+        if (req.method !== 'PUT') return Response.badRequest("Invalid request method");
 
         const requestData = Validators.confirmResetPasswordSchema.safeParse(req.body || {});
 
@@ -241,7 +241,6 @@ export default class AuthController {
             return Response.unauthorized("Invalid token");
         }
 
-        // TODO: make the response in snake case
         return Response.success(
             "Token refreshed successfully",
             {accessToken: generateAccessToken(session)}
