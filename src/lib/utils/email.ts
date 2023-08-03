@@ -12,12 +12,17 @@ const transporter = nodemailer.createTransport({
 
 
 const send = async (to: string, subject: string, html: string) => {
-    await transporter.sendMail({
-        from: process.env.EMAIL_USERNAME,
-        to: to,
-        subject: subject,
-        html: html
-    });
+    try {
+        await transporter.sendMail({
+            from: process.env.EMAIL_USERNAME,
+            to: to,
+            subject: subject,
+            html: html
+        });
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 };
 
 const sendOTP = async (to: string, otp: string) => {
@@ -25,7 +30,7 @@ const sendOTP = async (to: string, otp: string) => {
 };
 
 const sendToken = async (to: string, token: string) => {
-    await send(to, 'Email Confirmation', `<a>http://localhost:3000/confirm-email?token=${token}${token}</a>`);
+    await send(to, 'Email Confirmation', `<a>http://localhost:3000/confirm-email?token=${token}</a>`);
 };
 
 const sendPasswordResetEmail = async (to: string, token: string) => {
