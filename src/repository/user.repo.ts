@@ -122,7 +122,7 @@ export default class UserRepository {
         });
     }
 
-    async getUserAddreses(id: number) {
+    async getUserAddresses(id: number) {
         const user = await this.user.findUnique({
             where: {id: id},
             select: {
@@ -186,6 +186,8 @@ export default class UserRepository {
                 wishlist: true
             }
         });
+
+        return user ? user.wishlist : [];
     }
 
     async deleteUserWishlist(id: number) {
