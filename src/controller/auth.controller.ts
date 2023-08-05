@@ -4,7 +4,7 @@ import { User } from "@prisma/client";
 import * as Constants from "@lib/constants";
 import { compare, hash } from "@utils/hashing";
 import { UserSession } from "@lib/types";
-import UserRepository from "@repository/user_repo";
+import UserRepository from "@repository/user.repo";
 import {
     generateAccessToken,
     generateOTP,
