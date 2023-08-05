@@ -12,9 +12,9 @@
     "lint": "next lint",
     "studio": "prisma studio",
     "test": "npm run test:unit && npm run test:integration",
-    "test:unit": "jest __test__/unit",
-    "test:watch": "jest --watch __test__/unit",
-    "test:integration": "jest __test__/integration",
+    "test:unit": "jest unit",
+    "test:watch": "jest --watch unit",
+    "test:integration": "jest integration",
     "test:cov": "jest --coverage",
     "test:ci": "jest --ci"
   },
