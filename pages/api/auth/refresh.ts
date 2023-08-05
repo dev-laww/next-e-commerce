@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-import AuthController from "@controller/auth_controller";
+import AuthController from "@controller/auth.controller";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const controller = new AuthController();
