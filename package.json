@@ -14,8 +14,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "clean": "rimraf .next .swc out coverage",
     "lint": "next lint",
+    "start": "next start",
     "studio": "prisma studio",
     "test": "npm run test:unit && npm run test:integration",
     "test:unit": "jest unit",
