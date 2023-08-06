@@ -7,7 +7,6 @@
   },
   "lint-staged": {
     "src/**/*": [
-      "yarn prettier:format",
       "yarn eslint:format"
     ]
   },
@@ -24,7 +23,8 @@
     "test:integration": "jest integration",
     "test:cov": "jest --coverage",
     "test:ci": "jest --ci",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "eslint:format": "eslint . --ext ts --ext tsx --ext js"
   },
   "dependencies": {
     "@prisma/client": "^5.1.0",
