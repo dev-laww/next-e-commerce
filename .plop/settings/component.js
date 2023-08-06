@@ -1,3 +1,4 @@
+/** @type {import('plop').PlopGeneratorConfig}*/
 module.exports = {
     description: 'Creates a new component',
     prompts: [
