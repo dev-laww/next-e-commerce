@@ -1,6 +1,6 @@
 import { Prisma, User } from "@prisma/client";
 
-import { TOKEN_OTP_EXPIRY} from "@lib/constants";
+import { TOKEN_OTP_EXPIRY } from "@lib/constants";
 import prisma from "@lib/prisma";
 import { hash } from "@utils/hashing";
 
@@ -9,38 +9,38 @@ export default class UserRepository {
     prismaClient = prisma;
     user = this.prismaClient.user;
 
-    async createUser(data: User) {
+    public async createUser(data: User) {
         return this.user.create({
             data: data
         });
     }
 
-    async getUserById(id: number) {
+    public async getUserById(id: number) {
         return this.user.findUnique({
             where: {id: id}
         });
     }
 
-    async getUserByEmail(email: string) {
+    public async getUserByEmail(email: string) {
         return this.user.findUnique({
             where: {email: email}
         });
     }
 
-    async getUserByUsername(username: string) {
+    public async getUserByUsername(username: string) {
         return this.user.findUnique({
             where: {username: username}
         });
     }
 
-    async updateUser(id: number, data: Prisma.UserUpdateInput) {
+    public async updateUser(id: number, data: Prisma.UserUpdateInput) {
         return this.user.update({
             where: {id: id},
             data: data
         });
     }
 
-    async changePassword(id: number, password: string) {
+    public async changePassword(id: number, password: string) {
         const hashed = await hash(password);
 
         return this.user.update({
@@ -51,14 +51,14 @@ export default class UserRepository {
         });
     }
 
-    async deleteUserById(id: number) {
+    public async deleteUserById(id: number) {
         return this.user.delete({
             where: {id: id}
         });
     }
 
     // TODO: Add pagination
-    async getAllUsers(filter: Prisma.UserWhereInput) {
+    public async getAllUsers(filter: Prisma.UserWhereInput) {
         return this.user.findMany({
             where: filter,
             include: {
@@ -67,7 +67,7 @@ export default class UserRepository {
         });
     }
 
-    async getUserRoles(id: number) {
+    public async getUserRoles(id: number) {
         const user = await this.user.findUnique({
             where: {id: id},
             select: {
@@ -78,7 +78,7 @@ export default class UserRepository {
         return user ? user.roles : [];
     }
 
-    async updateUserRoles(id: number, roles: number[]) {
+    public async updateUserRoles(id: number, roles: number[]) {
         return this.user.update({
             where: {id: id},
             data: {
@@ -89,7 +89,7 @@ export default class UserRepository {
         });
     }
 
-    async getUserPermissions(id: number) {
+    public async getUserPermissions(id: number) {
         const roles = await this.getUserRoles(id);
 
         if (!roles) return null;
@@ -103,7 +103,7 @@ export default class UserRepository {
         });
     }
 
-    async getUserPaymentMethods(id: number) {
+    public async getUserPaymentMethods(id: number) {
         const user = await this.user.findUnique({
             where: {id: id},
             select: {
@@ -114,7 +114,7 @@ export default class UserRepository {
         return user ? user.payment_methods : [];
     }
 
-    async deleteUserPaymentMethods(id: number) {
+    public async deleteUserPaymentMethods(id: number) {
         return this.prismaClient.paymentMethod.deleteMany({
             where: {
                 user_id: id
@@ -122,7 +122,7 @@ export default class UserRepository {
         });
     }
 
-    async getUserAddresses(id: number) {
+    public async getUserAddresses(id: number) {
         const user = await this.user.findUnique({
             where: {id: id},
             select: {
@@ -133,7 +133,7 @@ export default class UserRepository {
         return user ? user.addresses : [];
     }
 
-    async deleteUserAddresses(id: number) {
+    public async deleteUserAddresses(id: number) {
         return this.prismaClient.address.deleteMany({
             where: {
                 user_id: id
@@ -141,7 +141,7 @@ export default class UserRepository {
         });
     }
 
-    async getUserOrders(id: number) {
+    public async getUserOrders(id: number) {
         const user = await this.user.findUnique({
             where: {id: id},
             select: {
@@ -152,7 +152,7 @@ export default class UserRepository {
         return user ? user.orders : [];
     }
 
-    async deleteUserOrders(id: number) {
+    public async deleteUserOrders(id: number) {
         return this.prismaClient.order.deleteMany({
             where: {
                 user_id: id
@@ -160,7 +160,7 @@ export default class UserRepository {
         });
     }
 
-    async getUserReviews(id: number) {
+    public async getUserReviews(id: number) {
         const user = await this.user.findUnique({
             where: {id: id},
             select: {
@@ -171,7 +171,7 @@ export default class UserRepository {
         return user ? user.reviews : [];
     }
 
-    async deleteAllUserReviews(id: number) {
+    public async deleteAllUserReviews(id: number) {
         return this.prismaClient.review.deleteMany({
             where: {
                 user_id: id
@@ -179,7 +179,7 @@ export default class UserRepository {
         });
     }
 
-    async getUserWishlist(id: number) {
+    public async getUserWishlist(id: number) {
         const user = await this.user.findUnique({
             where: {id: id},
             select: {
@@ -190,7 +190,7 @@ export default class UserRepository {
         return user ? user.wishlist : [];
     }
 
-    async deleteUserWishlist(id: number) {
+    public async deleteUserWishlist(id: number) {
         return this.prismaClient.wishlistItem.deleteMany({
             where: {
                 user_id: id
@@ -198,7 +198,7 @@ export default class UserRepository {
         });
     }
 
-    async getUserCart(id: number) {
+    public async getUserCart(id: number) {
         const user = await this.user.findUnique({
             where: {id: id},
             select: {
@@ -209,14 +209,15 @@ export default class UserRepository {
         return user ? user.cart : [];
     }
 
-    async deleteUserCart(id: number) {
+    public async deleteUserCart(id: number) {
         return this.prismaClient.cartItem.deleteMany({
             where: {
                 user_id: id
             }
         });
     }
-    async generateTokenOTP(id: number, token: string, type: string) {
+
+    public async generateTokenOTP(id: number, token: string, type: string) {
         return prisma.tokenOTP.create({
             data: {
                 token: token,
@@ -226,7 +227,7 @@ export default class UserRepository {
         });
     }
 
-    async verifyTokenOTP(token: string, type: string) {
+    public async verifyTokenOTP(token: string, type: string) {
         const tokenRecord = await prisma.tokenOTP.findFirst({
             where: {
                 token: token,
