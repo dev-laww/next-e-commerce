@@ -12,27 +12,26 @@ module.exports = {
         // controller
         {
             type: "add",
-            path: "../src/controller/name.controller.ts",
-            templateFile: "templates/controller/{{name}}.controller.ts.hbs"
+            path: "../src/controller/{{camelCase name}}.controller.ts",
+            templateFile: "templates/controller/controller.ts.hbs"
         },
         // tests
         {
             type: "add",
-            path: "../__test__/unit/controller/{{name}}.controller.test.ts",
-            templateFile: "templates/controller/" +
-                "test.controller.hbs"
+            path: "../__test__/unit/controller/{{camelCase name}}.controller.test.ts",
+            templateFile: "templates/controller/test.controller.ts.hbs"
         },
         // validation
         {
             type: "add",
-            path: "../src/validation/{{name}}.validation.ts",
-            templateFile: "templates/controller/validation.ts.hbs"
+            path: "../src/lib/validator/{{camelCase name}}.validator.ts",
+            templateFile: "templates/controller/validator.ts.hbs"
         },
         // validation tests
         {
             type: "add",
-            path: "../__test__/unit/validation/{{name}}.validation.test.ts",
-            templateFile: "templates/controller/test.validation.hbs"
+            path: "../__test__/unit/validator/{{camelCase name}}.validator.test.ts",
+            templateFile: "templates/controller/test.validator.ts.hbs"
         }
     ]
 }

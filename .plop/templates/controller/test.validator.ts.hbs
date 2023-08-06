@@ -1,4 +1,4 @@
-import Validators from "@lib/validator/{{name}}.validator";
+import Validators from "@lib/validator/{{camelCase name}}.validator";
 
 describe("{{pascalCase name}}Validator", () => {
     it("validates correctly", async () => {
@@ -10,8 +10,10 @@ describe("{{pascalCase name}}Validator", () => {
 
         const validatedObj = Validators.testSchema.safeParse(testObject);
 
+        if (!validatedObj.success) throw new Error("Validation failed")
+
         expect(validatedObj.success).toBe(true);
-        expect(validatedObj.data).toEqual({
+        expect(validatedObj.data).toMatchObject({
             name: "John Doe",
             email: testObject.email,
             age: 18
@@ -25,15 +27,15 @@ describe("{{pascalCase name}}Validator", () => {
             age: 18
         };
 
-        const { error } = Validators.testSchema.safeParse(testObject);
+        const validatedObj = Validators.testSchema.safeParse(testObject);
 
-        expect(error).toEqual({
-            code: "invalid_type",
-            expected: "string",
-            message: "Invalid input type",
+        if (validatedObj.success) throw new Error("Validation should fail")
+
+        expect(validatedObj.error.errors).toEqual([{
+            code: "invalid_string",
+            message: "Invalid email",
             path: ["email"],
-            received: "undefined",
-            type: "string"
-        });
+            validation: "email",
+        }]);
     });
 });
