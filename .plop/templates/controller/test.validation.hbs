@@ -1,0 +1,39 @@
+import Validators from "@lib/validator/{{name}}.validator";
+
+describe("{{pascalCase name}}Validator", () => {
+    it("validates correctly", async () => {
+        const testObject = {
+            name: "John Doe",
+            email: "mail@email.com",
+            age: 18
+        };
+
+        const validatedObj = Validators.testSchema.safeParse(testObject);
+
+        expect(validatedObj.success).toBe(true);
+        expect(validatedObj.data).toEqual({
+            name: "John Doe",
+            email: testObject.email,
+            age: 18
+        });
+    });
+
+    it("validates error", async () => {
+        const testObject = {
+            name: "John Doe",
+            email: "",
+            age: 18
+        };
+
+        const { error } = Validators.testSchema.safeParse(testObject);
+
+        expect(error).toEqual({
+            code: "invalid_type",
+            expected: "string",
+            message: "Invalid input type",
+            path: ["email"],
+            received: "undefined",
+            type: "string"
+        });
+    });
+});

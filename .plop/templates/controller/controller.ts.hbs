@@ -1,0 +1,11 @@
+import { NextApiRequest } from "next";
+
+import { objectToSnake } from "@utils/string_case";
+import Validators from "@lib/validator/{{name}}.validator";
+import Response from "@lib/http";
+
+export default class {{pascalCase name}}Controller {
+  async hello(req: NextApiRequest) {
+    return Response.success({ message: "Hello World" });
+  }
+}
