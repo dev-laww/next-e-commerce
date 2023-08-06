@@ -12,7 +12,6 @@ function convertObject<
     for (const [k, v] of Object.entries(obj)) {
         // eslint-disable-next-line
         // @ts-ignore
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         out[keyConverter(k)] = Array.isArray(v)
             ? (v.map(<ArrayItem extends object>(item: ArrayItem) =>
                 typeof item === 'object' && !Buffer.isBuffer(item)
