@@ -24,7 +24,8 @@
     "test:cov": "jest --coverage",
     "test:ci": "jest --ci",
     "prepare": "husky install",
-    "eslint:format": "eslint . --ext ts --ext tsx --ext js"
+    "eslint:format": "eslint . --ext ts --ext tsx --ext js",
+    "generate": "plop --plopfile ./.plop/plopfile.js"
   },
   "dependencies": {
     "@prisma/client": "^5.1.0",
