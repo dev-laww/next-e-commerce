@@ -1,0 +1,11 @@
+import {{pascalCase name}}Repository from "@repository/{{kebabCase name}}.repo";
+
+describe("{{pascalCase name}}Repository", () => {
+    it("should return a message", async () => {
+        const repository = new {{pascalCase name}}Repository();
+
+        const result = await repository.test();
+
+        expect(result).toEqual("Hello World");
+    });
+});
