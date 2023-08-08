@@ -121,7 +121,7 @@ export default class AuthController {
         if (!user) {
             user = await this.userRepo.getUserByUsername(requestData.data.email);
 
-            if (!user) return Response.badRequest("Email or username is invalid");
+            if (!user) return Response.notFound("Email or username is invalid");
         }
 
         const token = requestData.data.type === "otp" ? generateOTP() : generateRandomToken();
