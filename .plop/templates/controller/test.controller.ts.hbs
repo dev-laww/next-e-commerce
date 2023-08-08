@@ -3,21 +3,6 @@ import {{pascalCase name}}Controller from "@controller/{{camelCase name}}.contro
 
 
 describe("{{pascalCase name}}Controller", () => {
-    it("should return a message", async () => {
-        const controller = new {{pascalCase name}}Controller();
-
-        const req: Partial<NextApiRequest> = {
-            method: "GET",
-        };
-
-        const {statusCode, response} = await controller.hello(req as NextApiRequest);
-
-        expect(response).toMatchObject({
-            message: "Hello World",
-            data: {},
-            status: "success"
-        });
-        expect(statusCode).toEqual(200);
-    });
+    it.todo("write tests");
 });
 

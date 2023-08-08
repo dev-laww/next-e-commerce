@@ -1,41 +1,6 @@
 import Validators from "@lib/validator/{{camelCase name}}.validator";
 
 describe("{{pascalCase name}}Validator", () => {
-    it("validates correctly", async () => {
-        const testObject = {
-            name: "John Doe",
-            email: "mail@email.com",
-            age: 18
-        };
-
-        const validatedObj = Validators.testSchema.safeParse(testObject);
-
-        if (!validatedObj.success) throw new Error("Validation failed")
-
-        expect(validatedObj.success).toBe(true);
-        expect(validatedObj.data).toMatchObject({
-            name: "John Doe",
-            email: testObject.email,
-            age: 18
-        });
-    });
-
-    it("validates error", async () => {
-        const testObject = {
-            name: "John Doe",
-            email: "",
-            age: 18
-        };
-
-        const validatedObj = Validators.testSchema.safeParse(testObject);
-
-        if (validatedObj.success) throw new Error("Validation should fail")
-
-        expect(validatedObj.error.errors).toEqual([{
-            code: "invalid_string",
-            message: "Invalid email",
-            path: ["email"],
-            validation: "email",
-        }]);
-    });
+    it.todo("validates correctly");
+    it.todo("validates error");
 });
