@@ -15,7 +15,7 @@ const users = [
         "image_url": "https://example.com/user2.jpg",
         "email": "alice.smith@example.com",
         "username": "alicesmith",
-        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu_2",
+        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu",
         "confirmed": true
     },
     {
@@ -25,7 +25,7 @@ const users = [
         "image_url": "https://example.com/user101.jpg",
         "email": "emma.brown@example.com",
         "username": "emmabrown",
-        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu_101",
+        "password": "$2a$10$FyDL9cB8vaD9U/XF4Q81A.m2W26BHjT/fXkjw1xQtgKQ4z6dH7/Zu",
         "confirmed": true
     },
     {
