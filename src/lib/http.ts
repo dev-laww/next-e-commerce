@@ -83,7 +83,7 @@ const internalServerError = (message: string): Response => {
 const validationError = (message: string, errors: ZodIssue[]): Response => {
     const errorMessages = errors.map(error => error.message).join(", ");
     return {
-        statusCode: STATUS_CODE.BAD_REQUEST,
+        statusCode: STATUS_CODE.UNPROCESSABLE_ENTITY,
         response: {
             code: ERROR_CODE.VALIDATION_ERROR,
             status: STATUS.FAILED,
