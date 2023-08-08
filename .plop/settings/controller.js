@@ -26,12 +26,6 @@ module.exports = {
             type: "add",
             path: "../src/lib/validator/{{kebabCase name}}.validator.ts",
             templateFile: "templates/controller/validator.ts.hbs"
-        },
-        // validation tests
-        {
-            type: "add",
-            path: "../__test__/unit/validator/{{kebabCase name}}.validator.test.ts",
-            templateFile: "templates/controller/test.validator.ts.hbs"
         }
     ]
 }
