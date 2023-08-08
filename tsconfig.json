@@ -45,6 +45,9 @@
       "@controller/*": [
         "./src/controller/*"
       ],
+      "@mocks/*": [
+        "./__mocks__/*"
+      ],
     }
   },
   "include": [
