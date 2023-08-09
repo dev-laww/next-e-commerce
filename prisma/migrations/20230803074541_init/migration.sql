@@ -14,6 +14,8 @@ CREATE TABLE "user" (
     CONSTRAINT "user_pkey" PRIMARY KEY ("id")
 );
 
+ALTER SEQUENCE "user_id_seq" RESTART WITH 100000;
+
 -- CreateTable
 CREATE TABLE "role" (
     "id" SERIAL NOT NULL,
@@ -23,6 +25,8 @@ CREATE TABLE "role" (
 
     CONSTRAINT "role_pkey" PRIMARY KEY ("id")
 );
+
+ALTER SEQUENCE "role_id_seq" RESTART WITH 10000;
 
 -- CreateTable
 CREATE TABLE "user_role" (
@@ -35,6 +39,8 @@ CREATE TABLE "user_role" (
     CONSTRAINT "user_role_pkey" PRIMARY KEY ("id")
 );
 
+ALTER SEQUENCE "user_role_id_seq" RESTART WITH 10000;
+
 -- CreateTable
 CREATE TABLE "permission" (
     "id" SERIAL NOT NULL,
@@ -46,6 +52,8 @@ CREATE TABLE "permission" (
     CONSTRAINT "permission_pkey" PRIMARY KEY ("id")
 );
 
+ALTER SEQUENCE "permission_id_seq" RESTART WITH 10000;
+
 -- CreateTable
 CREATE TABLE "role_permission" (
     "id" SERIAL NOT NULL,
@@ -56,6 +64,8 @@ CREATE TABLE "role_permission" (
 
     CONSTRAINT "role_permission_pkey" PRIMARY KEY ("id")
 );
+
+ALTER SEQUENCE "role_permission_id_seq" RESTART WITH 10000;
 
 -- CreateTable
 CREATE TABLE "address" (
@@ -71,6 +81,8 @@ CREATE TABLE "address" (
 
     CONSTRAINT "address_pkey" PRIMARY KEY ("id")
 );
+
+ALTER SEQUENCE "address_id_seq" RESTART WITH 10000;
 
 -- CreateTable
 CREATE TABLE "payment_method" (
@@ -88,6 +100,8 @@ CREATE TABLE "payment_method" (
     CONSTRAINT "payment_method_pkey" PRIMARY KEY ("id")
 );
 
+ALTER SEQUENCE "payment_method_id_seq" RESTART WITH 10000;
+
 -- CreateTable
 CREATE TABLE "product" (
     "id" SERIAL NOT NULL,
@@ -98,6 +112,8 @@ CREATE TABLE "product" (
 
     CONSTRAINT "product_pkey" PRIMARY KEY ("id")
 );
+
+ALTER SEQUENCE "product_id_seq" RESTART WITH 10000;
 
 -- CreateTable
 CREATE TABLE "product_variant" (
@@ -114,6 +130,8 @@ CREATE TABLE "product_variant" (
     CONSTRAINT "product_variant_pkey" PRIMARY KEY ("id")
 );
 
+ALTER SEQUENCE "product_variant_id_seq" RESTART WITH 10000;
+
 -- CreateTable
 CREATE TABLE "shipping_method" (
     "id" SERIAL NOT NULL,
@@ -124,6 +142,8 @@ CREATE TABLE "shipping_method" (
 
     CONSTRAINT "shipping_method_pkey" PRIMARY KEY ("id")
 );
+
+ALTER SEQUENCE "shipping_method_id_seq" RESTART WITH 10000;
 
 -- CreateTable
 CREATE TABLE "review" (
@@ -138,6 +158,8 @@ CREATE TABLE "review" (
 
     CONSTRAINT "review_pkey" PRIMARY KEY ("id")
 );
+
+ALTER SEQUENCE "review_id_seq" RESTART WITH 10000;
 
 -- CreateTable
 CREATE TABLE "order" (
@@ -154,6 +176,8 @@ CREATE TABLE "order" (
     CONSTRAINT "order_pkey" PRIMARY KEY ("id")
 );
 
+ALTER SEQUENCE "order_id_seq" RESTART WITH 10000;
+
 -- CreateTable
 CREATE TABLE "order_item" (
     "id" SERIAL NOT NULL,
@@ -167,6 +191,8 @@ CREATE TABLE "order_item" (
 
     CONSTRAINT "order_item_pkey" PRIMARY KEY ("id")
 );
+
+ALTER SEQUENCE "order_item_id_seq" RESTART WITH 10000;
 
 -- CreateTable
 CREATE TABLE "payment" (
@@ -182,6 +208,8 @@ CREATE TABLE "payment" (
     CONSTRAINT "payment_pkey" PRIMARY KEY ("id")
 );
 
+ALTER SEQUENCE "payment_id_seq" RESTART WITH 10000;
+
 -- CreateTable
 CREATE TABLE "category" (
     "id" SERIAL NOT NULL,
@@ -191,6 +219,8 @@ CREATE TABLE "category" (
 
     CONSTRAINT "category_pkey" PRIMARY KEY ("id")
 );
+
+ALTER SEQUENCE "category_id_seq" RESTART WITH 10000;
 
 -- CreateTable
 CREATE TABLE "product_category" (
@@ -202,6 +232,8 @@ CREATE TABLE "product_category" (
 
     CONSTRAINT "product_category_pkey" PRIMARY KEY ("id")
 );
+
+ALTER SEQUENCE "product_category_id_seq" RESTART WITH 10000;
 
 -- CreateTable
 CREATE TABLE "cart_item" (
@@ -217,6 +249,8 @@ CREATE TABLE "cart_item" (
     CONSTRAINT "cart_item_pkey" PRIMARY KEY ("id")
 );
 
+ALTER SEQUENCE "cart_item_id_seq" RESTART WITH 10000;
+
 -- CreateTable
 CREATE TABLE "wishlist_item" (
     "id" SERIAL NOT NULL,
@@ -227,6 +261,8 @@ CREATE TABLE "wishlist_item" (
 
     CONSTRAINT "wishlist_item_pkey" PRIMARY KEY ("id")
 );
+
+ALTER SEQUENCE "wishlist_item_id_seq" RESTART WITH 10000;
 
 -- CreateTable
 CREATE TABLE "coupon" (
@@ -240,6 +276,8 @@ CREATE TABLE "coupon" (
     CONSTRAINT "coupon_pkey" PRIMARY KEY ("id")
 );
 
+ALTER SEQUENCE "coupon_id_seq" RESTART WITH 10000;
+
 -- CreateTable
 CREATE TABLE "log" (
     "id" SERIAL NOT NULL,
@@ -250,6 +288,8 @@ CREATE TABLE "log" (
 
     CONSTRAINT "log_pkey" PRIMARY KEY ("id")
 );
+
+ALTER SEQUENCE "log_id_seq" RESTART WITH 10000;
 
 -- CreateTable
 CREATE TABLE "TokenOTP" (
@@ -262,6 +302,8 @@ CREATE TABLE "TokenOTP" (
 
     CONSTRAINT "TokenOTP_pkey" PRIMARY KEY ("id")
 );
+
+ALTER SEQUENCE "TokenOTP_id_seq" RESTART WITH 10000;
 
 -- CreateIndex
 CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
