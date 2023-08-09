@@ -58,9 +58,9 @@ export default class UserRepository {
     }
 
     // TODO: Add pagination
-    public async getAllUsers(filter: Prisma.UserWhereInput) {
+    public async getAllUsers(filter: Prisma.UserWhereInput | undefined = undefined) {
         return this.user.findMany({
-            where: filter,
+            where: filter ? filter : undefined,
             include: {
                 _count: true
             }
@@ -92,11 +92,11 @@ export default class UserRepository {
     public async getUserPermissions(id: number) {
         const roles = await this.getUserRoles(id);
 
-        if (!roles) return null;
+        if (roles.length === 0) return null;
 
-        return this.prismaClient.role.findMany({
+        return this.prismaClient.rolePermission.findMany({
             where: {
-                id: {
+                role_id: {
                     in: roles.map(role => role.id)
                 }
             }
@@ -171,7 +171,7 @@ export default class UserRepository {
         return user ? user.reviews : [];
     }
 
-    public async deleteAllUserReviews(id: number) {
+    public async deleteUserReviews(id: number) {
         return this.prismaClient.review.deleteMany({
             where: {
                 user_id: id
