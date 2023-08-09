@@ -13,7 +13,7 @@ import {
     verifyRefreshToken
 } from "@utils/token";
 import { objectToSnake } from "@utils/string_case";
-import Validators from "@lib/validator/auth";
+import Validators from "@lib/validator/auth.validator";
 import Response from "@lib/http"
 import Email from "@utils/email";
 
