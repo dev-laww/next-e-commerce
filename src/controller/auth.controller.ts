@@ -1,5 +1,6 @@
 import { NextApiRequest } from "next";
 import { User } from "@prisma/client";
+import humps from "humps";
 
 import * as Constants from "@lib/constants";
 import { compare, hash } from "@utils/hashing";
@@ -12,7 +13,6 @@ import {
     generateRefreshToken,
     verifyRefreshToken
 } from "@utils/token";
-import { objectToSnake } from "@utils/string_case";
 import Validators from "@lib/validator/auth.validator";
 import Response from "@lib/http"
 import Email from "@utils/email";
@@ -37,7 +37,7 @@ export default class AuthController {
 
         req.body.password = await hash(req.body.password);
 
-        const user = await this.userRepo.createUser(objectToSnake(req.body) as User)
+        const user = await this.userRepo.createUser(humps.decamelizeKeys(req.body) as User)
         const userSession: UserSession = {
             id: user.id,
             first_name: user.first_name,
