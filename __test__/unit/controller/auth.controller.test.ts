@@ -259,10 +259,57 @@ describe("Auth Controller", () => {
     })
 
     describe("Test confirm reset password", () => {
-        it.todo("returns 200 if change password success");
-        it.todo("returns 422 if wrong body");
-        it.todo("returns 404 if user not found");
-        it.todo("returns 401 if invalid token");
+        beforeEach(() => {
+            req.method = "PUT";
+            req.body = {
+                token: "x",
+                password: "password",
+                type: "token"
+            };
+            jest.clearAllMocks();
+        })
+
+        it("returns 200 if change password success", async () => {
+            (controller.userRepo.verifyTokenOTP as jest.Mock).mockResolvedValue({success: true, data: data});
+            (controller.userRepo.changePassword as jest.Mock).mockResolvedValue(null);
+
+            let {statusCode, response} = await controller.confirmResetPassword(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.SUCCESS);
+            expect(response.data).toBeUndefined();
+
+            // OTP
+            req.body.type = "otp";
+            ({statusCode, response} = await controller.confirmResetPassword(req));
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.SUCCESS);
+            expect(response.data).toBeUndefined();
+        });
+
+        it("returns 422 if wrong body", async () => {
+            req.body = {};
+
+            const {statusCode, response} = await controller.confirmResetPassword(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.UNPROCESSABLE_ENTITY);
+            expect(response.data).toBeUndefined();
+        });
+
+        it("returns 401 if invalid token", async () => {
+            (controller.userRepo.verifyTokenOTP as jest.Mock).mockResolvedValue({success: false, data: null});
+
+            let {statusCode, response} = await controller.confirmResetPassword(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.UNAUTHORIZED);
+            expect(response.data).toBeUndefined();
+
+            req.body.type = "otp";
+
+            ({statusCode, response} = await controller.confirmResetPassword(req));
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.UNAUTHORIZED);
+            expect(response.data).toBeUndefined();
+        });
     })
 
     describe("Test confirm email", () => {
