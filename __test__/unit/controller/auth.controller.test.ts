@@ -10,6 +10,7 @@ jest.mock("@utils/email", () => require("@mocks/lib/utils/email.mock"));
 
 describe("Auth Controller", () => {
     let controller: AuthController;
+    let req: NextApiRequest;
     const data = {
         id: 1,
         username: "username",
@@ -20,19 +21,17 @@ describe("Auth Controller", () => {
     } as User;
 
     beforeEach(() => {
+        req = {
+            method: "POST",
+        } as NextApiRequest;
+
         controller = new AuthController();
 
         jest.clearAllMocks();
     });
 
     describe("Test login", () => {
-        let req: NextApiRequest;
-
         beforeEach(() => {
-            req = {
-                method: "POST",
-            } as NextApiRequest;
-
             jest.clearAllMocks();
         })
 
@@ -93,21 +92,16 @@ describe("Auth Controller", () => {
     })
 
     describe("Test signup", () => {
-        let req: NextApiRequest;
-
         beforeEach(() => {
-            req = {
-                method: "POST",
-                body: {
-                    username: "username",
-                    password: "password",
-                    confirmPassword: "password",
-                    email: "email@mail.com",
-                    firstName: "name",
-                    lastName: "name",
-                    imageUrl: "https://image.com/image.jpg"
-                }
-            } as NextApiRequest;
+            req.body = {
+                username: "username",
+                password: "password",
+                confirmPassword: "password",
+                email: "email@mail.com",
+                firstName: "name",
+                lastName: "name",
+                imageUrl: "https://image.com/image.jpg"
+            };
 
             jest.clearAllMocks();
         });
@@ -180,10 +174,88 @@ describe("Auth Controller", () => {
     })
 
     describe("Test reset password", () => {
-        it.todo("returns 200 if reset password success");
-        it.todo("returns 422 if wrong body");
-        it.todo("returns 404 if user not found");
-        it.todo("returns 500 if failed to send email");
+        beforeEach(() => {
+            req.body = {
+                email: "test@mail.com",
+                type: "token"
+            };
+            jest.clearAllMocks();
+        });
+
+        it("returns 200 if reset password success", async () => {
+            const token = {
+                id: 1,
+                user_id: 1,
+                token: "x",
+                type: Constants.TOKEN_TYPE.PASSWORD_RESET_TOKEN,
+            };
+
+            (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(data);
+            (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue(token);
+            (Email.sendToken as jest.Mock).mockResolvedValue(null);
+
+            let {statusCode, response} = await controller.resetPassword(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.SUCCESS);
+            expect(response.data).toBeUndefined();
+
+            // OTP
+            req.body.type = "otp";
+            token.type = Constants.TOKEN_TYPE.PASSWORD_RESET_OTP;
+            (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue(token);
+            (Email.sendOTP as jest.Mock).mockResolvedValue(null);
+
+            ({statusCode, response} = await controller.resetPassword(req));
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.SUCCESS);
+            expect(response.data).toBeUndefined();
+        });
+
+        it("returns 422 if wrong body", async () => {
+            req.body = {};
+
+            const {statusCode, response} = await controller.resetPassword(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.UNPROCESSABLE_ENTITY);
+            expect(response.data).toBeUndefined();
+        });
+
+        it("returns 404 if user not found", async () => {
+            (controller.userRepo.getUserByUsername as jest.Mock).mockResolvedValue(null);
+            (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(null);
+
+            const {statusCode, response} = await controller.resetPassword(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.NOT_FOUND);
+            expect(response.data).toBeUndefined();
+        });
+
+        it("returns 500 if failed to send email", async () => {
+            const token = {
+                id: 1,
+                user_id: 1,
+                token: "x",
+                type: Constants.TOKEN_TYPE.PASSWORD_RESET_TOKEN,
+            };
+
+            (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(data);
+            (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue(token);
+            (Email.sendToken as jest.Mock).mockRejectedValue(Error("error"));
+
+            let {statusCode, response} = await controller.resetPassword(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.INTERNAL_SERVER_ERROR);
+            expect(response.data).toBeUndefined();
+
+            // OTP
+            req.body.type = "otp";
+            token.type = Constants.TOKEN_TYPE.PASSWORD_RESET_OTP;
+            (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue(token);
+            (Email.sendOTP as jest.Mock).mockRejectedValue(Error("error"));
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.INTERNAL_SERVER_ERROR);
+            expect(response.data).toBeUndefined();
+        });
     })
 
     describe("Test confirm reset password", () => {
