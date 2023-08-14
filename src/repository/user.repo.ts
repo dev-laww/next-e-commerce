@@ -1,4 +1,16 @@
-import { Prisma, User } from "@prisma/client";
+import {
+    Address,
+    CartItem,
+    Order,
+    PaymentMethod,
+    Prisma,
+    Review,
+    Role,
+    RolePermission,
+    TokenOTP,
+    User,
+    WishlistItem
+} from "@prisma/client";
 
 import { TOKEN_OTP_EXPIRY } from "@lib/constants";
 import prisma from "@lib/prisma";
@@ -58,7 +70,7 @@ export default class UserRepository {
     }
 
     // TODO: Add pagination
-    public async getAll(filter: Prisma.UserWhereInput | undefined = undefined) {
+    public async getAll(filter: Prisma.UserWhereInput | undefined = undefined): Promise<User[]> {
         return this.user.findMany({
             where: filter,
             include: {
@@ -67,7 +79,7 @@ export default class UserRepository {
         });
     }
 
-    public async getUserRoles(id: number) {
+    public async getUserRoles(id: number): Promise<Role[]> {
         const user = await this.user.findUnique({
             where: {id: id},
             select: {
@@ -75,10 +87,16 @@ export default class UserRepository {
             }
         });
 
-        return user ? user.roles : [];
+        return this.prismaClient.role.findMany({
+            where: {
+                id: {
+                    in: user?.roles.map(role => role.role_id)
+                }
+            }
+        });
     }
 
-    public async updateUserRoles(id: number, roles: number[]) {
+    public async updateUserRoles(id: number, roles: number[]): Promise<User> {
         return this.user.update({
             where: {id: id},
             data: {
@@ -89,7 +107,7 @@ export default class UserRepository {
         });
     }
 
-    public async getUserPermissions(id: number) {
+    public async getUserPermissions(id: number): Promise<RolePermission[] | null> {
         const roles = await this.getUserRoles(id);
 
         if (roles.length === 0) return null;
@@ -103,7 +121,7 @@ export default class UserRepository {
         });
     }
 
-    public async getUserPaymentMethods(id: number) {
+    public async getUserPaymentMethods(id: number): Promise<PaymentMethod[]> {
         const user = await this.user.findUnique({
             where: {id: id},
             select: {
@@ -114,7 +132,7 @@ export default class UserRepository {
         return user ? user.payment_methods : [];
     }
 
-    public async deleteUserPaymentMethods(id: number) {
+    public async deleteUserPaymentMethods(id: number): Promise<Prisma.BatchPayload> {
         return this.prismaClient.paymentMethod.deleteMany({
             where: {
                 user_id: id
@@ -122,7 +140,7 @@ export default class UserRepository {
         });
     }
 
-    public async getUserAddresses(id: number) {
+    public async getUserAddresses(id: number): Promise<Address[]> {
         const user = await this.user.findUnique({
             where: {id: id},
             select: {
@@ -133,7 +151,7 @@ export default class UserRepository {
         return user ? user.addresses : [];
     }
 
-    public async deleteUserAddresses(id: number) {
+    public async deleteUserAddresses(id: number): Promise<Prisma.BatchPayload> {
         return this.prismaClient.address.deleteMany({
             where: {
                 user_id: id
@@ -141,7 +159,7 @@ export default class UserRepository {
         });
     }
 
-    public async getUserOrders(id: number) {
+    public async getUserOrders(id: number): Promise<Order[]> {
         const user = await this.user.findUnique({
             where: {id: id},
             select: {
@@ -152,7 +170,7 @@ export default class UserRepository {
         return user ? user.orders : [];
     }
 
-    public async deleteUserOrders(id: number) {
+    public async deleteUserOrders(id: number): Promise<Prisma.BatchPayload> {
         return this.prismaClient.order.deleteMany({
             where: {
                 user_id: id
@@ -160,7 +178,7 @@ export default class UserRepository {
         });
     }
 
-    public async getUserReviews(id: number) {
+    public async getUserReviews(id: number): Promise<Review[]> {
         const user = await this.user.findUnique({
             where: {id: id},
             select: {
@@ -171,7 +189,7 @@ export default class UserRepository {
         return user ? user.reviews : [];
     }
 
-    public async deleteUserReviews(id: number) {
+    public async deleteUserReviews(id: number): Promise<Prisma.BatchPayload> {
         return this.prismaClient.review.deleteMany({
             where: {
                 user_id: id
@@ -179,7 +197,7 @@ export default class UserRepository {
         });
     }
 
-    public async getUserWishlist(id: number) {
+    public async getUserWishlist(id: number): Promise<WishlistItem[]> {
         const user = await this.user.findUnique({
             where: {id: id},
             select: {
@@ -190,7 +208,7 @@ export default class UserRepository {
         return user ? user.wishlist : [];
     }
 
-    public async deleteUserWishlist(id: number) {
+public async deleteUserWishlist(id: number): Promise<Prisma.BatchPayload> {
         return this.prismaClient.wishlistItem.deleteMany({
             where: {
                 user_id: id
@@ -198,7 +216,7 @@ export default class UserRepository {
         });
     }
 
-    public async getUserCart(id: number) {
+    public async getUserCart(id: number): Promise<CartItem[]> {
         const user = await this.user.findUnique({
             where: {id: id},
             select: {
@@ -209,7 +227,7 @@ export default class UserRepository {
         return user ? user.cart : [];
     }
 
-    public async deleteUserCart(id: number) {
+    public async deleteUserCart(id: number): Promise<Prisma.BatchPayload> {
         return this.prismaClient.cartItem.deleteMany({
             where: {
                 user_id: id
@@ -217,7 +235,7 @@ export default class UserRepository {
         });
     }
 
-    public async generateTokenOTP(id: number, token: string, type: string) {
+    public async generateTokenOTP(id: number, token: string, type: string): Promise<TokenOTP> {
         return prisma.tokenOTP.create({
             data: {
                 token: token,
@@ -227,7 +245,7 @@ export default class UserRepository {
         });
     }
 
-    public async verifyTokenOTP(token: string, type: string) {
+    public async verifyTokenOTP(token: string, type: string): Promise<{success: boolean, data: User}> {
         const tokenRecord = await prisma.tokenOTP.findFirst({
             where: {
                 token: token,
