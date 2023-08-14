@@ -73,13 +73,13 @@ describe("UserRepository", () => {
 
     it("Test getAllUsers", async () => {
         (prisma.user.findMany as jest.Mock).mockResolvedValue([data] as User[]);
-        let result = await repository.getAllUsers()
+        let result = await repository.getAll()
 
         expect(result).toMatchObject([data]);
 
         // with filter
         (prisma.user.findMany as jest.Mock).mockResolvedValue([data] as User[]);
-        result = await repository.getAllUsers({
+        result = await repository.getAll({
             id: 1,
             username: "username"
         })

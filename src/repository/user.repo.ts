@@ -58,9 +58,9 @@ export default class UserRepository {
     }
 
     // TODO: Add pagination
-    public async getAllUsers(filter: Prisma.UserWhereInput | undefined = undefined) {
+    public async getAll(filter: Prisma.UserWhereInput | undefined = undefined) {
         return this.user.findMany({
-            where: filter ? filter : undefined,
+            where: filter,
             include: {
                 _count: true
             }
