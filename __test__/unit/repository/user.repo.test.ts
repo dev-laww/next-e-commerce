@@ -1,4 +1,14 @@
-import { Address, PaymentMethod, Order, User, Review, WishlistItem, CartItem, TokenOTP } from "@prisma/client";
+import {
+    Address,
+    PaymentMethod,
+    Order,
+    User,
+    Review,
+    WishlistItem,
+    CartItem,
+    TokenOTP,
+    UserRole, Role
+} from "@prisma/client";
 import { mockReset } from "jest-mock-extended";
 
 import UserRepository from "@repository/user.repo";
@@ -93,14 +103,16 @@ describe("UserRepository", () => {
             ...data,
             roles: [{
                 id: 1,
-                name: "name",
-            }]
+                role_id: 1,
+                user_id: 1
+            }] as UserRole[]
         };
 
         (prisma.user.findUnique as jest.Mock).mockResolvedValue(userWithRoles as User);
+        (prisma.role.findMany as jest.Mock).mockResolvedValue([]);
         let result = await repository.getUserRoles(1)
 
-        expect(result).toMatchObject(userWithRoles.roles);
+        expect(result).toMatchObject([]);
 
         (prisma.user.findUnique as jest.Mock).mockResolvedValue(null);
         result = await repository.getUserRoles(1)
@@ -115,16 +127,18 @@ describe("UserRepository", () => {
         expect(result).toMatchObject(data);
     })
 
-    it("Test getUserPermissions (non empty)", async () => {
+    it("Test getUserPermissions", async () => {
         const userWithRoles = {
             ...data,
             roles: [{
                 id: 1,
-                name: "name",
-            }]
+                role_id: 1,
+                user_id: 1
+            }] as UserRole[]
         };
 
         (prisma.user.findUnique as jest.Mock).mockResolvedValue(userWithRoles as User);
+        (prisma.role.findMany as jest.Mock).mockResolvedValue([{id: 1, name: "name"}] as Role[]);
         (prisma.rolePermission.findMany as jest.Mock).mockResolvedValue([]);
 
         let result = await repository.getUserPermissions(1)
@@ -133,6 +147,7 @@ describe("UserRepository", () => {
 
         // empty permissions
         (prisma.user.findUnique as jest.Mock).mockResolvedValue(null);
+        (prisma.role.findMany as jest.Mock).mockResolvedValue([]);
         (prisma.rolePermission.findMany as jest.Mock).mockResolvedValue([]);
         result = await repository.getUserPermissions(1)
 
