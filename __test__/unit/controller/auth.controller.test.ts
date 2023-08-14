@@ -44,7 +44,8 @@ describe("Auth Controller", () => {
             };
 
             // Mock getUserByEmail to return data
-            (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(data);
+            (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(null);
+            (controller.userRepo.getUserByUsername as jest.Mock).mockResolvedValue(data);
 
             // call login
             const {statusCode, response} = await controller.login(req);
@@ -65,7 +66,18 @@ describe("Auth Controller", () => {
             (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(data);
 
             // call login
-            const {statusCode, response} = await controller.login(req);
+            let {statusCode, response} = await controller.login(req);
+
+            // expect
+            expect(statusCode).toBe(Constants.STATUS_CODE.UNAUTHORIZED);
+            expect(response.data).toBeUndefined();
+
+            // Mock getUserByUsername to return data
+            (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(null);
+            (controller.userRepo.getUserByUsername as jest.Mock).mockResolvedValue(null);
+
+            // call login
+            ({statusCode, response} = await controller.login(req));
 
             // expect
             expect(statusCode).toBe(Constants.STATUS_CODE.UNAUTHORIZED);
@@ -125,8 +137,17 @@ describe("Auth Controller", () => {
             expect(response.data).toBeDefined();
         });
 
+        it("returns 400 if invalid request method", async () => {
+            req.method = "GET";
+
+            const {statusCode, response} = await controller.signup(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.BAD_REQUEST);
+            expect(response.data).toBeUndefined();
+        });
+
         it("returns 422 if wrong body", async () => {
-            req.body = {};
+            req.body = undefined;
 
             const {statusCode, response} = await controller.signup(req);
 
@@ -214,11 +235,20 @@ describe("Auth Controller", () => {
         });
 
         it("returns 422 if wrong body", async () => {
-            req.body = {};
+            req.body = undefined;
 
             const {statusCode, response} = await controller.resetPassword(req);
 
             expect(statusCode).toBe(Constants.STATUS_CODE.UNPROCESSABLE_ENTITY);
+            expect(response.data).toBeUndefined();
+        });
+
+        it("returns 400 if wrong request method", async () => {
+            req.method = "GET";
+
+            const {statusCode, response} = await controller.resetPassword(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.BAD_REQUEST);
             expect(response.data).toBeUndefined();
         });
 
@@ -229,6 +259,25 @@ describe("Auth Controller", () => {
             const {statusCode, response} = await controller.resetPassword(req);
 
             expect(statusCode).toBe(Constants.STATUS_CODE.NOT_FOUND);
+            expect(response.data).toBeUndefined();
+        });
+
+        it("returns 500 if failed to generate token", async () => {
+            (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(data);
+            (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue(null);
+
+            let {statusCode, response} = await controller.resetPassword(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.INTERNAL_SERVER_ERROR);
+            expect(response.data).toBeUndefined();
+
+            // OTP
+            req.body.type = "otp";
+            (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue(null);
+
+            ({statusCode, response} = await controller.resetPassword(req));
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.INTERNAL_SERVER_ERROR);
             expect(response.data).toBeUndefined();
         });
 
@@ -289,11 +338,20 @@ describe("Auth Controller", () => {
         });
 
         it("returns 422 if wrong body", async () => {
-            req.body = {};
+            req.body = undefined;
 
             const {statusCode, response} = await controller.confirmResetPassword(req);
 
             expect(statusCode).toBe(Constants.STATUS_CODE.UNPROCESSABLE_ENTITY);
+            expect(response.data).toBeUndefined();
+        });
+
+        it("returns 400 if invalid request method", async () => {
+            req.method = "GET";
+
+            const {statusCode, response} = await controller.confirmResetPassword(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.BAD_REQUEST);
             expect(response.data).toBeUndefined();
         });
 
@@ -341,11 +399,20 @@ describe("Auth Controller", () => {
         });
 
         it("returns 422 if wrong body", async () => {
-            req.body = {};
+            req.body = undefined;
 
             const {statusCode, response} = await controller.confirmEmail(req);
 
             expect(statusCode).toBe(Constants.STATUS_CODE.UNPROCESSABLE_ENTITY);
+            expect(response.data).toBeUndefined();
+        });
+
+        it("returns 400 if invalid request method", async () => {
+            req.method = "GET";
+
+            const {statusCode, response} = await controller.confirmEmail(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.BAD_REQUEST);
             expect(response.data).toBeUndefined();
         });
 
@@ -427,11 +494,30 @@ describe("Auth Controller", () => {
         });
 
         it("returns 422 if wrong body", async () => {
-            req.body = {};
+            req.body = undefined;
 
             const {statusCode, response} = await controller.resendEmailConfirmation(req);
 
             expect(statusCode).toBe(Constants.STATUS_CODE.UNPROCESSABLE_ENTITY);
+            expect(response.data).toBeUndefined();
+        });
+
+        it("returns 400 if invalid request method", async () => {
+            req.method = "GET";
+
+            const {statusCode, response} = await controller.resendEmailConfirmation(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.BAD_REQUEST);
+            expect(response.data).toBeUndefined();
+        });
+
+        it("returns 400 if user already confirmed", async () => {
+            (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(null);
+            (controller.userRepo.getUserByUsername as jest.Mock).mockResolvedValue({...data, confirmed: true});
+
+            const {statusCode, response} = await controller.resendEmailConfirmation(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.BAD_REQUEST);
             expect(response.data).toBeUndefined();
         });
 
@@ -442,6 +528,27 @@ describe("Auth Controller", () => {
             const {statusCode, response} = await controller.resendEmailConfirmation(req);
 
             expect(statusCode).toBe(Constants.STATUS_CODE.BAD_REQUEST);
+            expect(response.data).toBeUndefined();
+        });
+
+        it("returns 500 if failed to generate token", async () => {
+            (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(null);
+            (controller.userRepo.getUserByUsername as jest.Mock).mockResolvedValue(data);
+            (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue(null);
+
+            let {statusCode, response} = await controller.resendEmailConfirmation(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.INTERNAL_SERVER_ERROR);
+            expect(response.data).toBeUndefined();
+
+            // OTP
+            req.body.type = "otp";
+            token.type = Constants.TOKEN_TYPE.EMAIL_CONFIRMATION_OTP;
+            (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue(null);
+
+            ({statusCode, response} = await controller.resendEmailConfirmation(req));
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.INTERNAL_SERVER_ERROR);
             expect(response.data).toBeUndefined();
         });
 
@@ -498,11 +605,20 @@ describe("Auth Controller", () => {
         });
 
         it("returns 422 if wrong body", async () => {
-            req.body = {};
+            req.body = undefined;
 
             const {statusCode, response} = await controller.refreshToken(req);
 
             expect(statusCode).toBe(Constants.STATUS_CODE.UNPROCESSABLE_ENTITY);
+            expect(response.data).toBeUndefined();
+        });
+
+        it("returns 400 if invalid request method", async () => {
+            req.method = "GET";
+
+            const {statusCode, response} = await controller.refreshToken(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.BAD_REQUEST);
             expect(response.data).toBeUndefined();
         });
 
