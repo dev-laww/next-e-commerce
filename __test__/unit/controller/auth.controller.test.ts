@@ -4,6 +4,8 @@ import AuthController from "@controller/auth.controller";
 import { TokenOTP, User } from "@prisma/client";
 import * as Constants from "@lib/constants";
 import Email from "@utils/email";
+import { generateRefreshToken } from "@utils/token";
+import { UserSession } from "@lib/types";
 
 jest.mock("@repository/user.repo", () => require("@mocks/repository/user.repo.mock"));
 jest.mock("@utils/email", () => require("@mocks/lib/utils/email.mock"));
@@ -313,24 +315,204 @@ describe("Auth Controller", () => {
     })
 
     describe("Test confirm email", () => {
-        it.todo("returns 200 if confirm email success");
-        it.todo("returns 422 if wrong body");
-        it.todo("returns 400 if user already confirmed");
-        it.todo("returns 404 if user not found");
-        it.todo("returns 401 if invalid token");
+        beforeEach(() => {
+            req.body = {
+                token: "x",
+                type: "token"
+            }
+            jest.clearAllMocks();
+        })
+
+        it("returns 200 if confirm email success", async () => {
+            (controller.userRepo.verifyTokenOTP as jest.Mock).mockResolvedValue({success: true, data: data});
+            (controller.userRepo.updateUser as jest.Mock).mockResolvedValue(null);
+
+            let {statusCode, response} = await controller.confirmEmail(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.SUCCESS);
+            expect(response.data).toBeUndefined();
+
+            // OTP
+            req.body.type = "otp";
+            ({statusCode, response} = await controller.confirmEmail(req));
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.SUCCESS);
+            expect(response.data).toBeUndefined();
+        });
+
+        it("returns 422 if wrong body", async () => {
+            req.body = {};
+
+            const {statusCode, response} = await controller.confirmEmail(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.UNPROCESSABLE_ENTITY);
+            expect(response.data).toBeUndefined();
+        });
+
+        it("returns 400 if user already confirmed", async () => {
+            (controller.userRepo.verifyTokenOTP as jest.Mock).mockResolvedValue({
+                success: true,
+                data: {...data, confirmed: true}
+            });
+            (controller.userRepo.updateUser as jest.Mock).mockResolvedValue(null);
+
+            let {statusCode, response} = await controller.confirmEmail(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.BAD_REQUEST);
+            expect(response.data).toBeUndefined();
+
+            // OTP
+            req.body.type = "otp";
+            ({statusCode, response} = await controller.confirmEmail(req));
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.BAD_REQUEST);
+            expect(response.data).toBeUndefined();
+        });
+
+        it("returns 401 if invalid token", async () => {
+            (controller.userRepo.verifyTokenOTP as jest.Mock).mockResolvedValue({success: false, data: null});
+
+            let {statusCode, response} = await controller.confirmEmail(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.UNAUTHORIZED);
+            expect(response.data).toBeUndefined();
+
+            // OTP
+            req.body.type = "otp";
+            ({statusCode, response} = await controller.confirmEmail(req));
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.UNAUTHORIZED);
+            expect(response.data).toBeUndefined();
+        });
     })
 
     describe("Test resend confirmation email", () => {
-        it.todo("returns 200 if resend confirmation email success");
-        it.todo("returns 422 if wrong body");
-        it.todo("returns 404 if user not found");
-        it.todo("returns 500 if failed to send email");
+        let token: TokenOTP;
+
+        beforeEach(() => {
+            req.body = {
+                email: "test@mail.com",
+                type: "token"
+            };
+            token = {
+                id: 1,
+                user_id: 1,
+                token: "x",
+                type: Constants.TOKEN_TYPE.EMAIL_CONFIRMATION_TOKEN,
+            } as TokenOTP;
+            jest.clearAllMocks();
+        })
+
+        it("returns 200 if resend confirmation email success", async () => {
+            (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(null);
+            (controller.userRepo.getUserByUsername as jest.Mock).mockResolvedValue(data);
+            (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue(token);
+            (Email.sendToken as jest.Mock).mockResolvedValue(null);
+
+            let {statusCode, response} = await controller.resendEmailConfirmation(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.SUCCESS);
+            expect(response.data).toBeUndefined();
+
+            // OTP
+            req.body.type = "otp";
+            token.type = Constants.TOKEN_TYPE.EMAIL_CONFIRMATION_OTP;
+            (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue(token);
+            (Email.sendOTP as jest.Mock).mockResolvedValue(null);
+
+            ({statusCode, response} = await controller.resendEmailConfirmation(req));
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.SUCCESS);
+            expect(response.data).toBeUndefined();
+        });
+
+        it("returns 422 if wrong body", async () => {
+            req.body = {};
+
+            const {statusCode, response} = await controller.resendEmailConfirmation(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.UNPROCESSABLE_ENTITY);
+            expect(response.data).toBeUndefined();
+        });
+
+        it("returns 400 if user not found", async () => {
+            (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(null);
+            (controller.userRepo.getUserByUsername as jest.Mock).mockResolvedValue(null);
+
+            const {statusCode, response} = await controller.resendEmailConfirmation(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.BAD_REQUEST);
+            expect(response.data).toBeUndefined();
+        });
+
+        it("returns 500 if failed to send email", async () => {
+            (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(null);
+            (controller.userRepo.getUserByUsername as jest.Mock).mockResolvedValue(data);
+            (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue(token);
+            (Email.sendToken as jest.Mock).mockRejectedValue(Error("error"));
+
+            let {statusCode, response} = await controller.resendEmailConfirmation(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.INTERNAL_SERVER_ERROR);
+            expect(response.data).toBeUndefined();
+
+            // OTP
+            req.body.type = "otp";
+            token.type = Constants.TOKEN_TYPE.EMAIL_CONFIRMATION_OTP;
+            (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue(token);
+            (Email.sendOTP as jest.Mock).mockRejectedValue(Error("error"));
+
+            ({statusCode, response} = await controller.resendEmailConfirmation(req));
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.INTERNAL_SERVER_ERROR);
+            expect(response.data).toBeUndefined();
+        });
     })
 
     describe("Test refresh token", () => {
-        it.todo("returns 200 if refresh token success");
-        it.todo("returns 422 if wrong body");
-        it.todo("returns 404 if user not found");
-        it.todo("returns 401 if invalid token");
+        let refreshToken: string;
+        const userSession: UserSession = {
+            id: 1,
+            username: "username",
+            email: "email",
+            first_name: "name",
+            last_name: "name",
+            image_url: "https://image.com/image.jpg"
+        };
+
+        beforeEach(() => {
+            refreshToken = generateRefreshToken(userSession);
+
+            req.body = {
+                token: refreshToken
+            }
+
+            jest.clearAllMocks();
+        });
+
+        it("returns 200 if refresh token success", async () => {
+            const {statusCode, response} = await controller.refreshToken(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.SUCCESS);
+            expect(response.data).toBeDefined();
+        });
+
+        it("returns 422 if wrong body", async () => {
+            req.body = {};
+
+            const {statusCode, response} = await controller.refreshToken(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.UNPROCESSABLE_ENTITY);
+            expect(response.data).toBeUndefined();
+        });
+
+        it("returns 401 if invalid token", async () => {
+            req.body.token = "invalid_token";
+
+            const {statusCode, response} = await controller.refreshToken(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.UNAUTHORIZED);
+            expect(response.data).toBeUndefined();
+        });
     })
 })
