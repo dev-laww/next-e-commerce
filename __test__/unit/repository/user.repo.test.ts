@@ -139,7 +139,8 @@ describe("UserRepository", () => {
 
         (prisma.user.findUnique as jest.Mock).mockResolvedValue(userWithRoles as User);
         (prisma.role.findMany as jest.Mock).mockResolvedValue([{id: 1, name: "name"}] as Role[]);
-        (prisma.rolePermission.findMany as jest.Mock).mockResolvedValue([]);
+        (prisma.rolePermission.findMany as jest.Mock).mockResolvedValue([{id: 1, role_id: 1, permission_id: 1}]);
+        (prisma.permission.findMany as jest.Mock).mockResolvedValue([]);
 
         let result = await repository.getUserPermissions(1)
 
