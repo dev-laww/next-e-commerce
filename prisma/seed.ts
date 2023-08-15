@@ -26,6 +26,7 @@ async function seedEntity(entityName: string, findCondition: any, data: any[]): 
         'products': prisma.product,
         'shippingMethods': prisma.shippingMethod,
         'users': prisma.user,
+        'userRoles': prisma.userRole,
         'reviews': prisma.review,
         'wishlists': prisma.wishlistItem,
         'roles': prisma.role,

@@ -13,6 +13,7 @@ import products from './products';
 import reviews from './reviews';
 import shippingMethods from './shipping-methods';
 import users from './users';
+import userRoles from './user-roles';
 import wishlists from './wishlist';
 import roles from './roles';
 import permissions from './permissions';
@@ -36,6 +37,7 @@ export default {
     carts,
     wishlists,
     roles,
+    userRoles,
     permissions,
 }
 
