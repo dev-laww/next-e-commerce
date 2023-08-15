@@ -45,4 +45,10 @@ export default class PaymentMethodRepository {
             where: {id: id}
         });
     }
+
+    public async deleteByUserId(userId: number): Promise<Prisma.BatchPayload> {
+        return this.prismaClient.paymentMethod.deleteMany({
+            where: {user_id: userId}
+        });
+    }
 }

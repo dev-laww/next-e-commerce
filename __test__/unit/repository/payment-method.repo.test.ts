@@ -7,4 +7,5 @@ describe("PaymentMethodRepository", () => {
     it.todo("Test create");
     it.todo("Test update");
     it.todo("Test delete");
+    it.todo("Test deleteByUserId");
 });
