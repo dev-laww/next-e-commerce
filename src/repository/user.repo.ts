@@ -6,7 +6,6 @@ import {
     Prisma,
     Review,
     Role,
-    RolePermission,
     TokenOTP,
     User,
     WishlistItem
@@ -21,38 +20,38 @@ export default class UserRepository {
     prismaClient = prisma;
     user = this.prismaClient.user;
 
-    public async createUser(data: User) {
+    public async createUser(data: User): Promise<User> {
         return this.user.create({
             data: data
         });
     }
 
-    public async getUserById(id: number) {
+    public async getUserById(id: number): Promise<User | null> {
         return this.user.findUnique({
             where: {id: id}
         });
     }
 
-    public async getUserByEmail(email: string) {
+    public async getUserByEmail(email: string): Promise<User | null> {
         return this.user.findUnique({
             where: {email: email}
         });
     }
 
-    public async getUserByUsername(username: string) {
+    public async getUserByUsername(username: string): Promise<User | null> {
         return this.user.findUnique({
             where: {username: username}
         });
     }
 
-    public async updateUser(id: number, data: Prisma.UserUpdateInput) {
+    public async updateUser(id: number, data: Prisma.UserUpdateInput): Promise<User> {
         return this.user.update({
             where: {id: id},
             data: data
         });
     }
 
-    public async changePassword(id: number, password: string) {
+    public async changePassword(id: number, password: string): Promise<User> {
         const hashed = await hash(password);
 
         return this.user.update({
@@ -63,7 +62,7 @@ export default class UserRepository {
         });
     }
 
-    public async deleteUserById(id: number) {
+    public async deleteUserById(id: number): Promise<User> {
         return this.user.delete({
             where: {id: id}
         });
@@ -225,7 +224,7 @@ export default class UserRepository {
         return user ? user.wishlist : [];
     }
 
-public async deleteUserWishlist(id: number): Promise<Prisma.BatchPayload> {
+    public async deleteUserWishlist(id: number): Promise<Prisma.BatchPayload> {
         return this.prismaClient.wishlistItem.deleteMany({
             where: {
                 user_id: id
@@ -262,7 +261,7 @@ public async deleteUserWishlist(id: number): Promise<Prisma.BatchPayload> {
         });
     }
 
-    public async verifyTokenOTP(token: string, type: string): Promise<{success: boolean, data: User}> {
+    public async verifyTokenOTP(token: string, type: string): Promise<{ success: boolean, data: User }> {
         const tokenRecord = await prisma.tokenOTP.findFirst({
             where: {
                 token: token,
