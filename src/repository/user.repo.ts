@@ -2,7 +2,7 @@ import {
     Address,
     CartItem,
     Order,
-    PaymentMethod,
+    PaymentMethod, Permission,
     Prisma,
     Review,
     Role,
@@ -92,7 +92,11 @@ export default class UserRepository {
                 id: {
                     in: user?.roles.map(role => role.role_id)
                 }
-            }
+            },
+            select: {
+                id: true,
+                name: true,
+            } as Prisma.RoleSelect
         });
     }
 
@@ -107,17 +111,30 @@ export default class UserRepository {
         });
     }
 
-    public async getUserPermissions(id: number): Promise<RolePermission[] | null> {
+    public async getUserPermissions(id: number): Promise<Permission[] | null> {
         const roles = await this.getUserRoles(id);
 
         if (roles.length === 0) return null;
 
-        return this.prismaClient.rolePermission.findMany({
+        const rolePermissions = await this.prismaClient.rolePermission.findMany({
             where: {
                 role_id: {
                     in: roles.map(role => role.id)
                 }
             }
+        });
+
+        return this.prismaClient.permission.findMany({
+            where: {
+                id: {
+                    in: rolePermissions.map(rolePermission => rolePermission.permission_id)
+                }
+            },
+            select: {
+                id: true,
+                name: true,
+                description: true
+            } as Prisma.PermissionSelect
         });
     }
 
