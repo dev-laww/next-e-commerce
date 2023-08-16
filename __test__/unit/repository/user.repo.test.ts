@@ -15,7 +15,7 @@ import UserRepository from "@repository/user.repo";
 import prisma from "@lib/prisma";
 
 
-jest.mock("@lib/prisma", () => require("@mocks/prisma.mock"));
+jest.mock("@lib/prisma", () => require("@mocks/lib/prisma.mock"));
 
 describe("UserRepository", () => {
     let repository: UserRepository;
