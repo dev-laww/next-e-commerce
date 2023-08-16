@@ -1,5 +1,5 @@
-import * as fs from "fs";
-import humps from "humps";
+import * as fs from 'fs';
+import humps from 'humps';
 
 interface Seeders {
     [key: string]: any;
@@ -38,13 +38,9 @@ const manyToManyEntities = [
 ];
 
 // Find one-to-many entities
-const oneToManyEntities = Object.keys(tempSeeders).reduce((acc, key) => {
-    if (!nonRelationEntities.includes(key) && !manyToManyEntities.includes(key)) acc.push(key);
-    return acc;
-}, [] as string[]);
+const oneToManyEntities = Object.keys(tempSeeders).filter(entityName => !nonRelationEntities.includes(entityName) && !manyToManyEntities.includes(entityName));
 
 const seeders: Seeders = {};
-
 
 // Add entities to seeders
 ([...nonRelationEntities, ...oneToManyEntities, ...manyToManyEntities]).forEach((entityName) => {
