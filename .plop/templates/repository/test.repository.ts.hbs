@@ -1,5 +1,11 @@
 import {{pascalCase name}}Repository from "@repository/{{kebabCase name}}.repo";
 
+jest.mock("@lib/prisma", require("@mocks/lib/prisma.mock"));
+
 describe("{{pascalCase name}}Repository", () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
     it.todo("write tests");
 });
