@@ -1,8 +1,6 @@
 import PaymentMethodRepository from "@repository/payment-method.repo";
 import prisma from "@lib/prisma";
 import { PaymentMethod } from "@prisma/client";
-import { undefined } from "zod";
-
 
 jest.mock("@lib/prisma", require("@mocks/lib/prisma.mock"));
 
