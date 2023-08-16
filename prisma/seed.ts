@@ -8,87 +8,58 @@ interface SeedMap {
     [key: string]: any;
 }
 
-
-async function seedEntity(entityName: string, findCondition: any, data: any[]): Promise<void> {
-
-    let seedMap: SeedMap = {
-        'addresses': prisma.address,
-        'carts': prisma.cartItem,
-        'categories': prisma.category,
-        'coupons': prisma.coupon,
-        'logs': prisma.log,
-        'orderItems': prisma.orderItem,
-        'orders': prisma.order,
-        'paymentMethods': prisma.paymentMethod,
-        'payments': prisma.payment,
-        'productCategories': prisma.productCategory,
-        'productVariants': prisma.productVariant,
-        'products': prisma.product,
-        'shippingMethods': prisma.shippingMethod,
-        'users': prisma.user,
-        'userRoles': prisma.userRole,
-        'reviews': prisma.review,
-        'wishlists': prisma.wishlistItem,
-        'roles': prisma.role,
-        'permissions': prisma.permission,
-    }
-
-    const func = seedMap[entityName];
-
-    if (!func) {
-        console.log(`Invalid entity name: ${entityName}`);
-        return;
-    }
-
-    const entity = await func.findMany({
-        take: 1
-    });
-
-    if (entity.length === 1) return;
-
-    await func.createMany({data: data});
+const seedMap: SeedMap = {
+    'addresses': prisma.address,
+    'cart': prisma.cartItem,
+    'categories': prisma.category,
+    'coupons': prisma.coupon,
+    'logs': prisma.log,
+    'orderItems': prisma.orderItem,
+    'orders': prisma.order,
+    'paymentMethods': prisma.paymentMethod,
+    'payments': prisma.payment,
+    'productCategories': prisma.productCategory,
+    'productVariants': prisma.productVariant,
+    'products': prisma.product,
+    'shippingMethods': prisma.shippingMethod,
+    'users': prisma.user,
+    'userRoles': prisma.userRole,
+    'reviews': prisma.review,
+    'wishlist': prisma.wishlistItem,
+    'roles': prisma.role,
+    'permissions': prisma.permission,
 }
-
 
 async function main() {
     console.log('Start seeding ...')
 
-    const nonRelationEntities: any = [
-        seeders.users,
-        seeders.products,
-        seeders.categories,
-        seeders.coupons,
-        seeders.logs,
-        seeders.shippingMethods,
-        seeders.roles,
-        seeders.permissions
-    ];
+    for (const entityName in seeders) {
 
-    for (const [entityName, data] of Object.entries(seeders)) {
-        if (!nonRelationEntities.includes(data)) {
-            continue;
+        const func = seedMap[entityName];
+
+        if (!func) {
+            console.log(`Invalid entity name: ${entityName}`);
+            return;
         }
 
-        await seedEntity(entityName, {id: 1000}, data);
-    }
+        const entity = await func.findMany({
+            take: 1
+        });
 
-    for (const [entityName, data] of Object.entries(seeders)) {
-        if (nonRelationEntities.includes(data)) {
-            continue;
-        }
+        if (entity.length === 1) return;
 
-        await seedEntity(entityName, {id: 1000}, data);
+        await func.createMany({data: seeders[entityName]});
     }
 }
 
 main()
     .then(async () => {
-        await prisma.$disconnect()
         console.info('Seeding done.')
+        await prisma.$disconnect()
     })
     .catch(async (e) => {
-        console.error(e)
         await prisma.$disconnect()
+        console.error(e)
         process.exit(1)
     })
 
