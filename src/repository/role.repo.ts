@@ -95,8 +95,8 @@ export default class RoleRepository {
         return this.getRolePermissions(id);
     }
 
-    public async deleteRolePermissions(id: number, permissions: number[]): Promise<Role> {
-        return this.prismaClient.role.update({
+    public async deleteRolePermissions(id: number, permissions: number[]): Promise<Permission[]> {
+        await this.prismaClient.role.update({
             where: {
                 id: id
             },
@@ -104,7 +104,9 @@ export default class RoleRepository {
                 permissions: {
                     disconnect: permissions.map(permission => ({id: permission}))
                 }
-            }
+            },
         });
+
+        return this.getRolePermissions(id)
     }
 }
