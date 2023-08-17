@@ -14,6 +14,7 @@ import {
 import { TOKEN_OTP_EXPIRY } from "@lib/constants";
 import prisma from "@lib/prisma";
 import { hash } from "@utils/hashing";
+import userRoles from "../../prisma/seeders/user-roles";
 
 
 export default class UserRepository {
@@ -99,6 +100,7 @@ export default class UserRepository {
         });
     }
 
+    // TODO: Fix this
     public async updateUserRoles(id: number, roles: number[]): Promise<User> {
         return this.user.update({
             where: {id: id},
@@ -147,7 +149,7 @@ export default class UserRepository {
             }
         });
 
-        return user ? user.payment_methods : [];
+        return user ? user.payment_methods.map(({created_at, updated_at, user_id, ...rest}) => rest as PaymentMethod) : [];
     }
 
     public async deleteUserPaymentMethods(id: number): Promise<Prisma.BatchPayload> {
@@ -166,7 +168,7 @@ export default class UserRepository {
             }
         });
 
-        return user ? user.addresses : [];
+        return user ? user.addresses.map(({ created_at, updated_at, user_id, ...rest}) => rest as Address) : [];
     }
 
     public async deleteUserAddresses(id: number): Promise<Prisma.BatchPayload> {
@@ -185,7 +187,7 @@ export default class UserRepository {
             }
         });
 
-        return user ? user.orders : [];
+        return user ? user.orders.map(({created_at, updated_at, user_id, ...rest}) => rest as Order) : [];
     }
 
     public async deleteUserOrders(id: number): Promise<Prisma.BatchPayload> {
@@ -204,7 +206,7 @@ export default class UserRepository {
             }
         })
 
-        return user ? user.reviews : [];
+        return user ? user.reviews.map(({created_at, updated_at, user_id, ...rest}) => rest as Review) : [];
     }
 
     public async deleteUserReviews(id: number): Promise<Prisma.BatchPayload> {
@@ -223,7 +225,7 @@ export default class UserRepository {
             }
         });
 
-        return user ? user.wishlist : [];
+        return user ? user.wishlist.map(({created_at, updated_at, user_id, ...rest}) => rest as WishlistItem) : [];
     }
 
     public async deleteUserWishlist(id: number): Promise<Prisma.BatchPayload> {
@@ -242,7 +244,7 @@ export default class UserRepository {
             }
         });
 
-        return user ? user.cart : [];
+        return user ? user.cart.map(({created_at, updated_at, user_id, ...rest}) => rest as CartItem) : [];
     }
 
     public async deleteUserCart(id: number): Promise<Prisma.BatchPayload> {
