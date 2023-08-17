@@ -7,5 +7,11 @@ describe("PermissionRepository", () => {
         jest.clearAllMocks();
     });
 
-    it.todo("write tests");
+    it.todo("Test getAll");
+    it.todo("Test getById");
+    it.todo("Test create");
+    it.todo("Test update");
+    it.todo("Test delete");
+    it.todo("Test getRole")
+    it.todo("Test removeRole")
 });
