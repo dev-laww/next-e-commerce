@@ -16,8 +16,4 @@ describe("RoleRepository", () => {
     it.todo("Test addRolePermissions")
     it.todo("Test updateRolePermissions");
     it.todo("Test deleteRolePermissions");
-    it.todo("Test getUserRoles");
-    it.todo("Test updateUserRoles");
-    it.todo("Test removeUserRoles");
-    it.todo("Test removeUserRole");
 });
