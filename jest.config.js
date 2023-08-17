@@ -15,7 +15,8 @@ const config = {
         "src/**/*.{ts,tsx}",
         "!src/**/*.d.ts",
         "!src/app/**/*",
-        "!src/stories/**/*"
+        "!src/stories/**/*",
+        "!src/lib/prisma.ts",
     ],
     moduleNameMapper: {
         "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy",
