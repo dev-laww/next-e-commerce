@@ -120,20 +120,19 @@ export default class UserRepository {
                 role_id: {
                     in: roles.map(role => role.id)
                 }
+            },
+            select: {
+                permission: true
             }
         });
 
-        return this.prismaClient.permission.findMany({
-            where: {
-                id: {
-                    in: rolePermissions.map(rolePermission => rolePermission.permission_id)
-                }
-            },
-            select: {
-                id: true,
-                name: true,
-                description: true
-            } as Prisma.PermissionSelect
+        return rolePermissions.map(rolePermission => {
+            const permission = rolePermission.permission;
+            return {
+                id: permission.id,
+                name: permission.name,
+                description: permission.description,
+            } as Permission;
         });
     }
 
