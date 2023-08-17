@@ -13,9 +13,9 @@ for (const file of files) {
     // Skip index.ts and non-ts files
     if (file.match(/index\.ts$|(?<!\.ts)$/i)) continue;
 
-    const module = require(`./${file.replace('.ts', '')}`)
+    const seederModule = require(`./${file.replace('.ts', '')}`)
 
-    tempSeeders[humps.camelize(file.replace('.ts', ''))] = module.default
+    tempSeeders[humps.camelize(file.replace('.ts', ''))] = seederModule.default
 }
 
 const nonRelationEntities = [
