@@ -4,9 +4,12 @@ import prisma from "@lib/prisma";
 
 export default class RoleRepository {
     prismaClient = prisma;
-    public async getAll(filter: Prisma.RoleWhereInput | undefined = undefined): Promise<Role[]> {
+    public async getAll(filter?: Prisma.RoleWhereInput): Promise<Role[]> {
         return this.prismaClient.role.findMany({
             where: filter,
+            include: {
+                _count: true
+            }
         });
     }
 

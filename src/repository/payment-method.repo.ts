@@ -6,7 +6,7 @@ export default class PaymentMethodRepository {
     prismaClient = prisma;
 
     // TODO: Add pagination
-    public async getAll(filter: Prisma.PaymentMethodWhereInput | undefined = undefined): Promise<PaymentMethod[]> {
+    public async getAll(filter?: Prisma.PaymentMethodWhereInput): Promise<PaymentMethod[]> {
         return this.prismaClient.paymentMethod.findMany({
             where: filter,
             include: {
