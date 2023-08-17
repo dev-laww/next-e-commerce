@@ -157,7 +157,6 @@ describe("UserRepository", () => {
             ...data,
             payment_methods: [{
                 id: 1,
-                user_id: 1,
                 name: "name",
                 card_number: "xxx-xxx-xxxx-xxx",
                 expiration_date: "xx/xx",
@@ -189,7 +188,6 @@ describe("UserRepository", () => {
             ...data,
             addresses: [{
                 id: 1,
-                user_id: 1,
                 address: "x",
                 city: "x",
                 state: "x",
@@ -222,7 +220,6 @@ describe("UserRepository", () => {
             ...data,
             orders: [{
                 id: 1,
-                user_id: 1,
                 shipping_id: 1,
                 address_id: 1,
                 order_number: "xxxx",
@@ -256,7 +253,6 @@ describe("UserRepository", () => {
             ...data,
             reviews: [{
                 id: 1,
-                user_id: 1,
                 product_id: 1,
                 rating: 1,
                 comment: "comment"
@@ -288,7 +284,6 @@ describe("UserRepository", () => {
             ...data,
             wishlist: [{
                 id: 1,
-                user_id: 1,
                 product_id: 1,
             }] as WishlistItem[]
         };
@@ -317,8 +312,9 @@ describe("UserRepository", () => {
             ...data,
             cart: [{
                 id: 1,
-                user_id: 1,
                 product_id: 1,
+                variant_id: 1,
+                quantity: 1
             }] as CartItem[]
         };
 
