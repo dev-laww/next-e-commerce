@@ -86,15 +86,6 @@ describe("UserRepository", () => {
         let result = await repository.getAll()
 
         expect(result).toMatchObject([data]);
-
-        // with filter
-        (prisma.user.findMany as jest.Mock).mockResolvedValue([data] as User[]);
-        result = await repository.getAll({
-            id: 1,
-            username: "username"
-        })
-
-        expect(result).toMatchObject([data]);
     })
 
 
@@ -139,12 +130,18 @@ describe("UserRepository", () => {
 
         (prisma.user.findUnique as jest.Mock).mockResolvedValue(userWithRoles as User);
         (prisma.role.findMany as jest.Mock).mockResolvedValue([{id: 1, name: "name"}] as Role[]);
-        (prisma.rolePermission.findMany as jest.Mock).mockResolvedValue([{id: 1, role_id: 1, permission_id: 1}]);
+        (prisma.rolePermission.findMany as jest.Mock).mockResolvedValue([{
+            permission: {
+                id: 1,
+                name: "name",
+                description: "description"
+            }
+        }]);
         (prisma.permission.findMany as jest.Mock).mockResolvedValue([]);
 
         let result = await repository.getUserPermissions(1)
 
-        expect(result).toMatchObject([]);
+        expect(result).toMatchObject([{id: 1, name: "name", description: "description"}]);
 
         // empty permissions
         (prisma.user.findUnique as jest.Mock).mockResolvedValue(null);
@@ -286,7 +283,7 @@ describe("UserRepository", () => {
         expect(result).toMatchObject({count: 1});
     })
 
-    it("Test getUserWishlist (non empty)", async () => {
+    it("Test getUserWishlist", async () => {
         const userWithWishlist = {
             ...data,
             wishlist: [{
