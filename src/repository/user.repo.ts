@@ -106,6 +106,9 @@ export default class UserRepository {
                 roles: {
                     set: roles.map(role => ({id: role}))
                 }
+            },
+            include: {
+                roles: true
             }
         });
     }
