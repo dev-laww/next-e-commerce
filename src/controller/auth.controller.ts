@@ -24,9 +24,15 @@ export default class AuthController {
     async signup(req: NextRequest) {
         if (req.method !== 'POST') return Response.methodNotAllowed("Invalid request method");
 
-        const body = await req.json();
+        let body;
 
-        const requestData = Validators.registerSchema.safeParse(body || {});
+        try {
+            body = await req.json();
+        } catch (error) {
+            return Response.badRequest("Invalid request body");
+        }
+
+        const requestData = Validators.registerSchema.safeParse(body);
 
         if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
 
@@ -79,9 +85,14 @@ export default class AuthController {
     async login(req: NextRequest) {
         if (req.method !== 'POST') return Response.methodNotAllowed("Invalid request method");
 
-        const body = await req.json();
+        let body;
+        try {
+            body = await req.json();
+        } catch (error) {
+            return Response.badRequest("Invalid request body");
+        }
 
-        const requestData = Validators.loginSchema.safeParse(body || {});
+        const requestData = Validators.loginSchema.safeParse(body);
 
         if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
 
@@ -116,9 +127,14 @@ export default class AuthController {
     async resetPassword(req: NextRequest) {
         if (req.method !== 'POST') return Response.methodNotAllowed("Invalid request method");
 
-        const body = await req.json();
+        let body;
+        try {
+            body = await req.json();
+        } catch (error) {
+            return Response.badRequest("Invalid request body");
+        }
 
-        const requestData = Validators.resetPasswordSchema.safeParse(body || {});
+        const requestData = Validators.resetPasswordSchema.safeParse(body);
 
         if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
 
@@ -157,9 +173,14 @@ export default class AuthController {
     async confirmResetPassword(req: NextRequest) {
         if (req.method !== 'PUT') return Response.badRequest("Invalid request method");
 
-        const body = await req.json();
+        let body;
+        try {
+            body = await req.json();
+        } catch (error) {
+            return Response.badRequest("Invalid request body");
+        }
 
-        const requestData = Validators.confirmResetPasswordSchema.safeParse(body || {});
+        const requestData = Validators.confirmResetPasswordSchema.safeParse(body);
 
         if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
 
@@ -180,9 +201,14 @@ export default class AuthController {
     async confirmEmail(req: NextRequest) {
         if (req.method !== 'POST') return Response.methodNotAllowed("Invalid request method");
 
-        const body = await req.json();
+        let body;
+        try {
+            body = await req.json();
+        } catch (error) {
+            return Response.badRequest("Invalid request body");
+        }
 
-        const requestData = Validators.confirmEmailSchema.safeParse(body || {});
+        const requestData = Validators.confirmEmailSchema.safeParse(body);
 
         if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
 
@@ -205,9 +231,14 @@ export default class AuthController {
     async resendEmailConfirmation(req: NextRequest) {
         if (req.method !== 'POST') return Response.methodNotAllowed("Invalid request method");
 
-        const body = await req.json();
+        let body;
+        try {
+            body = await req.json();
+        } catch (error) {
+            return Response.badRequest("Invalid request body");
+        }
 
-        const requestData = Validators.resendEmailSchema.safeParse(body || {});
+        const requestData = Validators.resendEmailSchema.safeParse(body);
 
         if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
 
@@ -246,9 +277,14 @@ export default class AuthController {
     async refreshToken(req: NextRequest) {
         if (req.method !== 'POST') return Response.methodNotAllowed("Invalid request method");
 
-        const body = await req.json();
+        let body;
+        try {
+            body = await req.json();
+        } catch (error) {
+            return Response.badRequest("Invalid request body");
+        }
 
-        const requestData = Validators.refreshTokenSchema.safeParse(body || {});
+        const requestData = Validators.refreshTokenSchema.safeParse(body);
 
         if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
 
