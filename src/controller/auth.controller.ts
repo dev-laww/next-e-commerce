@@ -1,4 +1,4 @@
-import { NextApiRequest } from "next";
+import { NextRequest } from "next/server";
 import { User } from "@prisma/client";
 import humps from "humps";
 
@@ -21,23 +21,25 @@ import Email from "@utils/email";
 export default class AuthController {
     userRepo = new UserRepository();
 
-    async signup(req: NextApiRequest) {
+    async signup(req: NextRequest) {
         if (req.method !== 'POST') return Response.badRequest("Invalid request method");
 
-        const requestData = Validators.registerSchema.safeParse(req.body || {});
+        const body = await req.json();
+
+        const requestData = Validators.registerSchema.safeParse(body || {});
 
         if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
 
-        delete req.body.confirmPassword;
+        delete body.confirmPassword;
 
-        const userExistsByEmail = await this.userRepo.getUserByEmail(req.body.email);
-        const userExistsByUsername = await this.userRepo.getUserByUsername(req.body.username);
+        const userExistsByEmail = await this.userRepo.getUserByEmail(body.email);
+        const userExistsByUsername = await this.userRepo.getUserByUsername(body.username);
 
         if (userExistsByEmail || userExistsByUsername) return Response.badRequest("User already exists");
 
-        req.body.password = await hash(req.body.password);
+        body.password = await hash(body.password);
 
-        const user = await this.userRepo.createUser(humps.decamelizeKeys(req.body) as User)
+        const user = await this.userRepo.createUser(humps.decamelizeKeys(body) as User)
         const userSession: UserSession = {
             id: user.id,
             first_name: user.first_name,
@@ -74,22 +76,24 @@ export default class AuthController {
         });
     }
 
-    async login(req: NextApiRequest) {
+    async login(req: NextRequest) {
         if (req.method !== 'POST') return Response.badRequest("Invalid request method");
 
-        const requestData = Validators.loginSchema.safeParse(req.body || {});
+        const body = await req.json();
+
+        const requestData = Validators.loginSchema.safeParse(body || {});
 
         if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
 
-        let user = await this.userRepo.getUserByEmail(req.body.email);
+        let user = await this.userRepo.getUserByEmail(body.email);
 
         if (!user) {
-            user = await this.userRepo.getUserByUsername(req.body.email);
+            user = await this.userRepo.getUserByUsername(body.email);
 
             if (!user) return Response.invalidCredentials("Email or username is invalid");
         }
 
-        const isPasswordValid = await compare(req.body.password, user.password);
+        const isPasswordValid = await compare(body.password, user.password);
 
         if (!isPasswordValid) return Response.invalidCredentials("Incorrect password");
 
@@ -109,10 +113,12 @@ export default class AuthController {
         });
     }
 
-    async resetPassword(req: NextApiRequest) {
+    async resetPassword(req: NextRequest) {
         if (req.method !== 'POST') return Response.badRequest("Invalid request method");
 
-        const requestData = Validators.resetPasswordSchema.safeParse(req.body || {});
+        const body = await req.json();
+
+        const requestData = Validators.resetPasswordSchema.safeParse(body || {});
 
         if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
 
@@ -148,10 +154,12 @@ export default class AuthController {
         return Response.success("Password reset sent successfully");
     }
 
-    async confirmResetPassword(req: NextApiRequest) {
+    async confirmResetPassword(req: NextRequest) {
         if (req.method !== 'PUT') return Response.badRequest("Invalid request method");
 
-        const requestData = Validators.confirmResetPasswordSchema.safeParse(req.body || {});
+        const body = await req.json();
+
+        const requestData = Validators.confirmResetPasswordSchema.safeParse(body || {});
 
         if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
 
@@ -169,10 +177,12 @@ export default class AuthController {
         return Response.success("Password changed successfully");
     }
 
-    async confirmEmail(req: NextApiRequest) {
+    async confirmEmail(req: NextRequest) {
         if (req.method !== 'POST') return Response.badRequest("Invalid request method");
 
-        const requestData = Validators.confirmEmailSchema.safeParse(req.body || {});
+        const body = await req.json();
+
+        const requestData = Validators.confirmEmailSchema.safeParse(body || {});
 
         if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
 
@@ -192,10 +202,12 @@ export default class AuthController {
         return Response.success("Email confirmed successfully");
     }
 
-    async resendEmailConfirmation(req: NextApiRequest) {
+    async resendEmailConfirmation(req: NextRequest) {
         if (req.method !== 'POST') return Response.badRequest("Invalid request method");
 
-        const requestData = Validators.resendEmailSchema.safeParse(req.body || {});
+        const body = await req.json();
+
+        const requestData = Validators.resendEmailSchema.safeParse(body || {});
 
         if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
 
@@ -231,10 +243,12 @@ export default class AuthController {
         return Response.success("Email confirmation sent successfully");
     }
 
-    async refreshToken(req: NextApiRequest) {
+    async refreshToken(req: NextRequest) {
         if (req.method !== 'POST') return Response.badRequest("Invalid request method");
 
-        const requestData = Validators.refreshTokenSchema.safeParse(req.body || {});
+        const body = await req.json();
+
+        const requestData = Validators.refreshTokenSchema.safeParse(body || {});
 
         if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
 
