@@ -115,6 +115,17 @@ const error = (statusCode: STATUS_CODE, message: string, error?: ERROR_CODE): Re
     }
 }
 
+const methodNotAllowed = (message: string): Response => {
+    return {
+        statusCode: STATUS_CODE.METHOD_NOT_ALLOWED,
+        response: {
+            code: ERROR_CODE.METHOD_NOT_ALLOWED,
+            status: STATUS.FAILED,
+            message: message
+        }
+    }
+}
+
 const Response = {
     success,
     created,
@@ -124,7 +135,8 @@ const Response = {
     internalServerError,
     validationError,
     invalidCredentials,
-    error
+    error,
+    methodNotAllowed
 }
 
 export default Response;
