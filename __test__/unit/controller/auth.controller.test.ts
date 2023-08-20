@@ -298,7 +298,7 @@ describe("Auth Controller", () => {
                 method: "POST",
                 body: JSON.stringify({
                     email: "test@mail.com",
-                    type: "token"
+                    type: "otp"
                 })
             });
             token.type = Constants.TOKEN_TYPE.PASSWORD_RESET_OTP;
