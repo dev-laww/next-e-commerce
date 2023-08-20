@@ -59,7 +59,7 @@ export default class PermissionRepository {
         });
     }
 
-    public async updateRoles(id: number, roles: number[]): Promise<Permission> {
+    public async updateRoles(id: number, roles: number[]): Promise<Role[]> {
         const permissionRoles = await this.getRoles(id).then(roles => roles.map(role => role.id));
 
         const rolesToAdd = roles.filter(role => !permissionRoles.includes(role));
@@ -68,7 +68,7 @@ export default class PermissionRepository {
         console.log(rolesToAdd)
         console.log(rolesToRemove)
 
-        return this.prismaClient.permission.update({
+        const permission = await this.prismaClient.permission.update({
             where: {id: id},
             data: {
                 roles: {
@@ -77,15 +77,9 @@ export default class PermissionRepository {
                     },
                     deleteMany: rolesToRemove.map(role => ({role_id: role}))
                 }
-            },
-            include: {
-                roles: {
-                    select: {
-                        id: true,
-                        role_id: true
-                    }
-                }
             }
         });
+
+        return this.getRoles(permission.id);
     }
 }

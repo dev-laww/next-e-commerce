@@ -44,7 +44,7 @@ export default class RoleRepository {
         });
     }
 
-    public async getRolePermissions(id: number): Promise<Permission[]> {
+    public async getPermissions(id: number): Promise<Permission[]> {
         const rolePermissions = await this.prismaClient.rolePermission.findMany({
             where: {
                 role_id: id
@@ -65,48 +65,24 @@ export default class RoleRepository {
         });
     }
 
-    public async addRolePermissions(id: number, permissions: number[]): Promise<Permission[]> {
-        await this.prismaClient.role.update({
-            where: {
-                id: id
-            },
+    public async updatePermissions(id: number, permissions: number[]): Promise<Permission[]> {
+        const rolePermissions = (await this.getPermissions(id)).map(permission => permission.id);
+
+        const permissionsToAdd = permissions.filter(permission => !rolePermissions.includes(permission));
+        const permissionsToRemove = rolePermissions.filter(permission => !permissions.includes(permission));
+
+        const role = await this.prismaClient.role.update({
+            where: {id: id},
             data: {
                 permissions: {
-                    connect: permissions.map(permission => ({id: permission}))
+                    createMany: {
+                        data: permissionsToAdd.map(permission => ({permission_id: permission}))
+                    },
+                    deleteMany: permissionsToRemove.map(permission => ({permission_id: permission}))
                 }
             }
         });
 
-        return this.getRolePermissions(id);
-    }
-
-    public async updateRolePermissions(id: number, permissions: number[]): Promise<Permission[]> {
-         await this.prismaClient.role.update({
-            where: {
-                id: id
-            },
-            data: {
-                permissions: {
-                    set: permissions.map(permission => ({id: permission}))
-                }
-            }
-        });
-
-        return this.getRolePermissions(id);
-    }
-
-    public async deleteRolePermissions(id: number, permissions: number[]): Promise<Permission[]> {
-        await this.prismaClient.role.update({
-            where: {
-                id: id
-            },
-            data: {
-                permissions: {
-                    disconnect: permissions.map(permission => ({id: permission}))
-                }
-            },
-        });
-
-        return this.getRolePermissions(id)
+        return this.getPermissions(role.id);
     }
 }
