@@ -65,38 +65,17 @@ describe("RoleRepository", () => {
             permission: permission
         }]);
 
-        const result = await repo.getRolePermissions(1);
-
-        expect(result).toMatchObject([permission]);
-    });
-
-    it("Test addRolePermissions", async () => {
-        (prisma.rolePermission.findMany as jest.Mock).mockResolvedValue([{
-            permission: permission
-        }]);
-
-        const result = await repo.addRolePermissions(1, [1]);
+        const result = await repo.getPermissions(1);
 
         expect(result).toMatchObject([permission]);
     });
 
     it("Test updateRolePermissions", async () => {
-        (prisma.rolePermission.findMany as jest.Mock).mockResolvedValue([{
-            permission: permission
-        }]);
+        (prisma.rolePermission.findMany as jest.Mock).mockResolvedValue([]);
+        (prisma.role.update as jest.Mock).mockResolvedValue(role);
 
-        const result = await repo.updateRolePermissions(1, [1]);
+        const result = await repo.updatePermissions(1, [1]);
 
-        expect(result).toMatchObject([permission]);
-    });
-
-    it("Test deleteRolePermissions", async () => {
-        (prisma.rolePermission.findMany as jest.Mock).mockResolvedValue([{
-            permission: permission
-        }]);
-
-        const result = await repo.deleteRolePermissions(1, [1]);
-
-        expect(result).toMatchObject([permission]);
+        expect(result).toMatchObject([]);
     });
 });

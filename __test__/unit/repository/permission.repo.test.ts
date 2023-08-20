@@ -76,6 +76,6 @@ describe("PermissionRepository", () => {
 
         let result = await repo.updateRoles(1, [1, 2, 3]);
 
-        expect(result).toMatchObject({id: 1, name: "test"});
+        expect(result).toMatchObject([]);
     });
 });
