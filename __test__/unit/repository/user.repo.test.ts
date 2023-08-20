@@ -123,9 +123,9 @@ describe("UserRepository", () => {
 
         (prisma.user.update as jest.Mock).mockResolvedValue(userWithRoles as User);
         (prisma.user.findUnique as jest.Mock).mockResolvedValue(userWithRoles as User);
-        (prisma.role.findMany as jest.Mock).mockResolvedValue([]);
+        (prisma.role.findMany as jest.Mock).mockResolvedValue([{id: 1, name: "name"}]);
 
-        const result = await repository.updateUserRoles(1, [1, 2, 3])
+        const result = await repository.updateUserRoles(1, [ 2])
 
         expect(result).toMatchObject(data);
     })

@@ -71,11 +71,13 @@ describe("RoleRepository", () => {
     });
 
     it("Test updateRolePermissions", async () => {
-        (prisma.rolePermission.findMany as jest.Mock).mockResolvedValue([]);
+        (prisma.rolePermission.findMany as jest.Mock).mockResolvedValue([{
+            permission: permission
+        }]);
         (prisma.role.update as jest.Mock).mockResolvedValue(role);
 
-        const result = await repo.updatePermissions(1, [1]);
+        const result = await repo.updatePermissions(1, [2]);
 
-        expect(result).toMatchObject([]);
+        expect(result).toMatchObject([permission]);
     });
 });
