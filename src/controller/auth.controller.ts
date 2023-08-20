@@ -22,7 +22,7 @@ export default class AuthController {
     userRepo = new UserRepository();
 
     async signup(req: NextRequest) {
-        if (req.method !== 'POST') return Response.methodNotAllowed("Invalid request method");
+        if (req.method !== "POST") return Response.methodNotAllowed("Invalid request method");
 
         let body;
 
@@ -83,7 +83,7 @@ export default class AuthController {
     }
 
     async login(req: NextRequest) {
-        if (req.method !== 'POST') return Response.methodNotAllowed("Invalid request method");
+        if (req.method !== "POST") return Response.methodNotAllowed("Invalid request method");
 
         let body;
         try {
@@ -125,7 +125,7 @@ export default class AuthController {
     }
 
     async resetPassword(req: NextRequest) {
-        if (req.method !== 'POST') return Response.methodNotAllowed("Invalid request method");
+        if (req.method !== "POST") return Response.methodNotAllowed("Invalid request method");
 
         let body;
         try {
@@ -171,7 +171,7 @@ export default class AuthController {
     }
 
     async confirmResetPassword(req: NextRequest) {
-        if (req.method !== 'PUT') return Response.methodNotAllowed("Invalid request method");
+        if (req.method !== "PUT") return Response.methodNotAllowed("Invalid request method");
 
         let body;
         try {
@@ -199,7 +199,7 @@ export default class AuthController {
     }
 
     async confirmEmail(req: NextRequest) {
-        if (req.method !== 'POST') return Response.methodNotAllowed("Invalid request method");
+        if (req.method !== "POST") return Response.methodNotAllowed("Invalid request method");
 
         let body;
         try {
@@ -229,7 +229,7 @@ export default class AuthController {
     }
 
     async resendEmailConfirmation(req: NextRequest) {
-        if (req.method !== 'POST') return Response.methodNotAllowed("Invalid request method");
+        if (req.method !== "POST") return Response.methodNotAllowed("Invalid request method");
 
         let body;
         try {
@@ -275,7 +275,7 @@ export default class AuthController {
     }
 
     async refreshToken(req: NextRequest) {
-        if (req.method !== 'POST') return Response.methodNotAllowed("Invalid request method");
+        if (req.method !== "POST") return Response.methodNotAllowed("Invalid request method");
 
         let body;
         try {
