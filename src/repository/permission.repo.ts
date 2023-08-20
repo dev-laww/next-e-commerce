@@ -5,6 +5,7 @@ import prisma from "@lib/prisma";
 export default class PermissionRepository {
     prismaClient = prisma;
 
+    // TODO: Add pagination
     public async getAll(filter?: Prisma.PermissionWhereInput): Promise<Permission[]> {
         return this.prismaClient.permission.findMany({
             where: filter,
