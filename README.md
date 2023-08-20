@@ -32,15 +32,15 @@ yarn install
 
 Then, create a `.env` file in the root directory, see `.env.example` for an example.
 
-Then, set up the database:
+Then, apply migrations and generate Prisma client (make sure you have a PostgreSQL database running)
 ```bash
 prisma generate
 
-prisma migrate dev --name init
+prisma migrate dev
 
 # or
 
-npx prisma migrate dev --name init
+npx prisma migrate dev
 ```
 
 Then, run the development server:
@@ -53,6 +53,32 @@ pnpm dev
 ```
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## More scripts
+To run the tests:
+```bash
+npm run test
+npm run test:watch
+npm run test:cov
+npm run test:ci
+```
+
+To run the linter:
+```bash
+npm run lint
+```
+
+To generate new files:
+```bash
+npm run generate
+# Select the file you want to generate from the list
+```
+
+To build the app:
+```bash
+npm run build
+```
+
+See [documentation](./docs/README.md) for more information.
 
 ### NOTE: This project is still a work in progress. I will be adding more features and functionality in the future.
 - See [Documentation](./docs/README.md) for more information.
