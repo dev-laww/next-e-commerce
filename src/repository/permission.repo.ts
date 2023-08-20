@@ -60,14 +60,16 @@ export default class PermissionRepository {
         });
     }
 
-    // TODO: Fix this
     public async removeRole(id: number, roles: number[]): Promise<Permission> {
         return this.prismaClient.permission.update({
             where: {id: id},
             data: {
                 roles: {
-                    disconnect: roles.map(role => ({id: role}))
+                    deleteMany: roles.map(role => ({role_id: role}))
                 }
+            },
+            include: {
+                roles: true
             }
         });
     }
