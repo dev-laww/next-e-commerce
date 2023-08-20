@@ -7,7 +7,7 @@ import {
     Review,
     Role,
     TokenOTP,
-    User,
+    User, UserRole,
     WishlistItem
 } from "@prisma/client";
 
@@ -99,18 +99,19 @@ export default class UserRepository {
             } as Prisma.RoleSelect
         });
     }
-
-    // TODO: Fix this
     public async updateUserRoles(id: number, roles: number[]): Promise<User> {
+        const userRoles = await this.getUserRoles(id).then(roles => roles.map(role => role.id));
+
+        const rolesToAdd = roles.filter(role => !userRoles.includes(role));
+        const rolesToRemove = userRoles.filter(role => !roles.includes(role));
+
         return this.user.update({
             where: {id: id},
             data: {
                 roles: {
-                    set: roles.map(role => ({id: role}))
+                    create: rolesToAdd.map(role => ({role_id: role})),
+                    deleteMany: rolesToRemove.map(role => ({role_id: role}))
                 }
-            },
-            include: {
-                roles: true
             }
         });
     }
