@@ -171,7 +171,7 @@ export default class AuthController {
     }
 
     async confirmResetPassword(req: NextRequest) {
-        if (req.method !== 'PUT') return Response.badRequest("Invalid request method");
+        if (req.method !== 'PUT') return Response.methodNotAllowed("Invalid request method");
 
         let body;
         try {
