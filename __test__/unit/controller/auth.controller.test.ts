@@ -1,4 +1,4 @@
-import { NextApiRequest } from "next";
+import { NextRequest } from "next/server";
 
 import AuthController from "@controller/auth.controller";
 import { TokenOTP, User } from "@prisma/client";
@@ -12,7 +12,6 @@ jest.mock("@utils/email", () => require("@mocks/lib/utils/email.mock"));
 
 describe("Auth Controller", () => {
     let controller: AuthController;
-    let req: NextApiRequest;
     const data = {
         id: 1,
         username: "username",
@@ -23,10 +22,6 @@ describe("Auth Controller", () => {
     } as User;
 
     beforeEach(() => {
-        req = {
-            method: "POST",
-        } as NextApiRequest;
-
         controller = new AuthController();
 
         jest.clearAllMocks();
@@ -38,11 +33,14 @@ describe("Auth Controller", () => {
         })
 
         it("returns 200 if login success", async () => {
-            req.body = {
-                email: "username",
-                password: "password"
-            };
-
+            const req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    email: "email",
+                    password: "password"
+                })
+            });
             // Mock getUserByEmail to return data
             (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(null);
             (controller.userRepo.getUserByUsername as jest.Mock).mockResolvedValue(data);
@@ -57,10 +55,14 @@ describe("Auth Controller", () => {
         })
 
         it("returns 401 if login fail", async () => {
-            req.body = {
-                email: "username",
-                password: "wrong_password"
-            };
+            let req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    email: "username",
+                    password: "wrong_password"
+                })
+            });
 
             // Mock getUserByEmail to return data
             (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(data);
@@ -77,6 +79,14 @@ describe("Auth Controller", () => {
             (controller.userRepo.getUserByUsername as jest.Mock).mockResolvedValue(null);
 
             // call login
+            req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    email: "username",
+                    password: "wrong_password"
+                })
+            });
             ({statusCode, response} = await controller.login(req));
 
             // expect
@@ -84,7 +94,22 @@ describe("Auth Controller", () => {
             expect(response.data).toBeUndefined();
         })
 
+        it("returns 400 if body is invalid", async () => {
+            const req = new NextRequest("http://localhost:3000/api/auth", {method: "POST",});
+
+            // call login
+            const {statusCode, response} = await controller.login(req);
+
+            // expect
+            expect(statusCode).toBe(Constants.STATUS_CODE.BAD_REQUEST);
+            expect(response.data).toBeUndefined();
+        });
+
         it("returns 422 if wrong body", async () => {
+            const req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "POST",
+                body: "{}"
+            });
             // call login
             const {statusCode, response} = await controller.login(req);
 
@@ -93,30 +118,35 @@ describe("Auth Controller", () => {
             expect(response.data).toBeUndefined();
         });
 
-        it("returns 400 if invalid request method", async () => {
-            req.method = "GET";
+        it("returns 405 if invalid request method", async () => {
+            const req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "GET"
+            });
 
             // call login
             const {statusCode, response} = await controller.login(req);
 
             // expect
-            expect(statusCode).toBe(Constants.STATUS_CODE.BAD_REQUEST);
+            expect(statusCode).toBe(Constants.STATUS_CODE.METHOD_NOT_ALLOWED);
             expect(response.data).toBeUndefined();
         })
     })
 
     describe("Test signup", () => {
+        let req: NextRequest;
         beforeEach(() => {
-            req.body = {
-                username: "username",
-                password: "password",
-                confirmPassword: "password",
-                email: "email@mail.com",
-                firstName: "name",
-                lastName: "name",
-                imageUrl: "https://image.com/image.jpg"
-            };
-
+            req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "POST",
+                body: JSON.stringify({
+                    username: "username",
+                    password: "password",
+                    confirmPassword: "password",
+                    email: "email@mail.com",
+                    firstName: "name",
+                    lastName: "name",
+                    imageUrl: "https://image.com/image.jpg"
+                })
+            });
             jest.clearAllMocks();
         });
 
@@ -137,8 +167,17 @@ describe("Auth Controller", () => {
             expect(response.data).toBeDefined();
         });
 
-        it("returns 400 if invalid request method", async () => {
-            req.method = "GET";
+        it("returns 405 if invalid request method", async () => {
+            const req = new NextRequest("http://localhost:3000/api/auth", {});
+
+            const {statusCode, response} = await controller.signup(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.METHOD_NOT_ALLOWED);
+            expect(response.data).toBeUndefined();
+        });
+
+        it("returns 400 if invalid body", async () => {
+            const req = new NextRequest("http://localhost:3000/api/auth", {method: "POST"});
 
             const {statusCode, response} = await controller.signup(req);
 
@@ -147,7 +186,10 @@ describe("Auth Controller", () => {
         });
 
         it("returns 422 if wrong body", async () => {
-            req.body = undefined;
+            const req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "POST",
+                body: "{}"
+            });
 
             const {statusCode, response} = await controller.signup(req);
 
@@ -156,6 +198,18 @@ describe("Auth Controller", () => {
         });
 
         it("returns 400 if user already exist", async () => {
+            const req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "POST",
+                body: JSON.stringify({
+                    username: "username",
+                    password: "password",
+                    confirmPassword: "password",
+                    email: "email@mail.com",
+                    firstName: "name",
+                    lastName: "name",
+                    imageUrl: "https://image.com/image.jpg"
+                })
+            });
             (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(data);
             (controller.userRepo.getUserById as jest.Mock).mockResolvedValue(data);
 
@@ -166,6 +220,18 @@ describe("Auth Controller", () => {
         });
 
         it("returns 500 if generation token fail", async () => {
+            const req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "POST",
+                body: JSON.stringify({
+                    username: "username",
+                    password: "password",
+                    confirmPassword: "password",
+                    email: "email@mail.com",
+                    firstName: "name",
+                    lastName: "name",
+                    imageUrl: "https://image.com/image.jpg"
+                })
+            });
             (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(null);
             (controller.userRepo.getUserById as jest.Mock).mockResolvedValue(null);
             (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue(null);
@@ -197,11 +263,16 @@ describe("Auth Controller", () => {
     })
 
     describe("Test reset password", () => {
+        let req: NextRequest;
         beforeEach(() => {
-            req.body = {
-                email: "test@mail.com",
-                type: "token"
-            };
+            req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "POST",
+                body: JSON.stringify({
+                    email: "test@mail.com",
+                    type: "token"
+                })
+            });
+
             jest.clearAllMocks();
         });
 
@@ -223,7 +294,13 @@ describe("Auth Controller", () => {
             expect(response.data).toBeUndefined();
 
             // OTP
-            req.body.type = "otp";
+            req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "POST",
+                body: JSON.stringify({
+                    email: "test@mail.com",
+                    type: "token"
+                })
+            });
             token.type = Constants.TOKEN_TYPE.PASSWORD_RESET_OTP;
             (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue(token);
             (Email.sendOTP as jest.Mock).mockResolvedValue(null);
@@ -234,8 +311,20 @@ describe("Auth Controller", () => {
             expect(response.data).toBeUndefined();
         });
 
+        it("returns 400 if invalid request body", async () => {
+            req = new NextRequest("http://localhost:3000/api/auth", {method: "POST"});
+
+            const {statusCode, response} = await controller.resetPassword(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.BAD_REQUEST);
+            expect(response.data).toBeUndefined();
+        });
+
         it("returns 422 if wrong body", async () => {
-            req.body = undefined;
+            req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "POST",
+                body: "{}"
+            });
 
             const {statusCode, response} = await controller.resetPassword(req);
 
@@ -243,12 +332,12 @@ describe("Auth Controller", () => {
             expect(response.data).toBeUndefined();
         });
 
-        it("returns 400 if wrong request method", async () => {
-            req.method = "GET";
+        it("returns 405 if wrong request method", async () => {
+            req = new NextRequest("http://localhost:3000/api/auth", {});
 
             const {statusCode, response} = await controller.resetPassword(req);
 
-            expect(statusCode).toBe(Constants.STATUS_CODE.BAD_REQUEST);
+            expect(statusCode).toBe(Constants.STATUS_CODE.METHOD_NOT_ALLOWED);
             expect(response.data).toBeUndefined();
         });
 
@@ -263,6 +352,14 @@ describe("Auth Controller", () => {
         });
 
         it("returns 500 if failed to generate token", async () => {
+            req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "POST",
+                body: JSON.stringify({
+                    email: "test@mail.com",
+                    type: "token"
+                })
+            });
+
             (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(data);
             (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue(null);
 
@@ -272,7 +369,13 @@ describe("Auth Controller", () => {
             expect(response.data).toBeUndefined();
 
             // OTP
-            req.body.type = "otp";
+            req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "POST",
+                body: JSON.stringify({
+                    email: "test@mail.com",
+                    type: "otp"
+                })
+            });
             (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue(null);
 
             ({statusCode, response} = await controller.resetPassword(req));
@@ -299,10 +402,18 @@ describe("Auth Controller", () => {
             expect(response.data).toBeUndefined();
 
             // OTP
-            req.body.type = "otp";
+            req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "POST",
+                body: JSON.stringify({
+                    email: "test@mail.com",
+                    type: "token"
+                })
+            });
             token.type = Constants.TOKEN_TYPE.PASSWORD_RESET_OTP;
             (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue(token);
             (Email.sendOTP as jest.Mock).mockRejectedValue(Error("error"));
+
+            ({statusCode, response} = await controller.resetPassword(req));
 
             expect(statusCode).toBe(Constants.STATUS_CODE.INTERNAL_SERVER_ERROR);
             expect(response.data).toBeUndefined();
@@ -310,13 +421,17 @@ describe("Auth Controller", () => {
     })
 
     describe("Test confirm reset password", () => {
+        let req: NextRequest;
         beforeEach(() => {
-            req.method = "PUT";
-            req.body = {
-                token: "x",
-                password: "password",
-                type: "token"
-            };
+            req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "PUT",
+                body: JSON.stringify({
+                    token: "x",
+                    password: "password",
+                    type: "token"
+                })
+            });
+
             jest.clearAllMocks();
         })
 
@@ -330,15 +445,34 @@ describe("Auth Controller", () => {
             expect(response.data).toBeUndefined();
 
             // OTP
-            req.body.type = "otp";
+            req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "PUT",
+                body: JSON.stringify({
+                    token: "x",
+                    password: "password",
+                    type: "otp"
+                })
+            });
+
             ({statusCode, response} = await controller.confirmResetPassword(req));
 
             expect(statusCode).toBe(Constants.STATUS_CODE.SUCCESS);
             expect(response.data).toBeUndefined();
         });
 
-        it("returns 422 if wrong body", async () => {
-            req.body = undefined;
+        it("returns 400 if invalid body", async () => {
+            req = new NextRequest("http://localhost:3000/api/auth", {method: "PUT"});
+
+            const {statusCode, response} = await controller.confirmResetPassword(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.BAD_REQUEST);
+            expect(response.data).toBeUndefined();
+        });
+        it("returns 422 if invalid body", async () => {
+            req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "PUT",
+                body: '{}'
+            });
 
             const {statusCode, response} = await controller.confirmResetPassword(req);
 
@@ -346,16 +480,24 @@ describe("Auth Controller", () => {
             expect(response.data).toBeUndefined();
         });
 
-        it("returns 400 if invalid request method", async () => {
-            req.method = "GET";
+        it("returns 405 if invalid request method", async () => {
+            req = new NextRequest("http://localhost:3000/api/auth", {});
 
             const {statusCode, response} = await controller.confirmResetPassword(req);
 
-            expect(statusCode).toBe(Constants.STATUS_CODE.BAD_REQUEST);
+            expect(statusCode).toBe(Constants.STATUS_CODE.METHOD_NOT_ALLOWED);
             expect(response.data).toBeUndefined();
         });
 
         it("returns 401 if invalid token", async () => {
+            req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "PUT",
+                body: JSON.stringify({
+                    token: "x",
+                    password: "password",
+                    type: "token"
+                })
+            });
             (controller.userRepo.verifyTokenOTP as jest.Mock).mockResolvedValue({success: false, data: null});
 
             let {statusCode, response} = await controller.confirmResetPassword(req);
@@ -363,7 +505,15 @@ describe("Auth Controller", () => {
             expect(statusCode).toBe(Constants.STATUS_CODE.UNAUTHORIZED);
             expect(response.data).toBeUndefined();
 
-            req.body.type = "otp";
+            // OTP
+            req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "PUT",
+                body: JSON.stringify({
+                    token: "x",
+                    password: "password",
+                    type: "otp"
+                })
+            });
 
             ({statusCode, response} = await controller.confirmResetPassword(req));
 
@@ -373,11 +523,17 @@ describe("Auth Controller", () => {
     })
 
     describe("Test confirm email", () => {
+        let req: NextRequest;
+
         beforeEach(() => {
-            req.body = {
-                token: "x",
-                type: "token"
-            }
+            req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "POST",
+                body: JSON.stringify({
+                    token: "x",
+                    type: "token"
+                })
+            });
+
             jest.clearAllMocks();
         })
 
@@ -391,7 +547,13 @@ describe("Auth Controller", () => {
             expect(response.data).toBeUndefined();
 
             // OTP
-            req.body.type = "otp";
+            req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "POST",
+                body: JSON.stringify({
+                    token: "x",
+                    type: "otp"
+                })
+            });
             ({statusCode, response} = await controller.confirmEmail(req));
 
             expect(statusCode).toBe(Constants.STATUS_CODE.SUCCESS);
@@ -399,7 +561,10 @@ describe("Auth Controller", () => {
         });
 
         it("returns 422 if wrong body", async () => {
-            req.body = undefined;
+            const req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "POST",
+                body: '{}'
+            });
 
             const {statusCode, response} = await controller.confirmEmail(req);
 
@@ -407,12 +572,21 @@ describe("Auth Controller", () => {
             expect(response.data).toBeUndefined();
         });
 
-        it("returns 400 if invalid request method", async () => {
-            req.method = "GET";
+        it("returns 400 if invalid body", async () => {
+            const req = new NextRequest("http://localhost:3000/api/auth", {method: "POST"});
 
             const {statusCode, response} = await controller.confirmEmail(req);
 
             expect(statusCode).toBe(Constants.STATUS_CODE.BAD_REQUEST);
+            expect(response.data).toBeUndefined();
+        });
+
+        it("returns 405 if method not allowed", async () => {
+            const req = new NextRequest("http://localhost:3000/api/auth", {});
+
+            const {statusCode, response} = await controller.confirmEmail(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.METHOD_NOT_ALLOWED);
             expect(response.data).toBeUndefined();
         });
 
@@ -429,7 +603,13 @@ describe("Auth Controller", () => {
             expect(response.data).toBeUndefined();
 
             // OTP
-            req.body.type = "otp";
+            req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "POST",
+                body: JSON.stringify({
+                    token: "x",
+                    type: "otp"
+                })
+            });
             ({statusCode, response} = await controller.confirmEmail(req));
 
             expect(statusCode).toBe(Constants.STATUS_CODE.BAD_REQUEST);
@@ -445,7 +625,13 @@ describe("Auth Controller", () => {
             expect(response.data).toBeUndefined();
 
             // OTP
-            req.body.type = "otp";
+            req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "POST",
+                body: JSON.stringify({
+                    token: "x",
+                    type: "otp"
+                })
+            });
             ({statusCode, response} = await controller.confirmEmail(req));
 
             expect(statusCode).toBe(Constants.STATUS_CODE.UNAUTHORIZED);
@@ -455,12 +641,16 @@ describe("Auth Controller", () => {
 
     describe("Test resend confirmation email", () => {
         let token: TokenOTP;
+        let req: NextRequest;
 
         beforeEach(() => {
-            req.body = {
-                email: "test@mail.com",
-                type: "token"
-            };
+            req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "POST",
+                body: JSON.stringify({
+                    email: "test@mail.com",
+                    type: "token"
+                })
+            });
             token = {
                 id: 1,
                 user_id: 1,
@@ -482,7 +672,13 @@ describe("Auth Controller", () => {
             expect(response.data).toBeUndefined();
 
             // OTP
-            req.body.type = "otp";
+            req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "POST",
+                body: JSON.stringify({
+                    email: "test@mail.com",
+                    type: "otp"
+                })
+            });
             token.type = Constants.TOKEN_TYPE.EMAIL_CONFIRMATION_OTP;
             (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue(token);
             (Email.sendOTP as jest.Mock).mockResolvedValue(null);
@@ -493,8 +689,20 @@ describe("Auth Controller", () => {
             expect(response.data).toBeUndefined();
         });
 
+        it("returns 400 if invalid body", async () => {
+            const req = new NextRequest("http://localhost:3000/api/auth", {method: "POST"});
+
+            const {statusCode, response} = await controller.resendEmailConfirmation(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.BAD_REQUEST);
+            expect(response.data).toBeUndefined();
+        });
+
         it("returns 422 if wrong body", async () => {
-            req.body = undefined;
+            const req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "POST",
+                body: "{}"
+            });
 
             const {statusCode, response} = await controller.resendEmailConfirmation(req);
 
@@ -502,12 +710,12 @@ describe("Auth Controller", () => {
             expect(response.data).toBeUndefined();
         });
 
-        it("returns 400 if invalid request method", async () => {
-            req.method = "GET";
+        it("returns 405 if invalid request method", async () => {
+            req = new NextRequest("http://localhost:3000/api/auth", {});
 
             const {statusCode, response} = await controller.resendEmailConfirmation(req);
 
-            expect(statusCode).toBe(Constants.STATUS_CODE.BAD_REQUEST);
+            expect(statusCode).toBe(Constants.STATUS_CODE.METHOD_NOT_ALLOWED);
             expect(response.data).toBeUndefined();
         });
 
@@ -542,7 +750,13 @@ describe("Auth Controller", () => {
             expect(response.data).toBeUndefined();
 
             // OTP
-            req.body.type = "otp";
+            req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "POST",
+                body: JSON.stringify({
+                    email: "test@mail.com",
+                    type: "otp"
+                })
+            });
             token.type = Constants.TOKEN_TYPE.EMAIL_CONFIRMATION_OTP;
             (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue(null);
 
@@ -564,7 +778,13 @@ describe("Auth Controller", () => {
             expect(response.data).toBeUndefined();
 
             // OTP
-            req.body.type = "otp";
+            req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "POST",
+                body: JSON.stringify({
+                    email: "test@mail.com",
+                    type: "otp"
+                })
+            });
             token.type = Constants.TOKEN_TYPE.EMAIL_CONFIRMATION_OTP;
             (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue(token);
             (Email.sendOTP as jest.Mock).mockRejectedValue(Error("error"));
@@ -586,13 +806,17 @@ describe("Auth Controller", () => {
             last_name: "name",
             image_url: "https://image.com/image.jpg"
         };
+        let req: NextRequest;
 
         beforeEach(() => {
             refreshToken = generateRefreshToken(userSession);
 
-            req.body = {
-                token: refreshToken
-            }
+            req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "POST",
+                body: JSON.stringify({
+                    token: refreshToken
+                })
+            });
 
             jest.clearAllMocks();
         });
@@ -605,7 +829,7 @@ describe("Auth Controller", () => {
         });
 
         it("returns 422 if wrong body", async () => {
-            req.body = undefined;
+            const req = new NextRequest("http://localhost:3000/api/auth", {method: "POST", body: "{}"});
 
             const {statusCode, response} = await controller.refreshToken(req);
 
@@ -613,8 +837,8 @@ describe("Auth Controller", () => {
             expect(response.data).toBeUndefined();
         });
 
-        it("returns 400 if invalid request method", async () => {
-            req.method = "GET";
+        it("returns 400 if invalid body", async () => {
+            const req = new NextRequest("http://localhost:3000/api/auth", {method: "POST"});
 
             const {statusCode, response} = await controller.refreshToken(req);
 
@@ -622,8 +846,22 @@ describe("Auth Controller", () => {
             expect(response.data).toBeUndefined();
         });
 
+        it("returns 405 if invalid request method", async () => {
+            req = new NextRequest("http://localhost:3000/api/auth", {});
+
+            const {statusCode, response} = await controller.refreshToken(req);
+
+            expect(statusCode).toBe(Constants.STATUS_CODE.METHOD_NOT_ALLOWED);
+            expect(response.data).toBeUndefined();
+        });
+
         it("returns 401 if invalid token", async () => {
-            req.body.token = "invalid_token";
+            req = new NextRequest("http://localhost:3000/api/auth", {
+                method: "POST",
+                body: JSON.stringify({
+                    token: "invalid_token"
+                })
+            });
 
             const {statusCode, response} = await controller.refreshToken(req);
 
