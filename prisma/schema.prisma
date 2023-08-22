@@ -29,7 +29,7 @@ model User {
   reviews         Review[]
   payments        Payment[]
   roles           UserRole[]
-  token           TokenOTP[]
+  tokens          TokenOTP[]
 
   @@map("user")
 }
@@ -214,7 +214,7 @@ model Payment {
   order_id   Int
   method_id  Int
   amount     Float
-  status     String
+  status     String        @default("pending")
   created_at DateTime      @default(now())
   updated_at DateTime      @updatedAt
   user       User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
@@ -300,6 +300,6 @@ model TokenOTP {
   user_id    Int
   type       String
   created_at DateTime @default(now())
-  update_at  DateTime @updatedAt
+  updated_at DateTime @updatedAt
   user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }

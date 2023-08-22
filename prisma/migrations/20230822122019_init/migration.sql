@@ -201,7 +201,7 @@ CREATE TABLE "payment" (
     "order_id" INTEGER NOT NULL,
     "method_id" INTEGER NOT NULL,
     "amount" DOUBLE PRECISION NOT NULL,
-    "status" TEXT NOT NULL,
+    "status" TEXT NOT NULL DEFAULT 'pending',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -298,7 +298,7 @@ CREATE TABLE "TokenOTP" (
     "user_id" INTEGER NOT NULL,
     "type" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "update_at" TIMESTAMP(3) NOT NULL,
+    "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "TokenOTP_pkey" PRIMARY KEY ("id")
 );
