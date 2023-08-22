@@ -21,13 +21,13 @@ export default class PermissionRepository {
         });
     }
 
-    public async create(permission: Permission): Promise<Permission> {
+    public async create(permission: Prisma.PermissionCreateInput): Promise<Permission> {
         return this.prismaClient.permission.create({
             data: permission
         });
     }
 
-    public async update(id: number, permission: Permission): Promise<Permission> {
+    public async update(id: number, permission: Prisma.PermissionUpdateInput): Promise<Permission> {
         return this.prismaClient.permission.update({
             where: {id: id},
             data: permission

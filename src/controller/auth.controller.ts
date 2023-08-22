@@ -38,14 +38,14 @@ export default class AuthController {
 
         delete body.confirmPassword;
 
-        const userExistsByEmail = await this.userRepo.getUserByEmail(body.email);
-        const userExistsByUsername = await this.userRepo.getUserByUsername(body.username);
+        const userExistsByEmail = await this.userRepo.getByEmail(body.email);
+        const userExistsByUsername = await this.userRepo.getByUsername(body.username);
 
         if (userExistsByEmail || userExistsByUsername) return Response.badRequest("User already exists");
 
         body.password = await hash(body.password);
 
-        const user = await this.userRepo.createUser(humps.decamelizeKeys(body) as User)
+        const user = await this.userRepo.create(humps.decamelizeKeys(body) as User)
         const userSession: UserSession = {
             id: user.id,
             first_name: user.first_name,
@@ -63,7 +63,7 @@ export default class AuthController {
         );
 
         if (!confirmationToken) {
-            await this.userRepo.deleteUserById(user.id);
+            await this.userRepo.delete(user.id);
             return Response.internalServerError("Failed to generate confirmation token");
         }
 
@@ -71,7 +71,7 @@ export default class AuthController {
             await Email.sendToken(user.email, token)
         } catch (error) {
             console.log(error);
-            await this.userRepo.deleteUserById(user.id);
+            await this.userRepo.delete(user.id);
             return Response.internalServerError("Failed to send confirmation email");
         }
 
@@ -96,10 +96,10 @@ export default class AuthController {
 
         if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
 
-        let user = await this.userRepo.getUserByEmail(body.email);
+        let user = await this.userRepo.getByEmail(body.email);
 
         if (!user) {
-            user = await this.userRepo.getUserByUsername(body.email);
+            user = await this.userRepo.getByUsername(body.email);
 
             if (!user) return Response.invalidCredentials("Email or username is invalid");
         }
@@ -138,10 +138,10 @@ export default class AuthController {
 
         if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
 
-        let user = await this.userRepo.getUserByEmail(requestData.data.email);
+        let user = await this.userRepo.getByEmail(requestData.data.email);
 
         if (!user) {
-            user = await this.userRepo.getUserByUsername(requestData.data.email);
+            user = await this.userRepo.getByUsername(requestData.data.email);
 
             if (!user) return Response.notFound("Email or username is invalid");
         }
@@ -223,7 +223,7 @@ export default class AuthController {
 
         if (data.confirmed) return Response.badRequest("Email already confirmed");
 
-        await this.userRepo.updateUser(data.id, {confirmed: true});
+        await this.userRepo.update(data.id, {confirmed: true});
 
         return Response.success("Email confirmed successfully");
     }
@@ -242,10 +242,10 @@ export default class AuthController {
 
         if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
 
-        let user = await this.userRepo.getUserByEmail(requestData.data.email);
+        let user = await this.userRepo.getByEmail(requestData.data.email);
 
         if (!user) {
-            user = await this.userRepo.getUserByUsername(requestData.data.email);
+            user = await this.userRepo.getByUsername(requestData.data.email);
 
             if (!user) return Response.badRequest("User does not exist");
         }

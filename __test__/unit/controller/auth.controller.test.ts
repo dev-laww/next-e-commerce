@@ -42,8 +42,8 @@ describe("Auth Controller", () => {
                 })
             });
             // Mock getUserByEmail to return data
-            (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(null);
-            (controller.userRepo.getUserByUsername as jest.Mock).mockResolvedValue(data);
+            (controller.userRepo.getByEmail as jest.Mock).mockResolvedValue(null);
+            (controller.userRepo.getByUsername as jest.Mock).mockResolvedValue(data);
 
             // call login
             const {statusCode, response} = await controller.login(req);
@@ -65,7 +65,7 @@ describe("Auth Controller", () => {
             });
 
             // Mock getUserByEmail to return data
-            (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(data);
+            (controller.userRepo.getByEmail as jest.Mock).mockResolvedValue(data);
 
             // call login
             let {statusCode, response} = await controller.login(req);
@@ -75,8 +75,8 @@ describe("Auth Controller", () => {
             expect(response.data).toBeUndefined();
 
             // Mock getUserByUsername to return data
-            (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(null);
-            (controller.userRepo.getUserByUsername as jest.Mock).mockResolvedValue(null);
+            (controller.userRepo.getByEmail as jest.Mock).mockResolvedValue(null);
+            (controller.userRepo.getByUsername as jest.Mock).mockResolvedValue(null);
 
             // call login
             req = new NextRequest("http://localhost:3000/api/auth", {
@@ -151,7 +151,7 @@ describe("Auth Controller", () => {
         });
 
         it("returns 201 if register success", async () => {
-            (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(null);
+            (controller.userRepo.getByEmail as jest.Mock).mockResolvedValue(null);
             (controller.userRepo.getUserById as jest.Mock).mockResolvedValue(null);
             (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue({
                 id: 1,
@@ -159,7 +159,7 @@ describe("Auth Controller", () => {
                 token: "x",
                 type: Constants.TOKEN_TYPE.EMAIL_CONFIRMATION_OTP,
             } as TokenOTP);
-            (controller.userRepo.createUser as jest.Mock).mockResolvedValue(data);
+            (controller.userRepo.create as jest.Mock).mockResolvedValue(data);
 
             const {statusCode, response} = await controller.signup(req);
 
@@ -210,7 +210,7 @@ describe("Auth Controller", () => {
                     imageUrl: "https://image.com/image.jpg"
                 })
             });
-            (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(data);
+            (controller.userRepo.getByEmail as jest.Mock).mockResolvedValue(data);
             (controller.userRepo.getUserById as jest.Mock).mockResolvedValue(data);
 
             const {statusCode, response} = await controller.signup(req);
@@ -232,10 +232,10 @@ describe("Auth Controller", () => {
                     imageUrl: "https://image.com/image.jpg"
                 })
             });
-            (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(null);
+            (controller.userRepo.getByEmail as jest.Mock).mockResolvedValue(null);
             (controller.userRepo.getUserById as jest.Mock).mockResolvedValue(null);
             (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue(null);
-            (controller.userRepo.createUser as jest.Mock).mockResolvedValue(data);
+            (controller.userRepo.create as jest.Mock).mockResolvedValue(data);
 
             const {statusCode, response} = await controller.signup(req);
 
@@ -244,7 +244,7 @@ describe("Auth Controller", () => {
         });
 
         it("returns 500 if token sending fail", async () => {
-            (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(null);
+            (controller.userRepo.getByEmail as jest.Mock).mockResolvedValue(null);
             (controller.userRepo.getUserById as jest.Mock).mockResolvedValue(null);
             (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue({
                 id: 1,
@@ -252,7 +252,7 @@ describe("Auth Controller", () => {
                 token: "x",
                 type: Constants.TOKEN_TYPE.EMAIL_CONFIRMATION_OTP,
             } as TokenOTP);
-            (controller.userRepo.createUser as jest.Mock).mockResolvedValue(data);
+            (controller.userRepo.create as jest.Mock).mockResolvedValue(data);
             (Email.sendToken as jest.Mock).mockRejectedValue(Error("error"));
 
             const {statusCode, response} = await controller.signup(req);
@@ -284,7 +284,7 @@ describe("Auth Controller", () => {
                 type: Constants.TOKEN_TYPE.PASSWORD_RESET_TOKEN,
             };
 
-            (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(data);
+            (controller.userRepo.getByEmail as jest.Mock).mockResolvedValue(data);
             (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue(token);
             (Email.sendToken as jest.Mock).mockResolvedValue(null);
 
@@ -342,8 +342,8 @@ describe("Auth Controller", () => {
         });
 
         it("returns 404 if user not found", async () => {
-            (controller.userRepo.getUserByUsername as jest.Mock).mockResolvedValue(null);
-            (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(null);
+            (controller.userRepo.getByUsername as jest.Mock).mockResolvedValue(null);
+            (controller.userRepo.getByEmail as jest.Mock).mockResolvedValue(null);
 
             const {statusCode, response} = await controller.resetPassword(req);
 
@@ -360,7 +360,7 @@ describe("Auth Controller", () => {
                 })
             });
 
-            (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(data);
+            (controller.userRepo.getByEmail as jest.Mock).mockResolvedValue(data);
             (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue(null);
 
             let {statusCode, response} = await controller.resetPassword(req);
@@ -392,7 +392,7 @@ describe("Auth Controller", () => {
                 type: Constants.TOKEN_TYPE.PASSWORD_RESET_TOKEN,
             };
 
-            (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(data);
+            (controller.userRepo.getByEmail as jest.Mock).mockResolvedValue(data);
             (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue(token);
             (Email.sendToken as jest.Mock).mockRejectedValue(Error("error"));
 
@@ -539,7 +539,7 @@ describe("Auth Controller", () => {
 
         it("returns 200 if confirm email success", async () => {
             (controller.userRepo.verifyTokenOTP as jest.Mock).mockResolvedValue({success: true, data: data});
-            (controller.userRepo.updateUser as jest.Mock).mockResolvedValue(null);
+            (controller.userRepo.update as jest.Mock).mockResolvedValue(null);
 
             let {statusCode, response} = await controller.confirmEmail(req);
 
@@ -595,7 +595,7 @@ describe("Auth Controller", () => {
                 success: true,
                 data: {...data, confirmed: true}
             });
-            (controller.userRepo.updateUser as jest.Mock).mockResolvedValue(null);
+            (controller.userRepo.update as jest.Mock).mockResolvedValue(null);
 
             let {statusCode, response} = await controller.confirmEmail(req);
 
@@ -661,8 +661,8 @@ describe("Auth Controller", () => {
         })
 
         it("returns 200 if resend confirmation email success", async () => {
-            (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(null);
-            (controller.userRepo.getUserByUsername as jest.Mock).mockResolvedValue(data);
+            (controller.userRepo.getByEmail as jest.Mock).mockResolvedValue(null);
+            (controller.userRepo.getByUsername as jest.Mock).mockResolvedValue(data);
             (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue(token);
             (Email.sendToken as jest.Mock).mockResolvedValue(null);
 
@@ -720,8 +720,8 @@ describe("Auth Controller", () => {
         });
 
         it("returns 400 if user already confirmed", async () => {
-            (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(null);
-            (controller.userRepo.getUserByUsername as jest.Mock).mockResolvedValue({...data, confirmed: true});
+            (controller.userRepo.getByEmail as jest.Mock).mockResolvedValue(null);
+            (controller.userRepo.getByUsername as jest.Mock).mockResolvedValue({...data, confirmed: true});
 
             const {statusCode, response} = await controller.resendEmailConfirmation(req);
 
@@ -730,8 +730,8 @@ describe("Auth Controller", () => {
         });
 
         it("returns 400 if user not found", async () => {
-            (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(null);
-            (controller.userRepo.getUserByUsername as jest.Mock).mockResolvedValue(null);
+            (controller.userRepo.getByEmail as jest.Mock).mockResolvedValue(null);
+            (controller.userRepo.getByUsername as jest.Mock).mockResolvedValue(null);
 
             const {statusCode, response} = await controller.resendEmailConfirmation(req);
 
@@ -740,8 +740,8 @@ describe("Auth Controller", () => {
         });
 
         it("returns 500 if failed to generate token", async () => {
-            (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(null);
-            (controller.userRepo.getUserByUsername as jest.Mock).mockResolvedValue(data);
+            (controller.userRepo.getByEmail as jest.Mock).mockResolvedValue(null);
+            (controller.userRepo.getByUsername as jest.Mock).mockResolvedValue(data);
             (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue(null);
 
             let {statusCode, response} = await controller.resendEmailConfirmation(req);
@@ -767,8 +767,8 @@ describe("Auth Controller", () => {
         });
 
         it("returns 500 if failed to send email", async () => {
-            (controller.userRepo.getUserByEmail as jest.Mock).mockResolvedValue(null);
-            (controller.userRepo.getUserByUsername as jest.Mock).mockResolvedValue(data);
+            (controller.userRepo.getByEmail as jest.Mock).mockResolvedValue(null);
+            (controller.userRepo.getByUsername as jest.Mock).mockResolvedValue(data);
             (controller.userRepo.generateTokenOTP as jest.Mock).mockResolvedValue(token);
             (Email.sendToken as jest.Mock).mockRejectedValue(Error("error"));
 
