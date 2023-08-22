@@ -125,7 +125,7 @@ describe("UserRepository", () => {
         (prisma.user.findUnique as jest.Mock).mockResolvedValue(userWithRoles as User);
         (prisma.role.findMany as jest.Mock).mockResolvedValue([{id: 1, name: "name"}]);
 
-        const result = await repository.updateRoles(1, [ 2])
+        const result = await repository.updateRoles(1, [2])
 
         expect(result).toMatchObject(data);
     })
@@ -394,4 +394,92 @@ describe("UserRepository", () => {
         expect(success).toBe(false);
         expect(data).toMatchObject({});
     })
+
+    it("Test getTokens", async () => {
+        (prisma.user.findUnique as jest.Mock).mockResolvedValue({
+            ...data,
+            tokens: [{
+                id: 1,
+                token: "x",
+                type: "x",
+                user_id: 1
+            }]
+        } as User);
+
+        let result = await repository.getTokens(1)
+
+        expect(result).toMatchObject([{
+            id: 1,
+            token: "x",
+            type: "x"
+        }]);
+
+        (prisma.user.findUnique as jest.Mock).mockResolvedValue(null);
+
+        result = await repository.getTokens(1)
+
+        expect(result).toMatchObject([]);
+    });
+
+    it("Test getPayments", async () => {
+        (prisma.user.findUnique as jest.Mock).mockResolvedValue({
+            ...data,
+            payments: [{
+                id: 1,
+                payment_method_id: 1,
+                order_id: 1,
+                amount: 1,
+                status: "status",
+            }]
+        } as User);
+
+        let result = await repository.getPayments(1)
+
+        expect(result).toMatchObject([{
+            id: 1,
+            payment_method_id: 1,
+            order_id: 1,
+            amount: 1,
+            status: "status",
+        }]);
+
+        (prisma.user.findUnique as jest.Mock).mockResolvedValue(null);
+
+        result = await repository.getPayments(1)
+
+        expect(result).toMatchObject([]);
+    });
+
+    it("Test createPayment", async () => {
+        (prisma.order.findUnique as jest.Mock).mockResolvedValue({id: 1, total: 1});
+        (prisma.paymentMethod.findUnique as jest.Mock).mockResolvedValue({id: 1});
+        (prisma.user.update as jest.Mock).mockResolvedValue({
+            ...data,
+            payments: [{
+                id: 1,
+                payment_method_id: 1,
+                order_id: 1,
+                amount: 1,
+                status: "status",
+            }]
+        } as User);
+
+        let result = await repository.createPayment(1, 1, 1);
+
+        expect(result).toMatchObject({
+            id: 1,
+            payment_method_id: 1,
+            order_id: 1,
+            amount: 1,
+            status: "status",
+        });
+
+        (prisma.order.findUnique as jest.Mock).mockResolvedValue(null);
+        await expect(repository.createPayment(1, 1, 1)).rejects.toThrowError("Order not found");
+
+        (prisma.order.findUnique as jest.Mock).mockResolvedValue({id: 1, total: 1});
+        (prisma.paymentMethod.findUnique as jest.Mock).mockResolvedValue(null);
+
+        await expect(repository.createPayment(1, 1, 1)).rejects.toThrowError("Payment method not found");
+    });
 })
