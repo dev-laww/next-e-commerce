@@ -2,7 +2,9 @@ import {
     Address,
     CartItem,
     Order,
-    PaymentMethod, Permission,
+    Payment,
+    PaymentMethod,
+    Permission,
     Prisma,
     Review,
     Role,
@@ -98,6 +100,7 @@ export default class UserRepository {
             } as Prisma.RoleSelect
         });
     }
+
     public async updateRoles(id: number, roles: number[]): Promise<User> {
         const userRoles = await this.getRoles(id).then(roles => roles.map(role => role.id));
 
@@ -149,7 +152,12 @@ export default class UserRepository {
             }
         });
 
-        return user ? user.payment_methods.map(({created_at, updated_at, user_id, ...rest}) => rest as PaymentMethod) : [];
+        return user ? user.payment_methods.map(({
+                                                    created_at,
+                                                    updated_at,
+                                                    user_id,
+                                                    ...rest
+                                                }) => rest as PaymentMethod) : [];
     }
 
     public async deletePaymentMethods(id: number): Promise<Prisma.BatchPayload> {
@@ -168,7 +176,7 @@ export default class UserRepository {
             }
         });
 
-        return user ? user.addresses.map(({ created_at, updated_at, user_id, ...rest}) => rest as Address) : [];
+        return user ? user.addresses.map(({created_at, updated_at, user_id, ...rest}) => rest as Address) : [];
     }
 
     public async deleteAddresses(id: number): Promise<Prisma.BatchPayload> {
@@ -253,6 +261,59 @@ export default class UserRepository {
                 user_id: id
             }
         });
+    }
+
+    public async getPayments(id: number): Promise<Payment[]> {
+        const user = await this.user.findUnique({
+            where: {id: id},
+            select: {
+                payments: true
+            }
+        });
+
+        return user ? user.payments.map(({created_at, updated_at, user_id, ...rest}) => rest as Payment) : [];
+    }
+
+    public async createPayment(id: number, orderId: number, paymentMethodId: number): Promise<Payment> {
+        const order = await this.prismaClient.order.findUnique({
+            where: {id: orderId}
+        });
+
+        const paymentMethod = await this.prismaClient.paymentMethod.findUnique({
+            where: {id: paymentMethodId}
+        })
+
+        if (!order) throw new Error("Order not found");
+        if (!paymentMethod) throw new Error("Payment method not found");
+
+        return this.user.update({
+            where: {id: id},
+            data: {
+                payments: {
+                    create: {
+                        order_id: orderId,
+                        method_id: paymentMethodId,
+                        amount: order.total,
+                    }
+                }
+            },
+            select: {
+                payments: true
+            }
+        }).then(user => user.payments[0])
+            .then(({created_at, updated_at, user_id, ...rest}) => rest as Payment);
+    }
+
+
+    public async getTokens(id: number): Promise<TokenOTP[]> {
+        const user = await this.user.findUnique({
+            where: {id: id},
+            select: {
+                tokens: true
+            }
+        });
+
+        return user ? user.tokens.map(({created_at, updated_at, user_id, ...rest}) => rest as TokenOTP) : [];
     }
 
     public async generateTokenOTP(id: number, token: string, type: string): Promise<TokenOTP> {
