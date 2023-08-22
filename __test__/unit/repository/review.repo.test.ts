@@ -1,17 +1,69 @@
 import ReviewRepository from "@repository/review.repo";
+import prisma from "@lib/prisma";
+import { Prisma } from "@prisma/client";
 
 jest.mock("@lib/prisma", require("@mocks/lib/prisma.mock"));
 
 describe("ReviewRepository", () => {
+    let repo: ReviewRepository;
     beforeEach(() => {
         jest.clearAllMocks();
+        repo = new ReviewRepository();
     });
 
-    it.todo("Test getAll");
-    it.todo("Test getById");
-    it.todo("Test getProductReviews");
-    it.todo("Test getUserReviews");
-    it.todo("Test create");
-    it.todo("Test update");
-    it.todo("Test delete");
+    it("Test getAll", async () => {
+        (prisma.review.findMany as jest.Mock).mockResolvedValueOnce([]);
+
+        let result = await repo.getAll();
+
+        expect(result).toMatchObject([]);
+    });
+
+    it("Test getById", async () => {
+        (prisma.review.findUnique as jest.Mock).mockResolvedValueOnce(null);
+
+        let result = await repo.getById(1);
+
+        expect(result).toEqual(null);
+    });
+
+    it("Test getProductReviews", async () => {
+        (prisma.review.findMany as jest.Mock).mockResolvedValueOnce([]);
+
+        let result = await repo.getProductReviews(1);
+
+        expect(result).toMatchObject([]);
+    });
+
+    it("Test getUserReviews", async () => {
+        (prisma.review.findMany as jest.Mock).mockResolvedValueOnce([]);
+
+        let result = await repo.getUserReviews(1);
+
+        expect(result).toMatchObject([]);
+    });
+
+    it("Test create", async () => {
+        (prisma.review.create as jest.Mock).mockResolvedValueOnce({});
+
+        let result = await repo.create({} as Prisma.ReviewCreateInput);
+
+        expect(result).toEqual({});
+    });
+
+    it("Test update", async () => {
+        (prisma.review.update as jest.Mock).mockResolvedValueOnce({});
+
+        let result = await repo.update(1, {} as Prisma.ReviewUpdateInput);
+
+        expect(result).toEqual({});
+    });
+
+    it("Test delete", async () => {
+        (prisma.review.delete as jest.Mock).mockResolvedValueOnce({});
+
+        let result = await repo.delete(1);
+
+        expect(result).toEqual({});
+    });
 });
