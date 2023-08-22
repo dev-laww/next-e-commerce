@@ -7,14 +7,13 @@ import {
     Review,
     Role,
     TokenOTP,
-    User, UserRole,
+    User,
     WishlistItem
 } from "@prisma/client";
 
 import { TOKEN_OTP_EXPIRY } from "@lib/constants";
 import prisma from "@lib/prisma";
 import { hash } from "@utils/hashing";
-import userRoles from "../../prisma/seeders/user-roles";
 
 
 export default class UserRepository {
