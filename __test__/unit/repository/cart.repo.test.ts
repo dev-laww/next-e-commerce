@@ -1,4 +1,6 @@
 import CartRepository from "@repository/cart.repo";
+import prisma from "@lib/prisma";
+import { Prisma } from "@prisma/client";
 
 jest.mock("@lib/prisma", require("@mocks/lib/prisma.mock"));
 
@@ -9,15 +11,91 @@ describe("CartRepository", () => {
         repo = new CartRepository();
     });
 
-    it.todo("Test getAll");
-    it.todo("Test getByUserId");
-    it.todo("Test getByProductId");
-    it.todo("Test getByVariantId");
-    it.todo("Test getById");
-    it.todo("Test create");
-    it.todo("Test update");
-    it.todo("Test delete");
-    it.todo("Test deleteByUserId");
-    it.todo("Test deleteByProductId");
-    it.todo("Test deleteByVariantId");
+    it("Test getAll", async () => {
+        (prisma.cartItem.findMany as jest.Mock).mockResolvedValueOnce([]);
+
+        let result = await repo.getAll();
+
+        expect(result).toMatchObject([]);
+    });
+
+    it("Test getByUserId", async () => {
+        (prisma.cartItem.findMany as jest.Mock).mockResolvedValueOnce([]);
+
+        let result = await repo.getByUserId(1);
+
+        expect(result).toMatchObject([]);
+    });
+
+    it("Test getByProductId", async () => {
+        (prisma.cartItem.findMany as jest.Mock).mockResolvedValueOnce([]);
+
+        let result = await repo.getByProductId(1);
+
+        expect(result).toMatchObject([]);
+    });
+
+    it("Test getByVariantId", async () => {
+        (prisma.cartItem.findMany as jest.Mock).mockResolvedValueOnce([]);
+
+        let result = await repo.getByVariantId(1);
+
+        expect(result).toMatchObject([]);
+    });
+
+    it("Test getById", async () => {
+        (prisma.cartItem.findUnique as jest.Mock).mockResolvedValueOnce(null);
+
+        let result = await repo.getById(1);
+
+        expect(result).toEqual(null);
+    });
+
+    it("Test create", async () => {
+        (prisma.cartItem.create as jest.Mock).mockResolvedValueOnce({});
+
+        let result = await repo.create({} as Prisma.CartItemCreateInput);
+
+        expect(result).toEqual({});
+    });
+
+    it("Test update", async () => {
+        (prisma.cartItem.update as jest.Mock).mockResolvedValueOnce({});
+
+        let result = await repo.update(1, {} as Prisma.CartItemUpdateInput);
+
+        expect(result).toEqual({});
+    });
+
+    it("Test delete", async () => {
+        (prisma.cartItem.delete as jest.Mock).mockResolvedValueOnce({});
+
+        let result = await repo.delete(1);
+
+        expect(result).toEqual({});
+    });
+
+    it("Test deleteUserCart", async () => {
+        (prisma.cartItem.deleteMany as jest.Mock).mockResolvedValueOnce({});
+
+        let result = await repo.deleteUserCart(1);
+
+        expect(result).toEqual({});
+    });
+
+    it("Test deleteByProductId", async () => {
+        (prisma.cartItem.deleteMany as jest.Mock).mockResolvedValueOnce({});
+
+        let result = await repo.deleteByProductId(1);
+
+        expect(result).toEqual({});
+    });
+
+    it("Test deleteByVariantId", async () => {
+        (prisma.cartItem.deleteMany as jest.Mock).mockResolvedValueOnce({});
+
+        let result = await repo.deleteByVariantId(1);
+
+        expect(result).toEqual({});
+    });
 });
