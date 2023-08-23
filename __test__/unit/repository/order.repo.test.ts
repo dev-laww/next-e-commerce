@@ -108,4 +108,46 @@ describe("OrderRepository", () => {
         const result = await repo.delete(1);
         expect(result).toEqual(null);
     });
+
+    it("Test complete", async () => {
+        (prisma.order.update as jest.Mock).mockResolvedValueOnce(null);
+
+        const result = await repo.complete(1);
+        expect(result).toEqual(null);
+    });
+
+    it("Test cancel", async () => {
+        (prisma.order.update as jest.Mock).mockResolvedValueOnce(null);
+
+        const result = await repo.cancel(1);
+        expect(result).toEqual(null);
+    });
+
+    it("Test fail", async () => {
+        (prisma.order.update as jest.Mock).mockResolvedValueOnce(null);
+
+        const result = await repo.fail(1);
+        expect(result).toEqual(null);
+    });
+
+    it("Test process", async () => {
+        (prisma.order.update as jest.Mock).mockResolvedValueOnce(null);
+
+        const result = await repo.process(1);
+        expect(result).toEqual(null);
+    });
+
+    it("Test linkPayment", async () => {
+        (prisma.payment.findUnique as jest.Mock).mockResolvedValueOnce({id: 1, order_id: null});
+        (prisma.order.update as jest.Mock).mockResolvedValue(null);
+
+        const result = await repo.linkPayment(1, 1);
+        expect(result).toEqual(null);
+
+        (prisma.payment.findUnique as jest.Mock).mockResolvedValueOnce({id: 1, order_id: 1});
+        await expect(repo.linkPayment(1, 1)).rejects.toThrow("Payment already linked to an order");
+
+        (prisma.payment.findUnique as jest.Mock).mockResolvedValueOnce(null);
+        await expect(repo.linkPayment(1, 1)).rejects.toThrow("Payment not found");
+    });
 });

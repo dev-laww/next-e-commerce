@@ -1,6 +1,7 @@
 import { Order, OrderItem, Prisma } from "@prisma/client";
 
 import prisma from "@lib/prisma";
+import { ORDER_STATUS } from "@lib/constants";
 
 export default class OrderRepository {
     prismaClient = prisma;
@@ -24,7 +25,7 @@ export default class OrderRepository {
         });
     }
 
-    public async getByStatus(status: "processing" | "completed" | "cancelled" | "failed"): Promise<Order[]> {
+    public async getByStatus(status: "processing" | "completed" | "cancelled" | "failed" | "pending payment"): Promise<Order[]> {
         return this.prismaClient.order.findMany({
             where: {status: status},
         });
@@ -67,6 +68,57 @@ export default class OrderRepository {
     public async delete(id: number): Promise<Order> {
         return this.prismaClient.order.delete({
             where: {id: id}
+        });
+    }
+
+    public async cancel(id: number): Promise<Order> {
+        return this.prismaClient.order.update({
+            where: {id: id},
+            data: {status: ORDER_STATUS.CANCELLED}
+        });
+    }
+
+    public async complete(id: number): Promise<Order> {
+        return this.prismaClient.order.update({
+            where: {id: id},
+            data: {status: ORDER_STATUS.COMPLETED}
+        });
+    }
+
+    public async fail(id: number): Promise<Order> {
+        return this.prismaClient.order.update({
+            where: {id: id},
+            data: {status: ORDER_STATUS.FAILED}
+        });
+    }
+
+    public async process(id: number): Promise<Order> {
+        return this.prismaClient.order.update({
+            where: {id: id},
+            data: {status: ORDER_STATUS.PROCESSING}
+        });
+    }
+
+    public async linkPayment(id: number, paymentId: number): Promise<Order> {
+        const payment = await this.prismaClient.payment.findUnique({
+            where: {id: paymentId}
+        });
+
+        if (!payment)
+            throw new Error("Payment not found");
+
+        if (payment.order_id)
+            throw new Error("Payment already linked to an order");
+
+        await this.process(id);
+
+        return this.prismaClient.order.update({
+            where: {id: id},
+            data: {
+                payment: {
+                    connect: {id: paymentId}
+                }
+            }
         });
     }
 }
