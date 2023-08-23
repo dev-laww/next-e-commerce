@@ -36,7 +36,7 @@ export default class CartRepository {
         });
     }
 
-    public async create(data: Prisma.CartItemCreateInput): Promise<CartItem> {
+    public async create(data: Prisma.CartItemCreateInput | CartItem): Promise<CartItem> {
         return this.prismaClient.cartItem.create({
             data: data
         });

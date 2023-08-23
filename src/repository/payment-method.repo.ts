@@ -27,7 +27,7 @@ export default class PaymentMethodRepository {
         });
     }
 
-    public async create(paymentMethod: Prisma.PaymentMethodCreateInput): Promise<PaymentMethod> {
+    public async create(paymentMethod: Prisma.PaymentMethodCreateInput | PaymentMethod): Promise<PaymentMethod> {
         return this.prismaClient.paymentMethod.create({
             data: paymentMethod
         });

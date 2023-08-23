@@ -18,7 +18,7 @@ export default class LogRepository {
         });
     }
 
-    public async create(data: Prisma.LogCreateInput): Promise<Log> {
+    public async create(data: Prisma.LogCreateInput | Log): Promise<Log> {
         return this.prismaClient.log.create({
             data
         });

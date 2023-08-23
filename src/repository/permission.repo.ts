@@ -21,7 +21,7 @@ export default class PermissionRepository {
         });
     }
 
-    public async create(permission: Prisma.PermissionCreateInput): Promise<Permission> {
+    public async create(permission: Prisma.PermissionCreateInput | Permission): Promise<Permission> {
         return this.prismaClient.permission.create({
             data: permission
         });

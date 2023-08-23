@@ -23,7 +23,7 @@ export default class RoleRepository {
         });
     }
 
-    public async create(data: Prisma.RoleCreateInput): Promise<Role> {
+    public async create(data: Prisma.RoleCreateInput | Role): Promise<Role> {
         return this.prismaClient.role.create({
             data: data
         });

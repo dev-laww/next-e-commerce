@@ -50,7 +50,7 @@ export default class UserRepository {
         });
     }
 
-    public async create(data: Prisma.UserCreateInput): Promise<User> {
+    public async create(data: Prisma.UserCreateInput | User): Promise<User> {
         return this.user.create({
             data: data
         });

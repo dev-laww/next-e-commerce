@@ -21,7 +21,7 @@ export default class AddressRepository {
         });
     }
 
-    public async create(address: Prisma.AddressCreateInput): Promise<Address> {
+    public async create(address: Prisma.AddressCreateInput | Address): Promise<Address> {
         return this.prismaClient.address.create({
             data: address
         });

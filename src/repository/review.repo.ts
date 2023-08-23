@@ -30,7 +30,7 @@ export default class ReviewRepository {
         });
     }
 
-    public async create(data: Prisma.ReviewCreateInput): Promise<Review> {
+    public async create(data: Prisma.ReviewCreateInput | Review): Promise<Review> {
         return this.prismaClient.review.create({
             data: data
         });
