@@ -39,6 +39,7 @@ export default class AddressRepository {
             where: {id: id}
         });
     }
+
     public getAllUserAddresses(userId: number): Promise<Address[]> {
         return this.prismaClient.address.findMany({
             where: {user_id: userId}
