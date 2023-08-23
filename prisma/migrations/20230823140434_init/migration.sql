@@ -168,10 +168,11 @@ CREATE TABLE "order" (
     "shipping_id" INTEGER NOT NULL,
     "address_id" INTEGER NOT NULL,
     "order_number" TEXT NOT NULL,
-    "status" TEXT NOT NULL DEFAULT 'processing',
+    "status" TEXT NOT NULL DEFAULT 'pending payment',
     "total" DOUBLE PRECISION NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
+    "payment_id" INTEGER,
 
     CONSTRAINT "order_pkey" PRIMARY KEY ("id")
 );
@@ -312,6 +313,9 @@ CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
 CREATE UNIQUE INDEX "user_username_key" ON "user"("username");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "order_payment_id_key" ON "order"("payment_id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "payment_order_id_key" ON "payment"("order_id");
 
 -- AddForeignKey
@@ -354,6 +358,9 @@ ALTER TABLE "order" ADD CONSTRAINT "order_shipping_id_fkey" FOREIGN KEY ("shippi
 ALTER TABLE "order" ADD CONSTRAINT "order_address_id_fkey" FOREIGN KEY ("address_id") REFERENCES "address"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "order" ADD CONSTRAINT "order_payment_id_fkey" FOREIGN KEY ("payment_id") REFERENCES "payment"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "order_item" ADD CONSTRAINT "order_item_order_id_fkey" FOREIGN KEY ("order_id") REFERENCES "order"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -364,9 +371,6 @@ ALTER TABLE "order_item" ADD CONSTRAINT "order_item_variant_id_fkey" FOREIGN KEY
 
 -- AddForeignKey
 ALTER TABLE "payment" ADD CONSTRAINT "payment_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "payment" ADD CONSTRAINT "payment_order_id_fkey" FOREIGN KEY ("order_id") REFERENCES "order"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "payment" ADD CONSTRAINT "payment_method_id_fkey" FOREIGN KEY ("method_id") REFERENCES "payment_method"("id") ON DELETE CASCADE ON UPDATE CASCADE;

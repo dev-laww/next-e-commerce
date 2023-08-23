@@ -179,15 +179,16 @@ model Order {
   shipping_id  Int
   address_id   Int
   order_number String
-  status       String         @default("processing")
+  status       String         @default("pending payment")
   total        Float
   created_at   DateTime       @default(now())
   updated_at   DateTime       @updatedAt
+  payment_id   Int?           @unique
   order_items  OrderItem[]
   user         User           @relation(fields: [user_id], references: [id], onDelete: Cascade)
   shipping     ShippingMethod @relation(fields: [shipping_id], references: [id], onDelete: Cascade)
   address      Address        @relation(fields: [address_id], references: [id], onDelete: Cascade)
-  payment      Payment?
+  payment      Payment?       @relation(fields: [payment_id], references: [id])
 
   @@map("order")
 }
@@ -218,8 +219,8 @@ model Payment {
   created_at DateTime      @default(now())
   updated_at DateTime      @updatedAt
   user       User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  order      Order         @relation(fields: [order_id], references: [id])
   method     PaymentMethod @relation(fields: [method_id], references: [id], onDelete: Cascade)
+  order      Order?
 
   @@map("payment")
 }
