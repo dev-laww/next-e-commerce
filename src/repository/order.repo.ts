@@ -1,6 +1,5 @@
 import { Order, OrderItem, Prisma } from "@prisma/client";
 
-import { ORDER_STATUS } from "@lib/constants";
 import prisma from "@lib/prisma";
 
 export default class OrderRepository {
@@ -25,7 +24,7 @@ export default class OrderRepository {
         });
     }
 
-    public async getByStatus(status: ORDER_STATUS): Promise<Order[]> {
+    public async getByStatus(status: "processing" | "completed" | "cancelled" | "failed"): Promise<Order[]> {
         return this.prismaClient.order.findMany({
             where: {status: status},
         });
@@ -52,7 +51,7 @@ export default class OrderRepository {
         return order ? order.order_items.map(({created_at, updated_at, ...rest}) => ({...rest} as OrderItem)) : [];
     }
 
-    public async create(data: Prisma.OrderCreateInput): Promise<Order> {
+    public async create(data: Prisma.OrderCreateInput | Order): Promise<Order> {
         return this.prismaClient.order.create({
             data: data
         });
