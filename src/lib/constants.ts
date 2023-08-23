@@ -36,6 +36,7 @@ export enum TOKEN_TYPE {
 export const TOKEN_OTP_EXPIRY = 60 * 60 * 1000; // 1 hour
 
 export enum ORDER_STATUS {
+    PENDING_PAYMENT = 'pending_payment',
     PROCESSING = 'processing',
     CANCELLED = 'cancelled',
     COMPLETED = 'completed',
