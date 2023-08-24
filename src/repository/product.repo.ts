@@ -18,44 +18,32 @@ export default class ProductRepository {
 
     public async getById(id: number): Promise<Product | null> {
         return this.prismaClient.product.findUnique({
-            where: {
-                id: id
-            }
-        })
+            where: {id: id}
+        });
     }
 
     public async getVariants(id: number): Promise<ProductVariant[]> {
         return this.prismaClient.productVariant.findMany({
-            where: {
-                product_id: id
-            }
-        })
+            where: {product_id: id}
+        });
     }
 
     public async deleteVariant(product_id: number, id: number): Promise<ProductVariant> {
         return this.prismaClient.productVariant.delete({
-            where: {
-                product_id: product_id,
-                id: id
-            }
-        })
+            where: {product_id: product_id, id: id}
+        });
     }
 
     public async getCategories(id: number): Promise<ProductCategory[]> {
         return this.prismaClient.productCategory.findMany({
-            where: {
-                product_id: id
-            }
-        })
+            where: {product_id: id}
+        });
     }
 
     public async deleteCategory(product_id: number, id: number): Promise<ProductCategory> {
         return this.prismaClient.productCategory.delete({
-            where: {
-                product_id: product_id,
-                id: id
-            }
-        })
+            where: {product_id: product_id, id: id}
+        });
     }
 
     public async create(data: Prisma.ProductCreateInput): Promise<Product> {
