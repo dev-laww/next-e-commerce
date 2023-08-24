@@ -23,9 +23,14 @@ export default class ProductRepository {
     }
 
     public async getVariants(id: number): Promise<ProductVariant[]> {
-        return this.prismaClient.productVariant.findMany({
-            where: {product_id: id}
+        const products = await this.prismaClient.product.findUnique({
+            where: {id: id},
+            select: {
+                variants: true
+            }
         });
+
+        return products ? products.variants.map(({created_at, updated_at, ...rest}) => rest as ProductVariant) : [];
     }
 
     public async deleteVariant(product_id: number, id: number): Promise<ProductVariant> {
@@ -35,9 +40,14 @@ export default class ProductRepository {
     }
 
     public async getCategories(id: number): Promise<ProductCategory[]> {
-        return this.prismaClient.productCategory.findMany({
-            where: {product_id: id}
+        const product = await this.prismaClient.product.findUnique({
+            where: {id: id},
+            select: {
+                categories: true
+            }
         });
+
+        return product ? product.categories.map(({created_at, updated_at, ...rest}) => rest as ProductCategory) : []
     }
 
     public async deleteCategory(product_id: number, id: number): Promise<ProductCategory> {
