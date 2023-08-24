@@ -1,4 +1,4 @@
-import { Prisma, Product, ProductVariant } from "@prisma/client";
+import { Prisma, Product, ProductVariant, ProductCategory } from "@prisma/client";
 
 import prisma from "@src/lib/prisma";
 
@@ -24,17 +24,35 @@ export default class ProductRepository {
         })
     }
 
-    public async getAllVariants(product_id: number): Promise<ProductVariant[]> {
+    public async getVariants(id: number): Promise<ProductVariant[]> {
         return this.prismaClient.productVariant.findMany({
             where: {
-                product_id: product_id
+                product_id: id
             }
         })
     }
 
-    public async getVariantById(id: number): Promise<ProductVariant | null> {
-        return this.prismaClient.productVariant.findUnique({
+    public async deleteVariant(product_id: number, id: number): Promise<ProductVariant> {
+        return this.prismaClient.productVariant.delete({
             where: {
+                product_id: product_id,
+                id: id
+            }
+        })
+    }
+
+    public async getCategories(id: number): Promise<ProductCategory[]> {
+        return this.prismaClient.productCategory.findMany({
+            where: {
+                product_id: id
+            }
+        })
+    }
+
+    public async deleteCategory(product_id: number, id: number): Promise<ProductCategory> {
+        return this.prismaClient.productCategory.delete({
+            where: {
+                product_id: product_id,
                 id: id
             }
         })
@@ -55,25 +73,6 @@ export default class ProductRepository {
 
     public async delete(id: number): Promise<Product> {
         return this.prismaClient.product.delete({
-            where: {id: id}
-        });
-    }
-
-    public async createVariant(data: Prisma.ProductVariantCreateInput): Promise<ProductVariant> {
-        return this.prismaClient.productVariant.create({
-            data: data
-        })
-    }
-
-    public async updateVariant(id: number, data: Prisma.ProductVariantUpdateInput): Promise<ProductVariant> {
-        return this.prismaClient.productVariant.update({
-            where: {id: id},
-            data: data
-        });
-    }
-
-    public async deleteVariant(id: number): Promise<ProductVariant> {
-        return this.prismaClient.productVariant.delete({
             where: {id: id}
         });
     }
