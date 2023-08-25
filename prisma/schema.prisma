@@ -119,11 +119,11 @@ model Product {
   description     String
   created_at      DateTime          @default(now())
   updated_at      DateTime          @updatedAt
-  ProductVariant  ProductVariant[]
-  Review          Review[]
-  OrderItem       OrderItem[]
-  ProductCategory ProductCategory[]
-  WishlistItem    WishlistItem[]
+  variants  ProductVariant[]
+  reviews          Review[]
+  orders       OrderItem[]
+  categories ProductCategory[]
+  wishlists    WishlistItem[]
 
   @@map("product")
 }
@@ -139,9 +139,9 @@ model ProductVariant {
   created_at DateTime    @default(now())
   updated_at DateTime    @updatedAt
   product    Product     @relation(fields: [product_id], references: [id], onDelete: Cascade)
-  Review     Review[]
-  OrderItem  OrderItem[]
-  CartItem   CartItem[]
+  reviews     Review[]
+  orders  OrderItem[]
+  cart   CartItem[]
 
   @@map("product_variant")
 }
@@ -152,7 +152,7 @@ model ShippingMethod {
   price      Float
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  Order      Order[]
+  orders      Order[]
 
   @@map("shipping_method")
 }
@@ -230,7 +230,7 @@ model Category {
   name            String
   created_at      DateTime          @default(now())
   updated_at      DateTime          @updatedAt
-  ProductCategory ProductCategory[]
+  products ProductCategory[]
 
   @@map("category")
 }
