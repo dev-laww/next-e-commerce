@@ -38,7 +38,7 @@ describe("ProductRepository", () => {
     it("Test update", async () => {
         (prisma.product.update as jest.Mock).mockResolvedValueOnce({});
 
-        let result = await repo.update(1, {} as Prisma.ProductCreateInput);
+        let result = await repo.update(1, {} as Prisma.ProductUpdateInput);
 
         expect(result).toEqual({});
     });
@@ -57,7 +57,7 @@ describe("ProductRepository", () => {
         let result = await repo.getVariants(1);
 
         expect(result).toEqual([])
-    })
+    });
 
     it("Test getCategories", async () => {
         (prisma.productCategory.findMany as jest.Mock).mockResolvedValueOnce([]);
@@ -65,7 +65,7 @@ describe("ProductRepository", () => {
         let result = await repo.getCategories(1);
 
         expect(result).toEqual([])
-    })
+    });
 
     it("Test deleteVariant", async () => {
         (prisma.productVariant.delete as jest.Mock).mockResolvedValueOnce({})
@@ -73,7 +73,7 @@ describe("ProductRepository", () => {
         let result = await repo.deleteVariant(1, 1);
 
         expect(result).toEqual({})
-    })
+    });
 
     it("Test deleteCategory", async () => {
         (prisma.productCategory.delete as jest.Mock).mockResolvedValueOnce({})
@@ -81,5 +81,5 @@ describe("ProductRepository", () => {
         let result = await repo.deleteCategory(1, 1);
 
         expect(result).toEqual({})
-    })
-})
+    });
+});
