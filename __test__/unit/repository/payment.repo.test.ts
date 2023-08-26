@@ -1,5 +1,6 @@
 import PaymentRepository from "@repository/payment.repo";
 import prisma from "@lib/prisma";
+import { Payment, Prisma } from "@prisma/client";
 
 jest.mock("@lib/prisma", require("@mocks/lib/prisma.mock"));
 
@@ -10,15 +11,117 @@ describe("PaymentRepository", () => {
         repo = new PaymentRepository();
     });
 
-    it.todo("Test getAll");
-    it.todo("Test getById");
-    it.todo("Test getByOrderId");
-    it.todo("Test getByStatus");
-    it.todo("Test create");
-    it.todo("Test update");
-    it.todo("Test delete");
-    it.todo("Test success");
-    it.todo("Test fail");
-    it.todo("Test process")
-    it.todo("Test linkOrder");
+    it("Test getAll", async () => {
+        (prisma.payment.findMany as jest.Mock).mockResolvedValueOnce([]);
+
+        const result = await repo.getAll();
+
+        expect(result).toEqual([]);
+    });
+
+    it("Test getById", async () => {
+        (prisma.payment.findUnique as jest.Mock).mockResolvedValueOnce({
+            id: 1,
+            status: "success",
+        });
+
+        const result = await repo.getById(1);
+
+        expect(result).toEqual({
+            id: 1,
+            status: "success",
+        });
+    });
+
+    it("Test getByOrderId", async () => {
+        (prisma.payment.findMany as jest.Mock).mockResolvedValueOnce([]);
+
+        const result = await repo.getByOrderId(1);
+
+        expect(result).toEqual([]);
+    });
+
+    it("Test getByStatus", async () => {
+        (prisma.payment.findMany as jest.Mock).mockResolvedValueOnce([]);
+
+        const result = await repo.getByStatus("success");
+
+        expect(result).toEqual([]);
+    });
+
+    it("Test create", async () => {
+        (prisma.payment.create as jest.Mock).mockResolvedValueOnce({
+            id: 1,
+            status: "success",
+        });
+
+        const result = await repo.create({
+            id: 1,
+            status: "success",
+        } as Payment);
+
+        expect(result).toEqual({
+            id: 1,
+            status: "success",
+        });
+    });
+
+    it("Test update", async () => {
+        (prisma.payment.update as jest.Mock).mockResolvedValueOnce({
+            id: 1,
+            status: "success",
+        });
+
+        const result = await repo.update(1, {
+            id: 1,
+            status: "success",
+        } as Payment);
+
+        expect(result).toEqual({
+            id: 1,
+            status: "success",
+        });
+    });
+
+    it("Test delete", async () => {
+        (prisma.payment.delete as jest.Mock).mockResolvedValueOnce({
+            id: 1,
+            status: "success",
+        });
+
+        const result = await repo.delete(1);
+
+        expect(result).toEqual({
+            id: 1,
+            status: "success",
+        });
+    });
+
+    it("Test success", async () => {
+        (prisma.payment.update as jest.Mock).mockResolvedValueOnce({
+            id: 1,
+            status: "success",
+        });
+
+        const result = await repo.success(1);
+
+        expect(result).toEqual({
+            id: 1,
+            status: "success",
+        });
+    });
+
+    it("Test fail", async () => {
+        (prisma.payment.update as jest.Mock).mockResolvedValueOnce({
+            id: 1,
+            status: "failed",
+        });
+
+        const result = await repo.fail(1);
+
+        expect(result).toEqual({
+            id: 1,
+            status: "failed",
+        });
+    });
 });
