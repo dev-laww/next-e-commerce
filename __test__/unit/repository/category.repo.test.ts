@@ -14,7 +14,7 @@ describe("CategoryRepository", () => {
     it("Test getAll", async () => {
         (prisma.category.findMany as jest.Mock).mockResolvedValueOnce([]);
 
-        let result = await repo.getAll();
+        const result = await repo.getAll();
 
         expect(result).toMatchObject([]);
     })
@@ -22,7 +22,7 @@ describe("CategoryRepository", () => {
     it("Test getById", async () => {
         (prisma.category.findUnique as jest.Mock).mockResolvedValueOnce(null);
 
-        let result = await repo.getById(1);
+        const result = await repo.getById(1);
 
         expect(result).toEqual(null);
     });
@@ -30,7 +30,7 @@ describe("CategoryRepository", () => {
     it("Test create", async () => {
         (prisma.category.create as jest.Mock).mockResolvedValueOnce({});
 
-        let result = await repo.create({} as Prisma.CategoryCreateInput);
+        const result = await repo.create({} as Prisma.CategoryCreateInput);
 
         expect(result).toEqual({});
     });
@@ -38,7 +38,7 @@ describe("CategoryRepository", () => {
     it("Test update", async () => {
         (prisma.category.update as jest.Mock).mockResolvedValueOnce({});
 
-        let result = await repo.update(1, {} as Prisma.CategoryUpdateInput);
+        const result = await repo.update(1, {} as Prisma.CategoryUpdateInput);
 
         expect(result).toEqual({});
     });
@@ -46,7 +46,7 @@ describe("CategoryRepository", () => {
     it("Test delete", async () => {
         (prisma.category.delete as jest.Mock).mockResolvedValueOnce({});
 
-        let result = await repo.delete(1);
+        const result = await repo.delete(1);
 
         expect(result).toEqual({});
     });

@@ -14,7 +14,7 @@ describe("ReviewRepository", () => {
     it("Test getAll", async () => {
         (prisma.review.findMany as jest.Mock).mockResolvedValueOnce([]);
 
-        let result = await repo.getAll();
+        const result = await repo.getAll();
 
         expect(result).toMatchObject([]);
     });
@@ -22,7 +22,7 @@ describe("ReviewRepository", () => {
     it("Test getById", async () => {
         (prisma.review.findUnique as jest.Mock).mockResolvedValueOnce(null);
 
-        let result = await repo.getById(1);
+        const result = await repo.getById(1);
 
         expect(result).toEqual(null);
     });
@@ -30,7 +30,7 @@ describe("ReviewRepository", () => {
     it("Test getProductReviews", async () => {
         (prisma.review.findMany as jest.Mock).mockResolvedValueOnce([]);
 
-        let result = await repo.getProductReviews(1);
+        const result = await repo.getProductReviews(1);
 
         expect(result).toMatchObject([]);
     });
@@ -38,7 +38,7 @@ describe("ReviewRepository", () => {
     it("Test getUserReviews", async () => {
         (prisma.review.findMany as jest.Mock).mockResolvedValueOnce([]);
 
-        let result = await repo.getUserReviews(1);
+        const result = await repo.getUserReviews(1);
 
         expect(result).toMatchObject([]);
     });
@@ -46,7 +46,7 @@ describe("ReviewRepository", () => {
     it("Test create", async () => {
         (prisma.review.create as jest.Mock).mockResolvedValueOnce({});
 
-        let result = await repo.create({} as Prisma.ReviewCreateInput);
+        const result = await repo.create({} as Prisma.ReviewCreateInput);
 
         expect(result).toEqual({});
     });
@@ -54,7 +54,7 @@ describe("ReviewRepository", () => {
     it("Test update", async () => {
         (prisma.review.update as jest.Mock).mockResolvedValueOnce({});
 
-        let result = await repo.update(1, {} as Prisma.ReviewUpdateInput);
+        const result = await repo.update(1, {} as Prisma.ReviewUpdateInput);
 
         expect(result).toEqual({});
     });
@@ -62,7 +62,7 @@ describe("ReviewRepository", () => {
     it("Test delete", async () => {
         (prisma.review.delete as jest.Mock).mockResolvedValueOnce({});
 
-        let result = await repo.delete(1);
+        const result = await repo.delete(1);
 
         expect(result).toEqual({});
     });

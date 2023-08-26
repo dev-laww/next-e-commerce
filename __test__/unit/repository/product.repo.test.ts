@@ -14,7 +14,7 @@ describe("ProductRepository", () => {
     it("Test getAll", async () => {
         (prisma.product.findMany as jest.Mock).mockResolvedValueOnce([]);
 
-        let result = await repo.getAll();
+        const result = await repo.getAll();
 
         expect(result).toMatchObject([]);
     })
@@ -22,7 +22,7 @@ describe("ProductRepository", () => {
     it("Test getById", async () => {
         (prisma.product.findUnique as jest.Mock).mockResolvedValueOnce(null);
 
-        let result = await repo.getById(1);
+        const result = await repo.getById(1);
 
         expect(result).toEqual(null);
     });
@@ -30,7 +30,7 @@ describe("ProductRepository", () => {
     it("Test create", async () => {
         (prisma.product.create as jest.Mock).mockResolvedValueOnce({});
 
-        let result = await repo.create({} as Prisma.ProductCreateInput);
+        const result = await repo.create({} as Prisma.ProductCreateInput);
 
         expect(result).toEqual({});
     });
@@ -38,7 +38,7 @@ describe("ProductRepository", () => {
     it("Test update", async () => {
         (prisma.product.update as jest.Mock).mockResolvedValueOnce({});
 
-        let result = await repo.update(1, {} as Prisma.ProductUpdateInput);
+        const result = await repo.update(1, {} as Prisma.ProductUpdateInput);
 
         expect(result).toEqual({});
     });
@@ -46,7 +46,7 @@ describe("ProductRepository", () => {
     it("Test delete", async () => {
         (prisma.product.delete as jest.Mock).mockResolvedValueOnce({});
 
-        let result = await repo.delete(1);
+        const result = await repo.delete(1);
 
         expect(result).toEqual({});
     });
@@ -94,7 +94,7 @@ describe("ProductRepository", () => {
     it("Test deleteVariant", async () => {
         (prisma.productVariant.delete as jest.Mock).mockResolvedValueOnce({})
 
-        let result = await repo.deleteVariant(1, 1);
+        const result = await repo.deleteVariant(1, 1);
 
         expect(result).toEqual({})
     });
@@ -102,7 +102,7 @@ describe("ProductRepository", () => {
     it("Test deleteCategory", async () => {
         (prisma.productCategory.delete as jest.Mock).mockResolvedValueOnce({})
 
-        let result = await repo.deleteCategory(1, 1);
+        const result = await repo.deleteCategory(1, 1);
 
         expect(result).toEqual({})
     });

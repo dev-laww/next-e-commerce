@@ -14,13 +14,13 @@ export default class LogRepository {
 
     public async getById(id: number): Promise<Log | null> {
         return this.prismaClient.log.findUnique({
-            where: { id }
+            where: {id: id}
         });
     }
 
     public async create(data: Prisma.LogCreateInput | Log): Promise<Log> {
         return this.prismaClient.log.create({
-            data
+            data: data
         });
     }
 }
