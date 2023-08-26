@@ -52,19 +52,43 @@ describe("ProductRepository", () => {
     });
 
     it("Test getVariants", async () => {
-        (prisma.productVariant.findMany as jest.Mock).mockResolvedValueOnce([]);
+        (prisma.product.findUnique as jest.Mock).mockResolvedValueOnce(null);
 
         let result = await repo.getVariants(1);
 
-        expect(result).toEqual([])
+        expect(result).toEqual([]);
+
+        (prisma.product.findUnique as jest.Mock).mockResolvedValueOnce({
+            variants: [{
+                id: 1,
+            }]
+        });
+
+        result = await repo.getVariants(1);
+
+        expect(result).toEqual([{
+            id: 1,
+        }]);
     });
 
     it("Test getCategories", async () => {
-        (prisma.productCategory.findMany as jest.Mock).mockResolvedValueOnce([]);
+        (prisma.product.findUnique as jest.Mock).mockResolvedValueOnce(null);
 
         let result = await repo.getCategories(1);
 
-        expect(result).toEqual([])
+        expect(result).toEqual([]);
+
+        (prisma.product.findUnique as jest.Mock).mockResolvedValueOnce({
+            categories: [{
+                id: 1,
+            }]
+        });
+
+        result = await repo.getCategories(1);
+
+        expect(result).toEqual([{
+            id: 1,
+        }]);
     });
 
     it("Test deleteVariant", async () => {

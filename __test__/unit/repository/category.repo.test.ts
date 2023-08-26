@@ -52,10 +52,22 @@ describe("CategoryRepository", () => {
     });
 
     it("Test getProducts", async () => {
-        (prisma.product.findMany as jest.Mock).mockResolvedValueOnce([]);
+        (prisma.category.findUnique as jest.Mock).mockResolvedValueOnce(null);
 
         let result = await repo.getProducts(1);
 
         expect(result).toEqual([]);
+
+        (prisma.category.findUnique as jest.Mock).mockResolvedValueOnce({
+            products: [{
+                id: 1
+            }]
+        });
+
+        result = await repo.getProducts(1);
+
+        expect(result).toEqual([{
+            id: 1
+        }]);
     });
 });
