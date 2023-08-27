@@ -54,7 +54,7 @@ const resendEmailSchema = z.object({
 });
 
 
-export default {
+const validator =  {
     registerSchema,
     loginSchema,
     confirmEmailSchema,
@@ -63,3 +63,5 @@ export default {
     confirmResetPasswordSchema,
     resendEmailSchema
 }
+
+export default validator;
