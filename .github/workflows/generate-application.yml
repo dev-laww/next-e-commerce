@@ -24,9 +24,9 @@ jobs:
         with:
           node-version: 16
       - name: Install dependencies
-        run: yarn install
+        run: npm install --ignore-scripts
       - name: Run eslint check
-        run: yarn eslint:format
+        run: npm run eslint:format
 
   jest-check:
     name: Tests - jest
@@ -42,9 +42,9 @@ jobs:
         with:
           node-version: 16
       - name: Install dependencies
-        run: yarn install
+        run: npm install --ignore-scripts
       - name: Run tests
-        run: yarn test:ci
+        run: npm run test:ci
         env:
           CI: true
 
@@ -62,8 +62,11 @@ jobs:
         with:
           node-version: 16
       - name: Install dependencies
-        run: yarn install
+        run: npm install --ignore-scripts
+      - name: Generate prisma client
+        run: npx prisma generate
       - name: Build nextjs
-        run: yarn build
+        run: npm run build
         env:
+          POSTGRES_PRISMA_URL: "postgresql://postgres:postgres@localhost:5432/postgres?schema=public"
           CI: true

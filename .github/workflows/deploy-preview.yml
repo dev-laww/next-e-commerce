@@ -21,9 +21,9 @@ jobs:
         with:
           node-version: 16
       - name: Install dependencies
-        run: yarn install
+        run: npm install --ignore-scripts
       - name: Run eslint check
-        run: yarn eslint:format
+        run: npm run eslint:format
 
   jest-check:
     name: Tests - jest
@@ -37,9 +37,9 @@ jobs:
         with:
           node-version: 16
       - name: Install dependencies
-        run: yarn install
+        run: npm install --ignore-scripts
       - name: Run tests
-        run: yarn test:ci
+        run: npm run test:ci
         env:
           CI: true
 
