@@ -8,7 +8,7 @@ on:
       - develop
 
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [ opened, synchronize, reopened ]
 
 jobs:
   eslint-check:
@@ -30,7 +30,7 @@ jobs:
 
   jest-check:
     name: Tests - jest
-    needs: [eslint-check]
+    needs: [ eslint-check ]
     runs-on: ubuntu-latest
     env:
       SKIP_ENV_VALIDATION: ${{ secrets.SKIP_ENV_VALIDATION }}
@@ -50,7 +50,7 @@ jobs:
 
   nextjs-build-check:
     name: Build nextjs application
-    needs: [jest-check]
+    needs: [ jest-check ]
     runs-on: ubuntu-latest
     env:
       SKIP_ENV_VALIDATION: ${{ secrets.SKIP_ENV_VALIDATION }}
