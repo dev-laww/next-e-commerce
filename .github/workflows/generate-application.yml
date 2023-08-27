@@ -1,0 +1,69 @@
+name: Test application generation
+
+on:
+  push:
+    branches-ignore:
+      - main
+      - preview
+      - develop
+
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  eslint-check:
+    name: ESlint check
+    runs-on: ubuntu-latest
+    env:
+      SKIP_ENV_VALIDATION: ${{ secrets.SKIP_ENV_VALIDATION }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install dependencies
+        run: yarn install
+      - name: Run eslint check
+        run: yarn eslint:format
+
+  jest-check:
+    name: Tests - jest
+    needs: [eslint-check]
+    runs-on: ubuntu-latest
+    env:
+      SKIP_ENV_VALIDATION: ${{ secrets.SKIP_ENV_VALIDATION }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install dependencies
+        run: yarn install
+      - name: Run tests
+        run: yarn test:ci
+        env:
+          CI: true
+
+  nextjs-build-check:
+    name: Build nextjs application
+    needs: [jest-check]
+    runs-on: ubuntu-latest
+    env:
+      SKIP_ENV_VALIDATION: ${{ secrets.SKIP_ENV_VALIDATION }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install dependencies
+        run: yarn install
+      - name: Build nextjs
+        run: yarn build
+        env:
+          CI: true
