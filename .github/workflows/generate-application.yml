@@ -5,9 +5,11 @@ on:
     branches-ignore:
       - main
       - preview
-      - develop
 
   pull_request:
+    branches-ignore:
+      - main
+      - preview
     types: [ opened, synchronize, reopened ]
 
 jobs:
