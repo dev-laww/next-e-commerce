@@ -25,7 +25,8 @@
     "test:ci": "jest --ci",
     "prepare": "husky install",
     "eslint:format": "eslint . --ext ts --ext tsx --ext js",
-    "generate": "plop --plopfile ./.plop/plopfile.js"
+    "generate": "plop --plopfile ./.plop/plopfile.js",
+    "postinstall": "prisma generate && prisma migrate deploy && prisma db seed"
   },
   "dependencies": {
     "@prisma/client": "^5.1.0",
