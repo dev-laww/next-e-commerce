@@ -1,0 +1,74 @@
+name: Test application generation
+
+on:
+  push:
+    branches-ignore:
+      - main
+      - preview
+
+  pull_request:
+    branches-ignore:
+      - main
+      - preview
+    types: [ opened, synchronize, reopened ]
+
+jobs:
+  eslint-check:
+    name: ESlint check
+    runs-on: ubuntu-latest
+    env:
+      SKIP_ENV_VALIDATION: ${{ secrets.SKIP_ENV_VALIDATION }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install dependencies
+        run: npm install --ignore-scripts
+      - name: Run eslint check
+        run: npm run eslint:format
+
+  jest-check:
+    name: Tests - jest
+    needs: [ eslint-check ]
+    runs-on: ubuntu-latest
+    env:
+      SKIP_ENV_VALIDATION: ${{ secrets.SKIP_ENV_VALIDATION }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install dependencies
+        run: npm install --ignore-scripts
+      - name: Run tests
+        run: npm run test:ci
+        env:
+          CI: true
+
+  nextjs-build-check:
+    name: Build nextjs application
+    needs: [ jest-check ]
+    runs-on: ubuntu-latest
+    env:
+      SKIP_ENV_VALIDATION: ${{ secrets.SKIP_ENV_VALIDATION }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install dependencies
+        run: npm install --ignore-scripts
+      - name: Generate prisma client
+        run: npx prisma generate
+      - name: Build nextjs
+        run: npm run build
+        env:
+          POSTGRES_PRISMA_URL: "postgresql://postgres:postgres@localhost:5432/postgres?schema=public"
+          CI: true
