@@ -11,6 +11,7 @@ on:
       - main
 jobs:
   eslint-check:
+    name: ESlint check
     runs-on: ubuntu-latest
     steps:
       - name: Project linting
@@ -25,6 +26,7 @@ jobs:
         run: npm run eslint:format
 
   jest-check:
+    name: Tests - jest
     runs-on: ubuntu-latest
     needs: [ eslint-check ]
     steps:
