@@ -1,4 +1,4 @@
-import {NextRequest, NextResponse} from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 async function handler(req: NextRequest) {
     return NextResponse.json({message: "Hello World!"})
