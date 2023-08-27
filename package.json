@@ -35,6 +35,8 @@
     "jsonwebtoken": "^9.0.1",
     "next": "13.4.9",
     "nodemailer": "^6.9.4",
+    "pino": "^8.15.0",
+    "pino-pretty": "^10.2.0",
     "postcss": "8.4.25",
     "react": "18.2.0",
     "react-dom": "18.2.0",
