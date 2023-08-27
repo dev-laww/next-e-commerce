@@ -293,7 +293,7 @@ CREATE TABLE "log" (
 ALTER SEQUENCE "log_id_seq" RESTART WITH 100000;
 
 -- CreateTable
-CREATE TABLE "TokenOTP" (
+CREATE TABLE "token_otp" (
     "id" SERIAL NOT NULL,
     "token" TEXT NOT NULL,
     "user_id" INTEGER NOT NULL,
@@ -301,10 +301,10 @@ CREATE TABLE "TokenOTP" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "TokenOTP_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "token_otp_pkey" PRIMARY KEY ("id")
 );
 
-ALTER SEQUENCE "TokenOTP_id_seq" RESTART WITH 100000;
+ALTER SEQUENCE "token_otp_id_seq" RESTART WITH 100000;
 
 -- CreateIndex
 CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
@@ -394,4 +394,4 @@ ALTER TABLE "wishlist_item" ADD CONSTRAINT "wishlist_item_user_id_fkey" FOREIGN 
 ALTER TABLE "wishlist_item" ADD CONSTRAINT "wishlist_item_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "product"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "TokenOTP" ADD CONSTRAINT "TokenOTP_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "token_otp" ADD CONSTRAINT "token_otp_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
