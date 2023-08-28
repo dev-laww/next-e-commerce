@@ -73,12 +73,12 @@ export default class AuthController {
         try {
             await Email.sendToken(user.email, token)
         } catch (error) {
-            await this.logger.error(error, `User ${user.email} failed to send confirmation email`, process.env.NODE_ENV !== "test");
+            await this.logger.error(error);
             await this.userRepo.delete(user.id);
             return Response.internalServerError("Failed to send confirmation email");
         }
 
-        await this.logger.info(`${user.email} created an account`, undefined, process.env.NODE_ENV !== "test");
+        await this.logger.info(`${user.email} created an account`, undefined, true);
 
         return Response.created("User created successfully", {
             ...userSession,
@@ -122,8 +122,8 @@ export default class AuthController {
             image_url: user.image_url
         }
 
-        await this.logger.debug(userSession, `User ${user.email} logged in`, process.env.NODE_ENV !== "test")
-        await this.logger.info(`${user.email} logged in`, undefined, process.env.NODE_ENV !== "test");
+        await this.logger.debug(userSession, `User ${user.email} logged in`, true)
+        await this.logger.info(`${user.email} logged in`, undefined, true);
         return Response.success("Login successful", {
             ...userSession,
             accessToken: generateAccessToken(userSession),
@@ -170,12 +170,12 @@ export default class AuthController {
                 await Email.sendToken(user.email, token) :
                 await Email.sendOTP(user.email, token);
         } catch (error) {
-            await this.logger.error(error, `User ${user.email} failed to send reset password email`, process.env.NODE_ENV !== "test");
+            await this.logger.error(error);
             return Response.internalServerError("Failed to send confirmation email");
         }
 
-        await this.logger.debug(user, `User ${user.email} requested password reset`)
-        await this.logger.info(`${user.email} requested password reset`, undefined, process.env.NODE_ENV !== "test");
+        await this.logger.debug(user, `User ${user.email} requested password reset`, true)
+        await this.logger.info(`${user.email} requested password reset`, undefined, true);
         return Response.success("Password reset sent successfully");
     }
 
@@ -205,7 +205,7 @@ export default class AuthController {
         await this.userRepo.changePassword(data.id, requestData.data.password);
 
         await this.logger.debug(data, `User ${data.email} changed password`)
-        await this.logger.info(`${data.email} changed password`, undefined, process.env.NODE_ENV !== "test");
+        await this.logger.info(`${data.email} changed password`, undefined, true);
 
         return Response.success("Password changed successfully");
     }
@@ -238,7 +238,7 @@ export default class AuthController {
         await this.userRepo.update(data.id, {confirmed: true});
 
         await this.logger.debug(data, `User ${data.email} confirmed email`)
-        await this.logger.info(`${data.email} confirmed`, undefined, process.env.NODE_ENV !== "test");
+        await this.logger.info(`${data.email} confirmed`, undefined, true);
 
         return Response.success("Email confirmed successfully");
     }
@@ -282,12 +282,12 @@ export default class AuthController {
                 await Email.sendToken(user.email, token) :
                 await Email.sendOTP(user.email, token);
         } catch (error) {
-            await this.logger.error(error, `User ${user.email} failed to send confirmation email`, process.env.NODE_ENV !== "test");
+            await this.logger.error(error, `User ${user.email} failed to send confirmation email`, true);
             return Response.internalServerError("Failed to send confirmation email");
         }
 
         await this.logger.debug(user, `User ${user.email} requested email confirmation`)
-        await this.logger.info(`${user.email} requested email confirmation`, undefined, process.env.NODE_ENV !== "test");
+        await this.logger.info(`${user.email} requested email confirmation`, undefined, true);
         return Response.success("Email confirmation sent successfully");
     }
 
@@ -313,7 +313,7 @@ export default class AuthController {
         }
 
         await this.logger.debug(session, `User ${session.email} refreshed token`)
-        await this.logger.info(`${session.email} refreshed token`);
+        await this.logger.info(`${session.email} refreshed token`, undefined, true);
         return Response.success(
             "Token refreshed successfully",
             {accessToken: generateAccessToken(session)}
