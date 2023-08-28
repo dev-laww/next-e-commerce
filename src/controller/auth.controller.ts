@@ -3,7 +3,6 @@ import { User } from "@prisma/client";
 import humps from "humps";
 
 import * as Constants from "@lib/constants";
-import { compare, hash } from "@utils/hashing";
 import { UserSession } from "@lib/types";
 import UserRepository from "@repository/user.repo";
 import {
@@ -16,10 +15,13 @@ import {
 import Validators from "@lib/validator/auth.validator";
 import Response from "@lib/http"
 import Email from "@utils/email";
+import { compare, hash } from "@utils/hashing";
+import { getLogger } from "@utils/logging";
 
 
 export default class AuthController {
     userRepo = new UserRepository();
+    private logger = getLogger('controller:auth');
 
     async signup(req: NextRequest) {
         if (req.method !== "POST") return Response.methodNotAllowed("Invalid request method");
@@ -63,6 +65,7 @@ export default class AuthController {
         );
 
         if (!confirmationToken) {
+            await this.logger.error("Failed to generate confirmation token");
             await this.userRepo.delete(user.id);
             return Response.internalServerError("Failed to generate confirmation token");
         }
@@ -70,10 +73,12 @@ export default class AuthController {
         try {
             await Email.sendToken(user.email, token)
         } catch (error) {
-            console.log(error);
+            await this.logger.error(error);
             await this.userRepo.delete(user.id);
             return Response.internalServerError("Failed to send confirmation email");
         }
+
+        await this.logger.info(`${user.email} created an account`, undefined, true);
 
         return Response.created("User created successfully", {
             ...userSession,
@@ -117,6 +122,8 @@ export default class AuthController {
             image_url: user.image_url
         }
 
+        await this.logger.debug(userSession, `User ${user.email} logged in`, true)
+        await this.logger.info(`${user.email} logged in`, undefined, true);
         return Response.success("Login successful", {
             ...userSession,
             accessToken: generateAccessToken(userSession),
@@ -163,10 +170,12 @@ export default class AuthController {
                 await Email.sendToken(user.email, token) :
                 await Email.sendOTP(user.email, token);
         } catch (error) {
-            console.log(error);
+            await this.logger.error(error);
             return Response.internalServerError("Failed to send confirmation email");
         }
 
+        await this.logger.debug(user, `User ${user.email} requested password reset`, true)
+        await this.logger.info(`${user.email} requested password reset`, undefined, true);
         return Response.success("Password reset sent successfully");
     }
 
@@ -194,6 +203,9 @@ export default class AuthController {
         if (!success) return Response.unauthorized("Invalid token");
 
         await this.userRepo.changePassword(data.id, requestData.data.password);
+
+        await this.logger.debug(data, `User ${data.email} changed password`)
+        await this.logger.info(`${data.email} changed password`, undefined, true);
 
         return Response.success("Password changed successfully");
     }
@@ -224,6 +236,9 @@ export default class AuthController {
         if (data.confirmed) return Response.badRequest("Email already confirmed");
 
         await this.userRepo.update(data.id, {confirmed: true});
+
+        await this.logger.debug(data, `User ${data.email} confirmed email`)
+        await this.logger.info(`${data.email} confirmed`, undefined, true);
 
         return Response.success("Email confirmed successfully");
     }
@@ -267,10 +282,12 @@ export default class AuthController {
                 await Email.sendToken(user.email, token) :
                 await Email.sendOTP(user.email, token);
         } catch (error) {
-            console.log(error);
+            await this.logger.error(error, `User ${user.email} failed to send confirmation email`, true);
             return Response.internalServerError("Failed to send confirmation email");
         }
 
+        await this.logger.debug(user, `User ${user.email} requested email confirmation`)
+        await this.logger.info(`${user.email} requested email confirmation`, undefined, true);
         return Response.success("Email confirmation sent successfully");
     }
 
@@ -295,6 +312,8 @@ export default class AuthController {
             return Response.unauthorized("Invalid token");
         }
 
+        await this.logger.debug(session, `User ${session.email} refreshed token`)
+        await this.logger.info(`${session.email} refreshed token`, undefined, true);
         return Response.success(
             "Token refreshed successfully",
             {accessToken: generateAccessToken(session)}

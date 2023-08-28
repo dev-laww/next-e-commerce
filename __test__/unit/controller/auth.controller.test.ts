@@ -9,6 +9,7 @@ import { UserSession } from "@lib/types";
 
 jest.mock("@repository/user.repo", () => require("@mocks/repository/user.repo.mock"));
 jest.mock("@utils/email", () => require("@mocks/lib/utils/email.mock"));
+jest.mock("@utils/logging", () => require("@mocks/lib/utils/logging.mock"));
 
 describe("Auth Controller", () => {
     let controller: AuthController;
