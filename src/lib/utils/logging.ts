@@ -5,9 +5,10 @@ import LogRepository from "@repository/log.repo";
 
 
 const environment = new Map<string, string>(Object.entries({
-    "development": "debug",
-    "preview": "info",
-    "production": "error"
+    test: "silent",
+    development: "debug",
+    preview: "info",
+    production: "error"
 }))
 
 const stream = pretty({
