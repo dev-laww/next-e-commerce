@@ -26,25 +26,25 @@ export const getLogger = (name: string) => {
     const childLogger = logger.child({name: name});
 
     return {
-        debug: async (message: string, save?: boolean) => {
-            childLogger.debug(message);
-            if (save) await logRepo.create({level: "debug", message: message});
+        debug: async (obj: object, message?: string, save?: boolean, ...args: any[]) => {
+            childLogger.debug(obj, message, ...args);
+            if (save) await logRepo.create({level: "debug", message: message || JSON.stringify(obj)});
         },
-        info: async (message: string, save?: boolean) => {
-            childLogger.info(message);
-            if (save) await logRepo.create({level: "info", message: message});
+        info: async (obj: unknown, message?: string, save?: boolean, ...args: any[]) => {
+            childLogger.info(obj, message, ...args);
+            if (save) await logRepo.create({level: "info", message: message || JSON.stringify(obj)});
         },
-        error: async (message: string, save?: boolean) => {
-            childLogger.error(message);
-            if (save) await logRepo.create({level: "error", message: message});
+        error: async (obj: unknown, message?: string, save?: boolean, ...args: any[]) => {
+            childLogger.error(obj, message, ...args);
+            if (save) await logRepo.create({level: "error", message: message || JSON.stringify(obj)});
         },
-        warn: async (message: string, save?: boolean) => {
-            childLogger.warn(message);
-            if (save) await logRepo.create({level: "warn", message: message});
+        warn: async (obj: unknown, message?: string, save?: boolean, ...args: any[]) => {
+            childLogger.warn(obj, message, ...args);
+            if (save) await logRepo.create({level: "warn", message: message || JSON.stringify(obj)});
         },
-        fatal: async (message: string, save?: boolean) => {
-            childLogger.fatal(message);
-            if (save) await logRepo.create({level: "fatal", message: message});
+        fatal: async (obj: unknown, message?: string, save?: boolean, ...args: any[]) => {
+            childLogger.fatal(obj, message, ...args);
+            if (save) await logRepo.create({level: "fatal", message: message || JSON.stringify(obj)});
         }
     };
 }
