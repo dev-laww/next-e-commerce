@@ -1,30 +1,26 @@
 # API Endpoints
+
 List of all API endpoints.
 
 ## Table of Contents
+
 - [Auth](#auth)
 - [Account](#account)
+- [Profile](#profile)
 - [Roles](#roles)
 - [Permissions](#permissions)
-- [Role Permissions](#role-permissions)
-- [User Roles](#user-roles)
-- [Address](#address)
-- [Payment Methods](#payment-methods)
 - [Products](#products)
 - [Product Variants](#product-variants)
 - [Categories](#categories)
 - [Orders](#orders)
-- [Payments](#payments)
-- [Reviews](#reviews)
 - [Shipping](#shipping)
 - [Admin](#admin)
-- [Wishlist](#wishlist)
-- [Cart](#cart)
 - [Coupons](#coupons)
 - [Common Response](#common-response)
 - [Notes](#notes)
 
 ## Auth
+
 - `POST /auth/signup`: Create a new user account.
     - **Request**:
         ```http request
@@ -70,7 +66,6 @@ List of all API endpoints.
               "message": "Email or username already exists"
             }
             ```
-    
 - `POST /auth/login`: Login to an existing user account.
     - NOTE: Username can be used instead of email.
     - **Request**:
@@ -227,10 +222,16 @@ List of all API endpoints.
                 } 
             }
             ```
-      
+
 ## Account
-- `GET /accounts`: Get a list of all users. (admin-only)
+
+- (admin-only)
+- Always include authorization header with access token.
+- `GET /accounts`: Get a list of all users.
     - **Request**:
+        ```http request
+        GET /accounts
+        ```
     - **Response**:
         - Status: 200 OK
         - Body:
@@ -254,12 +255,53 @@ List of all API endpoints.
                 }]
             }
             ```
-- `GET /account/:id`: Get the details of a specific user. (admin-only)
+- `POST /accounts`: Create a new user.
     - **Request**:
         ```http request
-        GET /account/1
+        POST /accounts
       
-        Authorization: Bearer <access_token>
+        Content-Type: application/json
+      
+        {
+            "firstName": "John",
+            "lastName": "Doe",
+            "username": "johndoe",
+            "imageUrl": "https://example.com/profile.jpg",
+            "email": "johndoe@mail.com",
+            "password": "secretpassword",
+            "confirmPassword": "secretpassword"
+        }
+        ```
+    - **Response**:
+        - Status: 201 CREATED
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "User created successfully",
+                "data": {
+                    "id": "<id>",
+                    "firstName": "John",
+                    "lastName": "Doe",
+                    "username": "johndoe",
+                    "imageUrl": "https://example.com/profile.jpg",
+                    "email": "johndoe@mail.com"
+                }
+            } 
+            ```
+    - **Error Response**
+        - Status: 400 BAD REQUEST
+        - Body:
+            ```json
+            {
+              "status": "fail",
+              "message": "Email or username already exists"
+            }
+            ```
+- `GET /accounts/:id`: Get the details of a specific user.
+    - **Request**:
+        ```http request
+        GET /accounts/1
         ```
     - **Response**:
         - Status: 200 OK
@@ -277,10 +319,140 @@ List of all API endpoints.
                 }
             }
             ```
-- `GET /account/profile`: Get the user's profile information.
+- `DELETE /accounts/:id`: Delete a user
     - **Request**:
         ```http request
-        GET /account/profile
+        DELETE /accounts/1
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+              "status": "success",
+              "message": "User deleted successfully"
+            }
+            ```
+- `PUT /accounts/:id`: Update the details of a specific user.
+    - **Request**:
+        ```http request
+        PUT /accounts/1
+
+        Content-Type: application/json
+      
+        {
+            "firstName": "John",
+            "lastName": "Doe",
+            "username": "johndoe",
+            "imageUrl": "https://example.com/profile.jpg",
+            "email": "johndoe@mail.com",
+        }
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "User created successfully",
+                "data": {
+                    "id": "<id>",
+                    "firstName": "John",
+                    "lastName": "Doe",
+                    "username": "johndoe",
+                    "imageUrl": "https://example.com/profile.jpg",
+                    "email": "johndoe@mail.com"
+                }
+            } 
+            ```
+    - **Error Response**
+        - Status: 400 BAD REQUEST
+        - Body:
+            ```json
+            {
+              "status": "fail",
+              "message": "Email or username already exists"
+            }
+            ```
+- `GET /accounts/:id/roles`: Get the list user's roles
+    - **Request**:
+        ```http request
+        GET /accounts/:id/roles
+        
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "data": [{
+                    "id": 1,
+                    "name": "Admin",
+                    "description": "Admin role"
+                }, {
+                    "id": 2,
+                    "name": "User",
+                    "description": "User role"
+                }]
+            }
+            ```
+- `PUT /accounts/:id/roles`: Update the current user's roles
+    - **Request**
+       ```http request
+       PUT /accounts/:id/roles
+      
+       Content-Type: application/json
+     
+       {
+           "roles": [1, 2]
+       }
+       ```
+    - **Response**
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "User roles updated successfully",
+                "data": [{
+                    "id": 1,
+                    "code": "role:admin",
+                    "name": "Admin"
+                }, {
+                    "id": 2,
+                    "code": "role:user",
+                    "name": "User"
+                }]
+            }
+            ```
+- NOTE: Provide endpoints for the following. See equivalent endpoints on their respective sections.
+    - **Payment Methods**
+        - `GET /accounts/:id/payment-methods`: Get a list of all payment methods for a specific user.
+        - `GET /accounts/:id/payment-methods/:id`: Get a specific payment method for a specific user.
+    - **Addresses**
+        - `GET /accounts/:id/addresses`: Get a list of all addresses for a specific user.
+        - `GET /accounts/:id/addresses/:id`: Get a specific address for a specific user.
+    - **Orders**
+        - `GET /accounts/:id/orders`:  Get a list of all orders for a specific user.
+        - `GET /accounts/:id/orders/:id`: Get a specific order for a specific user.
+    - **Wishlist**
+        - `GET /accounts/:id/wishlist`: Get a list of all wishlist items for a specific user.
+        - `GET /accounts/:id/wishlist/:id`: Get a specific wishlist item for a specific user.
+    - **Cart**
+        - `GET /accounts/:id/cart`: Get a list of all cart items for a specific user.
+        - `GET /accounts/:id/cart/:id`: Get a specific cart item for a specific user.
+    - **Reviews**
+        - `GET /accounts/:id/reviews`: Get a list of all reviews for a specific user.
+        - `GET /accounts/:id/reviews/:id`: Get a specific review for a specific user.
+
+## Profile
+
+- `GET /profile`: Get the user's profile information.
+    - **Request**:
+        ```http request
+        GET /profile
       
         Authorization: Bearer <access_token>
         ```
@@ -300,10 +472,10 @@ List of all API endpoints.
                 }
             } 
             ```
-- `PUT /account/profile`: Update the user's profile information.
+- `PUT /profile`: Update the user's profile information.
     - **Request**:
         ```http request
-        PUT /account/profile
+        PUT /profile
       
         Authorization: Bearer <access_token>
         Content-Type: application/json
@@ -333,10 +505,54 @@ List of all API endpoints.
                 }
             } 
             ```
-- `PUT /account/change-password`: Change the user's password.
+- `PUT /profile/change-email`: Change the user's email address.
     - **Request**:
         ```http request
-        PUT /account/change-password
+        PUT /profile/change-email
+      
+        Authorization: Bearer <access_token>
+        Content-Type: application/json
+
+        {
+            "email": "test@mail.com",
+            "password": "currentpassword"
+        }
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Email changed successfully"
+            }
+            ```
+- `PUT /profile/change-username`: Change the user's username.
+    - **Request**:
+        ```http request
+        PUT /profile/change-username
+      
+        Authorization: Bearer <access_token>
+        Content-Type: application/json
+
+        {
+            "username": "username",
+            "password": "currentpassword"
+        }
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Username changed successfully"
+            }
+          ```
+- `PUT /profile/change-password`: Change the user's password.
+    - **Request**:
+        ```http request
+        PUT /profile/change-password
       
         Authorization: Bearer <access_token>
         Content-Type: application/json
@@ -355,10 +571,551 @@ List of all API endpoints.
                 "message": "Password changed successfully"
             }
             ```
-- `GET /accounts/:id/roles`: Get the list current user's roles (admin-only)
+- `GET /profile/address`: Get a list of all addresses for the current user.
+    - **Request**
+        ```http request
+        GET /profile/address
+        
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "data": [{
+                   "id": 1,
+                   "userId": 1,
+                   "name": "John Doe",
+                   "address": "123 Main St",
+                   "city": "New York",
+                   "state": "NY",
+                   "zip": "10001",
+                   "country": "US",
+                   "phone": "1234567890"
+                }, {
+                   "id": 2,
+                   "userId": 1,
+                   "name": "Jane Doe",
+                   "address": "123 Main St",
+                   "city": "New York",
+                   "state": "NY",
+                   "zip": "10001",
+                   "country": "US",
+                   "phone": "1234567890"
+                }]
+            }
+            ```
+- `POST /profile/address`: Create new address
+    - **Request**
+        ```http request
+        POST /profile/address
+        
+        Authorization: Bearer <access_token>
+        Content-Type: application/json
+      
+        {
+            "name": "John Doe",
+            "address": "123 Main St",
+            "city": "New York",
+            "state": "NY",
+            "zip": "10001",
+            "country": "US",
+            "phone": "1234567890"
+        }
+        ```
+    - **Response**
+        - Status: 201 CREATED
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Address created successfully",
+                "data": {
+                   "id": "<id>",
+                   "userId": 1,
+                   "name": "John Doe",
+                   "address": "123 Main St",
+                   "city": "New York",
+                   "state": "NY",
+                   "zip": "10001",
+                   "country": "US",
+                   "phone": "1234567890"
+                }
+            }
+            ```
+- `GET /profile/address/:id`: Get the details of a specific address.
+    - **Request**
+         ```http request
+         GET /profile/address/1
+         
+         Authorization: Bearer <access_token>
+         ```
+    - **Response**
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "data": {
+                   "id": 1,
+                   "userId": 1,
+                   "name": "John Doe",
+                   "address": "123 Main St",
+                   "city": "New York",
+                   "state": "NY",
+                   "zip": "10001",
+                   "country": "US",
+                   "phone": "1234567890"
+                }
+            }
+            ```
+- `PUT /profile/address/:id`: Update an existing address
+    - **Request**
+        ```http request
+        PUT /profile/address/1
+        
+        Authorization: Bearer <access_token>
+        Content-Type: application/json
+      
+        {
+            "name": "John Doe",
+            "address": "123 Main St",
+            "city": "New York",
+            "state": "NY",
+            "zip": "10001",
+            "country": "US",
+            "phone": "1234567890"
+        }
+        ```
+    - **Response**
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Address updated successfully",
+                "data": {
+                   "id": 1,
+                   "userId": 1,
+                   "name": "John Doe",
+                   "address": "123 Main St",
+                   "city": "New York",
+                   "state": "NY",
+                   "zip": "10001",
+                   "country": "US",
+                   "phone": "1234567890"
+                }
+            }
+            ```
+- `DELETE /profile/address/:id`: Delete a specific address.
     - **Request**:
         ```http request
-        GET /accounts/:id/roles
+        DELETE /address/1
+      
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Address deleted successfully"
+            } 
+            ```
+- `GET /profile/payment-methods`: Get a list of current user's payment methods.
+    - **Request**:
+        ```http request
+        GET /profile/payment-methods
+      
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "data": [{
+                    "id": 1,
+                    "userId": 1,
+                    "name": "John Doe",
+                    "cardNumber": "1234567890123456",
+                    "expirationMonth": "01",
+                    "expirationYear": "2020",
+                    "cvv": "123"
+                }, {
+                    "id": 2,
+                    "userId": 1,
+                    "name": "John Doe",
+                    "cardNumber": "1234567890123456",
+                    "expirationMonth": "01",
+                    "expirationYear": "2020",
+                    "cvv": "123"
+                }]
+            }
+            ```
+- `GET /profile/payment-methods/:id`: Get the details of a specific payment method. (admin-only)
+    - **Request**:
+        ```http request
+        GET /profile/payment-methods/1
+      
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**:
+        - Status: 20O OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Payment method created successfully",
+                "data": {
+                    "id": 1,
+                    "userId": 1,
+                    "name": "John Doe",
+                    "cardNumber": "1234567890123456",
+                    "expirationMonth": "01",
+                    "expirationYear": "2020",
+                    "cvv": "123"
+                }
+            } 
+            ```
+- `POST /profile/payment-methods`: Create a new payment method
+    - **Request**:
+        ```http request
+        POST /profile/payment-methods
+      
+        Authorization: Bearer <access_token>
+        Content-Type: application/json
+        
+        {
+            "id": 1,
+            "userId": 1,
+            "name": "New Name",
+            "cardNumber": "1234567890123456",
+            "expirationMonth": "01",
+            "expirationYear": "2020",
+            "cvv": "123"
+        }
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Payment method created successfully",
+                "data": {
+                    "id": "<id>",
+                    "userId": 1,
+                    "name": "New Name",
+                    "cardNumber": "1234567890123456",
+                    "expirationMonth": "01",
+                    "expirationYear": "2020",
+                    "cvv": "123"
+                }
+            }
+            ```
+- `PUT /profile/payment-methods/:id`: Update the details of a specific product.
+    - **Request**:
+        ```http request
+        PUT /profile/payment-methods/1
+      
+        Authorization: Bearer <access_token>
+        Content-Type: application/json
+        
+        {
+            "id": 1,
+            "userId": 1,
+            "name": "Updated Name",
+            "cardNumber": "1234567890123456",
+            "expirationMonth": "01",
+            "expirationYear": "2020",
+            "cvv": "123"
+        }
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Payment method updated successfully",
+                "data": {
+                    "id": 1,
+                    "userId": 1,
+                    "name": "Updated Name",
+                    "cardNumber": "1234567890123456",
+                    "expirationMonth": "01",
+                    "expirationYear": "2020",
+                    "cvv": "123"
+                }
+            }
+            ```
+- `DELETE /profile/payment-methods/:id`: Delete a specific product.
+    - **Request**:
+        ```http request
+        DELETE /profile/payment-methods/1
+      
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Payment method deleted successfully"
+            } 
+            ```
+- `GET /profile/orders`: Get a list of all orders.
+    - **Request**:
+        ```http request
+        GET /profile/orders
+      
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "data": [{
+                    "id": 1,
+                    "order_number": "ORD-001",
+                    "shipping_address_id": 1,
+                    "shipping_method_id": 1,
+                    "total_amount": 99.99,
+                    "status": "Processing"
+                }, {
+                    "id": 2,
+                    "order_number": "ORD-002",
+                    "payment_id": 2,
+                    "shipping_address_id": 2,
+                    "shipping_method_id": 2,
+                    "total_amount": 79.99,
+                    "status": "Delivered"
+                }]
+            }
+            ```
+- `GET /profile/orders/:id`: Get the details of a specific order.
+    - **Request**:
+        ```http request
+        GET /profile/orders/1
+      
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**:
+        - Status: 201 CREATED
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "data": {
+                    "id": 1,
+                    "order_number": "ORD-001",
+                    "shipping_address_id": 1,
+                    "shipping_method_id": 1,
+                    "total_amount": 99.99,
+                    "status": "Processing"
+                }
+            } 
+            ```
+- `POST /profile/orders`: Create a new order.
+    - **Request**:
+        ```http request
+        POST /profile/orders
+      
+        Authorization: Bearer <access_token>
+        Content-Type: application/json
+        
+        {
+            "payment_id": 1,
+            "shipping_address_id": 1,
+            "shipping_method_id": 1,
+            "total_amount": 119.99,
+            "status": "Processing"
+        }
+        ```
+    - **Response**:
+        - Status: 201 CREATED
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Order created successfully",
+                "data": {
+                    "id": 3,
+                    "order_number": "ORD-003",
+                    "shipping_address_id": 1,
+                    "shipping_method_id": 1,
+                    "total_amount": 119.99,
+                    "status": "Processing"
+                }
+            }
+            ```
+- `PUT /profile/orders/:id/cancel`: Cancel a specific order.
+    - **Request**:
+        ```http request
+        PUT /profile/orders/1/cancel
+      
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**:
+        - Status: 20O OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Order cancelled",
+                "data": {
+                "id": 1,
+                    "order_number": "ORD-001",
+                    "shipping_address_id": 1,
+                    "shipping_method_id": 1,
+                    "total_amount": 89.99,
+                    "status": "Cancelled"
+                }
+            }
+            ```
+- `GET /profile/wishlist`: Get the user's wishlist.
+    - **Request**:
+        ```http request
+        GET /profile/wishlist
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "data": [{
+                    "id": 1,
+                    "name": "Product 1",
+                    "price": 9.99,
+                    "description": "Lorem ipsum dolor sit amet",
+                    "image": "https://via.placeholder.com/150"
+                }, {
+                    "id": 2,
+                    "name": "Product 2",
+                    "price": 19.99,
+                    "description": "Lorem ipsum dolor sit amet",
+                    "image": "https://via.placeholder.com/150"
+                }]
+            }
+            ```
+- `POST /profile/wishlist`: Add a product to the user's wishlist.
+    - **Request**:
+        ```http request
+        POST /profile/wishlist
+        
+        Authorization: Bearer <access_token>
+        Content-Type: application/json
+        
+        {
+            "productId": 1
+        }
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Product added to wishlist successfully"
+            }
+            ```
+    - **Error**:
+        - Status: 400 BAD REQUEST
+        - Body:
+            ```json
+            {
+                "status": "error",
+                "message": "Product already in wishlist"
+            }
+            ```
+- `GET /profile/wishlist/:id`: Check if a product is in the user's wishlist.
+    - **Request**:
+        ```http request
+        GET /profile/wishlist/1
+        ```
+    - **Response**:
+        - Status: 201 CREATED
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "data": {
+                    "id": 1,
+                    "name": "Product 1",
+                    "price": 9.99,
+                    "description": "Lorem ipsum dolor sit amet",
+                    "image": "https://via.placeholder.com/150"
+                }
+            }
+            ```
+- `DELETE /profile/wishlist/:id`: Remove a product from the user's wishlist.
+    - **Request**:
+        ```http request
+        DELETE /profile/wishlist/1
+      
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Product removed from wishlist successfully"
+            }
+            ```
+- `DELETE /profile/wishlist`: Clear the user's wishlist.
+    - **Request**:
+        ```http request
+        DELETE /profile/wishlist
+      
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Wishlist cleared successfully"
+            }
+            ```
+- `PUT /profile/wishlist/:id/move-to-cart`: Move a product from the user's wishlist to cart.
+    - **Request**:
+        ```http request
+        PUT /profile/wishlist/1/move-to-cart
+      
+        Authorization: Bearer <access_token>
+        Content-Type: application/json
+        
+        {
+            "variantId": 1,
+            "quantity": 1
+        }
+        ```
+    - **Response**:
+        - Status: 201 CREATED
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Product moved to cart"
+            }
+            ```
+
+- `GET /profile/cart`: Get the user's shopping cart.
+    - **Request**:
+        ```http request
+        GET /profile/cart
         
         Authorization: Bearer <access_token>
         ```
@@ -370,96 +1127,318 @@ List of all API endpoints.
                 "status": "success",
                 "data": [{
                     "id": 1,
-                    "name": "Admin",
-                    "description": "Admin role"
+                    "name": "Product 1",
+                    "price": 9.99,
+                    "quantity": 1,
+                    "variantId": 1,
+                    "description": "Lorem ipsum dolor sit amet",
+                    "image": "https://via.placeholder.com/150"
                 }, {
                     "id": 2,
-                    "name": "User",
-                    "description": "User role"
+                    "name": "Product 2",
+                    "price": 19.99,
+                    "quantity": 2,
+                    "variantId": 2,
+                    "description": "Lorem ipsum dolor sit amet",
+                    "image": "https://via.placeholder.com/150"
                 }]
             }
             ```
-- `PUT /accounts/:id/roles`: Update the current user's roles (admin-only)
-     - **Request**
+- `GET /profile/cart/:id`: Get the user's shopping cart.
+    - **Request**:
         ```http request
-        PUT /accounts/:id/roles
-       
+        GET /profile/cart/1
+        
         Authorization: Bearer <access_token>
-        Content-Type: application/json
-      
-        {
-            "roles": [1, 2]
-        }
         ```
-     - **Response**
+    - **Response**:
         - Status: 200 OK
         - Body:
             ```json
             {
                 "status": "success",
-                "message": "User roles updated successfully",
+                "data": {
+                    "id": 1,
+                    "name": "Product 1",
+                    "price": 9.99,
+                    "quantity": 1,
+                    "description": "Lorem ipsum dolor sit amet",
+                    "image": "https://via.placeholder.com/150"
+                }
+            }
+            ```
+- `POST /profile/cart`: Add a product to the user's shopping cart.
+    - **Request**:
+        ```http request
+        POST /profile/cart
+      
+        Authorization: Bearer <access_token>
+        Content-Type: application/json
+        
+        {
+            "productId": 1,
+            "quantity": 2
+        }
+        ```
+    - **Response**:
+        - Status: 201 CREATED
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Product added to cart successfully"
+            } 
+            ```
+- `PUT /profile/cart/:id`: Update the quantity of a product in the user's shopping cart.
+    - **Request**:
+        ```http request
+        PUT /profile/cart/1
+      
+        Authorization: Bearer <access_token>
+        Content-Type: application/json
+        
+        {
+            "quantity": 2
+        }
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "User created successfully",
+                "data": {
+                    "id": 2,
+                    "name": "Product 2",
+                    "price": 19.99,
+                    "quantity": 2,
+                    "description": "Lorem ipsum dolor sit amet",
+                    "image": "https://via.placeholder.com/150"
+                }
+            } 
+            ```
+- `DELETE /profile/cart/:id`: Remove a product from the user's shopping cart.
+    - **Request**:
+        ```http request
+        DELETE /profile/cart/1
+      
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Product removed from cart successfully"
+            } 
+            ```
+- `DELETE /profile/cart`: Clear the user's shopping cart.
+    - **Request**:
+        ```http request
+        DELETE /profile/cart
+      
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+              "status": "success",
+              "message": "Cleared cart successfully"
+            } 
+            ```
+- `POST /profile/cart/checkout`: Checkout the user's shopping cart.
+    - **Request**
+        ```http request
+        POST /profile/cart/checkout
+      
+        Authorization: Bearer <access_token>
+        Content-Type: application/json
+        
+        {
+            "shippingMethodId": 1,
+            "paymentMethodId": 1,
+            "couponCode": "COUPON1"
+        }
+        ```
+- `GET /profile/reviews`: Get a list of all reviews. (admin-only)
+    - **Request**:
+        ```http request
+        GET /profile/reviews
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
                 "data": [{
                     "id": 1,
-                    "name": "Admin",
-                    "description": "Admin role"
+                    "userId": 1,
+                    "productId": 1,
+                    "variantId": 1,
+                    "rating": 4,
+                    "comment": "Great product"
                 }, {
                     "id": 2,
-                    "name": "User",
-                    "description": "User role"
+                    "userId": 1,
+                    "productId": 2,
+                    "variantId": 2,
+                    "rating": 5,
+                    "comment": "Excellent product"
                 }]
             }
             ```
-- NOTE: Provide endpoints for the following. See equivalent endpoints on their respective sections.
-    - **Payment Methods**
-        - Format: `REQ /accounts/:id/payment-methods`
-            - `GET`: Get a list of all payment methods for a specific user.
-            - `POST`: Create a new payment method for a specific user.
-            - `DELETE`: Delete payment methods for a specific user.
-        - Format: `REQ /accounts/:id/payment-methods/:id`
-            - `PUT`: Update a specific payment method for a specific user.
-            - `DELETE`: Delete a specific payment method for a specific user.
-    - **Addresses**
-        - Format: `REQ /accounts/:id/addresses`
-            - `GET`: Get a list of all addresses for a specific user.
-            - `POST`: Create a new address for a specific user.
-            - `DELETE`: Delete addresses for a specific user.
-        - Format: `REQ /accounts/:id/addresses/:id`
-            - `PUT`: Update a specific address for a specific user.
-            - `DELETE`: Delete a specific address for a specific user.
-    - **Orders**
-        - Format: `REQ /accounts/:id/orders`
-            - `GET`: Get a list of all orders for a specific user.
-            - `POST`: Create a new order for a specific user.
-            - `DELETE`: Delete orders for a specific user.
-        - Format: `REQ /accounts/:id/orders/:id`
-            - `PUT`: Cancels a specific order for a specific user.
-    - **Wishlist**
-        - Format: `REQ /accounts/:id/wishlist`
-            - `GET`: Get a list of all wishlist items for a specific user.
-            - `POST`: Create a new wishlist item for a specific user.
-            - `DELETE`: Delete wishlist items for a specific user.
-        - Format: `REQ /accounts/:id/wishlist/:id`
-            - `PUT`: Update a specific wishlist item for a specific user.
-            - `DELETE`: Delete a specific wishlist item for a specific user.
-    - **Cart**
-        - Format: `REQ /accounts/:id/cart`
-            - `GET`: Get a list of all cart items for a specific user.
-            - `POST`: Create a new cart item for a specific user.
-            - `DELETE`: Delete cart items for a specific user.
-        - Format: `REQ /accounts/:id/cart/:id`
-            - `PUT`: Update a specific cart item for a specific user.
-            - `DELETE`: Delete a specific cart item for a specific user.
-    - **Reviews**
-        - Format: `REQ /accounts/:id/reviews`
-            - `GET`: Get a list of all reviews for a specific user.
-            - `POST`: Create a new review for a specific user.
-            - `DELETE`: Delete reviews for a specific user.
-        - Format: `REQ /accounts/:id/reviews/:id`
-            - `PUT`: Update a specific review for a specific user.
-            - `DELETE`: Delete a specific review for a specific user.
+- `GET /profile/reviews/:id`: Get the details of a specific review.
+    - **Request**:
+        ```http request
+       GET /profile/reviews/1
+        ```
+    - **Response**:
+        - Status: 201 CREATED
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "data": {
+                    "id": 1,
+                    "userId": 1,
+                    "productId": 1,
+                    "variantId": 1,
+                    "rating": 4,
+                    "comment": "Great product"
+                }
+            }
+            ```
+- `POST /profile/reviews`: Create a new review.
+    - **Request**:
+        ```http request
+        POST /profile/reviews
+      
+        Authorization: Bearer <access_token>
+        Content-Type: application/json
+        
+        {
+            "userId": 1,
+            "productId": 1,
+            "variantId": 1,
+            "rating": 4,
+            "comment": "Great product"
+        }
+        ```
+    - **Response**:
+        - Status: 201 CREATED
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Review created successfully",
+                "data": {
+                    "id": 3,
+                    "userId": 1,
+                    "productId": 1,
+                    "rating": 4,
+                    "comment": "Great product"
+                }
+            }
+            ```
+- `PUT /profile/reviews/:id`: Update the details of a specific review.
+    - **Request**:
+        ```http request
+        PUT /profile/reviews/1
+      
+        Authorization: Bearer <access_token>
+        Content-Type: application/json
+        
+        {
+            "rating": 5,
+            "comment": "Excellent product"
+        }
+        ```
+    - **Response**:
+        - Status: 20O OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Review created successfully",
+                "data": {
+                    "id": 1,
+                    "userId": 1,
+                    "productId": 1,
+                    "variantId": 1,
+                    "rating": 5,
+                    "comment": "Excellent product"
+                }
+            }
+            ```
+- `DELETE /profile/reviews/:id`: Delete a specific review.
+    - **Request**:
+        ```http request
+        DELETE /reviews/1
+        
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+              "status": "success",
+              "message": "Review deleted successfully"
+            } 
+            ```
 
+- `GET /profile/payments`: Get a list of all payments.
+    - **Request**:
+        ```http request
+        GET /profile/payments
+      
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**:
+        - Status: 20O OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "data": [{
+                    "id": 1,
+                    "amount": 99.99,
+                    "status": "Paid"
+                }, {
+                    "id": 2,
+                    "amount": 79.99,
+                    "status": "Refunded"
+                }]
+            }
+            ```
+- `GET /profile/payments/:id`: Get the details of a specific payment.
+    - **Request**:
+        ```http request
+        GET /profile/payments/1
+      
+        Authorization: Bearer <access_token>
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "data": {
+                      "id": 2,
+                      "amount": 79.99,
+                      "status": "Refunded"
+                }
+            } 
+            ```
 
 ## Roles
+
 - `GET /roles`: Get a list of all roles. (admin-only)
     - **Request**
         ```http request
@@ -584,8 +1563,8 @@ List of all API endpoints.
         - `POST`: Create a new user for a specific role.
         - `PUT`: Update a specific user for a specific role.
 
-          
 ## Permissions
+
 - `GET /permissions`: Get list of all permissions (admin-only)
     - **Request**
         ```http request
@@ -707,529 +1686,8 @@ List of all API endpoints.
         - `POST`: Create a new role for a specific permission.
         - `PUT`: Update a specific role for a specific permission.
 
-## Role Permissions
-(admin-only)
-- `GET /role-permission`: Get a list of all roles
-    - **Request**
-        ```http request
-        GET /role-permission
-      
-        Authorization: Bearer <access_token>
-        ```
-    - **Response**
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "data": [{
-                    "id": 1,
-                    "roleId": 1,
-                    "permissionId": 1
-                }, {
-                    "id": 2,
-                    "roleId": 2,
-                    "permissionId": 1
-                }]
-            }
-            ```
-- `GET /role-permission/:id`: Get the details of a specific role
-    - **Request**
-        ```http request
-        GET /role-permission/:id
-      
-        Authorization: Bearer <access_token>
-        ```
-    - **Response**
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "data": {
-                    "id": 1,
-                    "roleId": 1,
-                    "permissionId": 1
-                }
-            }
-            ```
-- `POST /role-permission`: Create a new role
-    - **Request**
-        ```http request
-        POST /role-permission
-      
-        Authorization: Bearer <access_token>
-        Content-Type: application/json
-      
-        {
-            "roleId": 1,
-            "permissionId": 1
-        }
-        ```
-    - **Response**
-        - Status: 201 CREATED
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "data": {
-                    "id": "<id>",
-                    "roleId": 1,
-                    "permissionId": 1
-                }
-            }
-            ```
-- `DELETE /role-permission/:id`: Delete an existing role
-    - **Request**
-         ```http request
-         DELETE /user-roles/:id
-       
-         Authorization: Bearer <access_token>
-         ```
-    - **Response**
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Role deleted successfully"
-            }
-            ```
-- NOTE: Provide endpoints for the following. See equivalent endpoints on their respective sections.
-    - **Roles**
-        - Format: `REQ /user-roles/:id/roles`
-        - `GET`: Get a list of all roles for a specific role.
-    - **Permissions**
-        - Format: `REQ /user-roles/:id/users`
-        - `GET`: Get a list of all users for a specific role.
-
-## User Roles
-(admin-only)
-- `GET /user-roles`: Get a list of all roles
-    - **Request**
-        ```http request
-        GET /user-roles
-      
-        Authorization: Bearer <access_token>
-        ```
-    - **Response**
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "data": [{
-                    "id": 1,
-                    "userId": 1,
-                    "roleId": 1
-                }, {
-                    "id": 2,
-                    "userId": 1,
-                    "roleId": 2
-                }]
-            }
-            ```
-- `GET /user-roles/:id`: Get the details of a specific role
-    - **Request**
-        ```http request
-        GET /user-roles/:id
-      
-        Authorization: Bearer <access_token>
-        ```
-    - **Response**
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "data": {
-                    "id": 1,
-                    "userId": 1,
-                    "roleId": 1
-                }
-            }
-            ```
-- `POST /user-roles`: Create a new role
-    - **Request**
-        ```http request
-        POST /user-roles
-      
-        Authorization: Bearer <access_token>
-        Content-Type: application/json
-      
-        {
-            "userId": 1,
-            "roleId": 1
-        }
-        ```
-    - **Response**
-        - Status: 201 CREATED
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "data": {
-                    "id": "<id>",
-                    "userId": 1,
-                    "roleId": 1
-                }
-            }
-            ```
-- `DELETE /user-roles/:id`: Delete an existing role
-    - **Request**
-         ```http request
-         DELETE /user-roles/:id
-       
-         Authorization: Bearer <access_token>
-         ```
-    - **Response**
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Role deleted successfully"
-            }
-            ```
-- NOTE: Provide endpoints for the following. See equivalent endpoints on their respective sections.
-    - **Users**
-        - Format: `REQ /user-roles/:id/users`
-        - `GET`: Get a list of all users for a specific role.
-    - **Roles**
-        - Format: `REQ /user-roles/:id/roles`
-        - `GET`: Get a list of all roles for a specific role.
-
-## Address
-- `GET /address`: Get a list of all addresses for the current user
-    - NOTE: If the user is an admin, this will return all addresses for all users.
-    - **Request**
-        ```http request
-        GET /address
-        
-        Authorization: Bearer <access_token>
-        ```
-    - **Response**
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "data": [{
-                   "id": 1,
-                   "userId": 1,
-                   "name": "John Doe",
-                   "address": "123 Main St",
-                   "city": "New York",
-                   "state": "NY",
-                   "zip": "10001",
-                   "country": "US",
-                   "phone": "1234567890"
-                }, {
-                   "id": 2,
-                   "userId": 1,
-                   "name": "Jane Doe",
-                   "address": "123 Main St",
-                   "city": "New York",
-                   "state": "NY",
-                   "zip": "10001",
-                   "country": "US",
-                   "phone": "1234567890"
-                }]
-            }
-            ```
-- `GET /address/:id`: Get the details of a specific address
-   - **Request**
-        ```http request
-        GET /address/1
-        
-        Authorization: Bearer <access_token>
-        ```
-   - **Response**
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "data": {
-                   "id": 1,
-                   "userId": 1,
-                   "name": "John Doe",
-                   "address": "123 Main St",
-                   "city": "New York",
-                   "state": "NY",
-                   "zip": "10001",
-                   "country": "US",
-                   "phone": "1234567890"
-                }
-            }
-            ```
-- `POST /address`: Create a new address
-    - **Request**
-        ```http request
-        POST /address
-        
-        Authorization: Bearer <access_token>
-        Content-Type: application/json
-      
-        {
-            "name": "John Doe",
-            "address": "123 Main St",
-            "city": "New York",
-            "state": "NY",
-            "zip": "10001",
-            "country": "US",
-            "phone": "1234567890"
-        }
-        ```
-    - **Response**
-        - Status: 201 CREATED
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Address created successfully",
-                "data": {
-                   "id": "<id>",
-                   "userId": 1,
-                   "name": "John Doe",
-                   "address": "123 Main St",
-                   "city": "New York",
-                   "state": "NY",
-                   "zip": "10001",
-                   "country": "US",
-                   "phone": "1234567890"
-                }
-            }
-            ```
-- `PUT /address/:id`: Update an existing address
-    - **Request**
-        ```http request
-        PUT /address/1
-        
-        Authorization: Bearer <access_token>
-        Content-Type: application/json
-      
-        {
-            "name": "John Doe",
-            "address": "123 Main St",
-            "city": "New York",
-            "state": "NY",
-            "zip": "10001",
-            "country": "US",
-            "phone": "1234567890"
-        }
-        ```
-    - **Response**
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Address updated successfully",
-                "data": {
-                   "id": 1,
-                   "userId": 1,
-                   "name": "John Doe",
-                   "address": "123 Main St",
-                   "city": "New York",
-                   "state": "NY",
-                   "zip": "10001",
-                   "country": "US",
-                   "phone": "1234567890"
-                }
-            }
-            ```
-- `DELETE /address/:id`: Delete a specific address.
-    - **Request**:
-        ```http request
-        DELETE /address/1
-      
-        Authorization: Bearer <access_token>
-        ```
-    - **Response**:
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Address deleted successfully"
-            } 
-            ```
-- NOTE: Provide endpoints for the following. See equivalent endpoints on their respective sections.
-    - **User**
-        - Format: `REQ /address/:id/user`
-        - `GET`: Get the user details for a specific address.
-          
-## Payment Methods
-- `GET /payment-methods`: Get a list of current user's payment methods.
-    - NOTE: If the user is an admin, this will return all payment methods for all users.
-    - **Request**:
-        ```http request
-        GET /payment-methods
-      
-        Authorization: Bearer <access_token>
-        ```
-    - **Response**:
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "data": [{
-                    "id": 1,
-                    "userId": 1,
-                    "name": "John Doe",
-                    "cardNumber": "1234567890123456",
-                    "expirationMonth": "01",
-                    "expirationYear": "2020",
-                    "cvv": "123"
-                }, {
-                    "id": 2,
-                    "userId": 1,
-                    "name": "John Doe",
-                    "cardNumber": "1234567890123456",
-                    "expirationMonth": "01",
-                    "expirationYear": "2020",
-                    "cvv": "123"
-                }]
-            }
-            ```
-- `GET /payment-methods/:id`: Get the details of a specific payment method.
-    - NOTE: If the user is an admin, this will return all payment methods for all users.
-    - **Request**:
-        ```http request
-        GET /payment-methods/1
-      
-        Authorization: Bearer <access_token>
-        ```
-    - **Response**:
-        - Status: 20O OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Payment method created successfully",
-                "data": {
-                    "id": 1,
-                    "userId": 1,
-                    "name": "John Doe",
-                    "cardNumber": "1234567890123456",
-                    "expirationMonth": "01",
-                    "expirationYear": "2020",
-                    "cvv": "123"
-                }
-            } 
-            ```
-- `POST /payment-methods`: Create a new payment method
-    - **Request (admin)**:
-        ```http request
-        POST /payment-methods
-      
-        Authorization: Bearer <access_token>
-        Content-Type: application/json
-        
-        {
-            "userId": 1,
-            "name": "New Name",
-            "cardNumber": "1234567890123456",
-            "expirationMonth": "01",
-            "expirationYear": "2020",
-            "cvv": "123"
-        }
-        ```
-    - **Request (client)**:
-        ```http request
-        POST /payment-methods
-      
-        Authorization: Bearer <access_token>
-        Content-Type: application/json
-        
-        {
-            "id": 1,
-            "userId": 1,
-            "name": "New Name",
-            "cardNumber": "1234567890123456",
-            "expirationMonth": "01",
-            "expirationYear": "2020",
-            "cvv": "123"
-        }
-        ```
-    - **Response**:
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Payment method created successfully",
-                "data": {
-                    "id": "<id>",
-                    "userId": 1,
-                    "name": "New Name",
-                    "cardNumber": "1234567890123456",
-                    "expirationMonth": "01",
-                    "expirationYear": "2020",
-                    "cvv": "123"
-                }
-            }
-            ```
-- `PUT /payment-methods/:id`: Update the details of a specific product.
-    - **Request**:
-        ```http request
-        PUT /payment-methods
-      
-        Authorization: Bearer <access_token>
-        Content-Type: application/json
-        
-        {
-            "id": 1,
-            "userId": 1,
-            "name": "Updated Name",
-            "cardNumber": "1234567890123456",
-            "expirationMonth": "01",
-            "expirationYear": "2020",
-            "cvv": "123"
-        }
-        ```
-    - **Response**:
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Payment method updated successfully",
-                "data": {
-                    "id": 1,
-                    "userId": 1,
-                    "name": "Updated Name",
-                    "cardNumber": "1234567890123456",
-                    "expirationMonth": "01",
-                    "expirationYear": "2020",
-                    "cvv": "123"
-                }
-            }
-            ```
-- `DELETE /payment-methods/:id`: Delete a specific product.
-    - **Request**:
-        ```http request
-        DELETE /payment-methods/1
-      
-        Authorization: Bearer <access_token>
-        ```
-    - **Response**:
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Payment method deleted successfully"
-            } 
-            ```
-- NOTE: Provide endpoints for the following. See equivalent endpoints on their respective sections.
-    - **User**
-        - Format: `REQ /payment-methods/:id/user`
-        - `GET`: Get the user details for a specific payment method.
-
 ## Products
+
 - `GET /products`: Get a list of all products.
     - **Request**:
         ```http request
@@ -1351,12 +1809,12 @@ List of all API endpoints.
 - NOTE: Provide endpoints for the following. See equivalent endpoints on their respective sections.
     - **Variants**
         - Format: `REQ /products/:id/variants`
-             - `GET`: Get a list of all variants for a specific product.
-             - `POST`: Create a new variant for a specific product.
-             - `DELETE`: Delete all variant for a specific product.
+            - `GET`: Get a list of all variants for a specific product.
+            - `POST`: Create a new variant for a specific product.
+            - `DELETE`: Delete all variant for a specific product.
         - Format: `REQ /products/:id/variants/:id`
-             - `PUT`: Update a specific variant for a specific product.
-             - `DELETE`: Delete a specific variant for a specific product.
+            - `PUT`: Update a specific variant for a specific product.
+            - `DELETE`: Delete a specific variant for a specific product.
     - **Categories**
         - Format: `REQ /products/:id/categories`
             - `GET`: Get a list of all categories for a specific product.
@@ -1370,9 +1828,9 @@ List of all API endpoints.
         - Format: `REQ /products/:id/reviews/:id`
             - `PUT`: Update a specific review for a specific product.
             - `DELETE`: Delete a specific review for a specific product.
-    
-          
+
 ## Product Variants
+
 - `GET /variants`: Get a list of all variants. (admin-only)
     - **Request**:
         ```http request
@@ -1404,11 +1862,11 @@ List of all API endpoints.
             } 
             ```
 - `GET variants/:id`: Get the details of a specific variant.
-     - **Request**
-         ```http request
-         GET /variants/1
-         ```
-     - **Response**
+    - **Request**
+        ```http request
+        GET /variants/1
+        ```
+    - **Response**
         - Status: 200 OK
         - Body:
             ```json
@@ -1525,6 +1983,7 @@ List of all API endpoints.
             - `DELETE`: Delete a specific review for a specific variant.
 
 ## Categories
+
 - `GET /categories`: Get a list of all categories.
     - **Request**:
         ```http request
@@ -1630,146 +2089,7 @@ List of all API endpoints.
             ```
 
 ## Orders
-- `GET /orders`: Get a list of all orders.
-    - **Request**:
-        ```http request
-        GET /orders
-      
-        Authorization: Bearer <access_token>
-        ```
-    - **Response**:
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "data": [{
-                    "id": 1,
-                    "order_number": "ORD-001",
-                    "shipping_address_id": 1,
-                    "shipping_method_id": 1,
-                    "total_amount": 99.99,
-                    "status": "Processing"
-                }, {
-                    "id": 2,
-                    "order_number": "ORD-002",
-                    "payment_id": 2,
-                    "shipping_address_id": 2,
-                    "shipping_method_id": 2,
-                    "total_amount": 79.99,
-                    "status": "Delivered"
-                }]
-            }
-            ```
-- `GET /orders/:id`: Get the details of a specific order.
-    - **Request**:
-        ```http request
-        GET /orders/1
-      
-        Authorization: Bearer <access_token>
-        ```
-    - **Response**:
-        - Status: 201 CREATED
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "data": {
-                    "id": 1,
-                    "order_number": "ORD-001",
-                    "shipping_address_id": 1,
-                    "shipping_method_id": 1,
-                    "total_amount": 99.99,
-                    "status": "Processing"
-                }
-            } 
-            ```
-- `POST /orders`: Create a new order.
-    - **Request**:
-        ```http request
-        POST /orders
-      
-        Authorization: Bearer <access_token>
-        Content-Type: application/json
-        
-        {
-            "payment_id": 1,
-            "shipping_address_id": 1,
-            "shipping_method_id": 1,
-            "total_amount": 119.99,
-            "status": "Processing"
-        }
-        ```
-    - **Response**:
-        - Status: 201 CREATED
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Order created successfully",
-                "data": {
-                    "id": 3,
-                    "order_number": "ORD-003",
-                    "shipping_address_id": 1,
-                    "shipping_method_id": 1,
-                    "total_amount": 119.99,
-                    "status": "Processing"
-                }
-            }
-            ```
-- `PUT /orders/:id`: Update the details of a specific order.
-    - **Request**:
-        ```http request
-        PUT /orders/1
-      
-        Authorization: Bearer <access_token>
-        Content-Type: application/json
-        
-        {
-            "status": "Delivered"
-        }
-        ```
-    - **Response**:
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Order updated successfully",
-                "data": {
-                "id": 1,
-                    "order_number": "ORD-001",
-                    "shipping_address_id": 1,
-                    "shipping_method_id": 1,
-                    "total_amount": 89.99,
-                    "status": "Delivered"
-                }
-            }
-            ```
-- `PUT /orders/:id/cancel`: Cancel a specific order.
-    - **Request**:
-        ```http request
-        PUT /orders/1/cancel
-      
-        Authorization: Bearer <access_token>
-        ```
-    - **Response**:
-        - Status: 20O OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Order cancelled",
-                "data": {
-                "id": 1,
-                    "order_number": "ORD-001",
-                    "shipping_address_id": 1,
-                    "shipping_method_id": 1,
-                    "total_amount": 89.99,
-                    "status": "Cancelled"
-                }
-            }
-            ```
+
 - `DELETE /orders/:id`: Delete a specific order. (admin-only)
     - **Request**:
         ```http request
@@ -1787,254 +2107,8 @@ List of all API endpoints.
             } 
             ```
 
-## Payments
-- `GET /payments`: Get a list of all payments.
-    - **Request**:
-        ```http request
-        GET /payments
-      
-        Authorization: Bearer <access_token>
-        ```
-    - **Response**:
-        - Status: 20O OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "data": [{
-                    "id": 1,
-                    "amount": 99.99,
-                    "status": "Paid"
-                }, {
-                    "id": 2,
-                    "amount": 79.99,
-                    "status": "Refunded"
-                }]
-            }
-            ```
-- `GET /payments/:id`: Get the details of a specific payment.
-    - **Request**:
-        ```http request
-        GET /payments/1
-      
-        Authorization: Bearer <access_token>
-        ```
-    - **Response**:
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "data": {
-                      "id": 2,
-                      "amount": 79.99,
-                      "status": "Refunded"
-                }
-            } 
-            ```
-- `POST /payments`: Create a new payment.
-    - **Request**:
-        ```http request
-        POST /payments
-      
-        Authorization: Bearer <access_token>
-        Content-Type: application/json
-        
-        {
-            "amount": 119.99,
-            "status": "Paid"
-        }
-        ```
-    - **Response**:
-        - Status: 201 CREATED
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Payment created successfully",
-                "data": {
-                      "id": 3,
-                      "amount": 119.99,
-                      "status": "Paid"
-                }
-            }
-            ```
-- `PUT /payments/:id`: Update the details of a specific payment.
-    - **Request**:
-        ```http request
-        PUT /payments/1
-      
-        Authorization: Bearer <access_token>
-        Content-Type: application/json
-        
-        {
-            "amount": 89.99,
-            "status": "Refunded"
-        }
-        ```
-    - **Response**:
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Payment updated successfully",
-                "data": {
-                      "id": 1,
-                      "orderId": 1,
-                      "method_id": 1,
-                      "amount": 89.99,
-                      "status": "Refunded"
-                }
-            }
-            ```
-- `DELETE /payments/:id`: Delete a specific payment. (admin-only)
-    - **Request**:
-        ```http request
-        DELETE /payments/1
-      
-        Authorization: Bearer <access_token>
-        ```
-    - **Response**:
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Payment deleted successfully"
-            }
-            ```
-
-## Reviews
-- `GET /reviews`: Get a list of all reviews. (admin-only)
-    - **Request**:
-        ```http request
-        GET /reviews
-        ```
-    - **Response**:
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "data": [{
-                    "id": 1,
-                    "userId": 1,
-                    "productId": 1,
-                    "variantId": 1,
-                    "rating": 4,
-                    "comment": "Great product"
-                }, {
-                    "id": 2,
-                    "userId": 1,
-                    "productId": 2,
-                    "variantId": 2,
-                    "rating": 5,
-                    "comment": "Excellent product"
-                }]
-            }
-            ```
-- `GET /reviews/:id`: Get the details of a specific review.
-    - **Request**:
-        ```http request
-       GET /reviews/1
-        ```
-    - **Response**:
-        - Status: 201 CREATED
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "data": {
-                    "id": 1,
-                    "userId": 1,
-                    "productId": 1,
-                    "variantId": 1,
-                    "rating": 4,
-                    "comment": "Great product"
-                }
-            }
-            ```
-- `POST /reviews`: Create a new review.
-    - **Request**:
-        ```http request
-        POST /reviews
-      
-        Authorization: Bearer <access_token>
-        Content-Type: application/json
-        
-        {
-            "userId": 1,
-            "productId": 1,
-            "variantId": 1,
-            "rating": 4,
-            "comment": "Great product"
-        }
-        ```
-    - **Response**:
-        - Status: 201 CREATED
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Review created successfully",
-                "data": {
-                    "id": 3,
-                    "userId": 1,
-                    "productId": 1,
-                    "rating": 4,
-                    "comment": "Great product"
-                }
-            }
-            ```
-- `PUT /reviews/:id`: Update the details of a specific review.
-    - **Request**:
-        ```http request
-        PUT /reviews/1
-      
-        Authorization: Bearer <access_token>
-        Content-Type: application/json
-        
-        {
-            "rating": 5,
-            "comment": "Excellent product"
-        }
-        ```
-    - **Response**:
-        - Status: 20O OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Review created successfully",
-                "data": {
-                    "id": 1,
-                    "userId": 1,
-                    "productId": 1,
-                    "variantId": 1,
-                    "rating": 5,
-                    "comment": "Excellent product"
-                }
-            }
-            ```
-- `DELETE /reviews/:id`: Delete a specific review.
-    - **Request**:
-        ```http request
-        DELETE /reviews/1
-        
-        Authorization: Bearer <access_token>
-        ```
-    - **Response**:
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-              "status": "success",
-              "message": "Review deleted successfully"
-            } 
-            ```
-
 ## Shipping
+
 - `GET /shipping-methods`: Get a list of available shipping methods.
     - **Request**:
         ```http request
@@ -2148,240 +2222,10 @@ List of all API endpoints.
 
 ## Admin
 
-
-
-## Wishlist
-- `GET /wishlist`: Get the user's wishlist.
-    - **Request**:
-        ```http request
-        GET /wishlist
-        ```
-    - **Response**:
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "data": [{
-                    "id": 1,
-                    "name": "Product 1",
-                    "price": 9.99,
-                    "description": "Lorem ipsum dolor sit amet",
-                    "image": "https://via.placeholder.com/150"
-                }, {
-                    "id": 2,
-                    "name": "Product 2",
-                    "price": 19.99,
-                    "description": "Lorem ipsum dolor sit amet",
-                    "image": "https://via.placeholder.com/150"
-                }]
-            }
-            ```
-- `POST /wishlist`: Add a product to the user's wishlist.
-    - **Request**:
-        ```http request
-        POST /wishlist
-        
-        Authorization: Bearer <access_token>
-        Content-Type: application/json
-        
-        {
-            "productId": 1
-        }
-        ```
-    - **Response**:
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Product added to wishlist successfully"
-            }
-            ```
-    - **Error**:
-        - Status: 400 BAD REQUEST
-        - Body:
-            ```json
-            {
-                "status": "error",
-                "message": "Product already in wishlist"
-            }
-            ```
-- `GET /wishlist/:id`: Check if a product is in the user's wishlist.
-    - **Request**:
-        ```http request
-        GET /wishlist/1
-        ```
-    - **Response**:
-        - Status: 201 CREATED
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "data": {
-                    "id": 1,
-                    "name": "Product 1",
-                    "price": 9.99,
-                    "description": "Lorem ipsum dolor sit amet",
-                    "image": "https://via.placeholder.com/150"
-                }
-            }
-            ```
-- `DELETE /wishlist/:id`: Remove a product from the user's wishlist.
-    - **Request**:
-        ```http request
-        DELETE /wishlist/1
-      
-        Authorization: Bearer <access_token>
-        ```
-    - **Response**:
-        - Status: 201 CREATED
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Product removed from wishlist successfully"
-            }
-            ```
-- `DELETE /wishlist`: Clear the user's wishlist.
-    - **Request**:
-        ```http request
-        DELETE /wishlist
-      
-        Authorization: Bearer <access_token>
-        ```
-    - **Response**:
-        - Status: 201 CREATED
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Wishlist cleared successfully"
-            }
-            ```
-- NOTE: Provide endpoints for the following. See equivalent endpoints on their respective sections.
-    - **Product**
-        - Format: `REQ /wishlist/:id/product/:id`
-            - `GET`: Check if a product is in the user's wishlist.
-            - `POST`: Add a product to the user's wishlist.
-            - `DELETE`: Remove a product from the user's wishlist.
-
-## Cart
-- `GET /cart`: Get the user's shopping cart.
-    - **Request**:
-        ```http request
-        GET /cart
-        
-        Authorization: Bearer <access_token>
-        ```
-    - **Response**:
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "data": [{
-                    "id": 1,
-                    "name": "Product 1",
-                    "price": 9.99,
-                    "quantity": 1,
-                    "description": "Lorem ipsum dolor sit amet",
-                    "image": "https://via.placeholder.com/150"
-                }, {
-                    "id": 2,
-                    "name": "Product 2",
-                    "price": 19.99,
-                    "quantity": 2,
-                    "description": "Lorem ipsum dolor sit amet",
-                    "image": "https://via.placeholder.com/150"
-                }]
-            }
-            ```
-- `POST /cart`: Add a product to the user's shopping cart.
-    - **Request**:
-        ```http request
-        POST /cart
-      
-        Authorization: Bearer <access_token>
-        Content-Type: application/json
-        
-        {
-            "productId": 1,
-            "quantity": 2
-        }
-        ```
-    - **Response**:
-        - Status: 201 CREATED
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Product added to cart successfully"
-            } 
-            ```
-- `PUT /cart/:id`: Update the quantity of a product in the user's shopping cart.
-    - **Request**:
-        ```http request
-        PUT /cart/1
-      
-        Authorization: Bearer <access_token>
-        Content-Type: application/json
-        
-        {
-            "quantity": 2
-        }
-        ```
-    - **Response**:
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "User created successfully",
-                "data": {
-                    "id": 2,
-                    "name": "Product 2",
-                    "price": 19.99,
-                    "quantity": 2,
-                    "description": "Lorem ipsum dolor sit amet",
-                    "image": "https://via.placeholder.com/150"
-                }
-            } 
-            ```
-- `DELETE /cart/:id`: Remove a product from the user's shopping cart.
-    - **Request**:
-        ```http request
-        DELETE /cart/1
-      
-        Authorization: Bearer <access_token>
-        ```
-    - **Response**:
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Product removed from cart successfully"
-            } 
-            ```
-- `DELETE /cart`: Clear the user's shopping cart.
-    - **Request**:
-        ```http request
-        DELETE /cart
-      
-        Authorization: Bearer <access_token>
-        ```
-    - **Response**:
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-              "status": "success",
-              "message": "Cleared cart successfully"
-            } 
-            ```
+- `GET /admin/statistics`: TODO
 
 ## Coupons
+
 - `GET /coupons`: Get a list of all available coupons. (admin-only)
     - **Request**:
         ```http request
@@ -2509,9 +2353,11 @@ List of all API endpoints.
                 "message": "Coupon deleted successfully"
             }
             ```
-          
+
 ## Logs
+
 (Admin only)
+
 - `GET /logs`: Get a list of all logs.
     - **Request**:
         ```http request
@@ -2538,9 +2384,10 @@ List of all API endpoints.
                 }]
             }
             ```
-- 
+-
 
 ## Common Response
+
 - Status: 401 UNAUTHORIZED
     ```json
     {
@@ -2584,10 +2431,12 @@ List of all API endpoints.
         "message": "Internal server error"
     }
     ```
-  
+
 ## Notes
+
 - May be edited as needed.
 - All endpoints are prefixed with `/api`.
 - All list endpoints are paginated.
 - All list endpoints must include filters and/or search.
-- All endpoints that require authentication must include the `Authorization` header with the value `Bearer <access_token>`.
+- All endpoints that require authentication must include the `Authorization` header with the
+  value `Bearer <access_token>`.
