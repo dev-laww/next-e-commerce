@@ -5,13 +5,12 @@ import prisma from "@lib/prisma";
 export default class RoleRepository {
     prismaClient = prisma;
 
-    // TODO: Add pagination
-    public async getAll(filter?: Prisma.RoleWhereInput): Promise<Role[]> {
+    public async getAll(filter?: Prisma.RoleWhereInput, limit: number = 50, cursor?: Prisma.RoleWhereUniqueInput): Promise<Role[]> {
         return this.prismaClient.role.findMany({
+            cursor: cursor,
+            take: limit,
+            skip: cursor ? 1 : 0,
             where: filter,
-            include: {
-                _count: true
-            }
         });
     }
 

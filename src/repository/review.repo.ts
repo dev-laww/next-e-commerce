@@ -5,9 +5,11 @@ import prisma from "@lib/prisma";
 export default class ReviewRepository {
     prismaClient = prisma;
 
-    // TODO: add pagination
-    public async getAll(filter?: Prisma.ReviewWhereInput): Promise<Review[]> {
+    public async getAll(filter?: Prisma.ReviewWhereInput, limit: number = 50, cursor?: Prisma.ReviewWhereUniqueInput): Promise<Review[]> {
         return this.prismaClient.review.findMany({
+            cursor: cursor,
+            take: limit,
+            skip: cursor ? 1 : 0,
             where: filter,
         });
     }

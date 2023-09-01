@@ -5,9 +5,11 @@ import prisma from "@lib/prisma";
 export default class CartRepository {
     prismaClient = prisma;
 
-    // TODO: add pagination
-    public async getAll(filter?: Prisma.CartItemWhereInput): Promise<CartItem[]> {
+    public async getAll(filter?: Prisma.CartItemWhereInput, limit: number = 50, cursor?: Prisma.CartItemWhereUniqueInput): Promise<CartItem[]> {
         return this.prismaClient.cartItem.findMany({
+            cursor: cursor,
+            take: limit,
+            skip: cursor ? 1 : 0,
             where: filter
         });
     }

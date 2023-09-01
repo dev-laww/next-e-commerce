@@ -6,9 +6,11 @@ import { ORDER_STATUS } from "@lib/constants";
 export default class OrderRepository {
     prismaClient = prisma;
 
-    // TODO: Add pagination
-    public async getAll(filter?: Prisma.OrderWhereInput): Promise<Order[]> {
+    public async getAll(filter?: Prisma.OrderWhereInput,  limit: number = 50, cursor?: Prisma.OrderWhereUniqueInput): Promise<Order[]> {
         return this.prismaClient.order.findMany({
+            cursor: cursor,
+            take: limit,
+            skip: cursor ? 1 : 0,
             where: filter,
         });
     }

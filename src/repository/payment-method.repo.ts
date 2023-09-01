@@ -5,13 +5,12 @@ import prisma from "@lib/prisma";
 export default class PaymentMethodRepository {
     prismaClient = prisma;
 
-    // TODO: Add pagination
-    public async getAll(filter?: Prisma.PaymentMethodWhereInput): Promise<PaymentMethod[]> {
+    public async getAll(filter?: Prisma.PaymentMethodWhereInput, limit: number = 50, cursor?: Prisma.PaymentMethodWhereUniqueInput): Promise<PaymentMethod[]> {
         return this.prismaClient.paymentMethod.findMany({
+            cursor: cursor,
+            take: limit,
+            skip: cursor ? 1 : 0,
             where: filter,
-            include: {
-                _count: true
-            }
         });
     }
 
