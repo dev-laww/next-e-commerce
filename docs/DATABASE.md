@@ -43,13 +43,13 @@ Database structure of the project.
 
 ## Role
 
-| Field       | Type       | Description           |
-|-------------|------------|-----------------------|
-| id          | `int`      | Role id               |
-| name        | `string`   | Role name             |
-| description | `string`   | Role description      |
-| created_at  | `datetime` | Role creation date    |
-| updated_at  | `datetime` | Role last update date |
+| Field      | Type       | Description           |
+|------------|------------|-----------------------|
+| id         | `int`      | Role id               |
+| code       | `string`   | Role code             |
+| name       | `string`   | Role name             |
+| created_at | `datetime` | Role creation date    |
+| updated_at | `datetime` | Role last update date |
 
 ## User Role
 
@@ -63,13 +63,15 @@ Database structure of the project.
 
 ## Permission
 
-| Field       | Type       | Description                 |
-|-------------|------------|-----------------------------|
-| id          | `int`      | Permission id               |
-| name        | `string`   | Permission name             |
-| description | `string`   | Permission description      |
-| created_at  | `datetime` | Permission creation date    |
-| updated_at  | `datetime` | Permission last update date |
+| Field      | Type       | Description                 |
+|------------|------------|-----------------------------|
+| id         | `int`      | Permission id               |
+| code       | `string`   | Permission code             |
+| name       | `string`   | Permission name             |
+| action     | `string`   | Permission action           |
+| resource   | `string`   | Permission resource         |
+| created_at | `datetime` | Permission creation date    |
+| updated_at | `datetime` | Permission last update date |
 
 ## Role Permission
 
@@ -103,6 +105,8 @@ Database structure of the project.
 | id              | `int`      | Payment Method id               |
 | user_id         | `int`      | Payment Method user id          |
 | name            | `string`   | Payment Method name             |
+| email           | `string`   | Payment Method email            |
+| phone_number    | `string`   | Payment Method phone            |
 | card_number     | `string`   | Payment Method card number      |
 | expiration_date | `string`   | Payment Method expiration date  |
 | cvv             | `string`   | Payment Method cvv              |
@@ -125,7 +129,7 @@ Database structure of the project.
 |------------|------------|----------------------------------|
 | id         | `int`      | Product variant id               |
 | name       | `string`   | Product variant name             |
-| image      | `string`   | Product variant image            |
+| image_url  | `string`   | Product variant image            |
 | stock      | `int`      | Product variant stock            |
 | product_id | `int`      | Product variant product id       |
 | price      | `real`     | Product variant price            |
@@ -166,7 +170,7 @@ Database structure of the project.
 | shipping_id  | `int`      | Order shipping id      |
 | order_number | `string`   | Order number           |
 | status       | `string`   | Order status           |
-| total_amount | `real`     | Order total            |
+| total        | `real`     | Order total            |
 | created_at   | `datetime` | Order creation date    |
 | updated_at   | `datetime` | Order last update date |
 
