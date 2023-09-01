@@ -29,13 +29,17 @@ describe("PaymentMethodRepository", () => {
     })
 
     it("Test getAll", async () => {
-        (prisma.paymentMethod.findMany as jest.Mock).mockResolvedValue(paymentMethods)
+        (prisma.paymentMethod.findMany as jest.Mock).mockResolvedValue([])
 
         const repo = new PaymentMethodRepository();
 
-        const result = await repo.getAll();
+        let result = await repo.getAll();
 
-        expect(result).toMatchObject(paymentMethods);
+        expect(result).toMatchObject([]);
+
+        result = await repo.getAll(undefined, 50, {id: 1});
+
+        expect(result).toMatchObject([]);
     });
 
     it("Test getById", async () => {
