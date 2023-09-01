@@ -60,8 +60,8 @@ export default class RoleRepository {
 
             return {
                 id: permission.id,
+                code: permission.code,
                 name: permission.name,
-                description: permission.description
             } as Permission;
         });
     }
