@@ -56,13 +56,9 @@ export default class RoleRepository {
         });
 
         return rolePermissions.map(rolePermission => {
-            const permission = rolePermission.permission;
+            const {created_at, updated_at, ...rest} = rolePermission.permission;
 
-            return {
-                id: permission.id,
-                code: permission.code,
-                name: permission.name,
-            } as Permission;
+            return rest as Permission;
         });
     }
 
