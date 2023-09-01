@@ -28,6 +28,7 @@ const seedMap: SeedMap = {
     'wishlist': prisma.wishlistItem,
     'roles': prisma.role,
     'permissions': prisma.permission,
+    'rolePermissions': prisma.rolePermission,
 }
 
 async function main() {
