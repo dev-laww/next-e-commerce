@@ -16,12 +16,12 @@ import Validators from "@lib/validator/auth.validator";
 import Response from "@lib/http"
 import Email from "@utils/email";
 import { compare, hash } from "@utils/hashing";
-import { getLogger } from "@utils/logging";
+import { getDatabaseLogger } from "@utils/logging";
 
 
 export default class AuthController {
     userRepo = new UserRepository();
-    private logger = getLogger('controller:auth');
+    private logger = getDatabaseLogger({name: "controller:auth", class: "AuthController"});
 
     public async signup(req: NextRequest) {
         if (req.method !== "POST") return Response.methodNotAllowed("Invalid request method");
