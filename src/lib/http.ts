@@ -13,7 +13,7 @@ type Response = {
 }
 
 
-const success = (message: string, data?: any): Response => {
+const ok = (message: string, data?: any): Response => {
     return {
         statusCode: STATUS_CODE.OK,
         response: {
@@ -115,18 +115,16 @@ const error = (statusCode: STATUS_CODE, message: string, error?: ERROR_CODE): Re
     }
 }
 
-const methodNotAllowed = (message: string): Response => {
-    return {
-        statusCode: STATUS_CODE.METHOD_NOT_ALLOWED,
-        response: {
-            code: ERROR_CODE.METHOD_NOT_ALLOWED,
-            status: STATUS.FAILED,
-            message: message
-        }
+const methodNotAllowed: Response = {
+    statusCode: STATUS_CODE.METHOD_NOT_ALLOWED,
+    response: {
+        code: ERROR_CODE.METHOD_NOT_ALLOWED,
+        status: STATUS.FAILED,
+        message: "Method not allowed"
     }
 }
 
-const forbidden = {
+const forbidden: Response = {
     statusCode: STATUS_CODE.FORBIDDEN,
     response: {
         code: ERROR_CODE.FORBIDDEN,
@@ -136,7 +134,7 @@ const forbidden = {
 }
 
 const Response = {
-    success,
+    success: ok,
     created,
     badRequest,
     unauthorized,
