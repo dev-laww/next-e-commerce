@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import Response from "@lib/http";
-import Permission from "@utils/api";
 
-@Permission.classDecorator
 class Hello {
     async sayHello(req: NextRequest) {
-        return Response.success("Hello world!")
+        await req.json();
+
+        return Response.ok("Hello world!")
     }
 }
 
