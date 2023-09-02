@@ -126,6 +126,15 @@ const methodNotAllowed = (message: string): Response => {
     }
 }
 
+const forbidden = {
+    statusCode: STATUS_CODE.FORBIDDEN,
+    response: {
+        code: ERROR_CODE.FORBIDDEN,
+        status: STATUS.FAILED,
+        message: "User is not allowed to perform this action"
+    }
+}
+
 const Response = {
     success,
     created,
@@ -136,7 +145,8 @@ const Response = {
     validationError,
     invalidCredentials,
     error,
-    methodNotAllowed
+    methodNotAllowed,
+    forbidden
 }
 
 export default Response;
