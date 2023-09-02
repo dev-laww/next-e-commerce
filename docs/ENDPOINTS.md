@@ -1554,14 +1554,16 @@ List of all API endpoints.
 - NOTE: Provide endpoints for the following. See equivalent endpoints on their respective sections.
     - **Permissions**
         - Format: `REQ /roles/:id/permissions`
-        - `GET`: Get a list of all permissions for a specific role.
-        - `POST`: Create a new permission for a specific role.
-        - `PUT`: Update a specific permission for a specific role.
+            - `GET`: Get a list of all permissions for a specific role.
+        - Format: `REQ /roles/:id/permissions/:id`
+            - `POST`: Link a specific permission to a specific role.
+            - `DELETE`: Unlink a specific permission from a specific role.
     - **Users**
         - Format: `REQ /roles/:id/users`
-        - `GET`: Get a list of all users for a specific role.
-        - `POST`: Create a new user for a specific role.
-        - `PUT`: Update a specific user for a specific role.
+            - `GET`: Get a list of all users for a specific role.
+        - Format: `REQ /roles/:id/users/:id`
+            - `POST`: Link a specific user to a specific role.
+            - `DELETE`: Unlink a specific user from a specific role.
 
 ## Permissions
 
@@ -1682,9 +1684,10 @@ List of all API endpoints.
 - NOTE: Provide endpoints for the following. See equivalent endpoints on their respective sections.
     - **Roles**
         - Format: `REQ /permissions/:id/roles`
-        - `GET`: Get a list of all roles for a specific permission.
-        - `POST`: Create a new role for a specific permission.
-        - `PUT`: Update a specific role for a specific permission.
+            - `GET`: Get a list of all roles for a specific permission.
+        - Format: `REQ /permissions/:id/roles/:id`
+            - `POST`: Link a specific role to a specific permission.
+            - `DELETE`: Unlink a specific role from a specific permission.
 
 ## Products
 
@@ -1818,8 +1821,9 @@ List of all API endpoints.
     - **Categories**
         - Format: `REQ /products/:id/categories`
             - `GET`: Get a list of all categories for a specific product.
-            - `POST`: Create a new category for a specific product.
-            - `PUT`: Update a specific category.
+        - Format: `REQ /products/:id/categories/:id`
+            - `POST`: Link a specific category to a specific product.
+            - `DELETE`: Unlink a specific category from a specific product. 
     - **Reviews**
         - Format: `REQ /products/:id/reviews`
             - `GET`: Get a list of all reviews for a specific product.
@@ -1970,9 +1974,6 @@ List of all API endpoints.
             } 
             ```
 - NOTE: Provide endpoints for the following. See equivalent endpoints on their respective sections.
-    - **Product**
-        - Format: `REQ /variants/:id/product`
-            - `GET`: Get the product details for a specific variant.
     - **Reviews**
         - Format: `REQ /variants/:id/reviews`
             - `GET`: Get a list of all reviews for a specific variant.
@@ -2089,7 +2090,38 @@ List of all API endpoints.
             ```
 
 ## Orders
-
+- `GET /orders`: Get a list of all orders. (admin-only)
+    - **Request**:
+        ```http request
+        GET /orders
+      
+        Auhtorization: Bearer <access_token>
+        ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+              "status": "success",
+              "data": [{
+                "id": 1,
+                "userId": 1,
+                "shippingMethodId": 1,
+                "paymentMethodId": 1,
+                "couponId": 1,
+                "status": "Pending",
+                "total": 99.99
+              }, {
+                "id": 2,
+                "userId": 1,
+                "shippingMethodId": 1,
+                "paymentMethodId": 1,
+                "couponId": 1,
+                "status": "Pending",
+                "total": 99.99
+              }]
+            }
+            ```
 - `DELETE /orders/:id`: Delete a specific order. (admin-only)
     - **Request**:
         ```http request
@@ -2384,7 +2416,6 @@ List of all API endpoints.
                 }]
             }
             ```
--
 
 ## Common Response
 
