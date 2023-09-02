@@ -398,35 +398,6 @@ List of all API endpoints.
                 }]
             }
             ```
-- `PUT /accounts/:id/roles`: Update the current user's roles
-    - **Request**
-       ```http request
-       PUT /accounts/:id/roles
-      
-       Content-Type: application/json
-     
-       {
-           "roles": [1, 2]
-       }
-       ```
-    - **Response**
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "User roles updated successfully",
-                "data": [{
-                    "id": 1,
-                    "code": "role:admin",
-                    "name": "Admin"
-                }, {
-                    "id": 2,
-                    "code": "role:user",
-                    "name": "User"
-                }]
-            }
-            ```
 - NOTE: Provide endpoints for the following. See equivalent endpoints on their respective sections.
     - **Payment Methods**
         - `GET /accounts/:id/payment-methods`: Get a list of all payment methods for a specific user.
