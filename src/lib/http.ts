@@ -134,7 +134,7 @@ const forbidden: Response = {
 }
 
 const Response = {
-    success: ok,
+    ok,
     created,
     badRequest,
     unauthorized,
