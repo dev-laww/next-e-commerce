@@ -10,7 +10,7 @@ async function handler(req: NextRequest) {
     const controller = new AuthController();
 
     const {statusCode, response} = await controller.resetPassword(req);
-    const success = statusCode == STATUS_CODE.SUCCESS;
+    const success = statusCode == STATUS_CODE.OK;
     await logger.info(success ? response.message : response, success ? undefined : `Reset password failed: ${response.message}`);
 
     return NextResponse.json(response, {status: statusCode});

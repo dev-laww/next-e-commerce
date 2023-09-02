@@ -10,7 +10,7 @@ async function handler(req: NextRequest) {
     const controller = new AuthController();
 
     const {statusCode, response} = await controller.login(req);
-    const success = statusCode == STATUS_CODE.SUCCESS;
+    const success = statusCode == STATUS_CODE.OK;
     await logger.info(success ? `${response.data.username} logged in` : response, success ? undefined : `Login failed: ${response.message}`);
 
     return NextResponse.json(response, {status: statusCode})

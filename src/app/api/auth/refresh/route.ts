@@ -10,7 +10,7 @@ async function handler(req: NextRequest) {
     const controller = new AuthController();
 
     const {statusCode, response} = await controller.refreshToken(req);
-    const success = statusCode == STATUS_CODE.SUCCESS;
+    const success = statusCode == STATUS_CODE.OK;
     await logger.info(success ? response.message : `Refresh token failed: ${response.message}`, success ? undefined : `Refresh token failed: ${response.message}`);
 
     return NextResponse.json(response, {status: statusCode});

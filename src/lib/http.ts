@@ -15,7 +15,7 @@ type Response = {
 
 const success = (message: string, data?: any): Response => {
     return {
-        statusCode: STATUS_CODE.SUCCESS,
+        statusCode: STATUS_CODE.OK,
         response: {
             status: STATUS.SUCCESS,
             message,
