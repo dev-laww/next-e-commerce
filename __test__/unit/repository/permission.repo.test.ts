@@ -12,7 +12,9 @@ describe("PermissionRepository", () => {
     } as Role;
     const permission = {
         id: 1,
-        name: "test"
+        name: "test",
+        action: "GET",
+        resource: "GET/test"
     } as Permission;
 
     beforeEach(() => {
@@ -32,6 +34,14 @@ describe("PermissionRepository", () => {
         expect(result).toMatchObject([]);
     });
 
+    it ("Test getAvailableResources", async () => {
+        (prisma.permission.findMany as jest.Mock).mockResolvedValue([permission]);
+
+        const result = await repo.getAvailableResources();
+
+        expect(result).toMatchObject([permission.resource]);
+    });
+
     it("Test getById", async () => {
         (prisma.permission.findUnique as jest.Mock).mockResolvedValue(null);
 
@@ -49,7 +59,7 @@ describe("PermissionRepository", () => {
     it("Test create", async () => {
         (prisma.permission.create as jest.Mock).mockResolvedValue(permission);
 
-        let result = await repo.create({name: "test"} as Permission);
+        const result = await repo.create({name: "test"} as Permission);
 
         expect(result).toMatchObject(permission);
     });
@@ -57,7 +67,7 @@ describe("PermissionRepository", () => {
     it("Test update", async () => {
         (prisma.permission.update as jest.Mock).mockResolvedValue(permission);
 
-        let result = await repo.update(1, {name: "test"} as Permission);
+        const result = await repo.update(1, {name: "test"} as Permission);
 
         expect(result).toMatchObject(permission);
     });
@@ -65,7 +75,7 @@ describe("PermissionRepository", () => {
     it("Test delete", async () => {
         (prisma.permission.delete as jest.Mock).mockResolvedValue(permission);
 
-        let result = await repo.delete(1);
+        const result = await repo.delete(1);
 
         expect(result).toMatchObject(permission);
     });
@@ -75,7 +85,7 @@ describe("PermissionRepository", () => {
             role: role
         }]);
 
-        let result = await repo.getRoles(1);
+        const result = await repo.getRoles(1);
 
         expect(result).toMatchObject([role]);
     });
@@ -86,7 +96,7 @@ describe("PermissionRepository", () => {
         }]);
         (prisma.permission.update as jest.Mock).mockResolvedValue(permission);
 
-        let result = await repo.updateRoles(1, [2]);
+        const result = await repo.updateRoles(1, [2]);
 
         expect(result).toMatchObject([role]);
     });
