@@ -23,7 +23,7 @@ export default class AuthController {
     userRepo = new UserRepository();
     private logger = getLogger('controller:auth');
 
-    async signup(req: NextRequest) {
+    public async signup(req: NextRequest) {
         if (req.method !== "POST") return Response.methodNotAllowed("Invalid request method");
 
         let body;
@@ -87,7 +87,7 @@ export default class AuthController {
         });
     }
 
-    async login(req: NextRequest) {
+    public async login(req: NextRequest) {
         if (req.method !== "POST") return Response.methodNotAllowed("Invalid request method");
 
         let body;
@@ -131,7 +131,7 @@ export default class AuthController {
         });
     }
 
-    async resetPassword(req: NextRequest) {
+    public async resetPassword(req: NextRequest) {
         if (req.method !== "POST") return Response.methodNotAllowed("Invalid request method");
 
         let body;
@@ -179,7 +179,7 @@ export default class AuthController {
         return Response.success("Password reset sent successfully");
     }
 
-    async confirmResetPassword(req: NextRequest) {
+    public async confirmResetPassword(req: NextRequest) {
         if (req.method !== "PUT") return Response.methodNotAllowed("Invalid request method");
 
         let body;
@@ -210,7 +210,7 @@ export default class AuthController {
         return Response.success("Password changed successfully");
     }
 
-    async confirmEmail(req: NextRequest) {
+    public async confirmEmail(req: NextRequest) {
         if (req.method !== "POST") return Response.methodNotAllowed("Invalid request method");
 
         let body;
@@ -243,7 +243,7 @@ export default class AuthController {
         return Response.success("Email confirmed successfully");
     }
 
-    async resendEmailConfirmation(req: NextRequest) {
+    public async resendEmailConfirmation(req: NextRequest) {
         if (req.method !== "POST") return Response.methodNotAllowed("Invalid request method");
 
         let body;
@@ -291,7 +291,7 @@ export default class AuthController {
         return Response.success("Email confirmation sent successfully");
     }
 
-    async refreshToken(req: NextRequest) {
+    public async refreshToken(req: NextRequest) {
         if (req.method !== "POST") return Response.methodNotAllowed("Invalid request method");
 
         let body;
