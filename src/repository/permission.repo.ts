@@ -14,6 +14,14 @@ export default class PermissionRepository {
         });
     }
 
+    public async getAvailableResources(): Promise<string[]> {
+        return this.prismaClient.permission.findMany({
+            select: {
+                resource: true
+            }
+        }).then(permissions => permissions.map(permission => permission.resource));
+    }
+
     public async getById(id: number): Promise<Permission | null> {
         return this.prismaClient.permission.findUnique({
             where: {id: id}
