@@ -5,6 +5,10 @@ import PermissionRepository from "@repository/permission.repo";
 import { getLogger } from "@utils/logging";
 import { verifyAccessToken } from "@utils/token";
 
+/**
+ * Controller for permission
+ * Check if the user is allowed to access the resource
+ */
 export default class PermissionController {
     private static repo = new UserRepository();
     private static permissionRepo = new PermissionRepository();

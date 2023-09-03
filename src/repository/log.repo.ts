@@ -3,7 +3,7 @@ import { Log, Prisma } from "@prisma/client";
 import prisma from "@lib/prisma";
 
 export default class LogRepository {
-    prismaClient = prisma;
+    private prismaClient = prisma;
 
     public async getAll(filter?: Prisma.LogWhereInput,  limit: number = 50, cursor?: Prisma.LogWhereUniqueInput) {
         return this.prismaClient.log.findMany({

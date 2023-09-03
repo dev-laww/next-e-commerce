@@ -3,7 +3,7 @@ import { Prisma, ProductVariant } from "@prisma/client";
 import prisma from "@lib/prisma";
 
 export default class ProductVariantRepository {
-    prismaClient = prisma;
+    private prismaClient = prisma;
 
     public async getAll(filter?: Prisma.ProductVariantWhereInput, limit: number = 50, cursor?: Prisma.ProductVariantWhereUniqueInput): Promise<ProductVariant[]> {
         return this.prismaClient.productVariant.findMany({

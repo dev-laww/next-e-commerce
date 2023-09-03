@@ -3,7 +3,7 @@ import { Address, Prisma } from "@prisma/client";
 import prisma from "@lib/prisma";
 
 export default class AddressRepository {
-    prismaClient = prisma;
+    private prismaClient = prisma;
 
     public async getAll(filters?: Prisma.AddressWhereInput, limit: number = 50, cursor?: Prisma.AddressWhereUniqueInput): Promise<Address[]> {
         return this.prismaClient.address.findMany({

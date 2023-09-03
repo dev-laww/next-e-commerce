@@ -4,7 +4,7 @@ import prisma from "@src/lib/prisma";
 
 
 export default class ProductRepository {
-    prismaClient = prisma;
+    private prismaClient = prisma;
 
     public async getAll(filter?: Prisma.ProductWhereInput, limit: number = 50, cursor?: Prisma.ProductWhereUniqueInput): Promise<Product[]> {
         return this.prismaClient.product.findMany({

@@ -3,7 +3,7 @@ import { Payment, Prisma } from "@prisma/client";
 import prisma from "@lib/prisma";
 
 export default class PaymentRepository {
-    prismaClient = prisma;
+    private prismaClient = prisma;
 
     public async getAll(filter?: Prisma.PaymentWhereInput, limit: number = 50, cursor?: Prisma.PaymentWhereUniqueInput): Promise<Payment[]> {
         return this.prismaClient.payment.findMany({

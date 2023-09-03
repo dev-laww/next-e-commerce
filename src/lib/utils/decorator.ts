@@ -2,6 +2,11 @@ import { NextRequest } from "next/server";
 import Response from "@lib/http";
 import PermissionController from "@controller/permission.controller";
 
+/**
+ * Wrapper function to check if the user is permitted to access the resource
+ *
+ * @param target
+ */
 export function withPermission<T extends Function>(target: T): T {
     const wrapped = async function (this: typeof target, request: NextRequest) {
         const isAllowed = await PermissionController.isAllowed(request);
@@ -12,7 +17,22 @@ export function withPermission<T extends Function>(target: T): T {
     return wrapped as unknown as T;
 }
 
+/**
+ * Decorator to check if the user is permitted to access the resource
+ *
+ * @param target
+ * @constructor
+ */
 export function AllowPermitted(target: Function): void;
+
+/**
+ * Decorator to check if the user is permitted to access the resource (method)
+ *
+ * @param target
+ * @param propertyKey
+ * @param descriptor
+ * @constructor
+ */
 export function AllowPermitted(target: any, propertyKey: string, descriptor: PropertyDescriptor): void;
 export function AllowPermitted(...args: any[]): any {
     if (args.length === 1 && typeof args[0] === 'function') {
@@ -46,7 +66,12 @@ export function AllowPermitted(...args: any[]): any {
     }
 }
 
-
+/**
+ * Wrapper function to check if the request body is valid
+ *
+ * @param func
+ * @param method
+ */
 export function checkMethod<T extends Function>(func: T, method: string | string[]): T {
     const wrapped = async function (this: typeof func, request: NextRequest) {
         if (Array.isArray(method) && !method.includes(request.method)) return Response.methodNotAllowed;
@@ -59,13 +84,24 @@ export function checkMethod<T extends Function>(func: T, method: string | string
     return wrapped as unknown as T;
 }
 
-export function AllowMethod(methods: string | string[]): MethodDecorator {
+/**
+ * Decorator to check if the request body is valid
+ *
+ * @param method
+ * @constructor
+ */
+export function AllowMethod(method: string | string[]): MethodDecorator {
     return function (_target: any, _propertyKey: string | symbol, descriptor: PropertyDescriptor) {
         const originalMethod = descriptor.value;
-        descriptor.value = checkMethod(originalMethod, methods);
+        descriptor.value = checkMethod(originalMethod, method);
     };
 }
 
+/**
+ * Wrapper function to check if the request body is valid
+ *
+ * @param func
+ */
 export function checkBody<T extends Function>(func: T): T {
     const wrapped = async function (this: typeof func, request: NextRequest) {
 
@@ -84,6 +120,14 @@ export function checkBody<T extends Function>(func: T): T {
     return wrapped as unknown as T;
 }
 
+/**
+ * Decorator to check if the request body is valid
+ *
+ * @param _target
+ * @param _propertyKey
+ * @param descriptor
+ * @constructor
+ */
 export function CheckBody(_target: any, _propertyKey: string, descriptor: PropertyDescriptor) {
     const originalMethod = descriptor.value;
     descriptor.value = checkBody(originalMethod);

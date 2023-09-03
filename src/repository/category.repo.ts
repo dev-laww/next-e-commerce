@@ -3,7 +3,7 @@ import { Prisma, Category, ProductCategory } from "@prisma/client";
 import prisma from "@lib/prisma";
 
 export default class CategoryRepository {
-    prismaClient = prisma;
+    private prismaClient = prisma;
 
     public async getAll(filter?: Prisma.CategoryWhereInput,  limit: number = 50, cursor?: Prisma.CategoryWhereUniqueInput): Promise<Category[]> {
         return this.prismaClient.category.findMany({

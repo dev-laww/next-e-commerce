@@ -3,7 +3,7 @@ import { Prisma, WishlistItem } from "@prisma/client";
 import prisma from "@lib/prisma";
 
 export default class WishlistRepository {
-    prismaClient = prisma;
+    private prismaClient = prisma;
 
     public async getAll(filter?: Prisma.WishlistItemWhereInput, limit: number = 50, cursor?: Prisma.WishlistItemWhereUniqueInput): Promise<WishlistItem[]> {
         return this.prismaClient.wishlistItem.findMany({

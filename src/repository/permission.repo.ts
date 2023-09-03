@@ -3,7 +3,7 @@ import { Permission, Prisma, Role, RolePermission } from "@prisma/client";
 import prisma from "@lib/prisma";
 
 export default class PermissionRepository {
-    prismaClient = prisma;
+    private prismaClient = prisma;
 
     public async getAll(filter?: Prisma.PermissionWhereInput, limit: number = 50, cursor?: Prisma.PermissionWhereUniqueInput): Promise<Permission[]> {
         return this.prismaClient.permission.findMany({

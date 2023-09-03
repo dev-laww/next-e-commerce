@@ -3,7 +3,7 @@ import { Prisma, Review } from "@prisma/client";
 import prisma from "@lib/prisma";
 
 export default class ReviewRepository {
-    prismaClient = prisma;
+    private prismaClient = prisma;
 
     public async getAll(filter?: Prisma.ReviewWhereInput, limit: number = 50, cursor?: Prisma.ReviewWhereUniqueInput): Promise<Review[]> {
         return this.prismaClient.review.findMany({

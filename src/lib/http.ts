@@ -1,17 +1,7 @@
-import { ERROR_CODE, STATUS, STATUS_CODE } from "@lib/constants";
 import { ZodIssue } from "zod";
 
-type Response = {
-    statusCode: STATUS_CODE,
-    response: {
-        status: STATUS,
-        message: string,
-        code?: ERROR_CODE,
-        data?: any,
-        errors?: any,
-    }
-}
-
+import { ERROR_CODE, STATUS, STATUS_CODE } from "@lib/constants";
+import { Response } from "@lib/types";
 
 const ok = (message: string, data?: any): Response => {
     return {

@@ -29,6 +29,11 @@ interface LoggerArgs {
     function?: string;
 }
 
+/**
+ * Returns a logger that is connected to the database
+ *
+ * @param args
+ */
 export const getDatabaseLogger = (args: LoggerArgs) => {
     const logRepo = new LogRepository();
     const childLogger = logger.child(args);

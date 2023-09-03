@@ -19,7 +19,7 @@ import { hash } from "@utils/hashing";
 
 
 export default class UserRepository {
-    prismaClient = prisma;
+    private prismaClient = prisma;
 
     public async getAll(filter?: Prisma.UserWhereInput, limit: number = 50, cursor?: Prisma.UserWhereUniqueInput): Promise<User[]> {
         return this.prismaClient.user.findMany({
