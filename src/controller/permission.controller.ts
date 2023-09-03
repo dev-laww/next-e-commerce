@@ -4,6 +4,7 @@ import UserRepository from "@repository/user.repo";
 import PermissionRepository from "@repository/permission.repo";
 import { getLogger } from "@utils/logging";
 import { verifyAccessToken } from "@utils/token";
+import { COMMON_RESOURCES } from "@lib/constants";
 
 /**
  * Controller for permission
@@ -31,11 +32,13 @@ export default class PermissionController {
         const token = req.headers.get("authorization")?.split(" ")[1];
 
         let resource = `${req.method}${path}`;
+        logger.info(`Checking permission for ${resource}`);
 
         if (path.startsWith("/api/auth")) return true;
-        // TODO: Add common resources without permission needed
 
-        logger.info(`Checking permission for ${resource}`);
+        const isCommonResource = this.getRequestedResource(resource, COMMON_RESOURCES);
+
+        if (isCommonResource) return true;
 
         const resourceList = await this.permissionRepo.getAvailableResources();
         const requestedResource = this.getRequestedResource(resource, resourceList);
