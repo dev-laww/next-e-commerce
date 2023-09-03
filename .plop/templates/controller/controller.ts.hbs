@@ -1,7 +1,6 @@
-import { NextApiRequest } from "next";
+import { NextRequest } from "next/server";
 
-import { objectToSnake } from "@utils/string_case";
-import Validators from "@lib/validator/{{name}}.validator";
+import Validators from "@lib/validator/{{kebabCase name}}.validator";
 import Response from "@lib/http";
 
 export default class {{pascalCase name}}Controller {

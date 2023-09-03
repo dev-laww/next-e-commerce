@@ -4,15 +4,14 @@ import prisma from "@src/lib/prisma";
 
 
 export default class ProductRepository {
-    prismaClient = prisma;
+    private prismaClient = prisma;
 
-    // TODO: Add pagination
-    public async getAll(filter?: Prisma.ProductWhereInput): Promise<Product[]> {
+    public async getAll(filter?: Prisma.ProductWhereInput, limit: number = 50, cursor?: Prisma.ProductWhereUniqueInput): Promise<Product[]> {
         return this.prismaClient.product.findMany({
+            cursor: cursor,
+            take: limit,
+            skip: cursor ? 1 : 0,
             where: filter,
-            include: {
-                _count: true
-            }
         });
     }
 

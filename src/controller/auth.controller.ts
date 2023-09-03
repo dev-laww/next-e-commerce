@@ -3,7 +3,6 @@ import { User } from "@prisma/client";
 import humps from "humps";
 
 import * as Constants from "@lib/constants";
-import { compare, hash } from "@utils/hashing";
 import { UserSession } from "@lib/types";
 import UserRepository from "@repository/user.repo";
 import {
@@ -16,21 +15,19 @@ import {
 import Validators from "@lib/validator/auth.validator";
 import Response from "@lib/http"
 import Email from "@utils/email";
+import { compare, hash } from "@utils/hashing";
+import { getDatabaseLogger } from "@utils/logging";
+import { AllowMethod, CheckBody } from "@utils/decorator";
 
 
 export default class AuthController {
     userRepo = new UserRepository();
+    private logger = getDatabaseLogger({name: "controller:auth", class: "AuthController"});
 
-    async signup(req: NextRequest) {
-        if (req.method !== "POST") return Response.methodNotAllowed("Invalid request method");
-
-        let body;
-
-        try {
-            body = await req.json();
-        } catch (error) {
-            return Response.badRequest("Invalid request body");
-        }
+    @AllowMethod("POST")
+    @CheckBody
+    public async signup(req: NextRequest) {
+        const body = await req.json()
 
         const requestData = Validators.registerSchema.safeParse(body);
 
@@ -63,6 +60,7 @@ export default class AuthController {
         );
 
         if (!confirmationToken) {
+            await this.logger.error("Failed to generate confirmation token");
             await this.userRepo.delete(user.id);
             return Response.internalServerError("Failed to generate confirmation token");
         }
@@ -70,10 +68,12 @@ export default class AuthController {
         try {
             await Email.sendToken(user.email, token)
         } catch (error) {
-            console.log(error);
+            await this.logger.error(error);
             await this.userRepo.delete(user.id);
             return Response.internalServerError("Failed to send confirmation email");
         }
+
+        await this.logger.info(`${user.email} created an account`, undefined, true);
 
         return Response.created("User created successfully", {
             ...userSession,
@@ -82,15 +82,10 @@ export default class AuthController {
         });
     }
 
-    async login(req: NextRequest) {
-        if (req.method !== "POST") return Response.methodNotAllowed("Invalid request method");
-
-        let body;
-        try {
-            body = await req.json();
-        } catch (error) {
-            return Response.badRequest("Invalid request body");
-        }
+    @AllowMethod("POST")
+    @CheckBody
+    public async login(req: NextRequest) {
+        const body = await req.json()
 
         const requestData = Validators.loginSchema.safeParse(body);
 
@@ -117,22 +112,20 @@ export default class AuthController {
             image_url: user.image_url
         }
 
-        return Response.success("Login successful", {
+        await this.logger.debug(userSession, `User ${user.email} logged in`)
+        await this.logger.info(`${user.email} logged in`, undefined, true);
+
+        return Response.ok("Login successful", {
             ...userSession,
             accessToken: generateAccessToken(userSession),
             refreshToken: generateRefreshToken(userSession),
         });
     }
 
-    async resetPassword(req: NextRequest) {
-        if (req.method !== "POST") return Response.methodNotAllowed("Invalid request method");
-
-        let body;
-        try {
-            body = await req.json();
-        } catch (error) {
-            return Response.badRequest("Invalid request body");
-        }
+    @AllowMethod("POST")
+    @CheckBody
+    public async resetPassword(req: NextRequest) {
+        const body = await req.json()
 
         const requestData = Validators.resetPasswordSchema.safeParse(body);
 
@@ -163,22 +156,19 @@ export default class AuthController {
                 await Email.sendToken(user.email, token) :
                 await Email.sendOTP(user.email, token);
         } catch (error) {
-            console.log(error);
+            await this.logger.error(error);
             return Response.internalServerError("Failed to send confirmation email");
         }
 
-        return Response.success("Password reset sent successfully");
+        await this.logger.debug(user, `User ${user.email} requested password reset`, true)
+        await this.logger.info(`${user.email} requested password reset`, undefined, true);
+        return Response.ok("Password reset sent successfully");
     }
 
-    async confirmResetPassword(req: NextRequest) {
-        if (req.method !== "PUT") return Response.methodNotAllowed("Invalid request method");
-
-        let body;
-        try {
-            body = await req.json();
-        } catch (error) {
-            return Response.badRequest("Invalid request body");
-        }
+    @AllowMethod("PUT")
+    @CheckBody
+    public async confirmResetPassword(req: NextRequest) {
+        const body = await req.json()
 
         const requestData = Validators.confirmResetPasswordSchema.safeParse(body);
 
@@ -195,18 +185,16 @@ export default class AuthController {
 
         await this.userRepo.changePassword(data.id, requestData.data.password);
 
-        return Response.success("Password changed successfully");
+        await this.logger.debug(data, `User ${data.email} changed password`)
+        await this.logger.info(`${data.email} changed password`, undefined, true);
+
+        return Response.ok("Password changed successfully");
     }
 
-    async confirmEmail(req: NextRequest) {
-        if (req.method !== "POST") return Response.methodNotAllowed("Invalid request method");
-
-        let body;
-        try {
-            body = await req.json();
-        } catch (error) {
-            return Response.badRequest("Invalid request body");
-        }
+    @AllowMethod("POST")
+    @CheckBody
+    public async confirmEmail(req: NextRequest) {
+        const body = await req.json()
 
         const requestData = Validators.confirmEmailSchema.safeParse(body);
 
@@ -225,18 +213,16 @@ export default class AuthController {
 
         await this.userRepo.update(data.id, {confirmed: true});
 
-        return Response.success("Email confirmed successfully");
+        await this.logger.debug(data, `User ${data.email} confirmed email`)
+        await this.logger.info(`${data.email} confirmed`, undefined, true);
+
+        return Response.ok("Email confirmed successfully");
     }
 
-    async resendEmailConfirmation(req: NextRequest) {
-        if (req.method !== "POST") return Response.methodNotAllowed("Invalid request method");
-
-        let body;
-        try {
-            body = await req.json();
-        } catch (error) {
-            return Response.badRequest("Invalid request body");
-        }
+    @AllowMethod("POST")
+    @CheckBody
+    public async resendEmailConfirmation(req: NextRequest) {
+        const body = await req.json()
 
         const requestData = Validators.resendEmailSchema.safeParse(body);
 
@@ -267,22 +253,19 @@ export default class AuthController {
                 await Email.sendToken(user.email, token) :
                 await Email.sendOTP(user.email, token);
         } catch (error) {
-            console.log(error);
+            await this.logger.error(error, `User ${user.email} failed to send confirmation email`, true);
             return Response.internalServerError("Failed to send confirmation email");
         }
 
-        return Response.success("Email confirmation sent successfully");
+        await this.logger.debug(user, `User ${user.email} requested email confirmation`)
+        await this.logger.info(`${user.email} requested email confirmation`, undefined, true);
+        return Response.ok("Email confirmation sent successfully");
     }
 
-    async refreshToken(req: NextRequest) {
-        if (req.method !== "POST") return Response.methodNotAllowed("Invalid request method");
-
-        let body;
-        try {
-            body = await req.json();
-        } catch (error) {
-            return Response.badRequest("Invalid request body");
-        }
+    @AllowMethod("POST")
+    @CheckBody
+    public async refreshToken(req: NextRequest) {
+        const body = await req.json()
 
         const requestData = Validators.refreshTokenSchema.safeParse(body);
 
@@ -295,7 +278,9 @@ export default class AuthController {
             return Response.unauthorized("Invalid token");
         }
 
-        return Response.success(
+        await this.logger.debug(session, `User ${session.email} refreshed token`)
+        await this.logger.info(`${session.email} refreshed token`, undefined, true);
+        return Response.ok(
             "Token refreshed successfully",
             {accessToken: generateAccessToken(session)}
         );

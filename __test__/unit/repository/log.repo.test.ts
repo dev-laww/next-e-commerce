@@ -11,10 +11,15 @@ describe("LogRepository", () => {
     });
 
     it("Test getAll", async () => {
-        (prisma.log.findMany as jest.Mock).mockResolvedValueOnce([]);
+        (prisma.log.findMany as jest.Mock).mockResolvedValue([]);
 
-        const result = await repo.getAll();
-        expect(result).toEqual([]);
+        let result = await repo.getAll();
+
+        expect(result).toMatchObject([]);
+
+        result = await repo.getAll(undefined, 50, {id: 1});
+
+        expect(result).toMatchObject([]);
     });
 
     it("Test getById", async () => {

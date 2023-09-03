@@ -1,7 +1,21 @@
-import {NextRequest, NextResponse} from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+
+import Response from "@lib/http";
+
+class Hello {
+    async sayHello(req: NextRequest) {
+        await req.json();
+
+        return Response.ok("Hello world!")
+    }
+}
 
 async function handler(req: NextRequest) {
-    return NextResponse.json({message: "Hello World!"})
+    const controller = new Hello();
+
+    const {statusCode, response} = await controller.sayHello(req);
+
+    return NextResponse.json(response, {status: statusCode});
 }
 
 export {

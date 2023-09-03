@@ -5,7 +5,6 @@ on:
     branches-ignore:
       - main
       - preview
-      - develop
 
   pull_request:
     types: [ opened, synchronize, reopened ]
@@ -43,14 +42,17 @@ jobs:
           node-version: 16
       - name: Install dependencies
         run: npm install --ignore-scripts
+      - name: Generate prisma client
+        run: npx prisma generate
       - name: Run tests
         run: npm run test:ci
         env:
+          POSTGRES_PRISMA_URL: "postgresql://postgres:postgres@localhost:5432/postgres?schema=public"
           CI: true
 
   nextjs-build-check:
     name: Build nextjs application
-    needs: [ jest-check ]
+    needs: [ eslint-check, jest-check ]
     runs-on: ubuntu-latest
     env:
       SKIP_ENV_VALIDATION: ${{ secrets.SKIP_ENV_VALIDATION }}
@@ -66,7 +68,7 @@ jobs:
       - name: Generate prisma client
         run: npx prisma generate
       - name: Build nextjs
-        run: npm run build
+        run: npm run build:local
         env:
           POSTGRES_PRISMA_URL: "postgresql://postgres:postgres@localhost:5432/postgres?schema=public"
           CI: true

@@ -1,21 +1,11 @@
-import { ERROR_CODE, STATUS, STATUS_CODE } from "@lib/constants";
 import { ZodIssue } from "zod";
 
-type Response = {
-    statusCode: STATUS_CODE,
-    response: {
-        status: STATUS,
-        message: string,
-        code?: ERROR_CODE,
-        data?: any,
-        errors?: any,
-    }
-}
+import { ERROR_CODE, STATUS, STATUS_CODE } from "@lib/constants";
+import { Response } from "@lib/types";
 
-
-const success = (message: string, data?: any): Response => {
+const ok = (message: string, data?: any): Response => {
     return {
-        statusCode: STATUS_CODE.SUCCESS,
+        statusCode: STATUS_CODE.OK,
         response: {
             status: STATUS.SUCCESS,
             message,
@@ -115,19 +105,26 @@ const error = (statusCode: STATUS_CODE, message: string, error?: ERROR_CODE): Re
     }
 }
 
-const methodNotAllowed = (message: string): Response => {
-    return {
-        statusCode: STATUS_CODE.METHOD_NOT_ALLOWED,
-        response: {
-            code: ERROR_CODE.METHOD_NOT_ALLOWED,
-            status: STATUS.FAILED,
-            message: message
-        }
+const methodNotAllowed: Response = {
+    statusCode: STATUS_CODE.METHOD_NOT_ALLOWED,
+    response: {
+        code: ERROR_CODE.METHOD_NOT_ALLOWED,
+        status: STATUS.FAILED,
+        message: "Method not allowed"
+    }
+}
+
+const forbidden: Response = {
+    statusCode: STATUS_CODE.FORBIDDEN,
+    response: {
+        code: ERROR_CODE.FORBIDDEN,
+        status: STATUS.FAILED,
+        message: "User is not allowed to perform this action"
     }
 }
 
 const Response = {
-    success,
+    ok,
     created,
     badRequest,
     unauthorized,
@@ -136,7 +133,8 @@ const Response = {
     validationError,
     invalidCredentials,
     error,
-    methodNotAllowed
+    methodNotAllowed,
+    forbidden
 }
 
 export default Response;

@@ -7,12 +7,13 @@
   },
   "lint-staged": {
     "src/**/*": [
-      "yarn eslint:format"
+      "npm run eslint:format"
     ]
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && prisma migrate deploy && next build",
+    "build:local": "next build",
     "clean": "rimraf .next .swc out coverage",
     "lint": "next lint",
     "start": "next start",
@@ -25,8 +26,7 @@
     "test:ci": "jest --ci",
     "prepare": "husky install",
     "eslint:format": "eslint . --ext ts --ext tsx --ext js",
-    "generate": "plop --plopfile ./.plop/plopfile.js",
-    "postinstall": "prisma generate && prisma migrate deploy && prisma db seed"
+    "generate": "plop --plopfile ./.plop/plopfile.js"
   },
   "dependencies": {
     "@prisma/client": "^5.1.0",
@@ -36,6 +36,8 @@
     "jsonwebtoken": "^9.0.1",
     "next": "13.4.9",
     "nodemailer": "^6.9.4",
+    "pino": "^8.15.0",
+    "pino-pretty": "^10.2.0",
     "postcss": "8.4.25",
     "react": "18.2.0",
     "react-dom": "18.2.0",

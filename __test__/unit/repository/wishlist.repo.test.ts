@@ -12,9 +12,13 @@ describe("WishlistRepository", () => {
     });
 
     it("Test getAll", async () => {
-        (prisma.wishlistItem.findMany as jest.Mock).mockResolvedValueOnce([]);
+        (prisma.wishlistItem.findMany as jest.Mock).mockResolvedValue([]);
 
         let result = await repo.getAll();
+
+        expect(result).toMatchObject([]);
+
+        result = await repo.getAll(undefined, 50, {id: 1});
 
         expect(result).toMatchObject([]);
     });

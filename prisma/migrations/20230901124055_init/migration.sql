@@ -20,6 +20,7 @@ ALTER SEQUENCE "user_id_seq" RESTART WITH 100000;
 CREATE TABLE "role" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "code" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -44,8 +45,10 @@ ALTER SEQUENCE "user_role_id_seq" RESTART WITH 100000;
 -- CreateTable
 CREATE TABLE "permission" (
     "id" SERIAL NOT NULL,
+    "code" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
+    "action" TEXT NOT NULL,
+    "resource" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 

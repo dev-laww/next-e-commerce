@@ -3,11 +3,13 @@ import { Prisma, WishlistItem } from "@prisma/client";
 import prisma from "@lib/prisma";
 
 export default class WishlistRepository {
-    prismaClient = prisma;
+    private prismaClient = prisma;
 
-    // TODO: Add pagination
-    public async getAll(filter?: Prisma.WishlistItemWhereInput): Promise<WishlistItem[]> {
+    public async getAll(filter?: Prisma.WishlistItemWhereInput, limit: number = 50, cursor?: Prisma.WishlistItemWhereUniqueInput): Promise<WishlistItem[]> {
         return this.prismaClient.wishlistItem.findMany({
+            cursor: cursor,
+            take: limit,
+            skip: cursor ? 1 : 0,
             where: filter,
         });
     }
