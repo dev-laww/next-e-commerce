@@ -4,8 +4,6 @@ import Response from "@lib/http";
 
 class Hello {
     async sayHello(req: NextRequest) {
-        await req.json();
-
         return Response.ok("Hello world!")
     }
 }
