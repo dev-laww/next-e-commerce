@@ -1,8 +1,9 @@
 export enum STATUS_CODE {
-    SUCCESS = 200,
+    OK = 200,
     CREATED = 201,
     BAD_REQUEST = 400,
     UNAUTHORIZED = 401,
+    FORBIDDEN = 403,
     NOT_FOUND = 404,
     UNPROCESSABLE_ENTITY = 422,
     INTERNAL_SERVER_ERROR = 500,
@@ -15,22 +16,23 @@ export enum STATUS {
 }
 
 export enum ERROR_CODE {
-    UNAUTHORIZED = 'UNAUTHORIZED',
-    NOT_FOUND = 'NOT_FOUND',
-    UNPROCESSABLE_ENTITY = 'UNPROCESSABLE_ENTITY',
-    METHOD_NOT_ALLOWED = 'METHOD_NOT_ALLOWED',
-    INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR',
-    BAD_REQUEST = 'BAD_REQUEST',
-    VALIDATION_ERROR = 'VALIDATION_ERROR',
-    INVALID_CREDENTIALS = 'INVALID_CREDENTIALS',
+    UNAUTHORIZED = 'error:unauthorized',
+    NOT_FOUND = 'error:not_found',
+    UNPROCESSABLE_ENTITY = 'error:unprocessable_entity',
+    METHOD_NOT_ALLOWED = 'error:method_not_allowed',
+    INTERNAL_SERVER_ERROR = 'error:internal_server_error',
+    BAD_REQUEST = 'error:bad_request',
+    VALIDATION_ERROR = 'error:validation_error',
+    INVALID_CREDENTIALS = 'error:invalid_credentials',
+    FORBIDDEN = 'error:forbidden',
 }
 
 
 export enum TOKEN_TYPE {
-    EMAIL_CONFIRMATION_TOKEN = 'EMAIL_CONFIRMATION_TOKEN',
-    PASSWORD_RESET_TOKEN = 'PASSWORD_RESET_TOKEN',
-    EMAIL_CONFIRMATION_OTP = 'EMAIL_CONFIRMATION_OTP',
-    PASSWORD_RESET_OTP = 'PASSWORD_RESET_OTP',
+    EMAIL_CONFIRMATION_TOKEN = 'token:email_confirmation',
+    PASSWORD_RESET_TOKEN = 'token:password_reset',
+    EMAIL_CONFIRMATION_OTP = 'otp:email_confirmation',
+    PASSWORD_RESET_OTP = 'otp:password_reset',
 }
 
 export const TOKEN_OTP_EXPIRY = 60 * 60 * 1000; // 1 hour

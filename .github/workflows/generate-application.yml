@@ -68,7 +68,7 @@ jobs:
       - name: Generate prisma client
         run: npx prisma generate
       - name: Build nextjs
-        run: npm run build
+        run: npm run build:local
         env:
           POSTGRES_PRISMA_URL: "postgresql://postgres:postgres@localhost:5432/postgres?schema=public"
           CI: true

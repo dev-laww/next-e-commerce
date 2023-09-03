@@ -1,239 +1,487 @@
 const permissions = [
     {
+        id: 1000,
+        name: "View Users",
+        code: "permission:read:users",
+        action: "GET",
+        resource: "GET/api/accounts",
+    },
+    {
         id: 1001,
-        name: 'CREATE_USER',
-        description: 'Create a new user'
+        name: "Create User",
+        code: "permission:create:user",
+        action: "POST",
+        resource: "POST/api/accounts",
     },
     {
         id: 1002,
-        name: 'UPDATE_USER',
-        description: 'Update an existing user'
+        name: "View User",
+        code: "permission:read:user",
+        action: "GET",
+        resource: "GET/api/accounts/:id",
     },
     {
         id: 1003,
-        name: 'DELETE_USER',
-        description: 'Delete an existing user'
+        name: "Update User",
+        code: "permission:update:user",
+        action: "PUT",
+        resource: "PUT/api/accounts/:id",
     },
     {
         id: 1004,
-        name: 'VIEW_USER',
-        description: 'View an existing user'
+        name: "Delete User",
+        code: "permission:delete:user",
+        action: "DELETE",
+        resource: "DELETE/api/accounts/:id",
     },
     {
         id: 1005,
-        name: 'CREATE_PRODUCT',
-        description: 'Create a new product'
+        name: "View User Roles",
+        code: "permission:read:user-roles",
+        action: "GET",
+        resource: "GET/api/accounts/:id/roles",
     },
     {
         id: 1006,
-        name: 'UPDATE_PRODUCT',
-        description: 'Update an existing product'
+        name: "View user payment methods",
+        code: "permission:read:user-payment-methods",
+        action: "GET",
+        resource: "GET/api/accounts/:id/payment-methods",
     },
     {
         id: 1007,
-        name: 'DELETE_PRODUCT',
-        description: 'Delete an existing product'
+        name: "View user payment method",
+        code: "permission:read:user-payment-method",
+        action: "GET",
+        resource: "GET/api/accounts/:id/payment-methods/:paymentMethodId",
     },
     {
         id: 1008,
-        name: 'VIEW_PRODUCT',
-        description: 'View an existing product'
+        name: "View user addresses",
+        code: "permission:read:user-addresses",
+        action: "GET",
+        resource: "GET/api/accounts/:id/addresses",
     },
     {
         id: 1009,
-        name: 'CREATE_ROLE',
-        description: 'Create a new role'
+        name: "View user address",
+        code: "permission:read:user-address",
+        action: "GET",
+        resource: "GET/api/accounts/:id/addresses/:addressId",
     },
     {
         id: 1010,
-        name: 'UPDATE_ROLE',
-        description: 'Update an existing role'
+        name: "View user orders",
+        code: "permission:read:user-orders",
+        action: "GET",
+        resource: "GET/api/accounts/:id/orders",
     },
     {
         id: 1011,
-        name: 'DELETE_ROLE',
-        description: 'Delete an existing role'
+        name: "View user order",
+        code: "permission:read:user-order",
+        action: "GET",
+        resource: "GET/api/accounts/:id/orders/:orderId",
     },
     {
         id: 1012,
-        name: 'VIEW_ROLE',
-        description: 'View an existing role'
+        name: "View user wishlist",
+        code: "permission:read:user-wishlist",
+        action: "GET",
+        resource: "GET/api/accounts/:id/wishlist",
     },
     {
         id: 1013,
-        name: 'ASSIGN_ROLE',
-        description: 'Assign a role to a user'
+        name: "View user wishlist item",
+        code: "permission:read:user-wishlist-item",
+        action: "GET",
+        resource: "GET/api/accounts/:id/wishlist/:wishlistItemId",
     },
     {
         id: 1014,
-        name: 'ADD_ADDRESS',
-        description: 'Add a new address'
+        name: "View user cart",
+        code: "permission:read:user-cart",
+        action: "GET",
+        resource: "GET/api/accounts/:id/cart",
     },
     {
         id: 1015,
-        name: 'UPDATE_ADDRESS',
-        description: 'Update an existing address'
+        name: "View user cart item",
+        code: "permission:read:user-cart-item",
+        action: "GET",
+        resource: "GET/api/accounts/:id/cart/:cartItemId",
     },
     {
         id: 1016,
-        name: 'DELETE_ADDRESS',
-        description: 'Delete an existing address'
+        name: "View user reviews",
+        code: "permission:read:user-reviews",
+        action: "GET",
+        resource: "GET/api/accounts/:id/reviews",
     },
     {
         id: 1017,
-        name: 'CREATE_CATEGORY',
-        description: 'Create a new category'
+        name: "View user review",
+        code: "permission:read:user-review",
+        action: "GET",
+        resource: "GET/api/accounts/:id/reviews/:reviewId",
     },
     {
         id: 1018,
-        name: 'UPDATE_CATEGORY',
-        description: 'Update an existing category'
+        name: "View roles",
+        code: "permission:read:roles",
+        action: "GET",
+        resource: "GET/api/roles",
     },
     {
         id: 1019,
-        name: 'DELETE_CATEGORY',
-        description: 'Delete an existing category'
+        name: "Create role",
+        code: "permission:create:role",
+        action: "POST",
+        resource: "POST/api/roles",
     },
     {
         id: 1020,
-        name: 'VIEW_CATEGORY',
-        description: 'View an existing category'
+        name: "View role",
+        code: "permission:read:role",
+        action: "GET",
+        resource: "GET/api/roles/:id",
     },
     {
         id: 1021,
-        name: 'CREATE_COUPON',
-        description: 'Create a new coupon'
+        name: "Update role",
+        code: "permission:update:role",
+        action: "PUT",
+        resource: "PUT/api/roles/:id",
     },
     {
         id: 1022,
-        name: 'UPDATE_COUPON',
-        description: 'Update an existing coupon'
+        name: "Delete role",
+        code: "permission:delete:role",
+        action: "DELETE",
+        resource: "DELETE/api/roles/:id",
     },
     {
         id: 1023,
-        name: 'DELETE_COUPON',
-        description: 'Delete an existing coupon'
+        name: "View role permissions",
+        code: "permission:read:role-permissions",
+        action: "GET",
+        resource: "GET/api/roles/:id/permissions",
     },
     {
         id: 1024,
-        name: 'VIEW_COUPON',
-        description: 'View an existing coupon'
+        name: "Create role permissions",
+        code: "permission:create:role-permission",
+        action: "POST",
+        resource: "POST/api/roles/:id/permissions/:permissionId",
     },
     {
         id: 1025,
-        name: 'VIEW_LOGS',
-        description: 'View logs'
+        name: "Delete role permission",
+        code: "permission:delete:role-permission",
+        action: "DELETE",
+        resource: "DELETE/api/roles/:id/permissions/:permissionId",
+    },
+    {
+        id: 1026,
+        name: "View role users",
+        code: "permission:read:role-users",
+        action: "GET",
+        resource: "GET/api/roles/:id/users",
     },
     {
         id: 1027,
-        name: 'CREATE_REVIEWS',
-        description: 'Create a new review'
+        name: "Create user role",
+        code: "permission:create:user-role",
+        action: "POST",
+        resource: "POST/api/roles/:id/users/:userId",
     },
     {
         id: 1028,
-        name: 'UPDATE_REVIEWS',
-        description: 'Update an existing review'
+        name: "Delete user role",
+        code: "permission:delete:user-role",
+        action: "DELETE",
+        resource: "DELETE/api/roles/:id/users/:userId",
     },
     {
         id: 1029,
-        name: 'DELETE_REVIEWS',
-        description: 'Delete an existing review'
+        name: "View permissions",
+        code: "permission:read:permissions",
+        action: "GET",
+        resource: "GET/api/permissions",
     },
     {
         id: 1030,
-        name: 'VIEW_REVIEWS',
-        description: 'View an existing review'
+        name: "Create permission",
+        code: "permission:create:permission",
+        action: "POST",
+        resource: "POST/api/permissions",
     },
     {
         id: 1031,
-        name: 'ADD_PAYMENT_METHOD',
-        description: 'Add a new payment method'
+        name: "View permission",
+        code: "permission:read:permission",
+        action: "GET",
+        resource: "GET/api/permissions/:id",
     },
     {
         id: 1032,
-        name: 'UPDATE_PAYMENT_METHOD',
-        description: 'Update an existing payment method'
+        name: "Update permission",
+        code: "permission:update:permission",
+        action: "PUT",
+        resource: "PUT/api/permissions/:id",
     },
     {
         id: 1033,
-        name: 'DELETE_PAYMENT_METHOD',
-        description: 'Delete an existing payment method'
+        name: "Delete permission",
+        code: "permission:delete:permission",
+        action: "DELETE",
+        resource: "DELETE/api/permissions/:id",
     },
     {
         id: 1034,
-        name: 'VIEW_PAYMENT_METHOD',
-        description: 'View an existing payment method'
+        name: "View role permission",
+        code: "permission:read:role-permission",
+        action: "GET",
+        resource: "GET/api/permissions/:id/roles",
     },
     {
         id: 1035,
-        name: 'ADD_WISHLIST',
-        description: 'Add a new wishlist'
+        name: "Create role permission",
+        code: "permission:create:role-permission",
+        action: "POST",
+        resource: "POST/api/permissions/:id/roles/:roleId",
     },
     {
         id: 1036,
-        name: 'UPDATE_WISHLIST',
-        description: 'Update an existing wishlist'
+        name: "Delete role permission",
+        code: "permission:delete:role-permission",
+        action: "DELETE",
+        resource: "DELETE/api/permissions/:id/roles/:roleId",
     },
     {
         id: 1037,
-        name: 'DELETE_WISHLIST',
-        description: 'Delete an existing wishlist'
+        name: "Create product",
+        code: "permission:create:product",
+        action: "POST",
+        resource: "POST/api/products",
     },
     {
         id: 1038,
-        name: 'VIEW_WISHLIST',
-        description: 'View an existing wishlist'
+        name: "Update product",
+        code: "permission:update:product",
+        action: "PUT",
+        resource: "PUT/api/products/:id",
     },
     {
         id: 1039,
-        name: 'ADD_SHIPPING_METHOD',
-        description: 'Add a new shipping method'
+        name: "Delete product",
+        code: "permission:delete:product",
+        action: "DELETE",
+        resource: "DELETE/api/products/:id",
     },
     {
         id: 1040,
-        name: 'UPDATE_SHIPPING_METHOD',
-        description: 'Update an existing shipping method'
+        name: "Create product variant",
+        code: "permission:create:product-variant",
+        action: "POST",
+        resource: "POST/api/products/:id/variants",
     },
     {
         id: 1041,
-        name: 'DELETE_SHIPPING_METHOD',
-        description: 'Delete an existing shipping method'
+        name: "Delete all product variants",
+        code: "permission:delete:product-variants",
+        action: "DELETE",
+        resource: "DELETE/api/products/:id/variants",
     },
     {
         id: 1042,
-        name: 'VIEW_SHIPPING_METHOD',
-        description: 'View an existing shipping method'
+        name: "Update product variant",
+        code: "permission:update:product-variant",
+        action: "PUT",
+        resource: "PUT/api/products/:id/variants/:variantId",
     },
     {
         id: 1043,
-        name: 'CREATE_ORDER',
-        description: 'Create a new order'
+        name: "Delete product variant",
+        code: "permission:delete:product-variant",
+        action: "DELETE",
+        resource: "DELETE/api/products/:id/variants/:variantId",
     },
     {
         id: 1044,
-        name: 'UPDATE_ORDER',
-        description: 'Update an existing order'
+        name: "Create product category",
+        code: "permission:create:product-category",
+        action: "POST",
+        resource: "POST/api/products/:id/categories/:categoryId",
     },
     {
         id: 1045,
-        name: 'DELETE_ORDER',
-        description: 'Delete an existing order'
+        name: "Delete product category",
+        code: "permission:delete:product-category",
+        action: "DELETE",
+        resource: "DELETE/api/products/:id/categories/:categoryId",
     },
     {
         id: 1046,
-        name: 'VIEW_ORDER',
-        description: 'View an existing order'
+        name: "Create product review",
+        code: "permission:create:product-review",
+        action: "POST",
+        resource: "POST/api/products/:id/reviews",
     },
     {
         id: 1047,
-        name: 'VIEW_PAYMENTS',
-        description: 'View payments'
+        name: "Delete all product reviews",
+        code: "permission:delete:product-reviews",
+        action: "DELETE",
+        resource: "DELETE/api/products/:id/reviews",
     },
     {
         id: 1048,
-        name: 'VIEW_USER_PAYMENTS',
-        description: 'View user payments'
+        name: "Update product review",
+        code: "permission:update:product-review",
+        action: "PUT",
+        resource: "PUT/api/products/:id/reviews/:reviewId",
+    },
+    {
+        id: 1049,
+        name: "Create product variant",
+        code: "permission:create:variant",
+        action: "POST",
+        resource: "POST/api/variants",
+    },
+    {
+        id: 1050,
+        name: "Update product variant",
+        code: "permission:update:variant",
+        action: "PUT",
+        resource: "PUT/api/variants/:id",
+    },
+    {
+        id: 1051,
+        name: "Delete product variant",
+        code: "permission:delete:variant",
+        action: "DELETE",
+        resource: "DELETE/api/variants/:id",
+    },
+    {
+        id: 1052,
+        name: "Create variant review",
+        code: "permission:create:variant-review",
+        action: "POST",
+        resource: "POST/api/variants/:id/reviews",
+    },
+    {
+        id: 1053,
+        name: "Delete all variant reviews",
+        code: "permission:delete:variant-reviews",
+        action: "DELETE",
+        resource: "DELETE/api/variants/:id/reviews",
+    },
+    {
+        id: 1054,
+        name: "Update variant review",
+        code: "permission:update:variant-review",
+        action: "PUT",
+        resource: "PUT/api/variants/:id/reviews/:reviewId",
+    },
+    {
+        id: 1055,
+        name: "Delete variant review",
+        code: "permission:delete:variant-review",
+        action: "DELETE",
+        resource: "DELETE/api/variants/:id/reviews/:reviewId",
+    },
+    {
+        id: 1056,
+        name: "Create category",
+        code: "permission:create:category",
+        action: "POST",
+        resource: "POST/api/categories",
+    },
+    {
+        id: 1057,
+        name: "Update category",
+        code: "permission:update:category",
+        action: "PUT",
+        resource: "PUT/api/categories/:id",
+    },
+    {
+        id: 1058,
+        name: "Delete category",
+        code: "permission:delete:category",
+        action: "DELETE",
+        resource: "DELETE/api/categories/:id",
+    },
+    {
+        id: 1059,
+        name: "View orders",
+        code: "permission:read:orders",
+        action: "GET",
+        resource: "GET/api/orders",
+    },
+    {
+        id: 1060,
+        name: "Delete order",
+        code: "permission:delete:order",
+        action: "DELETE",
+        resource: "DELETE/api/orders/:id",
+    },
+    {
+        id: 1061,
+        name: "Create shipping method",
+        code: "permission:create:shipping-method",
+        action: "POST",
+        resource: "POST/api/shipping-methods",
+    },
+    {
+        id: 1062,
+        name: "Update shipping method",
+        code: "permission:update:shipping-method",
+        action: "PUT",
+        resource: "PUT/api/shipping-methods/:id",
+    },
+    {
+        id: 1063,
+        name: "Delete shipping method",
+        code: "permission:delete:shipping-method",
+        action: "DELETE",
+        resource: "DELETE/api/shipping-methods/:id",
+    },
+    {
+        id: 1064,
+        name: "View coupons",
+        code: "permission:read:coupons",
+        action: "GET",
+        resource: "GET/api/coupons",
+    },
+    {
+        id: 1065,
+        name: "Create coupon",
+        code: "permission:create:coupon",
+        action: "POST",
+        resource: "POST/api/coupons",
+    },
+    {
+        id: 1066,
+        name: "Update coupon",
+        code: "permission:update:coupon",
+        action: "PUT",
+        resource: "PUT/api/coupons/:id",
+    },
+    {
+        id: 1067,
+        name: "Delete coupon",
+        code: "permission:delete:coupon",
+        action: "DELETE",
+        resource: "DELETE/api/coupons/:id",
+    },
+    {
+        id: 1068,
+        name: "View logs",
+        code: "permission:read:logs",
+        action: "GET",
+        resource: "GET/api/logs",
     }
-]
+];
 
 export default permissions;

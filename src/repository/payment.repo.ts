@@ -3,11 +3,13 @@ import { Payment, Prisma } from "@prisma/client";
 import prisma from "@lib/prisma";
 
 export default class PaymentRepository {
-    prismaClient = prisma;
+    private prismaClient = prisma;
 
-    // TODO: Add pagination
-    public async getAll(filter?: Prisma.PaymentWhereInput): Promise<Payment[]> {
+    public async getAll(filter?: Prisma.PaymentWhereInput, limit: number = 50, cursor?: Prisma.PaymentWhereUniqueInput): Promise<Payment[]> {
         return this.prismaClient.payment.findMany({
+            cursor: cursor,
+            take: limit,
+            skip: cursor ? 1 : 0,
             where: filter,
         });
     }

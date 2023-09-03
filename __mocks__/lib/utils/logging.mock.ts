@@ -12,5 +12,6 @@ const getLoggerMock = (name: string) => ({
 module.exports = {
     __esModule: true,
     default: logger,
-    getLogger: getLoggerMock
+    getDatabaseLogger: getLoggerMock,
+    getLogger: jest.fn()
 };

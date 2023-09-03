@@ -1,14 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import AuthController from "@controller/auth.controller";
+import { STATUS_CODE } from "@lib/constants";
 import { getLogger } from "@utils/logging";
 
+const logger = getLogger({name: "api:auth:reset-password"});
+
 async function handler(req: NextRequest) {
-    const logger = getLogger('api:auth:reset-password');
     const controller = new AuthController();
 
     const {statusCode, response} = await controller.resetPassword(req);
-    await logger.info(statusCode == 200 ? response.message : `Reset password failed: ${response.message}`);
+    const success = statusCode == STATUS_CODE.OK;
+    logger.info(success ? response.message : response, success ? undefined : `Reset password failed: ${response.message}`);
 
     return NextResponse.json(response, {status: statusCode});
 }

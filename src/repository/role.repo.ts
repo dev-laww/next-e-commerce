@@ -3,15 +3,14 @@ import { Permission, Prisma, Role } from "@prisma/client";
 import prisma from "@lib/prisma";
 
 export default class RoleRepository {
-    prismaClient = prisma;
+    private prismaClient = prisma;
 
-    // TODO: Add pagination
-    public async getAll(filter?: Prisma.RoleWhereInput): Promise<Role[]> {
+    public async getAll(filter?: Prisma.RoleWhereInput, limit: number = 50, cursor?: Prisma.RoleWhereUniqueInput): Promise<Role[]> {
         return this.prismaClient.role.findMany({
+            cursor: cursor,
+            take: limit,
+            skip: cursor ? 1 : 0,
             where: filter,
-            include: {
-                _count: true
-            }
         });
     }
 
@@ -57,13 +56,9 @@ export default class RoleRepository {
         });
 
         return rolePermissions.map(rolePermission => {
-            const permission = rolePermission.permission;
+            const {created_at, updated_at, ...rest} = rolePermission.permission;
 
-            return {
-                id: permission.id,
-                name: permission.name,
-                description: permission.description
-            } as Permission;
+            return rest as Permission;
         });
     }
 

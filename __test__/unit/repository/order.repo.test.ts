@@ -13,10 +13,15 @@ describe("OrderRepository", () => {
     });
 
     it("Test getAll", async () => {
-        (prisma.order.findMany as jest.Mock).mockResolvedValueOnce([]);
+        (prisma.order.findMany as jest.Mock).mockResolvedValue([]);
 
-        const result = await repo.getAll();
-        expect(result).toEqual([]);
+        let result = await repo.getAll();
+
+        expect(result).toMatchObject([]);
+
+        result = await repo.getAll(undefined, 50, {id: 1});
+
+        expect(result).toMatchObject([]);
     });
 
     it("Test getById", async () => {

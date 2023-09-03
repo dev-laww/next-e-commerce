@@ -22,9 +22,21 @@ const logger = pino({
     level: environment.get(process.env.NODE_ENV ?? "development"),
 }, stream);
 
-export const getLogger = (name: string) => {
+interface LoggerArgs {
+    name: string;
+    class?: string;
+    module?: string;
+    function?: string;
+}
+
+/**
+ * Returns a logger that is connected to the database
+ *
+ * @param args
+ */
+export const getDatabaseLogger = (args: LoggerArgs) => {
     const logRepo = new LogRepository();
-    const childLogger = logger.child({name: name});
+    const childLogger = logger.child(args);
 
     return {
         debug: async (obj: object, message?: string, save?: boolean, ...args: any[]) => {
@@ -49,5 +61,7 @@ export const getLogger = (name: string) => {
         }
     };
 }
+
+export const getLogger = (args: LoggerArgs) => logger.child(args);
 
 export default logger;

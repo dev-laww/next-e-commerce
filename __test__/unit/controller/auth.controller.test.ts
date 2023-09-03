@@ -50,7 +50,7 @@ describe("Auth Controller", () => {
             const {statusCode, response} = await controller.login(req);
 
             // expect
-            expect(statusCode).toBe(Constants.STATUS_CODE.SUCCESS);
+            expect(statusCode).toBe(Constants.STATUS_CODE.OK);
             expect(response.data).toBeDefined();
             expect(response.data.accessToken).toBeDefined();
         })
@@ -291,7 +291,7 @@ describe("Auth Controller", () => {
 
             let {statusCode, response} = await controller.resetPassword(req);
 
-            expect(statusCode).toBe(Constants.STATUS_CODE.SUCCESS);
+            expect(statusCode).toBe(Constants.STATUS_CODE.OK);
             expect(response.data).toBeUndefined();
 
             // OTP
@@ -308,7 +308,7 @@ describe("Auth Controller", () => {
 
             ({statusCode, response} = await controller.resetPassword(req));
 
-            expect(statusCode).toBe(Constants.STATUS_CODE.SUCCESS);
+            expect(statusCode).toBe(Constants.STATUS_CODE.OK);
             expect(response.data).toBeUndefined();
         });
 
@@ -442,7 +442,7 @@ describe("Auth Controller", () => {
 
             let {statusCode, response} = await controller.confirmResetPassword(req);
 
-            expect(statusCode).toBe(Constants.STATUS_CODE.SUCCESS);
+            expect(statusCode).toBe(Constants.STATUS_CODE.OK);
             expect(response.data).toBeUndefined();
 
             // OTP
@@ -457,7 +457,7 @@ describe("Auth Controller", () => {
 
             ({statusCode, response} = await controller.confirmResetPassword(req));
 
-            expect(statusCode).toBe(Constants.STATUS_CODE.SUCCESS);
+            expect(statusCode).toBe(Constants.STATUS_CODE.OK);
             expect(response.data).toBeUndefined();
         });
 
@@ -544,7 +544,7 @@ describe("Auth Controller", () => {
 
             let {statusCode, response} = await controller.confirmEmail(req);
 
-            expect(statusCode).toBe(Constants.STATUS_CODE.SUCCESS);
+            expect(statusCode).toBe(Constants.STATUS_CODE.OK);
             expect(response.data).toBeUndefined();
 
             // OTP
@@ -557,7 +557,7 @@ describe("Auth Controller", () => {
             });
             ({statusCode, response} = await controller.confirmEmail(req));
 
-            expect(statusCode).toBe(Constants.STATUS_CODE.SUCCESS);
+            expect(statusCode).toBe(Constants.STATUS_CODE.OK);
             expect(response.data).toBeUndefined();
         });
 
@@ -669,7 +669,7 @@ describe("Auth Controller", () => {
 
             let {statusCode, response} = await controller.resendEmailConfirmation(req);
 
-            expect(statusCode).toBe(Constants.STATUS_CODE.SUCCESS);
+            expect(statusCode).toBe(Constants.STATUS_CODE.OK);
             expect(response.data).toBeUndefined();
 
             // OTP
@@ -686,7 +686,7 @@ describe("Auth Controller", () => {
 
             ({statusCode, response} = await controller.resendEmailConfirmation(req));
 
-            expect(statusCode).toBe(Constants.STATUS_CODE.SUCCESS);
+            expect(statusCode).toBe(Constants.STATUS_CODE.OK);
             expect(response.data).toBeUndefined();
         });
 
@@ -825,7 +825,7 @@ describe("Auth Controller", () => {
         it("returns 200 if refresh token success", async () => {
             const {statusCode, response} = await controller.refreshToken(req);
 
-            expect(statusCode).toBe(Constants.STATUS_CODE.SUCCESS);
+            expect(statusCode).toBe(Constants.STATUS_CODE.OK);
             expect(response.data).toBeDefined();
         });
 

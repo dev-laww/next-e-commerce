@@ -34,7 +34,8 @@ const manyToManyEntities = [
     'cart',
     'orders',
     'orderItems',
-    'payments'
+    'payments',
+    'rolePermissions',
 ];
 
 // Find one-to-many entities

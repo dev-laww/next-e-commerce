@@ -12,9 +12,13 @@ describe("ReviewRepository", () => {
     });
 
     it("Test getAll", async () => {
-        (prisma.review.findMany as jest.Mock).mockResolvedValueOnce([]);
+        (prisma.review.findMany as jest.Mock).mockResolvedValue([]);
 
-        const result = await repo.getAll();
+        let result = await repo.getAll();
+
+        expect(result).toMatchObject([]);
+
+        result = await repo.getAll(undefined, 50, {id: 1});
 
         expect(result).toMatchObject([]);
     });

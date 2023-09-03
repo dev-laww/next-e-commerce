@@ -1,14 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import AuthController from "@controller/auth.controller";
+import { STATUS_CODE } from "@lib/constants";
 import { getLogger } from "@utils/logging";
 
+const logger = getLogger({name: "api:auth:confirm-email"});
+
 async function handler(req: NextRequest) {
-    const logger = getLogger('api:auth:confirm-email');
     const controller = new AuthController();
 
     const {statusCode, response} = await controller.signup(req);
-    await logger.info(statusCode == 200 ? response.message : `Signup failed: ${response.message}`);
+    const success = statusCode == STATUS_CODE.CREATED;
+    logger.info(success ? response.message : response, success ? undefined : `Signup failed: ${response.message}`);
 
     return NextResponse.json(response, {status: statusCode})
 }

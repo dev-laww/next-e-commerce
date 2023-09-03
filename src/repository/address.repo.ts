@@ -3,15 +3,14 @@ import { Address, Prisma } from "@prisma/client";
 import prisma from "@lib/prisma";
 
 export default class AddressRepository {
-    prismaClient = prisma;
+    private prismaClient = prisma;
 
-    // TODO: add pagination
-    public async getAll(filters?: Prisma.AddressWhereInput): Promise<Address[]> {
+    public async getAll(filters?: Prisma.AddressWhereInput, limit: number = 50, cursor?: Prisma.AddressWhereUniqueInput): Promise<Address[]> {
         return this.prismaClient.address.findMany({
+            cursor: cursor,
+            take: limit,
+            skip: cursor ? 1 : 0,
             where: filters,
-            include: {
-                _count: true
-            }
         });
     }
 

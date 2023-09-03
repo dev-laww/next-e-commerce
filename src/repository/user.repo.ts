@@ -19,45 +19,43 @@ import { hash } from "@utils/hashing";
 
 
 export default class UserRepository {
-    prismaClient = prisma;
-    user = this.prismaClient.user;
+    private prismaClient = prisma;
 
-    // TODO: Add pagination
-    public async getAll(filter?: Prisma.UserWhereInput): Promise<User[]> {
-        return this.user.findMany({
+    public async getAll(filter?: Prisma.UserWhereInput, limit: number = 50, cursor?: Prisma.UserWhereUniqueInput): Promise<User[]> {
+        return this.prismaClient.user.findMany({
+            cursor: cursor,
+            take: limit,
+            skip: cursor ? 1 : 0,
             where: filter,
-            include: {
-                _count: true
-            }
         });
     }
 
     public async getUserById(id: number): Promise<User | null> {
-        return this.user.findUnique({
+        return this.prismaClient.user.findUnique({
             where: {id: id}
         });
     }
 
     public async getByEmail(email: string): Promise<User | null> {
-        return this.user.findUnique({
+        return this.prismaClient.user.findUnique({
             where: {email: email}
         });
     }
 
     public async getByUsername(username: string): Promise<User | null> {
-        return this.user.findUnique({
+        return this.prismaClient.user.findUnique({
             where: {username: username}
         });
     }
 
     public async create(data: Prisma.UserCreateInput | User): Promise<User> {
-        return this.user.create({
+        return this.prismaClient.user.create({
             data: data
         });
     }
 
     public async update(id: number, data: Prisma.UserUpdateInput): Promise<User> {
-        return this.user.update({
+        return this.prismaClient.user.update({
             where: {id: id},
             data: data
         });
@@ -66,7 +64,7 @@ export default class UserRepository {
     public async changePassword(id: number, password: string): Promise<User> {
         const hashed = await hash(password);
 
-        return this.user.update({
+        return this.prismaClient.user.update({
             where: {id: id},
             data: {
                 password: hashed
@@ -75,13 +73,13 @@ export default class UserRepository {
     }
 
     public async delete(id: number): Promise<User> {
-        return this.user.delete({
+        return this.prismaClient.user.delete({
             where: {id: id}
         });
     }
 
     public async getRoles(id: number): Promise<Role[]> {
-        const user = await this.user.findUnique({
+        const user = await this.prismaClient.user.findUnique({
             where: {id: id},
             select: {
                 roles: true
@@ -107,7 +105,7 @@ export default class UserRepository {
         const rolesToAdd = roles.filter(role => !userRoles.includes(role));
         const rolesToRemove = userRoles.filter(role => !roles.includes(role));
 
-        return this.user.update({
+        return this.prismaClient.user.update({
             where: {id: id},
             data: {
                 roles: {
@@ -135,17 +133,13 @@ export default class UserRepository {
         });
 
         return rolePermissions.map(rolePermission => {
-            const permission = rolePermission.permission;
-            return {
-                id: permission.id,
-                name: permission.name,
-                description: permission.description,
-            } as Permission;
+            const {created_at, updated_at, ...rest} = rolePermission.permission;
+            return rest as Permission;
         });
     }
 
     public async getPaymentMethods(id: number): Promise<PaymentMethod[]> {
-        const user = await this.user.findUnique({
+        const user = await this.prismaClient.user.findUnique({
             where: {id: id},
             select: {
                 payment_methods: true
@@ -169,7 +163,7 @@ export default class UserRepository {
     }
 
     public async getAddresses(id: number): Promise<Address[]> {
-        const user = await this.user.findUnique({
+        const user = await this.prismaClient.user.findUnique({
             where: {id: id},
             select: {
                 addresses: true
@@ -188,7 +182,7 @@ export default class UserRepository {
     }
 
     public async getOrders(id: number): Promise<Order[]> {
-        const user = await this.user.findUnique({
+        const user = await this.prismaClient.user.findUnique({
             where: {id: id},
             select: {
                 orders: true
@@ -207,7 +201,7 @@ export default class UserRepository {
     }
 
     public async getReviews(id: number): Promise<Review[]> {
-        const user = await this.user.findUnique({
+        const user = await this.prismaClient.user.findUnique({
             where: {id: id},
             select: {
                 reviews: true
@@ -226,7 +220,7 @@ export default class UserRepository {
     }
 
     public async getWishlist(id: number): Promise<WishlistItem[]> {
-        const user = await this.user.findUnique({
+        const user = await this.prismaClient.user.findUnique({
             where: {id: id},
             select: {
                 wishlist: true
@@ -245,7 +239,7 @@ export default class UserRepository {
     }
 
     public async getCart(id: number): Promise<CartItem[]> {
-        const user = await this.user.findUnique({
+        const user = await this.prismaClient.user.findUnique({
             where: {id: id},
             select: {
                 cart: true
@@ -264,7 +258,7 @@ export default class UserRepository {
     }
 
     public async getPayments(id: number): Promise<Payment[]> {
-        const user = await this.user.findUnique({
+        const user = await this.prismaClient.user.findUnique({
             where: {id: id},
             select: {
                 payments: true
@@ -286,7 +280,7 @@ export default class UserRepository {
         if (!order) throw new Error("Order not found");
         if (!paymentMethod) throw new Error("Payment method not found");
 
-        return this.user.update({
+        return this.prismaClient.user.update({
             where: {id: id},
             data: {
                 payments: {
@@ -306,7 +300,7 @@ export default class UserRepository {
 
 
     public async getTokens(id: number): Promise<TokenOTP[]> {
-        const user = await this.user.findUnique({
+        const user = await this.prismaClient.user.findUnique({
             where: {id: id},
             select: {
                 tokens: true
