@@ -17,8 +17,9 @@ import Response from "@lib/http"
 import Email from "@utils/email";
 import { compare, hash } from "@utils/hashing";
 import { getDatabaseLogger } from "@utils/logging";
-import { AllowPermitted, AllowMethod, CheckBody } from "@utils/decorator";
+import { AllowPermitted, AllowMethod, CheckBody, CheckError } from "@utils/decorator";
 
+@CheckError
 @AllowPermitted
 export default class AuthController {
     userRepo = new UserRepository();
