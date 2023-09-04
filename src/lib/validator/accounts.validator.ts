@@ -19,11 +19,7 @@ const search = z.object({
     limit: z.preprocess(
         (a) => parseInt(a as string, 10),
         z.number().positive()
-    ).optional(),
-    previous: z.preprocess(
-        (a) => (a as string).match(/true/i) !== null,
-        z.boolean()
-    ).optional(),
+    ).optional()
 });
 
 const validator = {

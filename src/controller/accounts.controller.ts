@@ -6,6 +6,7 @@ import { AllowPermitted, AllowMethod, CheckError } from "@utils/decorator";
 import UserRepository from "@repository/user.repo";
 import { parsePageToken, generatePageToken } from "@utils/token";
 import { User } from "@prisma/client";
+import { PageToken } from "@lib/types";
 
 @AllowPermitted
 @CheckError
@@ -20,42 +21,63 @@ export default class AccountsController {
 
         if (!filters.success) return Response.badRequest("Invalid search params", filters.error.errors);
 
-        let {pageToken, previous, limit, ...filter} = filters.data;
+        let {pageToken, limit, ...filter} = filters.data;
         limit = limit || 50;
 
+        // Parse page token
         let cursor: User | undefined;
+        let type: "next" | "previous" | undefined;
         if (pageToken) {
-            cursor = parsePageToken(pageToken);
+            const token = parsePageToken(pageToken);
 
-            if (!cursor) return Response.badRequest("Invalid page token");
+            if (!token) return Response.badRequest("Invalid page token");
+
+            const {type: tokenType, ...cursorData} = token;
+
+            cursor = cursorData as User;
+            type = tokenType;
         }
 
+        // If type is previous, make limit negative
+        const previous = type === "previous";
         let result = await this.repo.getAll(filter, previous ? -limit : limit, cursor);
 
-        const nextPageToken = result[result.length - 1] ? generatePageToken(result[result.length - 1]) : undefined;
+        if (result.length === 0) return Response.notFound("No accounts found");
+
+        // Parsing page tokens
+        const last = result[result.length - 1];
+        const first = result[0];
+        const nextPageToken: PageToken = {
+            id: last.id,
+            type: "next"
+        };
         const hasNextPage = await this.repo.getAll(filter, limit || 50, result[result.length - 1]).then(res => res.length > 0);
 
-        delete searchParams.previous;
         const newSearchParam = new URLSearchParams({
             ...searchParams,
-            pageToken: nextPageToken || ""
+            pageToken: generatePageToken(nextPageToken) || ""
         });
 
         const hasPreviousPage = await this.repo.getAll(filter, limit ? -limit : -50, result[0]).then(res => res.length > 0);
-        const previousPageToken = result[0] ? generatePageToken(result[0]) : undefined;
+        const previousPageToken: PageToken = {
+            id: first.id,
+            type: "previous"
+        };
 
         const newPreviousSearchParam = new URLSearchParams({
             ...searchParams,
-            previous: "true",
-            pageToken: previousPageToken || ""
+            pageToken: generatePageToken(previousPageToken) || ""
         });
 
+        // Generate urls
         const nextUrl = `${req.nextUrl.origin}/${req.nextUrl.pathname}?${newSearchParam.toString()}`;
         const previousUrl = `${req.nextUrl.origin}/${req.nextUrl.pathname}?${newPreviousSearchParam.toString()}`;
 
-        return Response.ok("Test", {
+        return Response.ok("Accounts found!", {
             result,
             meta: {
+                hasNextPage,
+                hasPreviousPage,
                 previousPageUrl: hasPreviousPage ? previousUrl : undefined,
                 nextPageUrl: hasNextPage ? nextUrl : undefined,
             },
