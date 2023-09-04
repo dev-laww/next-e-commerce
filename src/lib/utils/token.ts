@@ -1,4 +1,4 @@
-import { UserSession } from "@lib/types";
+import { PageToken, UserSession } from "@lib/types";
 import { generateToken, verifyToken } from "@utils/jwt";
 import crypto from "crypto";
 import { User } from "@prisma/client";
@@ -69,13 +69,13 @@ export const generateRandomToken  = () => crypto.randomBytes(32).toString('hex')
 
 export const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 
-export const generatePageToken = (user: User) => {
-    const userJson = JSON.stringify(user);
+export const generatePageToken = (token: PageToken) => {
+    const userJson = JSON.stringify(token);
 
     return Buffer.from(userJson).toString("base64");
 }
 
-export const parsePageToken = (token: string): User | undefined => {
+export const parsePageToken = (token: string): PageToken | undefined => {
     try {
         const userJson = Buffer.from(token, "base64").toString("ascii");
 
