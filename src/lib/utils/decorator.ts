@@ -9,10 +9,10 @@ import logger from "@utils/logging";
  * @param target
  */
 export function withPermission<T extends Function>(target: T): T {
-    const wrapped = async function (this: typeof target, request: NextRequest) {
+    const wrapped = async function (this: typeof target, request: NextRequest, args : any[]) {
         const isAllowed = await PermissionController.isAllowed(request);
 
-        return isAllowed ? target.call(this, request) : Response.forbidden;
+        return isAllowed ? target.call(this, request, args) : Response.forbidden;
     }
 
     return wrapped as unknown as T;
@@ -74,12 +74,12 @@ export function AllowPermitted(...args: any[]): any {
  * @param method
  */
 export function checkMethod<T extends Function>(func: T, method: string | string[]): T {
-    const wrapped = async function (this: typeof func, request: NextRequest) {
+    const wrapped = async function (this: typeof func, request: NextRequest, args : any[]) {
         if (Array.isArray(method) && !method.includes(request.method)) return Response.methodNotAllowed;
 
         if (typeof method === "string" && method !== request.method) return Response.methodNotAllowed;
 
-        return func.call(this, request);
+        return func.call(this, request, args);
     }
 
     return wrapped as unknown as T;
@@ -104,7 +104,7 @@ export function AllowMethod(method: string | string[]): MethodDecorator {
  * @param func
  */
 export function checkBody<T extends Function>(func: T): T {
-    const wrapped = async function (this: typeof func, request: NextRequest) {
+    const wrapped = async function (this: typeof func, request: NextRequest, args : any[]) {
 
         let body;
         try {
@@ -115,7 +115,7 @@ export function checkBody<T extends Function>(func: T): T {
 
         if (!body) return Response.badRequest("Invalid request body");
 
-        return func.call(this, request);
+        return func.call(this, request, args);
     }
 
     return wrapped as unknown as T;
@@ -141,9 +141,9 @@ export function CheckBody(_target: any, _propertyKey: string, descriptor: Proper
  * @param func
  */
 export function checkError<T extends Function>(func: Function): T {
-    const wrapped = async function (this: typeof func, request: NextRequest) {
+    const wrapped = async function (this: typeof func, request: NextRequest, args : any[]) {
         try {
-            return await func.call(this, request);
+            return await func.call(this, request, args);
         } catch (err: any) {
             logger.error(err);
             return Response.internalServerError(err.message);
