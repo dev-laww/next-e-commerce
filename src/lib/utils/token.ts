@@ -1,6 +1,7 @@
 import { UserSession } from "@lib/types";
 import { generateToken, verifyToken } from "@utils/jwt";
 import crypto from "crypto";
+import { User } from "@prisma/client";
 
 export const generateAccessToken = (
     payload: UserSession,
@@ -67,4 +68,20 @@ export const verifyRefreshToken = (
 export const generateRandomToken  = () => crypto.randomBytes(32).toString('hex');
 
 export const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
+
+export const generatePageToken = (user: User) => {
+    const userJson = JSON.stringify(user);
+
+    return Buffer.from(userJson).toString("base64");
+}
+
+export const parsePageToken = (token: string): User | undefined => {
+    try {
+        const userJson = Buffer.from(token, "base64").toString("ascii");
+
+        return JSON.parse(userJson);
+    } catch (err) {
+        return undefined;
+    }
+}
 
