@@ -2,9 +2,9 @@ import { NextRequest } from "next/server";
 
 import Validators from "@lib/validator/accounts.validator";
 import Response from "@lib/http";
-import { AllowPermitted, AllowMethod, CheckError } from "@utils/decorator";
+import { AllowPermitted, CheckError } from "@utils/decorator";
 import UserRepository from "@repository/user.repo";
-import { parsePageToken, generatePageToken } from "@utils/token";
+import { generatePageToken, parsePageToken } from "@utils/token";
 import { User } from "@prisma/client";
 import { PageToken } from "@lib/types";
 
@@ -13,13 +13,12 @@ import { PageToken } from "@lib/types";
 export default class AccountsController {
     repo = new UserRepository();
 
-    @AllowMethod("GET")
     public async getAccounts(req: NextRequest) {
         const searchParams = Object.fromEntries(req.nextUrl.searchParams);
 
         const filters = Validators.search.parse(searchParams);
 
-        let {pageToken, limit, ...filter} = filters;
+        let { pageToken, limit, ...filter } = filters;
         limit = limit || 50;
 
         // Parse page token
@@ -30,7 +29,7 @@ export default class AccountsController {
 
             if (!token) return Response.badRequest("Invalid page token");
 
-            const {type: tokenType, ...cursorData} = token;
+            const { type: tokenType, ...cursorData } = token;
 
             cursor = cursorData as User;
             type = tokenType;
@@ -81,4 +80,14 @@ export default class AccountsController {
             },
         });
     }
+
+    public async getAccount(_req: NextRequest, params: { id: string }) {
+        const { id } = params;
+
+        const account = await this.repo.getById(parseInt(id, 10) || 0);
+
+        if (!account) return Response.notFound("Account not found");
+
+        return Response.ok("Account found!", account);
+    };
 }
