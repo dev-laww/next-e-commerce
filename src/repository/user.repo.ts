@@ -28,7 +28,7 @@ export default class UserRepository {
             skip: cursor ? 1 : 0,
             where: filter,
             orderBy: {id: "asc"}
-        });
+        }).then(users => users.map(({password, created_at, updated_at, confirmed, ...rest}) => rest as User));
     }
 
     public async getUserById(id: number): Promise<User | null> {
