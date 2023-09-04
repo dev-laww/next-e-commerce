@@ -14,7 +14,7 @@ import { UserSession } from "@lib/types";
 export default class PermissionController {
     private static repo = new UserRepository();
     private static permissionRepo = new PermissionRepository();
-    private static logger = getLogger({name: "controller:permission"});
+    private static logger = getLogger({ name: "controller:permission" });
 
     private static getRequestedResource(resource: string, availableResource: string[]): string | undefined {
         for (const available of availableResource) {
@@ -28,7 +28,7 @@ export default class PermissionController {
     }
 
     public static async isAllowed(req: NextRequest): Promise<boolean> {
-        const logger = this.logger.child({function: "isAllowed"});
+        const logger = this.logger.child({ function: "isAllowed" });
         const path = req.nextUrl.pathname;
         const token = req.headers.get("authorization")?.split(" ")[1];
 

@@ -1,4 +1,4 @@
-import { Permission, Prisma, Role, RolePermission } from "@prisma/client";
+import { Permission, Prisma, Role } from "@prisma/client";
 
 import prisma from "@lib/prisma";
 
@@ -24,7 +24,7 @@ export default class PermissionRepository {
 
     public async getById(id: number): Promise<Permission | null> {
         return this.prismaClient.permission.findUnique({
-            where: {id: id}
+            where: { id: id }
         });
     }
 
@@ -36,14 +36,14 @@ export default class PermissionRepository {
 
     public async update(id: number, permission: Prisma.PermissionUpdateInput): Promise<Permission> {
         return this.prismaClient.permission.update({
-            where: {id: id},
+            where: { id: id },
             data: permission
         });
     }
 
     public async delete(id: number): Promise<Permission> {
         return this.prismaClient.permission.delete({
-            where: {id: id}
+            where: { id: id }
         });
     }
 
@@ -77,13 +77,13 @@ export default class PermissionRepository {
         console.log(rolesToRemove)
 
         const permission = await this.prismaClient.permission.update({
-            where: {id: id},
+            where: { id: id },
             data: {
                 roles: {
                     createMany: {
-                        data: rolesToAdd.map(role => ({role_id: role}))
+                        data: rolesToAdd.map(role => ({ role_id: role }))
                     },
-                    deleteMany: rolesToRemove.map(role => ({role_id: role}))
+                    deleteMany: rolesToRemove.map(role => ({ role_id: role }))
                 }
             }
         });

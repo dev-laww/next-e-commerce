@@ -17,13 +17,13 @@ import Response from "@lib/http"
 import Email from "@utils/email";
 import { compare, hash } from "@utils/hashing";
 import { getDatabaseLogger } from "@utils/logging";
-import { AllowPermitted, AllowMethod, CheckBody, CheckError } from "@utils/decorator";
+import { AllowMethod, AllowPermitted, CheckBody, CheckError } from "@utils/decorator";
 
 @CheckError
 @AllowPermitted
 export default class AuthController {
     userRepo = new UserRepository();
-    private logger = getDatabaseLogger({name: "controller:auth", class: "AuthController"});
+    private logger = getDatabaseLogger({ name: "controller:auth", class: "AuthController" });
 
     @AllowMethod("POST")
     @CheckBody
@@ -175,7 +175,7 @@ export default class AuthController {
 
         if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
 
-        const {success, data} = await this.userRepo.verifyTokenOTP(
+        const { success, data } = await this.userRepo.verifyTokenOTP(
             requestData.data.token,
             requestData.data.type === "otp" ?
                 Constants.TOKEN_TYPE.PASSWORD_RESET_OTP :
@@ -201,7 +201,7 @@ export default class AuthController {
 
         if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
 
-        const {success, data} = await this.userRepo.verifyTokenOTP(
+        const { success, data } = await this.userRepo.verifyTokenOTP(
             requestData.data.token,
             requestData.data.type === "otp" ?
                 Constants.TOKEN_TYPE.EMAIL_CONFIRMATION_OTP :
@@ -212,7 +212,7 @@ export default class AuthController {
 
         if (data.confirmed) return Response.badRequest("Email already confirmed");
 
-        await this.userRepo.update(data.id, {confirmed: true});
+        await this.userRepo.update(data.id, { confirmed: true });
 
         await this.logger.debug(data, `User ${data.email} confirmed email`)
         await this.logger.info(`${data.email} confirmed`, undefined, true);
@@ -283,7 +283,7 @@ export default class AuthController {
         await this.logger.info(`${session.email} refreshed token`, undefined, true);
         return Response.ok(
             "Token refreshed successfully",
-            {accessToken: generateAccessToken(session)}
+            { accessToken: generateAccessToken(session) }
         );
     }
 }

@@ -1,764 +1,764 @@
 {
-	"info": {
-		"_postman_id": "b1e6f4a8-ec54-4fda-af6d-cc846e90aba9",
-		"name": "Next E-Commerce",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "20011538"
-	},
-	"item": [
-		{
-			"name": "Auth",
-			"item": [
-				{
-					"name": "Register",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"firstName\": \"Admin\",\r\n    \"lastName\": \"User\",\r\n    \"username\": \"test\",\r\n    \"email\": \"rorensuuu@gmail.com\",\r\n    \"password\": \"supersecretpassword\",\r\n    \"confirmPassword\": \"supersecretpassword\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/auth/signup",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"auth",
-								"signup"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "Register",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"firstName\": \"Admin\",\r\n    \"lastName\": \"User\",\r\n    \"username\": \"admin\",\r\n    \"email\": \"rorensuuu@gmail.com\",\r\n    \"password\": \"admin_password\",\r\n    \"confirmPassword\": \"admin_password\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/api/auth/signup",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"api",
-										"auth",
-										"signup"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "content-type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "etag",
-									"value": "\"q38k5oftepl9\""
-								},
-								{
-									"key": "content-length",
-									"value": "765"
-								},
-								{
-									"key": "vary",
-									"value": "Accept-Encoding"
-								},
-								{
-									"key": "date",
-									"value": "Thu, 03 Aug 2023 07:12:59 GMT"
-								},
-								{
-									"key": "connection",
-									"value": "close"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"status\": \"success\",\n    \"message\": \"User created successfully\",\n    \"data\": {\n        \"id\": 8,\n        \"first_name\": \"Admin\",\n        \"last_name\": \"User\",\n        \"email\": \"rorensuuu@gmail.com\",\n        \"username\": \"admin\",\n        \"image_url\": \"\",\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZmlyc3RfbmFtZSI6IkFkbWluIiwibGFzdF9uYW1lIjoiVXNlciIsImVtYWlsIjoicm9yZW5zdXV1QGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiYWRtaW4iLCJpbWFnZV91cmwiOiIiLCJpYXQiOjE2OTEwNDY3NzksImV4cCI6MTY5MTA0NzY3OX0.e6958rhZxCc8S_GdRZTZQ173LJ_7qi16xAcmv_O3X-8\",\n        \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZmlyc3RfbmFtZSI6IkFkbWluIiwibGFzdF9uYW1lIjoiVXNlciIsImVtYWlsIjoicm9yZW5zdXV1QGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiYWRtaW4iLCJpbWFnZV91cmwiOiIiLCJpYXQiOjE2OTEwNDY3NzksImV4cCI6MTY5MTY1MTU3OX0.h5uOseMwhl_WeFkkQpA3powP3pq3ZbgAsnb3LejgSkk\"\n    }\n}"
-						}
-					]
-				},
-				{
-					"name": "Login",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"var statusCode = pm.response.code;\r",
-									"var jsonData = pm.response.json();\r",
-									"if(statusCode==200 || statusCode==201){\r",
-									"    pm.environment.set(\"accessToken\", jsonData.data.accessToken);\r",
-									"    pm.environment.set(\"refreshToken\", jsonData.data.refreshToken);\r",
-									"}\r",
-									"\r",
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{password}}\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/auth/login",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"auth",
-								"login"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "Login",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{password}}\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/auth/login",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"auth",
-										"login"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "content-type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "etag",
-									"value": "\"bt3uxp47jrl0\""
-								},
-								{
-									"key": "content-length",
-									"value": "756"
-								},
-								{
-									"key": "vary",
-									"value": "Accept-Encoding"
-								},
-								{
-									"key": "date",
-									"value": "Thu, 03 Aug 2023 07:32:57 GMT"
-								},
-								{
-									"key": "connection",
-									"value": "close"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Login successful\",\n    \"data\": {\n        \"id\": 8,\n        \"first_name\": \"Admin\",\n        \"last_name\": \"User\",\n        \"email\": \"rorensuuu@gmail.com\",\n        \"username\": \"admin\",\n        \"image_url\": \"\",\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZmlyc3RfbmFtZSI6IkFkbWluIiwibGFzdF9uYW1lIjoiVXNlciIsImVtYWlsIjoicm9yZW5zdXV1QGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiYWRtaW4iLCJpbWFnZV91cmwiOiIiLCJpYXQiOjE2OTEwNDc5NzcsImV4cCI6MTY5MTA0ODg3N30.HwgBTvWPJbMq10IpL27gdwzRPu2VSDxWNFLDEUwVJZk\",\n        \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZmlyc3RfbmFtZSI6IkFkbWluIiwibGFzdF9uYW1lIjoiVXNlciIsImVtYWlsIjoicm9yZW5zdXV1QGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiYWRtaW4iLCJpbWFnZV91cmwiOiIiLCJpYXQiOjE2OTEwNDc5NzcsImV4cCI6MTY5MTY1Mjc3N30.HPDz-IVHp78Xb3S9JlNk4Ikp6_1p2GWIfPXl18e16DI\"\n    }\n}"
-						}
-					]
-				},
-				{
-					"name": "Reset Password",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"rorensuuu@gmail.com\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/auth/reset-password",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"auth",
-								"reset-password"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "Reset password",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"rorensuuu@gmail.com\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/auth/reset-password",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"auth",
-										"reset-password"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "content-type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "etag",
-									"value": "\"pnhlni54tj1t\""
-								},
-								{
-									"key": "content-length",
-									"value": "65"
-								},
-								{
-									"key": "vary",
-									"value": "Accept-Encoding"
-								},
-								{
-									"key": "date",
-									"value": "Thu, 03 Aug 2023 07:53:22 GMT"
-								},
-								{
-									"key": "connection",
-									"value": "close"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Password reset sent successfully\"\n}"
-						}
-					]
-				},
-				{
-					"name": "Confirm Reset Password",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"token\": \"26fde5a38a36ac08dd8d9c3171b25b15a124a84d9c6dacbb394bee402bcc243b\",\r\n    \"password\": \"password\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/auth/confirm-reset-password",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"auth",
-								"confirm-reset-password"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "Confirm reset password",
-							"originalRequest": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"token\": \"26fde5a38a36ac08dd8d9c3171b25b15a124a84d9c6dacbb394bee402bcc243b\",\r\n    \"password\": \"password\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/auth/confirm-reset-password",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"auth",
-										"confirm-reset-password"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "content-type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "etag",
-									"value": "\"4zqo3k591z1q\""
-								},
-								{
-									"key": "content-length",
-									"value": "62"
-								},
-								{
-									"key": "vary",
-									"value": "Accept-Encoding"
-								},
-								{
-									"key": "date",
-									"value": "Thu, 03 Aug 2023 07:56:30 GMT"
-								},
-								{
-									"key": "connection",
-									"value": "close"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Password changed successfully\"\n}"
-						}
-					]
-				},
-				{
-					"name": "Confirm Email",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"type\": \"otp\",\r\n    \"token\": \"407548\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/auth/confirm-email",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"auth",
-								"confirm-email"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "Confirm email using token",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"type\": \"token\",\r\n    \"token\": \"78511edcd4f5d23f09a23714979cb0242accbf446db05b96790edae090457186\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/auth/confirm-email",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"auth",
-										"confirm-email"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "content-type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "etag",
-									"value": "\"3h7lxj5qmm1p\""
-								},
-								{
-									"key": "content-length",
-									"value": "61"
-								},
-								{
-									"key": "vary",
-									"value": "Accept-Encoding"
-								},
-								{
-									"key": "date",
-									"value": "Thu, 03 Aug 2023 08:11:49 GMT"
-								},
-								{
-									"key": "connection",
-									"value": "close"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Email confirmed successfully\"\n}"
-						},
-						{
-							"name": "Confirm email using otp",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"type\": \"otp\",\r\n    \"token\": \"407548\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/auth/confirm-email",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"auth",
-										"confirm-email"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "content-type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "etag",
-									"value": "\"3h7lxj5qmm1p\""
-								},
-								{
-									"key": "content-length",
-									"value": "61"
-								},
-								{
-									"key": "vary",
-									"value": "Accept-Encoding"
-								},
-								{
-									"key": "date",
-									"value": "Thu, 03 Aug 2023 08:19:15 GMT"
-								},
-								{
-									"key": "connection",
-									"value": "close"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Email confirmed successfully\"\n}"
-						}
-					]
-				},
-				{
-					"name": "Resend Confirmation Email",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"type\": \"token\",\r\n    \"email\": \"rorensuuu@gmail.com\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/auth/resend-confirmation-email",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"auth",
-								"resend-confirmation-email"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "Resend confirmation email",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"type\": \"token\",\r\n    \"email\": \"rorensuuu@gmail.com\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/auth/resend-confirmation-email",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"auth",
-										"resend-confirmation-email"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "content-type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "etag",
-									"value": "\"4s608yi1431x\""
-								},
-								{
-									"key": "content-length",
-									"value": "69"
-								},
-								{
-									"key": "vary",
-									"value": "Accept-Encoding"
-								},
-								{
-									"key": "date",
-									"value": "Thu, 03 Aug 2023 08:12:41 GMT"
-								},
-								{
-									"key": "connection",
-									"value": "close"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Email confirmation sent successfully\"\n}"
-						},
-						{
-							"name": "Resend confirmation otp",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"type\": \"otp\",\r\n    \"email\": \"rorensuuu@gmail.com\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/auth/resend-confirmation-email",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"auth",
-										"resend-confirmation-email"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "content-type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "etag",
-									"value": "\"4s608yi1431x\""
-								},
-								{
-									"key": "content-length",
-									"value": "69"
-								},
-								{
-									"key": "vary",
-									"value": "Accept-Encoding"
-								},
-								{
-									"key": "date",
-									"value": "Thu, 03 Aug 2023 08:10:35 GMT"
-								},
-								{
-									"key": "connection",
-									"value": "close"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Email confirmation sent successfully\"\n}"
-						}
-					]
-				},
-				{
-					"name": "Refresh Access token",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"var statusCode = pm.response.code;\r",
-									"var jsonData = pm.response.json();\r",
-									"if(statusCode==200 || statusCode==201){\r",
-									"    pm.environment.set(\"accessToken\", jsonData.data.accessToken);\r",
-									"}\r",
-									"\r",
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"token\": \"{{refreshToken}}\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/auth/refresh",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"auth",
-								"refresh"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "Refresh Access token",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"token\": \"{{refreshToken}}\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/auth/refresh",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"auth",
-										"refresh"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "content-type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "etag",
-									"value": "\"95w08gn6r5a6\""
-								},
-								{
-									"key": "content-length",
-									"value": "366"
-								},
-								{
-									"key": "vary",
-									"value": "Accept-Encoding"
-								},
-								{
-									"key": "date",
-									"value": "Thu, 03 Aug 2023 08:21:49 GMT"
-								},
-								{
-									"key": "connection",
-									"value": "close"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Token refreshed successfully\",\n    \"data\": {\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAwMCwiZW1haWwiOiJ0b3Jhb29vLjEwMDZAZ21haWwuY29tIiwidXNlcm5hbWUiOiJhZG1pbiIsImZpcnN0X25hbWUiOiJBZG1pbiIsImxhc3RfbmFtZSI6IiIsImltYWdlX3VybCI6IiIsImlhdCI6MTY5MTA1MDkwOSwiZXhwIjoxNjkxMDUxODA5fQ.o4ywe3oMRzbB8iVTFjTfEtE2SYHBUxPtA3vjHtXHjFE\"\n    }\n}"
-						}
-					]
-				}
-			]
-		}
-	]
+  "info": {
+    "_postman_id": "b1e6f4a8-ec54-4fda-af6d-cc846e90aba9",
+    "name": "Next E-Commerce",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "20011538"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"firstName\": \"Admin\",\r\n    \"lastName\": \"User\",\r\n    \"username\": \"test\",\r\n    \"email\": \"rorensuuu@gmail.com\",\r\n    \"password\": \"supersecretpassword\",\r\n    \"confirmPassword\": \"supersecretpassword\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/signup",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "signup"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Register",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"firstName\": \"Admin\",\r\n    \"lastName\": \"User\",\r\n    \"username\": \"admin\",\r\n    \"email\": \"rorensuuu@gmail.com\",\r\n    \"password\": \"admin_password\",\r\n    \"confirmPassword\": \"admin_password\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/auth/signup",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "signup"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "etag",
+                  "value": "\"q38k5oftepl9\""
+                },
+                {
+                  "key": "content-length",
+                  "value": "765"
+                },
+                {
+                  "key": "vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 03 Aug 2023 07:12:59 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"User created successfully\",\n    \"data\": {\n        \"id\": 8,\n        \"first_name\": \"Admin\",\n        \"last_name\": \"User\",\n        \"email\": \"rorensuuu@gmail.com\",\n        \"username\": \"admin\",\n        \"image_url\": \"\",\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZmlyc3RfbmFtZSI6IkFkbWluIiwibGFzdF9uYW1lIjoiVXNlciIsImVtYWlsIjoicm9yZW5zdXV1QGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiYWRtaW4iLCJpbWFnZV91cmwiOiIiLCJpYXQiOjE2OTEwNDY3NzksImV4cCI6MTY5MTA0NzY3OX0.e6958rhZxCc8S_GdRZTZQ173LJ_7qi16xAcmv_O3X-8\",\n        \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZmlyc3RfbmFtZSI6IkFkbWluIiwibGFzdF9uYW1lIjoiVXNlciIsImVtYWlsIjoicm9yZW5zdXV1QGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiYWRtaW4iLCJpbWFnZV91cmwiOiIiLCJpYXQiOjE2OTEwNDY3NzksImV4cCI6MTY5MTY1MTU3OX0.h5uOseMwhl_WeFkkQpA3powP3pq3ZbgAsnb3LejgSkk\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var statusCode = pm.response.code;\r",
+                  "var jsonData = pm.response.json();\r",
+                  "if(statusCode==200 || statusCode==201){\r",
+                  "    pm.environment.set(\"accessToken\", jsonData.data.accessToken);\r",
+                  "    pm.environment.set(\"refreshToken\", jsonData.data.refreshToken);\r",
+                  "}\r",
+                  "\r",
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{password}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Login",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{password}}\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/login",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "etag",
+                  "value": "\"bt3uxp47jrl0\""
+                },
+                {
+                  "key": "content-length",
+                  "value": "756"
+                },
+                {
+                  "key": "vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 03 Aug 2023 07:32:57 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Login successful\",\n    \"data\": {\n        \"id\": 8,\n        \"first_name\": \"Admin\",\n        \"last_name\": \"User\",\n        \"email\": \"rorensuuu@gmail.com\",\n        \"username\": \"admin\",\n        \"image_url\": \"\",\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZmlyc3RfbmFtZSI6IkFkbWluIiwibGFzdF9uYW1lIjoiVXNlciIsImVtYWlsIjoicm9yZW5zdXV1QGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiYWRtaW4iLCJpbWFnZV91cmwiOiIiLCJpYXQiOjE2OTEwNDc5NzcsImV4cCI6MTY5MTA0ODg3N30.HwgBTvWPJbMq10IpL27gdwzRPu2VSDxWNFLDEUwVJZk\",\n        \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZmlyc3RfbmFtZSI6IkFkbWluIiwibGFzdF9uYW1lIjoiVXNlciIsImVtYWlsIjoicm9yZW5zdXV1QGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiYWRtaW4iLCJpbWFnZV91cmwiOiIiLCJpYXQiOjE2OTEwNDc5NzcsImV4cCI6MTY5MTY1Mjc3N30.HPDz-IVHp78Xb3S9JlNk4Ikp6_1p2GWIfPXl18e16DI\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"rorensuuu@gmail.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/reset-password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "reset-password"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Reset password",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\": \"rorensuuu@gmail.com\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/reset-password",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "reset-password"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "etag",
+                  "value": "\"pnhlni54tj1t\""
+                },
+                {
+                  "key": "content-length",
+                  "value": "65"
+                },
+                {
+                  "key": "vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 03 Aug 2023 07:53:22 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Password reset sent successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Confirm Reset Password",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"token\": \"26fde5a38a36ac08dd8d9c3171b25b15a124a84d9c6dacbb394bee402bcc243b\",\r\n    \"password\": \"password\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/confirm-reset-password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "confirm-reset-password"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Confirm reset password",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"token\": \"26fde5a38a36ac08dd8d9c3171b25b15a124a84d9c6dacbb394bee402bcc243b\",\r\n    \"password\": \"password\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/confirm-reset-password",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "confirm-reset-password"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "etag",
+                  "value": "\"4zqo3k591z1q\""
+                },
+                {
+                  "key": "content-length",
+                  "value": "62"
+                },
+                {
+                  "key": "vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 03 Aug 2023 07:56:30 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Password changed successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Confirm Email",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"type\": \"otp\",\r\n    \"token\": \"407548\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/confirm-email",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "confirm-email"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Confirm email using token",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"type\": \"token\",\r\n    \"token\": \"78511edcd4f5d23f09a23714979cb0242accbf446db05b96790edae090457186\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/confirm-email",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "confirm-email"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "etag",
+                  "value": "\"3h7lxj5qmm1p\""
+                },
+                {
+                  "key": "content-length",
+                  "value": "61"
+                },
+                {
+                  "key": "vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 03 Aug 2023 08:11:49 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Email confirmed successfully\"\n}"
+            },
+            {
+              "name": "Confirm email using otp",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"type\": \"otp\",\r\n    \"token\": \"407548\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/confirm-email",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "confirm-email"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "etag",
+                  "value": "\"3h7lxj5qmm1p\""
+                },
+                {
+                  "key": "content-length",
+                  "value": "61"
+                },
+                {
+                  "key": "vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 03 Aug 2023 08:19:15 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Email confirmed successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Resend Confirmation Email",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"type\": \"token\",\r\n    \"email\": \"rorensuuu@gmail.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/resend-confirmation-email",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "resend-confirmation-email"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Resend confirmation email",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"type\": \"token\",\r\n    \"email\": \"rorensuuu@gmail.com\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/resend-confirmation-email",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "resend-confirmation-email"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "etag",
+                  "value": "\"4s608yi1431x\""
+                },
+                {
+                  "key": "content-length",
+                  "value": "69"
+                },
+                {
+                  "key": "vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 03 Aug 2023 08:12:41 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Email confirmation sent successfully\"\n}"
+            },
+            {
+              "name": "Resend confirmation otp",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"type\": \"otp\",\r\n    \"email\": \"rorensuuu@gmail.com\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/resend-confirmation-email",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "resend-confirmation-email"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "etag",
+                  "value": "\"4s608yi1431x\""
+                },
+                {
+                  "key": "content-length",
+                  "value": "69"
+                },
+                {
+                  "key": "vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 03 Aug 2023 08:10:35 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Email confirmation sent successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Refresh Access token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var statusCode = pm.response.code;\r",
+                  "var jsonData = pm.response.json();\r",
+                  "if(statusCode==200 || statusCode==201){\r",
+                  "    pm.environment.set(\"accessToken\", jsonData.data.accessToken);\r",
+                  "}\r",
+                  "\r",
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"token\": \"{{refreshToken}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/refresh",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "refresh"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Refresh Access token",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"token\": \"{{refreshToken}}\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/refresh",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "refresh"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "etag",
+                  "value": "\"95w08gn6r5a6\""
+                },
+                {
+                  "key": "content-length",
+                  "value": "366"
+                },
+                {
+                  "key": "vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 03 Aug 2023 08:21:49 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Token refreshed successfully\",\n    \"data\": {\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAwMCwiZW1haWwiOiJ0b3Jhb29vLjEwMDZAZ21haWwuY29tIiwidXNlcm5hbWUiOiJhZG1pbiIsImZpcnN0X25hbWUiOiJBZG1pbiIsImxhc3RfbmFtZSI6IiIsImltYWdlX3VybCI6IiIsImlhdCI6MTY5MTA1MDkwOSwiZXhwIjoxNjkxMDUxODA5fQ.o4ywe3oMRzbB8iVTFjTfEtE2SYHBUxPtA3vjHtXHjFE\"\n    }\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

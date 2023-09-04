@@ -11,9 +11,9 @@ class Hello {
 async function handler(req: NextRequest) {
     const controller = new Hello();
 
-    const {statusCode, response} = await controller.sayHello(req);
+    const { statusCode, response } = await controller.sayHello(req);
 
-    return NextResponse.json(response, {status: statusCode});
+    return NextResponse.json(response, { status: statusCode });
 }
 
 export {

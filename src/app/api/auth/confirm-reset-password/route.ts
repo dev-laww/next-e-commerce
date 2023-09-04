@@ -4,16 +4,16 @@ import AuthController from "@controller/auth.controller";
 import { getLogger } from "@utils/logging";
 import { STATUS_CODE } from "@lib/constants";
 
-const logger = getLogger({name: "api:auth:confirm-reset-password"});
+const logger = getLogger({ name: "api:auth:confirm-reset-password" });
 
 async function handler(req: NextRequest) {
     const controller = new AuthController();
 
-    const {statusCode, response} = await controller.confirmResetPassword(req);
+    const { statusCode, response } = await controller.confirmResetPassword(req);
     const success = statusCode == STATUS_CODE.OK;
     logger.info(success ? response.message : response, success ? undefined : `Confirm reset password failed: ${response.message}`);
 
-    return NextResponse.json(response, {status: statusCode})
+    return NextResponse.json(response, { status: statusCode })
 }
 
 export {

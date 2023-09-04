@@ -17,7 +17,7 @@ describe("LogRepository", () => {
 
         expect(result).toMatchObject([]);
 
-        result = await repo.getAll(undefined, 50, {id: 1});
+        result = await repo.getAll(undefined, 50, { id: 1 });
 
         expect(result).toMatchObject([]);
     });

@@ -1,5 +1,5 @@
 import UserRepository from "@repository/user.repo";
-import { mockDeep, DeepMockProxy } from "jest-mock-extended";
+import { DeepMockProxy, mockDeep } from "jest-mock-extended";
 
 const repositoryMock = mockDeep<UserRepository>;
 

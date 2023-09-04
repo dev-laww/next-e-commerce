@@ -46,7 +46,7 @@ const permissions = [
         name: "Update User Roles",
         code: "permission:update:user-role",
         action: "PUT",
-        resource: "PUT/api/accounts/:id/roles/",
+        resource: "PUT/api/accounts/:id/roles",
     },
     {
         id: 1006,

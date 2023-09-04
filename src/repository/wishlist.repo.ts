@@ -16,19 +16,19 @@ export default class WishlistRepository {
 
     public async getById(id: number): Promise<WishlistItem | null> {
         return this.prismaClient.wishlistItem.findUnique({
-            where: {id: id},
+            where: { id: id },
         });
     }
 
     public async getUserWishlist(userId: number): Promise<WishlistItem[]> {
         return this.prismaClient.wishlistItem.findMany({
-            where: {user_id: userId},
+            where: { user_id: userId },
         });
     }
 
     public async getByProductId(productId: number): Promise<WishlistItem[]> {
         return this.prismaClient.wishlistItem.findMany({
-            where: {product_id: productId},
+            where: { product_id: productId },
         });
     }
 
@@ -40,26 +40,26 @@ export default class WishlistRepository {
 
     public async update(id: number, data: Prisma.WishlistItemUpdateInput): Promise<WishlistItem> {
         return this.prismaClient.wishlistItem.update({
-            where: {id: id},
+            where: { id: id },
             data: data
         });
     }
 
     public async delete(id: number): Promise<WishlistItem> {
         return this.prismaClient.wishlistItem.delete({
-            where: {id: id}
+            where: { id: id }
         });
     }
 
     public async deleteUserWishlist(userId: number): Promise<Prisma.BatchPayload> {
         return this.prismaClient.wishlistItem.deleteMany({
-            where: {user_id: userId}
+            where: { user_id: userId }
         });
     }
 
     public async deleteByProductId(productId: number): Promise<Prisma.BatchPayload> {
         return this.prismaClient.wishlistItem.deleteMany({
-            where: {product_id: productId}
+            where: { product_id: productId }
         });
     }
 }

@@ -56,7 +56,7 @@ export default class RoleRepository {
         });
 
         return rolePermissions.map(rolePermission => {
-            const {created_at, updated_at, ...rest} = rolePermission.permission;
+            const { created_at, updated_at, ...rest } = rolePermission.permission;
 
             return rest as Permission;
         });
@@ -69,13 +69,13 @@ export default class RoleRepository {
         const permissionsToRemove = rolePermissions.filter(permission => !permissions.includes(permission));
 
         const role = await this.prismaClient.role.update({
-            where: {id: id},
+            where: { id: id },
             data: {
                 permissions: {
                     createMany: {
-                        data: permissionsToAdd.map(permission => ({permission_id: permission}))
+                        data: permissionsToAdd.map(permission => ({ permission_id: permission }))
                     },
-                    deleteMany: permissionsToRemove.map(permission => ({permission_id: permission}))
+                    deleteMany: permissionsToRemove.map(permission => ({ permission_id: permission }))
                 }
             }
         });

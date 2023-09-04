@@ -1824,7 +1824,7 @@ List of all API endpoints.
             - `GET`: Get a list of all categories for a specific product.
         - Format: `REQ /products/:id/categories/:id`
             - `POST`: Link a specific category to a specific product.
-            - `DELETE`: Unlink a specific category from a specific product. 
+            - `DELETE`: Unlink a specific category from a specific product.
     - **Reviews**
         - Format: `REQ /products/:id/reviews`
             - `GET`: Get a list of all reviews for a specific product.
@@ -2091,6 +2091,7 @@ List of all API endpoints.
             ```
 
 ## Orders
+
 - `GET /orders`: Get a list of all orders. (admin-only)
     - **Request**:
         ```http request

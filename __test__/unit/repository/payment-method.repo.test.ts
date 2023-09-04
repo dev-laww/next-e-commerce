@@ -37,7 +37,7 @@ describe("PaymentMethodRepository", () => {
 
         expect(result).toMatchObject([]);
 
-        result = await repo.getAll(undefined, 50, {id: 1});
+        result = await repo.getAll(undefined, 50, { id: 1 });
 
         expect(result).toMatchObject([]);
     });
@@ -93,12 +93,12 @@ describe("PaymentMethodRepository", () => {
     });
 
     it("Test deleteByUserId", async () => {
-        (prisma.paymentMethod.deleteMany as jest.Mock).mockResolvedValue({count: 1})
+        (prisma.paymentMethod.deleteMany as jest.Mock).mockResolvedValue({ count: 1 })
 
         const repo = new PaymentMethodRepository();
 
         const result = await repo.deleteByUserId(1000);
 
-        expect(result).toMatchObject({count: 1});
+        expect(result).toMatchObject({ count: 1 });
     });
 });

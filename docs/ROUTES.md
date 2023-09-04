@@ -1,7 +1,9 @@
 # Routes
+
 List of all routes within the application.
 
 ## Table of Contents
+
 - [Auth](#auth)
 - [User](#user)
 - [Cart](#cart)
@@ -13,12 +15,14 @@ List of all routes within the application.
 - [Miscellaneous](#miscellaneous)
 
 ## Auth
+
 - `/auth/login`: Login a user
 - `/auth/register`: Register a user
 - `/auth/confirmation`: Confirm a user's email
 - `/auth/forgot-password`: Send a password reset email
 
 ## User
+
 - `/user/me`: Get the current user
 - `/user/:id`: Get a user by id
 - `/user/:id/orders`: Get a user's orders
@@ -29,25 +33,31 @@ List of all routes within the application.
 - `/user/:id/payment-methods`: Get a user's payment methods
 
 ## Cart
+
 - `/cart`: Get the current user's cart
 - `/cart/add`: Add an item to the current user's cart
 
 ## Product
+
 - `/products`: Get all products
 - `/products/:id`: Get a product by id
 - `/products/:id/reviews`: Get a product's reviews
 
 ## Order
+
 - `/orders`: Get the current user's orders
 - `/orders/:id`: Get an order by id
 
 ## Checkout
+
 - `/checkout`: Checkout the current user's cart
 
 ## Search
+
 - `/search`: Search for products
 
 ## Admin
+
 - `/admin`: Admin dashboard
 - `/admin/products`: Admin products dashboard
 - `/admin/products/add`: Add a product
@@ -75,8 +85,10 @@ List of all routes within the application.
 - `/admin/logs`: Admin logs dashboard
 
 ## Miscellaneous
+
 - `/`: Home page
 
 ## Notes
+
 - This is a work in progress, routes will be added as they are implemented
 

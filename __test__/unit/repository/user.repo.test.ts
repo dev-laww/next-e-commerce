@@ -1,13 +1,14 @@
 import {
     Address,
-    PaymentMethod,
-    Order,
-    User,
-    Review,
-    WishlistItem,
     CartItem,
+    Order,
+    PaymentMethod,
+    Review,
+    Role,
     TokenOTP,
-    UserRole, Role
+    User,
+    UserRole,
+    WishlistItem
 } from "@prisma/client";
 import { mockReset } from "jest-mock-extended";
 
@@ -39,11 +40,19 @@ describe("UserRepository", () => {
         expect(result).toMatchObject(data);
     });
 
-    it("Test getUserById", async () => {
-        (prisma.user.findUnique as jest.Mock).mockResolvedValue(data as User);
-        const result = await repo.getUserById(1)
+    it("Test getById", async () => {
+        const { password, ...user } = data;
+        (prisma.user.findUnique as jest.Mock).mockResolvedValue(user);
 
-        expect(result).toMatchObject(data);
+        let result = await repo.getById(1)
+
+        expect(result).toMatchObject(user);
+
+        (prisma.user.findUnique as jest.Mock).mockResolvedValue(null);
+
+        result = await repo.getById(1)
+
+        expect(result).toBe(null);
     })
 
     it("Test getUserByEmail", async () => {
@@ -53,7 +62,7 @@ describe("UserRepository", () => {
         expect(result).toMatchObject(data);
     })
 
-    it("Test getUserByUsername", async () => {
+    it("Test getByUsername", async () => {
         (prisma.user.findUnique as jest.Mock).mockResolvedValue(data as User);
         const result = await repo.getByUsername("username")
 
@@ -82,13 +91,16 @@ describe("UserRepository", () => {
     })
 
     it("Test getAll", async () => {
+        const { password, ...user } = data;
+        (prisma.user.findMany as jest.Mock).mockResolvedValue([user]);
+
+        let result = await repo.getAll(undefined, 50, { id: 1 });
+
+        expect(result).toMatchObject([user]);
+
         (prisma.user.findMany as jest.Mock).mockResolvedValue([]);
 
-        let result = await repo.getAll();
-
-        expect(result).toMatchObject([]);
-
-        result = await repo.getAll(undefined, 50, {id: 1});
+        result = await repo.getAll();
 
         expect(result).toMatchObject([]);
     })
@@ -128,7 +140,7 @@ describe("UserRepository", () => {
 
         (prisma.user.update as jest.Mock).mockResolvedValue(userWithRoles as User);
         (prisma.user.findUnique as jest.Mock).mockResolvedValue(userWithRoles as User);
-        (prisma.role.findMany as jest.Mock).mockResolvedValue([{id: 1, name: "name"}]);
+        (prisma.role.findMany as jest.Mock).mockResolvedValue([{ id: 1, name: "name" }]);
 
         const result = await repo.updateRoles(1, [2])
 
@@ -146,7 +158,7 @@ describe("UserRepository", () => {
         };
 
         (prisma.user.findUnique as jest.Mock).mockResolvedValue(userWithRoles as User);
-        (prisma.role.findMany as jest.Mock).mockResolvedValue([{id: 1, name: "name"}] as Role[]);
+        (prisma.role.findMany as jest.Mock).mockResolvedValue([{ id: 1, name: "name" }] as Role[]);
         (prisma.rolePermission.findMany as jest.Mock).mockResolvedValue([{
             permission: {
                 id: 1,
@@ -158,7 +170,7 @@ describe("UserRepository", () => {
 
         let result = await repo.getPermissions(1)
 
-        expect(result).toMatchObject([{id: 1, name: "name", description: "description"}]);
+        expect(result).toMatchObject([{ id: 1, name: "name", description: "description" }]);
 
         // empty permissions
         (prisma.user.findUnique as jest.Mock).mockResolvedValue(null);
@@ -194,10 +206,10 @@ describe("UserRepository", () => {
     })
 
     it("Test deleteUserPaymentMethods", async () => {
-        (prisma.paymentMethod.deleteMany as jest.Mock).mockResolvedValue({count: 1});
+        (prisma.paymentMethod.deleteMany as jest.Mock).mockResolvedValue({ count: 1 });
         const result = await repo.deletePaymentMethods(1)
 
-        expect(result).toMatchObject({count: 1});
+        expect(result).toMatchObject({ count: 1 });
     })
 
     it("Test getUserAddresses (non empty)", async () => {
@@ -226,10 +238,10 @@ describe("UserRepository", () => {
     })
 
     it("Test deleteUserAddresses", async () => {
-        (prisma.address.deleteMany as jest.Mock).mockResolvedValue({count: 1});
+        (prisma.address.deleteMany as jest.Mock).mockResolvedValue({ count: 1 });
         const result = await repo.deleteAddresses(1)
 
-        expect(result).toMatchObject({count: 1});
+        expect(result).toMatchObject({ count: 1 });
     })
 
     it("Test getUserOrders", async () => {
@@ -258,11 +270,11 @@ describe("UserRepository", () => {
     })
 
     it("Test deleteUserOrders", async () => {
-        (prisma.order.deleteMany as jest.Mock).mockResolvedValue({count: 1});
+        (prisma.order.deleteMany as jest.Mock).mockResolvedValue({ count: 1 });
 
         const result = await repo.deleteOrders(1)
 
-        expect(result).toMatchObject({count: 1});
+        expect(result).toMatchObject({ count: 1 });
     })
 
     it("Test getUserReviews", async () => {
@@ -289,11 +301,11 @@ describe("UserRepository", () => {
     })
 
     it("Test deleteUserReviews", async () => {
-        (prisma.review.deleteMany as jest.Mock).mockResolvedValue({count: 1});
+        (prisma.review.deleteMany as jest.Mock).mockResolvedValue({ count: 1 });
 
         const result = await repo.deleteReviews(1)
 
-        expect(result).toMatchObject({count: 1});
+        expect(result).toMatchObject({ count: 1 });
     })
 
     it("Test getUserWishlist", async () => {
@@ -318,10 +330,10 @@ describe("UserRepository", () => {
     })
 
     it("Test deleteUserWishlist", async () => {
-        (prisma.wishlistItem.deleteMany as jest.Mock).mockResolvedValue({count: 1});
+        (prisma.wishlistItem.deleteMany as jest.Mock).mockResolvedValue({ count: 1 });
         const result = await repo.deleteWishlist(1)
 
-        expect(result).toMatchObject({count: 1});
+        expect(result).toMatchObject({ count: 1 });
     })
 
     it("Test getUserCart", async () => {
@@ -348,10 +360,10 @@ describe("UserRepository", () => {
     })
 
     it("Test deleteUserCart", async () => {
-        (prisma.cartItem.deleteMany as jest.Mock).mockResolvedValue({count: 1});
+        (prisma.cartItem.deleteMany as jest.Mock).mockResolvedValue({ count: 1 });
         const result = await repo.deleteCart(1)
 
-        expect(result).toMatchObject({count: 1});
+        expect(result).toMatchObject({ count: 1 });
     })
 
     it("Test generateTokenOTP", async () => {
@@ -379,7 +391,7 @@ describe("UserRepository", () => {
         // success
         (prisma.tokenOTP.findFirst as jest.Mock).mockResolvedValue(token);
         (prisma.tokenOTP.delete as jest.Mock).mockResolvedValue(token);
-        let {success, data} = await repo.verifyTokenOTP("x", "x")
+        let { success, data } = await repo.verifyTokenOTP("x", "x")
 
         expect(success).toBe(true);
         expect(data).toBe(null);
@@ -387,14 +399,14 @@ describe("UserRepository", () => {
         // fail expired
         token.created_at = new Date();
         (prisma.tokenOTP.findFirst as jest.Mock).mockResolvedValue(token);
-        ({success, data} = await repo.verifyTokenOTP("x", "x"))
+        ({ success, data } = await repo.verifyTokenOTP("x", "x"))
 
         expect(success).toBe(false);
         expect(data).toMatchObject({});
 
         // fail not found
         (prisma.tokenOTP.findFirst as jest.Mock).mockResolvedValue(null);
-        ({success, data} = await repo.verifyTokenOTP("x", "x"))
+        ({ success, data } = await repo.verifyTokenOTP("x", "x"))
 
         expect(success).toBe(false);
         expect(data).toMatchObject({});
@@ -456,8 +468,8 @@ describe("UserRepository", () => {
     });
 
     it("Test createPayment", async () => {
-        (prisma.order.findUnique as jest.Mock).mockResolvedValue({id: 1, total: 1});
-        (prisma.paymentMethod.findUnique as jest.Mock).mockResolvedValue({id: 1});
+        (prisma.order.findUnique as jest.Mock).mockResolvedValue({ id: 1, total: 1 });
+        (prisma.paymentMethod.findUnique as jest.Mock).mockResolvedValue({ id: 1 });
         (prisma.user.update as jest.Mock).mockResolvedValue({
             ...data,
             payments: [{
@@ -482,7 +494,7 @@ describe("UserRepository", () => {
         (prisma.order.findUnique as jest.Mock).mockResolvedValue(null);
         await expect(repo.createPayment(1, 1, 1)).rejects.toThrowError("Order not found");
 
-        (prisma.order.findUnique as jest.Mock).mockResolvedValue({id: 1, total: 1});
+        (prisma.order.findUnique as jest.Mock).mockResolvedValue({ id: 1, total: 1 });
         (prisma.paymentMethod.findUnique as jest.Mock).mockResolvedValue(null);
 
         await expect(repo.createPayment(1, 1, 1)).rejects.toThrowError("Payment method not found");

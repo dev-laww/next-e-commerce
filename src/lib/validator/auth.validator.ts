@@ -1,60 +1,60 @@
 import z from "zod";
 
 const registerSchema = z.object({
-    "firstName": z.string({required_error: "First name is required"})
+    "firstName": z.string({ required_error: "First name is required" })
         .min(3, "First name must be at least 3 characters")
         .max(50, "First name must be at most 50 characters"),
-    "lastName": z.string({required_error: "Last name is required"})
+    "lastName": z.string({ required_error: "Last name is required" })
         .min(3, "Last name must be at least 3 characters")
         .max(50, "Last name must be at most 50 characters"),
-    "email": z.string({required_error: "Email is required"})
+    "email": z.string({ required_error: "Email is required" })
         .email("Invalid email address"),
     "imageUrl": z.optional(z.string().url("Invalid image url")),
-    "password": z.string({required_error: "Password is required"})
+    "password": z.string({ required_error: "Password is required" })
         .min(8, "Password must be at least 8 characters")
         .max(50, "Password must be at most 50 characters"),
-    "confirmPassword": z.string({required_error: "Confirm password is required"})
+    "confirmPassword": z.string({ required_error: "Confirm password is required" })
         .min(8, "Password must be at least 8 characters")
         .max(50, "Password must be at most 50 characters"),
 })
 
 const loginSchema = z.object({
-    "email": z.string({required_error: "Email or username is required"}),
-    "password": z.string({required_error: "Password is required"})
+    "email": z.string({ required_error: "Email or username is required" }),
+    "password": z.string({ required_error: "Password is required" })
 })
 
 const confirmEmailSchema = z.object({
-    "type": z.enum(["otp", "token"], {required_error: "Type is required"}),
-    "token": z.string({required_error: "Token is required"})
+    "type": z.enum(["otp", "token"], { required_error: "Type is required" }),
+    "token": z.string({ required_error: "Token is required" })
 })
 
 
 const refreshTokenSchema = z.object({
-    "token": z.string({required_error: "Token is required"})
+    "token": z.string({ required_error: "Token is required" })
 })
 
 const resetPasswordSchema = z.object({
-    "email": z.string({required_error: "Token is required"})
+    "email": z.string({ required_error: "Token is required" })
         .email("Invalid email address"),
-    "type": z.enum(["otp", "token"], {required_error: "Type is required"})
+    "type": z.enum(["otp", "token"], { required_error: "Type is required" })
 });
 
 const confirmResetPasswordSchema = z.object({
-    "type": z.enum(["otp", "token"], {required_error: "Type is required"}),
-    "token": z.string({required_error: "Token is required"}),
-    "password": z.string({required_error: "Password is required"})
+    "type": z.enum(["otp", "token"], { required_error: "Type is required" }),
+    "token": z.string({ required_error: "Token is required" }),
+    "password": z.string({ required_error: "Password is required" })
         .min(8, "Password must be at least 8 characters")
         .max(50, "Password must be at most 50 characters"),
 })
 
 const resendEmailSchema = z.object({
-    "email": z.string({required_error: "Email is required"})
+    "email": z.string({ required_error: "Email is required" })
         .email("Invalid email address"),
-    "type": z.enum(["otp", "token"], {required_error: "Type is required"})
+    "type": z.enum(["otp", "token"], { required_error: "Type is required" })
 });
 
 
-const validator =  {
+const validator = {
     registerSchema,
     loginSchema,
     confirmEmailSchema,

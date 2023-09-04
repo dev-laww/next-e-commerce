@@ -1,7 +1,3 @@
-import { NextApiRequest } from "next";
-import AccountsController from "@controller/accounts.controller";
-
-
 describe("AccountsController", () => {
     describe("Test getAccounts", () => {
         it.todo("returns 200 with accounts data");
