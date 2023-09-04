@@ -2,7 +2,9 @@ import { NextRequest } from "next/server";
 
 import Validators from "@lib/validator/{{kebabCase name}}.validator";
 import Response from "@lib/http";
+import { CheckError } from "@utils/decorator";
 
+@CheckError
 export default class {{pascalCase name}}Controller {
   async hello(req: NextApiRequest) {
     return Response.success("Hello World", {});
