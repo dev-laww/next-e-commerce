@@ -17,11 +17,9 @@ export default class AccountsController {
     public async getAccounts(req: NextRequest) {
         const searchParams = Object.fromEntries(req.nextUrl.searchParams);
 
-        const filters = Validators.search.safeParse(searchParams);
+        const filters = Validators.search.parse(searchParams);
 
-        if (!filters.success) return Response.badRequest("Invalid search params", filters.error.errors);
-
-        let {pageToken, limit, ...filter} = filters.data;
+        let {pageToken, limit, ...filter} = filters;
         limit = limit || 50;
 
         // Parse page token
@@ -53,9 +51,9 @@ export default class AccountsController {
         };
         const hasNextPage = await this.repo.getAll(filter, limit || 50, result[result.length - 1]).then(res => res.length > 0);
 
-        const newSearchParam = new URLSearchParams({
+        const nextSearchParams = new URLSearchParams({
             ...searchParams,
-            pageToken: generatePageToken(nextPageToken) || ""
+            pageToken: generatePageToken(nextPageToken)
         });
 
         const hasPreviousPage = await this.repo.getAll(filter, limit ? -limit : -50, result[0]).then(res => res.length > 0);
@@ -64,14 +62,14 @@ export default class AccountsController {
             type: "previous"
         };
 
-        const newPreviousSearchParam = new URLSearchParams({
+        const previousSearchParams = new URLSearchParams({
             ...searchParams,
-            pageToken: generatePageToken(previousPageToken) || ""
+            pageToken: generatePageToken(previousPageToken)
         });
 
         // Generate urls
-        const nextUrl = `${req.nextUrl.origin}/${req.nextUrl.pathname}?${newSearchParam.toString()}`;
-        const previousUrl = `${req.nextUrl.origin}/${req.nextUrl.pathname}?${newPreviousSearchParam.toString()}`;
+        const nextUrl = `${req.nextUrl.origin}/${req.nextUrl.pathname}?${nextSearchParams.toString()}`;
+        const previousUrl = `${req.nextUrl.origin}/${req.nextUrl.pathname}?${previousSearchParams.toString()}`;
 
         return Response.ok("Accounts found!", {
             result,
