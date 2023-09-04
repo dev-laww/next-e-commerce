@@ -27,6 +27,7 @@ export default class UserRepository {
             take: limit,
             skip: cursor ? 1 : 0,
             where: filter,
+            orderBy: {id: "asc"}
         });
     }
 
