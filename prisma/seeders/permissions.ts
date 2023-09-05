@@ -63,6 +63,20 @@ const permissions = [
         resource: "GET/api/accounts/:id/payment-methods/:paymentMethodId",
     },
     {
+        id: 1070,
+        name: "View user payments",
+        code: "permission:read:user-payments",
+        action: "GET",
+        resource: "GET/api/accounts/:id/payments",
+    },
+    {
+        id: 1071,
+        name: "View user payment",
+        code: "permission:read:user-payment",
+        action: "GET",
+        resource: "GET/api/accounts/:id/payments/:paymentId",
+    },
+    {
         id: 1008,
         name: "View user addresses",
         code: "permission:read:user-addresses",
