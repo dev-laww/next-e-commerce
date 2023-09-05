@@ -142,5 +142,20 @@ describe("AccountsController", () => {
         it.todo("returns 404 if account not found");
         it.todo("returns 404 if review not found");
     });
+
+    describe("Test getPayments", () => {
+        it.todo("returns 200 with reviews data");
+        it.todo("returns 401 if unauthorized");
+        it.todo("returns 403 if user is not permitted");
+        it.todo("returns 404 if account not found");
+    });
+
+    describe("Test getPayment", () => {
+        it.todo("returns 200 with review data");
+        it.todo("returns 401 if unauthorized");
+        it.todo("returns 403 if user is not permitted");
+        it.todo("returns 404 if account not found");
+        it.todo("returns 404 if review not found");
+    });
 });
 

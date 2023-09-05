@@ -431,22 +431,25 @@ List of all API endpoints.
 - NOTE: Provide endpoints for the following. See equivalent endpoints on their respective sections.
     - **Payment Methods**
         - `GET /accounts/:id/payment-methods`: Get a list of all payment methods for a specific user.
-        - `GET /accounts/:id/payment-methods/:id`: Get a specific payment method for a specific user.
+        - `GET /accounts/:id/payment-methods/:paymentMethodId`: Get a specific payment method for a specific user.
     - **Addresses**
         - `GET /accounts/:id/addresses`: Get a list of all addresses for a specific user.
-        - `GET /accounts/:id/addresses/:id`: Get a specific address for a specific user.
+        - `GET /accounts/:id/addresses/:addressId`: Get a specific address for a specific user.
     - **Orders**
         - `GET /accounts/:id/orders`:  Get a list of all orders for a specific user.
-        - `GET /accounts/:id/orders/:id`: Get a specific order for a specific user.
+        - `GET /accounts/:id/orders/:orderId`: Get a specific order for a specific user.
     - **Wishlist**
         - `GET /accounts/:id/wishlist`: Get a list of all wishlist items for a specific user.
-        - `GET /accounts/:id/wishlist/:id`: Get a specific wishlist item for a specific user.
+        - `GET /accounts/:id/wishlist/:wishlistItemId`: Get a specific wishlist item for a specific user.
     - **Cart**
         - `GET /accounts/:id/cart`: Get a list of all cart items for a specific user.
-        - `GET /accounts/:id/cart/:id`: Get a specific cart item for a specific user.
+        - `GET /accounts/:id/cart/:cartItemId`: Get a specific cart item for a specific user.
     - **Reviews**
         - `GET /accounts/:id/reviews`: Get a list of all reviews for a specific user.
-        - `GET /accounts/:id/reviews/:id`: Get a specific review for a specific user.
+        - `GET /accounts/:id/reviews/:reviewId`: Get a specific review for a specific user.
+  - **Payments**
+      - `GET /accounts/:id/payments`: Get a list of all reviews for a specific user.
+      - `GET /accounts/:id/payments/:paymentId`: Get a specific review for a specific user.
 
 ## Profile
 
