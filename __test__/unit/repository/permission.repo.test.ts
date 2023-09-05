@@ -2,8 +2,6 @@ import prisma from "@lib/prisma";
 import PermissionRepository from "@repository/permission.repo";
 import { Permission, Role } from "@prisma/client";
 
-jest.mock("@lib/prisma", require("@mocks/lib/prisma.mock"));
-
 describe("PermissionRepository", () => {
     let repo: PermissionRepository;
     const role = {
@@ -29,12 +27,12 @@ describe("PermissionRepository", () => {
 
         expect(result).toMatchObject([]);
 
-        result = await repo.getAll(undefined, 50, {id: 1});
+        result = await repo.getAll(undefined, 50, { id: 1 });
 
         expect(result).toMatchObject([]);
     });
 
-    it ("Test getAvailableResources", async () => {
+    it("Test getAvailableResources", async () => {
         (prisma.permission.findMany as jest.Mock).mockResolvedValue([permission]);
 
         const result = await repo.getAvailableResources();
@@ -59,7 +57,7 @@ describe("PermissionRepository", () => {
     it("Test create", async () => {
         (prisma.permission.create as jest.Mock).mockResolvedValue(permission);
 
-        const result = await repo.create({name: "test"} as Permission);
+        const result = await repo.create({ name: "test" } as Permission);
 
         expect(result).toMatchObject(permission);
     });
@@ -67,7 +65,7 @@ describe("PermissionRepository", () => {
     it("Test update", async () => {
         (prisma.permission.update as jest.Mock).mockResolvedValue(permission);
 
-        const result = await repo.update(1, {name: "test"} as Permission);
+        const result = await repo.update(1, { name: "test" } as Permission);
 
         expect(result).toMatchObject(permission);
     });

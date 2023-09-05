@@ -5,7 +5,7 @@ import prisma from "@lib/prisma";
 export default class LogRepository {
     private prismaClient = prisma;
 
-    public async getAll(filter?: Prisma.LogWhereInput,  limit: number = 50, cursor?: Prisma.LogWhereUniqueInput) {
+    public async getAll(filter?: Prisma.LogWhereInput, limit: number = 50, cursor?: Prisma.LogWhereUniqueInput) {
         return this.prismaClient.log.findMany({
             cursor: cursor,
             take: limit,
@@ -16,7 +16,7 @@ export default class LogRepository {
 
     public async getById(id: number): Promise<Log | null> {
         return this.prismaClient.log.findUnique({
-            where: {id: id}
+            where: { id: id }
         });
     }
 

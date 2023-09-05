@@ -2,8 +2,6 @@ import RoleRepository from "@repository/role.repo";
 import { Permission, Role } from "@prisma/client";
 import prisma from "@lib/prisma";
 
-jest.mock("@lib/prisma", require("@mocks/lib/prisma.mock"));
-
 describe("RoleRepository", () => {
     let repo: RoleRepository;
     const role = {
@@ -27,7 +25,7 @@ describe("RoleRepository", () => {
 
         expect(result).toMatchObject([]);
 
-        result = await repo.getAll(undefined, 50, {id: 1});
+        result = await repo.getAll(undefined, 50, { id: 1 });
 
         expect(result).toMatchObject([]);
     });

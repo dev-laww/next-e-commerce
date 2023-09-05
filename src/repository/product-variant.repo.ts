@@ -16,7 +16,7 @@ export default class ProductVariantRepository {
 
     public async getById(id: number): Promise<ProductVariant | null> {
         return this.prismaClient.productVariant.findUnique({
-            where: {id: id}
+            where: { id: id }
         });
     }
 
@@ -28,14 +28,14 @@ export default class ProductVariantRepository {
 
     public async update(id: number, data: Prisma.ProductVariantUpdateInput): Promise<ProductVariant> {
         return this.prismaClient.productVariant.update({
-            where: {id: id},
+            where: { id: id },
             data: data
         });
     }
 
     public async delete(id: number): Promise<ProductVariant> {
         return this.prismaClient.productVariant.delete({
-            where: {id: id}
+            where: { id: id }
         });
     }
 }

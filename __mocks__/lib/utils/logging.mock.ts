@@ -1,17 +1,15 @@
+import pino from "pino";
+import { mockDeep } from "jest-mock-extended";
 
-const logger = jest.fn()
 
-const getLoggerMock = (name: string) => ({
-    debug: jest.fn(),
-    info: jest.fn(),
-    error: jest.fn(),
-    warn: jest.fn(),
-    fatal: jest.fn()
-});
+const mockLogger = mockDeep<pino.Logger>();
+mockLogger.child.mockReturnValue(mockDeep<pino.Logger>());
+
+const getLoggerMock = jest.fn(() => mockLogger);
 
 module.exports = {
     __esModule: true,
-    default: logger,
+    default: mockLogger,
     getDatabaseLogger: getLoggerMock,
-    getLogger: jest.fn()
+    getLogger: getLoggerMock
 };

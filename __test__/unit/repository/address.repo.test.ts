@@ -2,8 +2,6 @@ import AddressRepository from "@repository/address.repo";
 import prisma from "@lib/prisma";
 import { Prisma } from "@prisma/client";
 
-jest.mock("@lib/prisma", require("@mocks/lib/prisma.mock"));
-
 describe("AddressRepository", () => {
     let repo: AddressRepository;
     beforeEach(() => {
@@ -18,7 +16,7 @@ describe("AddressRepository", () => {
 
         expect(result).toMatchObject([]);
 
-        result = await repo.getAll(undefined, 50, {id: 1});
+        result = await repo.getAll(undefined, 50, { id: 1 });
 
         expect(result).toMatchObject([]);
     });

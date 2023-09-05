@@ -23,7 +23,6 @@ const nonRelationEntities = [
     'products',
     'categories',
     'coupons',
-    'logs',
     'shippingMethods',
     'roles',
     'permissions'

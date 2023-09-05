@@ -16,7 +16,7 @@ export default class AddressRepository {
 
     public async getById(id: number): Promise<Address | null> {
         return this.prismaClient.address.findUnique({
-            where: {id: id},
+            where: { id: id },
         });
     }
 
@@ -28,26 +28,26 @@ export default class AddressRepository {
 
     public async update(id: number, address: Prisma.AddressUpdateInput): Promise<Address> {
         return this.prismaClient.address.update({
-            where: {id: id},
+            where: { id: id },
             data: address
         });
     }
 
     public async delete(id: number): Promise<Address> {
         return this.prismaClient.address.delete({
-            where: {id: id}
+            where: { id: id }
         });
     }
 
     public getAllUserAddresses(userId: number): Promise<Address[]> {
         return this.prismaClient.address.findMany({
-            where: {user_id: userId}
+            where: { user_id: userId }
         });
     }
 
     public async deleteUserAddresses(userId: number): Promise<Prisma.BatchPayload> {
         return this.prismaClient.address.deleteMany({
-            where: {user_id: userId}
+            where: { user_id: userId }
         });
     }
 }

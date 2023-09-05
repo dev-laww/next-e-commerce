@@ -1,4 +1,4 @@
-const { component, controller, repository } = require('./settings');
+const {component, controller, repository} = require('./settings');
 
 /** @type {import('plop').NodePlopAPI}*/
 module.exports = function (plop) {

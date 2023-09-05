@@ -14,3 +14,7 @@ export type Response = {
         errors?: any,
     }
 }
+
+export type PageToken = {
+    type: "next" | "previous",
+} & Partial<User>;

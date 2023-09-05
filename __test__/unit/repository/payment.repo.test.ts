@@ -1,8 +1,6 @@
 import PaymentRepository from "@repository/payment.repo";
 import prisma from "@lib/prisma";
-import { Payment, Prisma } from "@prisma/client";
-
-jest.mock("@lib/prisma", require("@mocks/lib/prisma.mock"));
+import { Payment } from "@prisma/client";
 
 describe("PaymentRepository", () => {
     let repo: PaymentRepository;
@@ -18,7 +16,7 @@ describe("PaymentRepository", () => {
 
         expect(result).toMatchObject([]);
 
-        result = await repo.getAll(undefined, 50, {id: 1});
+        result = await repo.getAll(undefined, 50, { id: 1 });
 
         expect(result).toMatchObject([]);
     });
