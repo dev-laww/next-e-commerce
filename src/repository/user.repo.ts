@@ -97,12 +97,8 @@ export default class UserRepository {
                 id: {
                     in: user?.roles.map(role => role.role_id)
                 }
-            },
-            select: {
-                id: true,
-                name: true,
-            } as Prisma.RoleSelect
-        });
+            }
+        }).then(roles => roles.map(({ created_at, updated_at, ...rest }) => rest as Role));
     }
 
     public async updateRoles(id: number, roles: number[]): Promise<User> {
