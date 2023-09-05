@@ -97,19 +97,35 @@ describe("AccountsController", () => {
         it.todo("returns 404 if order not found");
     });
 
-    describe("Test getWishlists", () => {
+    describe("Test getWishlist", () => {
         it.todo("returns 200 with wishlists data");
         it.todo("returns 401 if unauthorized");
         it.todo("returns 403 if user is not permitted");
         it.todo("returns 404 if account not found");
     });
 
-    describe("Test getWishlist", () => {
+    describe("Test getWishlistItem", () => {
         it.todo("returns 200 with wishlist data");
         it.todo("returns 401 if unauthorized");
         it.todo("returns 403 if user is not permitted");
         it.todo("returns 404 if account not found");
         it.todo("returns 404 if wishlist not found");
+    });
+
+    describe("Test getCart", () => {
+        it.todo("returns 200 with cart data");
+        it.todo("returns 401 if unauthorized");
+        it.todo("returns 403 if user is not permitted");
+        it.todo("returns 404 if account not found");
+        it.todo("returns 404 if cart not found");
+    });
+
+    describe("Test getCartItem", () => {
+        it.todo("returns 200 with cart item data");
+        it.todo("returns 401 if unauthorized");
+        it.todo("returns 403 if user is not permitted");
+        it.todo("returns 404 if account not found");
+        it.todo("returns 404 if cart item not found");
     });
 
     describe("Test getReviews", () => {
