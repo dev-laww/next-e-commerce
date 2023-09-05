@@ -6,7 +6,7 @@ import humps from "humps";
 
 import Response from "@lib/http";
 import Validators from "@lib/validator/accounts.validator";
-import { PageToken } from "@lib/types";
+import { PageToken, UserSession } from "@lib/types";
 import AddressRepository from "@repository/address.repo";
 import CartRepository from "@repository/cart.repo";
 import OrderRepository from "@repository/order.repo";
@@ -15,12 +15,20 @@ import ReviewRepository from "@repository/review.repo";
 import UserRepository from "@repository/user.repo";
 import WishlistRepository from "@repository/wishlist.repo";
 import { AllowPermitted, CheckBody, CheckError } from "@utils/decorator";
-import { generatePageToken, parsePageToken } from "@utils/token";
+import { generatePageToken, generateRandomToken, parsePageToken } from "@utils/token";
+import { hash } from "@utils/hashing";
+import * as Constants from "@lib/constants";
+import Email from "@utils/email";
+import { getDatabaseLogger } from "@utils/logging";
+import PaymentRepository from "@repository/payment.repo";
+
+// TODO: Add filters to all get methods that returns a list of items
 
 @AllowPermitted
 @CheckError
 export default class AccountsController {
     repo = new UserRepository();
+    private logger = getDatabaseLogger({ name: "controller:accounts", class: "AccountsController" })
 
     public async getAccounts(req: NextRequest) {
         const searchParams = Object.fromEntries(req.nextUrl.searchParams);
@@ -79,6 +87,7 @@ export default class AccountsController {
         const nextUrl = `${req.nextUrl.origin}/${req.nextUrl.pathname}?${nextSearchParams.toString()}`;
         const previousUrl = `${req.nextUrl.origin}/${req.nextUrl.pathname}?${previousSearchParams.toString()}`;
 
+        await this.logger.info("Accounts found");
         return Response.ok("Accounts found", {
             result,
             meta: {
@@ -94,13 +103,54 @@ export default class AccountsController {
     public async createAccount(req: NextRequest) {
         const body = await req.json();
 
-        const user = Validators.create.safeParse(body);
+        const requestData = Validators.create.safeParse(body);
 
-        if (!user.success) return Response.badRequest(user.error.message);
+        if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
 
-        const account = await this.repo.create(humps.decamelizeKeys(user.data) as User);
+        if (body.password !== body.confirmPassword) return Response.badRequest("Passwords do not match");
 
-        return Response.ok("Account created", account);
+        delete body.confirmPassword;
+
+        const userExistsByEmail = await this.repo.getByEmail(body.email);
+        const userExistsByUsername = await this.repo.getByUsername(body.username);
+
+        if (userExistsByEmail) return Response.badRequest("Email already exists");
+        if (userExistsByUsername) return Response.badRequest("Username already exists");
+
+        body.password = await hash(body.password);
+
+        const user = await this.repo.create(humps.decamelizeKeys(body) as User)
+        const userSession: UserSession = {
+            id: user.id,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            email: user.email,
+            username: user.username,
+            image_url: user.image_url
+        }
+
+        const token = generateRandomToken();
+        const confirmationToken = await this.repo.generateTokenOTP(
+            user.id,
+            token,
+            Constants.TOKEN_TYPE.EMAIL_CONFIRMATION_TOKEN
+        );
+
+        if (!confirmationToken) {
+            await this.logger.error("Failed to generate confirmation token", undefined, true);
+            await this.repo.delete(user.id);
+            return Response.internalServerError("Failed to generate confirmation token");
+        }
+
+        try {
+            await Email.sendToken(user.email, token)
+        } catch (error) {
+            await this.logger.error(error);
+            await this.repo.delete(user.id);
+            return Response.internalServerError("Failed to send confirmation email");
+        }
+
+        return Response.created("Account created successfully", userSession);
     }
 
     public async getAccount(_req: NextRequest, params: { id: string }) {
@@ -127,23 +177,28 @@ export default class AccountsController {
 
         if (!user.success) return Response.badRequest(user.error.message);
 
-        const data = humps.decamelizeKeys(user.data) as User;
+        if (user.data.password !== user.data.confirmPassword) return Response.badRequest("Passwords do not match");
+
+        delete body.confirmPassword;
+
+        body.password = await hash(body.password);
+
+        const data = humps.decamelizeKeys(body) as User;
 
         const { emailUpdated, usernameUpdated } = {
             emailUpdated: account.email !== data.email,
             usernameUpdated: account.username !== data.username
         }
 
-        if (emailUpdated && await this.repo.getByEmail(data.email)) {
+        if (emailUpdated && await this.repo.getByEmail(data.email))
             return Response.badRequest("Email already exists");
-        }
 
-        if (usernameUpdated && await this.repo.getByUsername(data.username)) {
+        if (usernameUpdated && await this.repo.getByUsername(data.username))
             return Response.badRequest("Username already exists");
-        }
 
         const updatedAccount = await this.repo.update(account.id, data);
 
+        await this.logger.info(updatedAccount, `Account [${id}] has been updated`, true);
         return Response.ok("Account account update successful", updatedAccount);
     }
 
@@ -156,6 +211,7 @@ export default class AccountsController {
 
         const deletedAccount = await this.repo.delete(account.id);
 
+        await this.logger.info(deletedAccount, `Account [${id}] deleted`, true);
         return Response.ok("Account delete successful", deletedAccount);
     }
 
@@ -189,6 +245,7 @@ export default class AccountsController {
 
         const accountRoles = await this.repo.getRoles(updatedAccount.id);
 
+        await this.logger.info(accountRoles, `Account [${id}] roles updated`, true);
         return Response.ok("Updated account roles", accountRoles);
     }
 
@@ -214,7 +271,10 @@ export default class AccountsController {
         if (!account) return Response.notFound("Account not found");
 
         const repo = new PaymentMethodRepository();
-        const paymentMethod = await repo.getById(parseInt(paymentMethodId, 10) || 0);
+        const paymentMethod = await repo.getAll({
+            id: parseInt(paymentMethodId, 10) || 0,
+            user_id: account.id
+        }).then(res => res[0]);
 
         if (!paymentMethod) return Response.notFound("Payment method not found");
 
@@ -243,7 +303,10 @@ export default class AccountsController {
         if (!account) return Response.notFound("Account not found");
 
         const repo = new AddressRepository();
-        const address = await repo.getById(parseInt(addressId, 10) || 0);
+        const address = await repo.getAll({
+            id: parseInt(addressId, 10) || 0,
+            user_id: account.id
+        }).then(res => res[0]);
 
         if (!address) return Response.notFound("Address not found");
 
@@ -272,7 +335,10 @@ export default class AccountsController {
         if (!account) return Response.notFound("Account not found");
 
         const repo = new OrderRepository();
-        const order = await repo.getById(parseInt(orderId, 10) || 0);
+        const order = await repo.getAll({
+            id: parseInt(orderId, 10) || 0,
+            user_id: account.id
+        }).then(res => res[0]);
 
         if (!order) return Response.notFound("Order not found");
 
@@ -301,7 +367,10 @@ export default class AccountsController {
         if (!account) return Response.notFound("Account not found");
 
         const repo = new WishlistRepository();
-        const wishlistItem = await repo.getById(parseInt(wishlistItemId, 10) || 0);
+        const wishlistItem = await repo.getAll({
+            id: parseInt(wishlistItemId, 10) || 0,
+            user_id: account.id
+        }).then(res => res[0]);
 
         if (!wishlistItem) return Response.notFound("Wishlist item not found");
 
@@ -309,7 +378,7 @@ export default class AccountsController {
     }
 
     public async getCart(_req: NextRequest, params: { id: string }) {
-        const {id} = params;
+        const { id } = params;
 
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
@@ -330,7 +399,10 @@ export default class AccountsController {
         if (!account) return Response.notFound("Account not found");
 
         const repo = new CartRepository();
-        const cartItem = await repo.getById(parseInt(cartItemId, 10) || 0);
+        const cartItem = await repo.getAll({
+            id: parseInt(cartItemId, 10) || 0,
+            user_id: account.id
+        }).then(res => res[0]);
 
         if (!cartItem) return Response.notFound("Cart item not found");
 
@@ -359,10 +431,46 @@ export default class AccountsController {
         if (!account) return Response.notFound("Account not found");
 
         const repo = new ReviewRepository();
-        const review = await repo.getById(parseInt(reviewId, 10) || 0);
+        const review = await repo.getAll({
+            id: parseInt(reviewId, 10) || 0,
+            user_id: account.id
+        }).then(res => res[0]);
 
         if (!review) return Response.notFound("Review not found");
 
         return Response.ok("Account review found", review);
+    }
+
+    public async getPaymets(_req: NextRequest, params: { id: string }) {
+        const { id } = params;
+
+        const account = await this.repo.getById(parseInt(id, 10) || 0);
+
+        if (!account) return Response.notFound("Account not found");
+
+        const payments = await this.repo.getPayments(account.id);
+
+        if (!payments.length) return Response.notFound("No payments were found");
+
+        return Response.ok("Account payments found", payments);
+    }
+
+    public async getPayment(_req: NextRequest, params: { id: string, paymentId: string }) {
+        const { id, paymentId } = params;
+
+        const account = await this.repo.getById(parseInt(id, 10) || 0);
+
+        if (!account) return Response.notFound("Account not found");
+
+        const repo = new PaymentRepository();
+
+        const payment = await repo.getAll({
+            id: parseInt(paymentId, 10) || 0,
+            user_id: account.id
+        }).then(res => res[0]);
+
+        if (!payment) return Response.notFound("Payment not found");
+
+        return Response.ok("Account payment found", payment);
     }
 }
