@@ -34,6 +34,8 @@ export default class AuthController {
 
         if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
 
+        if (body.password !== body.confirmPassword) return Response.badRequest("Passwords do not match");
+
         delete body.confirmPassword;
 
         const userExistsByEmail = await this.userRepo.getByEmail(body.email);
@@ -76,7 +78,7 @@ export default class AuthController {
 
         await this.logger.info(`${user.email} created an account`, undefined, true);
 
-        return Response.created("User created successfully", {
+        return Response.created("Signup successful", {
             ...userSession,
             accessToken: generateAccessToken(userSession),
             refreshToken: generateRefreshToken(userSession),
@@ -161,7 +163,7 @@ export default class AuthController {
             return Response.internalServerError("Failed to send confirmation email");
         }
 
-        await this.logger.debug(user, `User ${user.email} requested password reset`, true)
+        await this.logger.debug(user, `User [${user.email}] requested password reset`)
         await this.logger.info(`${user.email} requested password reset`, undefined, true);
         return Response.ok("Password reset sent successfully");
     }
@@ -189,7 +191,7 @@ export default class AuthController {
         await this.logger.debug(data, `User ${data.email} changed password`)
         await this.logger.info(`${data.email} changed password`, undefined, true);
 
-        return Response.ok("Password changed successfully");
+        return Response.ok("Password change successful");
     }
 
     @AllowMethod("POST")
@@ -217,7 +219,7 @@ export default class AuthController {
         await this.logger.debug(data, `User ${data.email} confirmed email`)
         await this.logger.info(`${data.email} confirmed`, undefined, true);
 
-        return Response.ok("Email confirmed successfully");
+        return Response.ok("Email confirm successful");
     }
 
     @AllowMethod("POST")
@@ -260,7 +262,7 @@ export default class AuthController {
 
         await this.logger.debug(user, `User ${user.email} requested email confirmation`)
         await this.logger.info(`${user.email} requested email confirmation`, undefined, true);
-        return Response.ok("Email confirmation sent successfully");
+        return Response.ok("Email confirmation sent");
     }
 
     @AllowMethod("POST")
@@ -282,7 +284,7 @@ export default class AuthController {
         await this.logger.debug(session, `User ${session.email} refreshed token`)
         await this.logger.info(`${session.email} refreshed token`, undefined, true);
         return Response.ok(
-            "Token refreshed successfully",
+            "Token refresh successful",
             { accessToken: generateAccessToken(session) }
         );
     }
