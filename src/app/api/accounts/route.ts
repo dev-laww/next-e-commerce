@@ -24,7 +24,7 @@ async function handler(req: NextRequest) {
             break;
         case "POST":
             ({ statusCode, response } = await controller.createAccount(req));
-            success = statusCode == STATUS_CODE.OK;
+            success = statusCode == STATUS_CODE.CREATED;
             logger.info(success ? response.message : response, success ? undefined : `Create account failed: ${response.message}`);
             break;
         default:

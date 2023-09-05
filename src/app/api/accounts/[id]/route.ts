@@ -21,12 +21,12 @@ export async function handler(req: NextRequest, { params }: { params: { id: stri
         case "GET":
             ({ statusCode, response } = await controller.getAccount(req, params));
             success = statusCode == STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Get accounts failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Get account failed: ${response.message}`);
             break;
-        case "POST":
+        case "PUT":
             ({ statusCode, response } = await controller.updateAccount(req, params));
             success = statusCode == STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Create account failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Update account failed: ${response.message}`);
             break;
         case "DELETE":
             ({ statusCode, response } = await controller.deleteAccount(req, params));
