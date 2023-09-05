@@ -44,3 +44,19 @@ export enum ORDER_STATUS {
     COMPLETED = 'completed',
     FAILED = 'failed',
 }
+
+export const COMMON_RESOURCES = [
+    "GET/api/products",
+    "GET/api/products/:id",
+    "GET/api/products/:id/variants",
+    "GET/api/products/:id/reviews",
+    "GET/api/products/:id/categories",
+    "GET/api/variants",
+    "GET/api/variants/:id",
+    "GET/api/variants/:id/reviews",
+    "GET/api/categories",
+    "GET/api/categories/:id",
+    "GET/api/shipping-methods",
+    "GET/api/shipping-methods/:id",
+    "GET/api/coupons/:code"
+];

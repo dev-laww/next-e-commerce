@@ -2,8 +2,6 @@ import WishlistRepository from "@repository/wishlist.repo";
 import prisma from "@lib/prisma";
 import { Prisma } from "@prisma/client";
 
-jest.mock("@lib/prisma", require("@mocks/lib/prisma.mock"));
-
 describe("WishlistRepository", () => {
     let repo: WishlistRepository;
     beforeEach(() => {
@@ -18,7 +16,7 @@ describe("WishlistRepository", () => {
 
         expect(result).toMatchObject([]);
 
-        result = await repo.getAll(undefined, 50, {id: 1});
+        result = await repo.getAll(undefined, 50, { id: 1 });
 
         expect(result).toMatchObject([]);
     });

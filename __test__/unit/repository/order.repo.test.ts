@@ -3,8 +3,6 @@ import prisma from "@lib/prisma";
 import { ORDER_STATUS } from "@lib/constants";
 import { Order } from "@prisma/client";
 
-jest.mock("@lib/prisma", require("@mocks/lib/prisma.mock"));
-
 describe("OrderRepository", () => {
     let repo: OrderRepository;
     beforeEach(() => {
@@ -19,7 +17,7 @@ describe("OrderRepository", () => {
 
         expect(result).toMatchObject([]);
 
-        result = await repo.getAll(undefined, 50, {id: 1});
+        result = await repo.getAll(undefined, 50, { id: 1 });
 
         expect(result).toMatchObject([]);
     });
@@ -143,13 +141,13 @@ describe("OrderRepository", () => {
     });
 
     it("Test linkPayment", async () => {
-        (prisma.payment.findUnique as jest.Mock).mockResolvedValueOnce({id: 1, order_id: null});
+        (prisma.payment.findUnique as jest.Mock).mockResolvedValueOnce({ id: 1, order_id: null });
         (prisma.order.update as jest.Mock).mockResolvedValue(null);
 
         const result = await repo.linkPayment(1, 1);
         expect(result).toEqual(null);
 
-        (prisma.payment.findUnique as jest.Mock).mockResolvedValueOnce({id: 1, order_id: 1});
+        (prisma.payment.findUnique as jest.Mock).mockResolvedValueOnce({ id: 1, order_id: 1 });
         await expect(repo.linkPayment(1, 1)).rejects.toThrow("Payment already linked to an order");
 
         (prisma.payment.findUnique as jest.Mock).mockResolvedValueOnce(null);

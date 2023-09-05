@@ -49,7 +49,7 @@ async function main() {
 
         if (entity.length === 1) return;
 
-        await func.createMany({data: seeders[entityName]});
+        await func.createMany({ data: seeders[entityName] });
     }
 }
 

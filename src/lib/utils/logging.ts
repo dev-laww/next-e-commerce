@@ -41,23 +41,23 @@ export const getDatabaseLogger = (args: LoggerArgs) => {
     return {
         debug: async (obj: object, message?: string, save?: boolean, ...args: any[]) => {
             childLogger.debug(obj, message, ...args);
-            if (save) await logRepo.create({level: "debug", message: message || JSON.stringify(obj)});
+            if (save) await logRepo.create({ level: "debug", message: message || JSON.stringify(obj) });
         },
         info: async (obj: unknown, message?: string, save?: boolean, ...args: any[]) => {
             childLogger.info(obj, message, ...args);
-            if (save) await logRepo.create({level: "info", message: message || JSON.stringify(obj)});
+            if (save) await logRepo.create({ level: "info", message: message || JSON.stringify(obj) });
         },
         error: async (obj: unknown, message?: string, save?: boolean, ...args: any[]) => {
             childLogger.error(obj, message, ...args);
-            if (save) await logRepo.create({level: "error", message: message || JSON.stringify(obj)});
+            if (save) await logRepo.create({ level: "error", message: message || JSON.stringify(obj) });
         },
         warn: async (obj: unknown, message?: string, save?: boolean, ...args: any[]) => {
             childLogger.warn(obj, message, ...args);
-            if (save) await logRepo.create({level: "warn", message: message || JSON.stringify(obj)});
+            if (save) await logRepo.create({ level: "warn", message: message || JSON.stringify(obj) });
         },
         fatal: async (obj: unknown, message?: string, save?: boolean, ...args: any[]) => {
             childLogger.fatal(obj, message, ...args);
-            if (save) await logRepo.create({level: "fatal", message: message || JSON.stringify(obj)});
+            if (save) await logRepo.create({ level: "fatal", message: message || JSON.stringify(obj) });
         }
     };
 }

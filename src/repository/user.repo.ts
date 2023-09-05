@@ -27,24 +27,30 @@ export default class UserRepository {
             take: limit,
             skip: cursor ? 1 : 0,
             where: filter,
-        });
+            orderBy: { id: "asc" }
+        }).then(users => users.map(({ password, created_at, updated_at, confirmed, ...rest }) => rest as User));
     }
 
-    public async getUserById(id: number): Promise<User | null> {
+    public async getById(id: number): Promise<User | null> {
         return this.prismaClient.user.findUnique({
-            where: {id: id}
-        });
+            where: { id: id }
+        }).then((res => {
+            if (!res) return null;
+
+            const { password, created_at, updated_at, confirmed, ...rest } = res;
+            return rest as User;
+        }));
     }
 
     public async getByEmail(email: string): Promise<User | null> {
         return this.prismaClient.user.findUnique({
-            where: {email: email}
+            where: { email: email }
         });
     }
 
     public async getByUsername(username: string): Promise<User | null> {
         return this.prismaClient.user.findUnique({
-            where: {username: username}
+            where: { username: username }
         });
     }
 
@@ -56,7 +62,7 @@ export default class UserRepository {
 
     public async update(id: number, data: Prisma.UserUpdateInput): Promise<User> {
         return this.prismaClient.user.update({
-            where: {id: id},
+            where: { id: id },
             data: data
         });
     }
@@ -65,7 +71,7 @@ export default class UserRepository {
         const hashed = await hash(password);
 
         return this.prismaClient.user.update({
-            where: {id: id},
+            where: { id: id },
             data: {
                 password: hashed
             }
@@ -74,13 +80,13 @@ export default class UserRepository {
 
     public async delete(id: number): Promise<User> {
         return this.prismaClient.user.delete({
-            where: {id: id}
+            where: { id: id }
         });
     }
 
     public async getRoles(id: number): Promise<Role[]> {
         const user = await this.prismaClient.user.findUnique({
-            where: {id: id},
+            where: { id: id },
             select: {
                 roles: true
             }
@@ -91,12 +97,8 @@ export default class UserRepository {
                 id: {
                     in: user?.roles.map(role => role.role_id)
                 }
-            },
-            select: {
-                id: true,
-                name: true,
-            } as Prisma.RoleSelect
-        });
+            }
+        }).then(roles => roles.map(({ created_at, updated_at, ...rest }) => rest as Role));
     }
 
     public async updateRoles(id: number, roles: number[]): Promise<User> {
@@ -106,11 +108,11 @@ export default class UserRepository {
         const rolesToRemove = userRoles.filter(role => !roles.includes(role));
 
         return this.prismaClient.user.update({
-            where: {id: id},
+            where: { id: id },
             data: {
                 roles: {
-                    create: rolesToAdd.map(role => ({role_id: role})),
-                    deleteMany: rolesToRemove.map(role => ({role_id: role}))
+                    create: rolesToAdd.map(role => ({ role_id: role })),
+                    deleteMany: rolesToRemove.map(role => ({ role_id: role }))
                 }
             }
         });
@@ -133,14 +135,14 @@ export default class UserRepository {
         });
 
         return rolePermissions.map(rolePermission => {
-            const {created_at, updated_at, ...rest} = rolePermission.permission;
+            const { created_at, updated_at, ...rest } = rolePermission.permission;
             return rest as Permission;
         });
     }
 
     public async getPaymentMethods(id: number): Promise<PaymentMethod[]> {
         const user = await this.prismaClient.user.findUnique({
-            where: {id: id},
+            where: { id: id },
             select: {
                 payment_methods: true
             }
@@ -164,13 +166,13 @@ export default class UserRepository {
 
     public async getAddresses(id: number): Promise<Address[]> {
         const user = await this.prismaClient.user.findUnique({
-            where: {id: id},
+            where: { id: id },
             select: {
                 addresses: true
             }
         });
 
-        return user ? user.addresses.map(({created_at, updated_at, user_id, ...rest}) => rest as Address) : [];
+        return user ? user.addresses.map(({ created_at, updated_at, user_id, ...rest }) => rest as Address) : [];
     }
 
     public async deleteAddresses(id: number): Promise<Prisma.BatchPayload> {
@@ -183,13 +185,13 @@ export default class UserRepository {
 
     public async getOrders(id: number): Promise<Order[]> {
         const user = await this.prismaClient.user.findUnique({
-            where: {id: id},
+            where: { id: id },
             select: {
                 orders: true
             }
         });
 
-        return user ? user.orders.map(({created_at, updated_at, user_id, ...rest}) => rest as Order) : [];
+        return user ? user.orders.map(({ created_at, updated_at, user_id, ...rest }) => rest as Order) : [];
     }
 
     public async deleteOrders(id: number): Promise<Prisma.BatchPayload> {
@@ -202,13 +204,13 @@ export default class UserRepository {
 
     public async getReviews(id: number): Promise<Review[]> {
         const user = await this.prismaClient.user.findUnique({
-            where: {id: id},
+            where: { id: id },
             select: {
                 reviews: true
             }
         })
 
-        return user ? user.reviews.map(({created_at, updated_at, user_id, ...rest}) => rest as Review) : [];
+        return user ? user.reviews.map(({ created_at, updated_at, user_id, ...rest }) => rest as Review) : [];
     }
 
     public async deleteReviews(id: number): Promise<Prisma.BatchPayload> {
@@ -221,13 +223,13 @@ export default class UserRepository {
 
     public async getWishlist(id: number): Promise<WishlistItem[]> {
         const user = await this.prismaClient.user.findUnique({
-            where: {id: id},
+            where: { id: id },
             select: {
                 wishlist: true
             }
         });
 
-        return user ? user.wishlist.map(({created_at, updated_at, user_id, ...rest}) => rest as WishlistItem) : [];
+        return user ? user.wishlist.map(({ created_at, updated_at, user_id, ...rest }) => rest as WishlistItem) : [];
     }
 
     public async deleteWishlist(id: number): Promise<Prisma.BatchPayload> {
@@ -240,13 +242,13 @@ export default class UserRepository {
 
     public async getCart(id: number): Promise<CartItem[]> {
         const user = await this.prismaClient.user.findUnique({
-            where: {id: id},
+            where: { id: id },
             select: {
                 cart: true
             }
         });
 
-        return user ? user.cart.map(({created_at, updated_at, user_id, ...rest}) => rest as CartItem) : [];
+        return user ? user.cart.map(({ created_at, updated_at, user_id, ...rest }) => rest as CartItem) : [];
     }
 
     public async deleteCart(id: number): Promise<Prisma.BatchPayload> {
@@ -259,29 +261,29 @@ export default class UserRepository {
 
     public async getPayments(id: number): Promise<Payment[]> {
         const user = await this.prismaClient.user.findUnique({
-            where: {id: id},
+            where: { id: id },
             select: {
                 payments: true
             }
         });
 
-        return user ? user.payments.map(({created_at, updated_at, user_id, ...rest}) => rest as Payment) : [];
+        return user ? user.payments.map(({ created_at, updated_at, user_id, ...rest }) => rest as Payment) : [];
     }
 
     public async createPayment(id: number, orderId: number, paymentMethodId: number): Promise<Payment> {
         const order = await this.prismaClient.order.findUnique({
-            where: {id: orderId}
+            where: { id: orderId }
         });
 
         const paymentMethod = await this.prismaClient.paymentMethod.findUnique({
-            where: {id: paymentMethodId}
+            where: { id: paymentMethodId }
         })
 
         if (!order) throw new Error("Order not found");
         if (!paymentMethod) throw new Error("Payment method not found");
 
         return this.prismaClient.user.update({
-            where: {id: id},
+            where: { id: id },
             data: {
                 payments: {
                     create: {
@@ -295,19 +297,19 @@ export default class UserRepository {
                 payments: true
             }
         }).then(user => user.payments[0])
-            .then(({created_at, updated_at, user_id, ...rest}) => rest as Payment);
+            .then(({ created_at, updated_at, user_id, ...rest }) => rest as Payment);
     }
 
 
     public async getTokens(id: number): Promise<TokenOTP[]> {
         const user = await this.prismaClient.user.findUnique({
-            where: {id: id},
+            where: { id: id },
             select: {
                 tokens: true
             }
         });
 
-        return user ? user.tokens.map(({created_at, updated_at, user_id, ...rest}) => rest as TokenOTP) : [];
+        return user ? user.tokens.map(({ created_at, updated_at, user_id, ...rest }) => rest as TokenOTP) : [];
     }
 
     public async generateTokenOTP(id: number, token: string, type: string): Promise<TokenOTP> {

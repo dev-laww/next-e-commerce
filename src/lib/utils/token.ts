@@ -1,4 +1,4 @@
-import { UserSession } from "@lib/types";
+import { PageToken, UserSession } from "@lib/types";
 import { generateToken, verifyToken } from "@utils/jwt";
 import crypto from "crypto";
 
@@ -64,7 +64,23 @@ export const verifyRefreshToken = (
     );
 }
 
-export const generateRandomToken  = () => crypto.randomBytes(32).toString('hex');
+export const generateRandomToken = () => crypto.randomBytes(32).toString('hex');
 
 export const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
+
+export const generatePageToken = (token: PageToken) => {
+    const userJson = JSON.stringify(token);
+
+    return Buffer.from(userJson).toString("base64");
+}
+
+export const parsePageToken = (token: string): PageToken | undefined => {
+    try {
+        const userJson = Buffer.from(token, "base64").toString("ascii");
+
+        return JSON.parse(userJson);
+    } catch (err) {
+        return undefined;
+    }
+}
 

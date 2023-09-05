@@ -16,19 +16,19 @@ export default class ReviewRepository {
 
     public async getById(id: number): Promise<Review | null> {
         return this.prismaClient.review.findUnique({
-            where: {id: id},
+            where: { id: id },
         });
     }
 
     public async getProductReviews(productId: number): Promise<Review[]> {
         return this.prismaClient.review.findMany({
-            where: {product_id: productId},
+            where: { product_id: productId },
         });
     }
 
     public async getUserReviews(userId: number): Promise<Review[]> {
         return this.prismaClient.review.findMany({
-            where: {user_id: userId},
+            where: { user_id: userId },
         });
     }
 
@@ -40,14 +40,14 @@ export default class ReviewRepository {
 
     public async update(id: number, data: Prisma.ReviewUpdateInput): Promise<Review> {
         return this.prismaClient.review.update({
-            where: {id: id},
+            where: { id: id },
             data: data
         });
     }
 
     public async delete(id: number): Promise<Review> {
         return this.prismaClient.review.delete({
-            where: {id: id}
+            where: { id: id }
         });
     }
 }

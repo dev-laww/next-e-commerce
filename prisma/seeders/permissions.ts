@@ -42,6 +42,13 @@ const permissions = [
         resource: "GET/api/accounts/:id/roles",
     },
     {
+        id: 1069,
+        name: "Update User Roles",
+        code: "permission:update:user-role",
+        action: "PUT",
+        resource: "PUT/api/accounts/:id/roles",
+    },
+    {
         id: 1006,
         name: "View user payment methods",
         code: "permission:read:user-payment-methods",
@@ -54,6 +61,20 @@ const permissions = [
         code: "permission:read:user-payment-method",
         action: "GET",
         resource: "GET/api/accounts/:id/payment-methods/:paymentMethodId",
+    },
+    {
+        id: 1070,
+        name: "View user payments",
+        code: "permission:read:user-payments",
+        action: "GET",
+        resource: "GET/api/accounts/:id/payments",
+    },
+    {
+        id: 1071,
+        name: "View user payment",
+        code: "permission:read:user-payment",
+        action: "GET",
+        resource: "GET/api/accounts/:id/payments/:paymentId",
     },
     {
         id: 1008,

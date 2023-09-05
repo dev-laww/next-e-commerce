@@ -1,8 +1,6 @@
 import LogRepository from "@repository/log.repo";
 import prisma from "@lib/prisma";
 
-jest.mock("@lib/prisma", require("@mocks/lib/prisma.mock"));
-
 describe("LogRepository", () => {
     let repo: LogRepository;
     beforeEach(() => {
@@ -17,7 +15,7 @@ describe("LogRepository", () => {
 
         expect(result).toMatchObject([]);
 
-        result = await repo.getAll(undefined, 50, {id: 1});
+        result = await repo.getAll(undefined, 50, { id: 1 });
 
         expect(result).toMatchObject([]);
     });

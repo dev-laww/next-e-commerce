@@ -1,764 +1,2643 @@
 {
-	"info": {
-		"_postman_id": "b1e6f4a8-ec54-4fda-af6d-cc846e90aba9",
-		"name": "Next E-Commerce",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "20011538"
-	},
-	"item": [
-		{
-			"name": "Auth",
-			"item": [
-				{
-					"name": "Register",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"firstName\": \"Admin\",\r\n    \"lastName\": \"User\",\r\n    \"username\": \"test\",\r\n    \"email\": \"rorensuuu@gmail.com\",\r\n    \"password\": \"supersecretpassword\",\r\n    \"confirmPassword\": \"supersecretpassword\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/auth/signup",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"auth",
-								"signup"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "Register",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"firstName\": \"Admin\",\r\n    \"lastName\": \"User\",\r\n    \"username\": \"admin\",\r\n    \"email\": \"rorensuuu@gmail.com\",\r\n    \"password\": \"admin_password\",\r\n    \"confirmPassword\": \"admin_password\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/api/auth/signup",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"api",
-										"auth",
-										"signup"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "content-type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "etag",
-									"value": "\"q38k5oftepl9\""
-								},
-								{
-									"key": "content-length",
-									"value": "765"
-								},
-								{
-									"key": "vary",
-									"value": "Accept-Encoding"
-								},
-								{
-									"key": "date",
-									"value": "Thu, 03 Aug 2023 07:12:59 GMT"
-								},
-								{
-									"key": "connection",
-									"value": "close"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"status\": \"success\",\n    \"message\": \"User created successfully\",\n    \"data\": {\n        \"id\": 8,\n        \"first_name\": \"Admin\",\n        \"last_name\": \"User\",\n        \"email\": \"rorensuuu@gmail.com\",\n        \"username\": \"admin\",\n        \"image_url\": \"\",\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZmlyc3RfbmFtZSI6IkFkbWluIiwibGFzdF9uYW1lIjoiVXNlciIsImVtYWlsIjoicm9yZW5zdXV1QGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiYWRtaW4iLCJpbWFnZV91cmwiOiIiLCJpYXQiOjE2OTEwNDY3NzksImV4cCI6MTY5MTA0NzY3OX0.e6958rhZxCc8S_GdRZTZQ173LJ_7qi16xAcmv_O3X-8\",\n        \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZmlyc3RfbmFtZSI6IkFkbWluIiwibGFzdF9uYW1lIjoiVXNlciIsImVtYWlsIjoicm9yZW5zdXV1QGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiYWRtaW4iLCJpbWFnZV91cmwiOiIiLCJpYXQiOjE2OTEwNDY3NzksImV4cCI6MTY5MTY1MTU3OX0.h5uOseMwhl_WeFkkQpA3powP3pq3ZbgAsnb3LejgSkk\"\n    }\n}"
-						}
-					]
-				},
-				{
-					"name": "Login",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"var statusCode = pm.response.code;\r",
-									"var jsonData = pm.response.json();\r",
-									"if(statusCode==200 || statusCode==201){\r",
-									"    pm.environment.set(\"accessToken\", jsonData.data.accessToken);\r",
-									"    pm.environment.set(\"refreshToken\", jsonData.data.refreshToken);\r",
-									"}\r",
-									"\r",
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{password}}\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/auth/login",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"auth",
-								"login"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "Login",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{password}}\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/auth/login",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"auth",
-										"login"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "content-type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "etag",
-									"value": "\"bt3uxp47jrl0\""
-								},
-								{
-									"key": "content-length",
-									"value": "756"
-								},
-								{
-									"key": "vary",
-									"value": "Accept-Encoding"
-								},
-								{
-									"key": "date",
-									"value": "Thu, 03 Aug 2023 07:32:57 GMT"
-								},
-								{
-									"key": "connection",
-									"value": "close"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Login successful\",\n    \"data\": {\n        \"id\": 8,\n        \"first_name\": \"Admin\",\n        \"last_name\": \"User\",\n        \"email\": \"rorensuuu@gmail.com\",\n        \"username\": \"admin\",\n        \"image_url\": \"\",\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZmlyc3RfbmFtZSI6IkFkbWluIiwibGFzdF9uYW1lIjoiVXNlciIsImVtYWlsIjoicm9yZW5zdXV1QGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiYWRtaW4iLCJpbWFnZV91cmwiOiIiLCJpYXQiOjE2OTEwNDc5NzcsImV4cCI6MTY5MTA0ODg3N30.HwgBTvWPJbMq10IpL27gdwzRPu2VSDxWNFLDEUwVJZk\",\n        \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZmlyc3RfbmFtZSI6IkFkbWluIiwibGFzdF9uYW1lIjoiVXNlciIsImVtYWlsIjoicm9yZW5zdXV1QGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiYWRtaW4iLCJpbWFnZV91cmwiOiIiLCJpYXQiOjE2OTEwNDc5NzcsImV4cCI6MTY5MTY1Mjc3N30.HPDz-IVHp78Xb3S9JlNk4Ikp6_1p2GWIfPXl18e16DI\"\n    }\n}"
-						}
-					]
-				},
-				{
-					"name": "Reset Password",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"rorensuuu@gmail.com\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/auth/reset-password",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"auth",
-								"reset-password"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "Reset password",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"rorensuuu@gmail.com\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/auth/reset-password",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"auth",
-										"reset-password"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "content-type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "etag",
-									"value": "\"pnhlni54tj1t\""
-								},
-								{
-									"key": "content-length",
-									"value": "65"
-								},
-								{
-									"key": "vary",
-									"value": "Accept-Encoding"
-								},
-								{
-									"key": "date",
-									"value": "Thu, 03 Aug 2023 07:53:22 GMT"
-								},
-								{
-									"key": "connection",
-									"value": "close"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Password reset sent successfully\"\n}"
-						}
-					]
-				},
-				{
-					"name": "Confirm Reset Password",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"token\": \"26fde5a38a36ac08dd8d9c3171b25b15a124a84d9c6dacbb394bee402bcc243b\",\r\n    \"password\": \"password\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/auth/confirm-reset-password",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"auth",
-								"confirm-reset-password"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "Confirm reset password",
-							"originalRequest": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"token\": \"26fde5a38a36ac08dd8d9c3171b25b15a124a84d9c6dacbb394bee402bcc243b\",\r\n    \"password\": \"password\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/auth/confirm-reset-password",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"auth",
-										"confirm-reset-password"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "content-type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "etag",
-									"value": "\"4zqo3k591z1q\""
-								},
-								{
-									"key": "content-length",
-									"value": "62"
-								},
-								{
-									"key": "vary",
-									"value": "Accept-Encoding"
-								},
-								{
-									"key": "date",
-									"value": "Thu, 03 Aug 2023 07:56:30 GMT"
-								},
-								{
-									"key": "connection",
-									"value": "close"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Password changed successfully\"\n}"
-						}
-					]
-				},
-				{
-					"name": "Confirm Email",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"type\": \"otp\",\r\n    \"token\": \"407548\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/auth/confirm-email",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"auth",
-								"confirm-email"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "Confirm email using token",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"type\": \"token\",\r\n    \"token\": \"78511edcd4f5d23f09a23714979cb0242accbf446db05b96790edae090457186\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/auth/confirm-email",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"auth",
-										"confirm-email"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "content-type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "etag",
-									"value": "\"3h7lxj5qmm1p\""
-								},
-								{
-									"key": "content-length",
-									"value": "61"
-								},
-								{
-									"key": "vary",
-									"value": "Accept-Encoding"
-								},
-								{
-									"key": "date",
-									"value": "Thu, 03 Aug 2023 08:11:49 GMT"
-								},
-								{
-									"key": "connection",
-									"value": "close"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Email confirmed successfully\"\n}"
-						},
-						{
-							"name": "Confirm email using otp",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"type\": \"otp\",\r\n    \"token\": \"407548\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/auth/confirm-email",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"auth",
-										"confirm-email"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "content-type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "etag",
-									"value": "\"3h7lxj5qmm1p\""
-								},
-								{
-									"key": "content-length",
-									"value": "61"
-								},
-								{
-									"key": "vary",
-									"value": "Accept-Encoding"
-								},
-								{
-									"key": "date",
-									"value": "Thu, 03 Aug 2023 08:19:15 GMT"
-								},
-								{
-									"key": "connection",
-									"value": "close"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Email confirmed successfully\"\n}"
-						}
-					]
-				},
-				{
-					"name": "Resend Confirmation Email",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"type\": \"token\",\r\n    \"email\": \"rorensuuu@gmail.com\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/auth/resend-confirmation-email",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"auth",
-								"resend-confirmation-email"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "Resend confirmation email",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"type\": \"token\",\r\n    \"email\": \"rorensuuu@gmail.com\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/auth/resend-confirmation-email",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"auth",
-										"resend-confirmation-email"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "content-type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "etag",
-									"value": "\"4s608yi1431x\""
-								},
-								{
-									"key": "content-length",
-									"value": "69"
-								},
-								{
-									"key": "vary",
-									"value": "Accept-Encoding"
-								},
-								{
-									"key": "date",
-									"value": "Thu, 03 Aug 2023 08:12:41 GMT"
-								},
-								{
-									"key": "connection",
-									"value": "close"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Email confirmation sent successfully\"\n}"
-						},
-						{
-							"name": "Resend confirmation otp",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"type\": \"otp\",\r\n    \"email\": \"rorensuuu@gmail.com\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/auth/resend-confirmation-email",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"auth",
-										"resend-confirmation-email"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "content-type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "etag",
-									"value": "\"4s608yi1431x\""
-								},
-								{
-									"key": "content-length",
-									"value": "69"
-								},
-								{
-									"key": "vary",
-									"value": "Accept-Encoding"
-								},
-								{
-									"key": "date",
-									"value": "Thu, 03 Aug 2023 08:10:35 GMT"
-								},
-								{
-									"key": "connection",
-									"value": "close"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Email confirmation sent successfully\"\n}"
-						}
-					]
-				},
-				{
-					"name": "Refresh Access token",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"var statusCode = pm.response.code;\r",
-									"var jsonData = pm.response.json();\r",
-									"if(statusCode==200 || statusCode==201){\r",
-									"    pm.environment.set(\"accessToken\", jsonData.data.accessToken);\r",
-									"}\r",
-									"\r",
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"token\": \"{{refreshToken}}\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/auth/refresh",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"auth",
-								"refresh"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "Refresh Access token",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"token\": \"{{refreshToken}}\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/auth/refresh",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"auth",
-										"refresh"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "content-type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "etag",
-									"value": "\"95w08gn6r5a6\""
-								},
-								{
-									"key": "content-length",
-									"value": "366"
-								},
-								{
-									"key": "vary",
-									"value": "Accept-Encoding"
-								},
-								{
-									"key": "date",
-									"value": "Thu, 03 Aug 2023 08:21:49 GMT"
-								},
-								{
-									"key": "connection",
-									"value": "close"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Token refreshed successfully\",\n    \"data\": {\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAwMCwiZW1haWwiOiJ0b3Jhb29vLjEwMDZAZ21haWwuY29tIiwidXNlcm5hbWUiOiJhZG1pbiIsImZpcnN0X25hbWUiOiJBZG1pbiIsImxhc3RfbmFtZSI6IiIsImltYWdlX3VybCI6IiIsImlhdCI6MTY5MTA1MDkwOSwiZXhwIjoxNjkxMDUxODA5fQ.o4ywe3oMRzbB8iVTFjTfEtE2SYHBUxPtA3vjHtXHjFE\"\n    }\n}"
-						}
-					]
-				}
-			]
-		}
-	]
+  "info": {
+    "_postman_id": "b1e6f4a8-ec54-4fda-af6d-cc846e90aba9",
+    "name": "Next E-Commerce",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "20011538"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"firstName\": \"Admin\",\r\n    \"lastName\": \"User\",\r\n    \"username\": \"test\",\r\n    \"email\": \"rorensuuu@gmail.com\",\r\n    \"password\": \"supersecretpassword\",\r\n    \"confirmPassword\": \"supersecretpassword\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/signup",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "signup"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"firstName\": \"Admin\",\r\n    \"lastName\": \"User\",\r\n    \"username\": \"admin\",\r\n    \"email\": \"rorensuuu@gmail.com\",\r\n    \"password\": \"admin_password\",\r\n    \"confirmPassword\": \"admin_password\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/auth/signup",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "signup"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "etag",
+                  "value": "\"q38k5oftepl9\""
+                },
+                {
+                  "key": "content-length",
+                  "value": "765"
+                },
+                {
+                  "key": "vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 03 Aug 2023 07:12:59 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"User created successfully\",\n    \"data\": {\n        \"id\": 8,\n        \"first_name\": \"Admin\",\n        \"last_name\": \"User\",\n        \"email\": \"rorensuuu@gmail.com\",\n        \"username\": \"admin\",\n        \"image_url\": \"\",\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZmlyc3RfbmFtZSI6IkFkbWluIiwibGFzdF9uYW1lIjoiVXNlciIsImVtYWlsIjoicm9yZW5zdXV1QGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiYWRtaW4iLCJpbWFnZV91cmwiOiIiLCJpYXQiOjE2OTEwNDY3NzksImV4cCI6MTY5MTA0NzY3OX0.e6958rhZxCc8S_GdRZTZQ173LJ_7qi16xAcmv_O3X-8\",\n        \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZmlyc3RfbmFtZSI6IkFkbWluIiwibGFzdF9uYW1lIjoiVXNlciIsImVtYWlsIjoicm9yZW5zdXV1QGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiYWRtaW4iLCJpbWFnZV91cmwiOiIiLCJpYXQiOjE2OTEwNDY3NzksImV4cCI6MTY5MTY1MTU3OX0.h5uOseMwhl_WeFkkQpA3powP3pq3ZbgAsnb3LejgSkk\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var statusCode = pm.response.code;\r",
+                  "var jsonData = pm.response.json();\r",
+                  "if(statusCode==200 || statusCode==201){\r",
+                  "    pm.environment.set(\"access_token\", jsonData.data.accessToken);\r",
+                  "    pm.environment.set(\"refresh_token\", jsonData.data.refreshToken);\r",
+                  "}\r",
+                  "\r",
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{password}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{password}}\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/login",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "etag",
+                  "value": "\"bt3uxp47jrl0\""
+                },
+                {
+                  "key": "content-length",
+                  "value": "756"
+                },
+                {
+                  "key": "vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 03 Aug 2023 07:32:57 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Login successful\",\n    \"data\": {\n        \"id\": 8,\n        \"first_name\": \"Admin\",\n        \"last_name\": \"User\",\n        \"email\": \"rorensuuu@gmail.com\",\n        \"username\": \"admin\",\n        \"image_url\": \"\",\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZmlyc3RfbmFtZSI6IkFkbWluIiwibGFzdF9uYW1lIjoiVXNlciIsImVtYWlsIjoicm9yZW5zdXV1QGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiYWRtaW4iLCJpbWFnZV91cmwiOiIiLCJpYXQiOjE2OTEwNDc5NzcsImV4cCI6MTY5MTA0ODg3N30.HwgBTvWPJbMq10IpL27gdwzRPu2VSDxWNFLDEUwVJZk\",\n        \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZmlyc3RfbmFtZSI6IkFkbWluIiwibGFzdF9uYW1lIjoiVXNlciIsImVtYWlsIjoicm9yZW5zdXV1QGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiYWRtaW4iLCJpbWFnZV91cmwiOiIiLCJpYXQiOjE2OTEwNDc5NzcsImV4cCI6MTY5MTY1Mjc3N30.HPDz-IVHp78Xb3S9JlNk4Ikp6_1p2GWIfPXl18e16DI\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"rorensuuu@gmail.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/reset-password",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "reset-password"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\": \"rorensuuu@gmail.com\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/reset-password",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "reset-password"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "etag",
+                  "value": "\"pnhlni54tj1t\""
+                },
+                {
+                  "key": "content-length",
+                  "value": "65"
+                },
+                {
+                  "key": "vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 03 Aug 2023 07:53:22 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Password reset sent successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Confirm Reset Password",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"token\": \"26fde5a38a36ac08dd8d9c3171b25b15a124a84d9c6dacbb394bee402bcc243b\",\r\n    \"password\": \"password\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/confirm-reset-password",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "confirm-reset-password"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"token\": \"26fde5a38a36ac08dd8d9c3171b25b15a124a84d9c6dacbb394bee402bcc243b\",\r\n    \"password\": \"password\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/confirm-reset-password",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "confirm-reset-password"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "etag",
+                  "value": "\"4zqo3k591z1q\""
+                },
+                {
+                  "key": "content-length",
+                  "value": "62"
+                },
+                {
+                  "key": "vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 03 Aug 2023 07:56:30 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Password changed successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Confirm Email",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"type\": \"otp\",\r\n    \"token\": \"407548\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/confirm-email",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "confirm-email"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"type\": \"token\",\r\n    \"token\": \"78511edcd4f5d23f09a23714979cb0242accbf446db05b96790edae090457186\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/confirm-email",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "confirm-email"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "etag",
+                  "value": "\"3h7lxj5qmm1p\""
+                },
+                {
+                  "key": "content-length",
+                  "value": "61"
+                },
+                {
+                  "key": "vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 03 Aug 2023 08:11:49 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Email confirmed successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Resend Confirmation Email",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"type\": \"token\",\r\n    \"email\": \"rorensuuu@gmail.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/resend-confirmation-email",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "resend-confirmation-email"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"type\": \"token\",\r\n    \"email\": \"rorensuuu@gmail.com\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/resend-confirmation-email",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "resend-confirmation-email"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "etag",
+                  "value": "\"4s608yi1431x\""
+                },
+                {
+                  "key": "content-length",
+                  "value": "69"
+                },
+                {
+                  "key": "vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 03 Aug 2023 08:12:41 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Email confirmation sent successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Refresh Access token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var statusCode = pm.response.code;\r",
+                  "var jsonData = pm.response.json();\r",
+                  "if(statusCode==200 || statusCode==201){\r",
+                  "    pm.environment.set(\"access_token\", jsonData.data.accessToken);\r",
+                  "}\r",
+                  "\r",
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"token\": \"{{refresh_token}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/refresh",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "refresh"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"token\": \"{{refreshToken}}\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/refresh",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "refresh"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "etag",
+                  "value": "\"95w08gn6r5a6\""
+                },
+                {
+                  "key": "content-length",
+                  "value": "366"
+                },
+                {
+                  "key": "vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 03 Aug 2023 08:21:49 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Token refreshed successfully\",\n    \"data\": {\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAwMCwiZW1haWwiOiJ0b3Jhb29vLjEwMDZAZ21haWwuY29tIiwidXNlcm5hbWUiOiJhZG1pbiIsImZpcnN0X25hbWUiOiJBZG1pbiIsImxhc3RfbmFtZSI6IiIsImltYWdlX3VybCI6IiIsImlhdCI6MTY5MTA1MDkwOSwiZXhwIjoxNjkxMDUxODA5fQ.o4ywe3oMRzbB8iVTFjTfEtE2SYHBUxPtA3vjHtXHjFE\"\n    }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Accounts",
+      "item": [
+        {
+          "name": "Get accounts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/accounts",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "pageToken",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "id",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "username",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "first_name",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "last_name",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "email",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/accounts?limit=10",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "accounts"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "id",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "username",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "first_name",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "last_name",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "email",
+                      "value": "",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Mon, 04 Sep 2023 13:16:45 GMT"
+                },
+                {
+                  "key": "vary",
+                  "value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-encoding",
+                  "value": "gzip"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Accounts found!\",\n    \"data\": {\n        \"result\": [\n            {\n                \"id\": 1000,\n                \"first_name\": \"Admin\",\n                \"last_name\": \"\",\n                \"image_url\": \"\",\n                \"email\": \"toraooo.1006@gmail.com\",\n                \"username\": \"admin\"\n            },\n            {\n                \"id\": 1001,\n                \"first_name\": \"Alice\",\n                \"last_name\": \"Smith\",\n                \"image_url\": \"https://example.com/user2.jpg\",\n                \"email\": \"alice.smith@example.com\",\n                \"username\": \"alicesmith\"\n            },\n            {\n                \"id\": 1002,\n                \"first_name\": \"Emma\",\n                \"last_name\": \"Brown\",\n                \"image_url\": \"https://example.com/user101.jpg\",\n                \"email\": \"emma.brown@example.com\",\n                \"username\": \"emmabrown\"\n            },\n            {\n                \"id\": 1003,\n                \"first_name\": \"Michael\",\n                \"last_name\": \"Davis\",\n                \"image_url\": \"https://example.com/user102.jpg\",\n                \"email\": \"michael.davis@example.com\",\n                \"username\": \"michaeldavis\"\n            },\n            {\n                \"id\": 1004,\n                \"first_name\": \"Sophia\",\n                \"last_name\": \"Garcia\",\n                \"image_url\": \"https://example.com/user3.jpg\",\n                \"email\": \"sophia.garcia@example.com\",\n                \"username\": \"sophiagarcia\"\n            },\n            {\n                \"id\": 1005,\n                \"first_name\": \"James\",\n                \"last_name\": \"Wilson\",\n                \"image_url\": \"https://example.com/user4.jpg\",\n                \"email\": \"james.wilson@example.com\",\n                \"username\": \"jameswilson\"\n            },\n            {\n                \"id\": 1006,\n                \"first_name\": \"Olivia\",\n                \"last_name\": \"Johnson\",\n                \"image_url\": \"https://example.com/user5.jpg\",\n                \"email\": \"olivia.johnson@example.com\",\n                \"username\": \"oliviajohnson\"\n            },\n            {\n                \"id\": 1007,\n                \"first_name\": \"William\",\n                \"last_name\": \"Smith\",\n                \"image_url\": \"https://example.com/user6.jpg\",\n                \"email\": \"william.smith@example.com\",\n                \"username\": \"williamsmith\"\n            },\n            {\n                \"id\": 1008,\n                \"first_name\": \"Isabella\",\n                \"last_name\": \"Davis\",\n                \"image_url\": \"https://example.com/user7.jpg\",\n                \"email\": \"isabella.davis@example.com\",\n                \"username\": \"isabelladavis\"\n            },\n            {\n                \"id\": 1009,\n                \"first_name\": \"Benjamin\",\n                \"last_name\": \"Anderson\",\n                \"image_url\": \"https://example.com/user8.jpg\",\n                \"email\": \"benjamin.anderson@example.com\",\n                \"username\": \"benjaminanderson\"\n            }\n        ],\n        \"meta\": {\n            \"hasNextPage\": true,\n            \"hasPreviousPage\": false,\n            \"nextPageUrl\": \"http://localhost:3000//api/accounts?limit=10&pageToken=eyJpZCI6MTAwOSwidHlwZSI6Im5leHQifQ%3D%3D\"\n        }\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get account",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/accounts/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/accounts/1000",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    "1000"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Tue, 05 Sep 2023 09:42:00 GMT"
+                },
+                {
+                  "key": "vary",
+                  "value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-encoding",
+                  "value": "gzip"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Account found\",\n    \"data\": {\n        \"id\": 1000,\n        \"first_name\": \"Admin\",\n        \"last_name\": \"\",\n        \"image_url\": \"\",\n        \"email\": \"toraooo.1006@gmail.com\",\n        \"username\": \"admin\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create account",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"firstName\": \"Admin\",\r\n    \"lastName\": \"User\",\r\n    \"username\": \"test\",\r\n    \"email\": \"rorensuuu@gmail.com\",\r\n    \"password\": \"supersecretpassword\",\r\n    \"confirmPassword\": \"supersecretpassword\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/accounts",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"firstName\": \"Admin\",\r\n    \"lastName\": \"User\",\r\n    \"username\": \"test\",\r\n    \"email\": \"rorensuuu@gmail.com\",\r\n    \"password\": \"supersecretpassword\",\r\n    \"confirmPassword\": \"supersecretpassword\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/accounts",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "accounts"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Tue, 05 Sep 2023 10:34:35 GMT"
+                },
+                {
+                  "key": "vary",
+                  "value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-encoding",
+                  "value": "gzip"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Account created successfully\",\n    \"data\": {\n        \"id\": 100000,\n        \"first_name\": \"Admin\",\n        \"last_name\": \"User\",\n        \"email\": \"rorensuuu@gmail.com\",\n        \"username\": \"test\",\n        \"image_url\": \"\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update account",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"firstName\": \"Admin\",\r\n    \"lastName\": \"Updated\",\r\n    \"username\": \"udpated\",\r\n    \"email\": \"rorensuuu@gmail.com\",\r\n    \"password\": \"supersecretpassword\",\r\n    \"confirmPassword\": \"supersecretpassword\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/accounts/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "100000"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"firstName\": \"Admin\",\r\n    \"lastName\": \"Updated\",\r\n    \"username\": \"udpated\",\r\n    \"email\": \"rorensuuu@gmail.com\",\r\n    \"password\": \"supersecretpassword\",\r\n    \"confirmPassword\": \"supersecretpassword\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/accounts/:id",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "100000"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Tue, 05 Sep 2023 10:43:24 GMT"
+                },
+                {
+                  "key": "vary",
+                  "value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-encoding",
+                  "value": "gzip"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Account account update successful\",\n    \"data\": {\n        \"id\": 100000,\n        \"first_name\": \"Admin\",\n        \"last_name\": \"Updated\",\n        \"image_url\": \"\",\n        \"email\": \"rorensuuu@gmail.com\",\n        \"username\": \"udpated\",\n        \"password\": \"$2a$10$nmKL5pXVX/3toSsHHTgz6e4RySZ8yzRvBIsTfc884DKAWK8i4dlZq\",\n        \"created_at\": \"2023-09-05T10:34:33.365Z\",\n        \"updated_at\": \"2023-09-05T10:43:24.669Z\",\n        \"confirmed\": false\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Delete account",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/accounts/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "100000"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/accounts/:id",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "100000"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Tue, 05 Sep 2023 10:44:43 GMT"
+                },
+                {
+                  "key": "vary",
+                  "value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-encoding",
+                  "value": "gzip"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Account delete successful\",\n    \"data\": {\n        \"id\": 100000,\n        \"first_name\": \"Admin\",\n        \"last_name\": \"Updated\",\n        \"image_url\": \"\",\n        \"email\": \"rorensuuu@gmail.com\",\n        \"username\": \"udpated\",\n        \"password\": \"$2a$10$nmKL5pXVX/3toSsHHTgz6e4RySZ8yzRvBIsTfc884DKAWK8i4dlZq\",\n        \"created_at\": \"2023-09-05T10:34:33.365Z\",\n        \"updated_at\": \"2023-09-05T10:43:24.669Z\",\n        \"confirmed\": false\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get addresses",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/accounts/:id/addresses",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts",
+                ":id",
+                "addresses"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/accounts/:id/addresses",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "addresses"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1000"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Tue, 05 Sep 2023 10:47:24 GMT"
+                },
+                {
+                  "key": "vary",
+                  "value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-encoding",
+                  "value": "gzip"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Account addresses found\",\n    \"data\": [\n        {\n            \"id\": 1000,\n            \"address\": \"123 Main Street\",\n            \"city\": \"New York\",\n            \"state\": \"NY\",\n            \"country\": \"USA\",\n            \"zip\": \"10001\"\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get address",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/accounts/:id/addresses/:addressId",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts",
+                ":id",
+                "addresses",
+                ":addressId"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1000"
+                },
+                {
+                  "key": "addressId",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/accounts/:id/addresses/:addressId",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "addresses",
+                    ":addressId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1000"
+                    },
+                    {
+                      "key": "addressId",
+                      "value": "10001"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Tue, 05 Sep 2023 10:49:35 GMT"
+                },
+                {
+                  "key": "vary",
+                  "value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-encoding",
+                  "value": "gzip"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Account address found\",\n    \"data\": {\n        \"id\": 1000,\n        \"user_id\": 1000,\n        \"address\": \"123 Main Street\",\n        \"city\": \"New York\",\n        \"state\": \"NY\",\n        \"country\": \"USA\",\n        \"zip\": \"10001\",\n        \"created_at\": \"2023-09-05T10:32:50.423Z\",\n        \"updated_at\": \"2023-09-05T10:32:50.423Z\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get cart",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/accounts/:id/cart",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts",
+                ":id",
+                "cart"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/accounts/:id/cart",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "cart"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1000"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Tue, 05 Sep 2023 10:53:50 GMT"
+                },
+                {
+                  "key": "vary",
+                  "value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-encoding",
+                  "value": "gzip"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Account cart found\",\n    \"data\": [\n        {\n            \"id\": 1000,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"total_price\": 19.99,\n            \"quantity\": 2\n        },\n        {\n            \"id\": 1001,\n            \"product_id\": 1000,\n            \"variant_id\": 1001,\n            \"total_price\": 12.5,\n            \"quantity\": 1\n        },\n        {\n            \"id\": 1002,\n            \"product_id\": 1000,\n            \"variant_id\": 1002,\n            \"total_price\": 29.99,\n            \"quantity\": 3\n        },\n        {\n            \"id\": 1003,\n            \"product_id\": 1000,\n            \"variant_id\": 1003,\n            \"total_price\": 9.95,\n            \"quantity\": 2\n        },\n        {\n            \"id\": 1004,\n            \"product_id\": 1000,\n            \"variant_id\": 1004,\n            \"total_price\": 14.99,\n            \"quantity\": 1\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get cart item",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/accounts/:id/cart/:cartItemId",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts",
+                ":id",
+                "cart",
+                ":cartItemId"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1000"
+                },
+                {
+                  "key": "cartItemId",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/accounts/:id/cart/:cartItemId",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "cart",
+                    ":cartItemId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1000"
+                    },
+                    {
+                      "key": "cartItemId",
+                      "value": "1000"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Tue, 05 Sep 2023 10:54:52 GMT"
+                },
+                {
+                  "key": "vary",
+                  "value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-encoding",
+                  "value": "gzip"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Account cart item found\",\n    \"data\": {\n        \"id\": 1000,\n        \"user_id\": 1000,\n        \"product_id\": 1000,\n        \"variant_id\": 1000,\n        \"total_price\": 19.99,\n        \"quantity\": 2,\n        \"created_at\": \"2023-09-05T10:32:50.503Z\",\n        \"updated_at\": \"2023-09-05T10:32:50.503Z\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/accounts/:id/orders",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts",
+                ":id",
+                "orders"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/accounts/:id/orders",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "orders"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1000"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Tue, 05 Sep 2023 10:59:29 GMT"
+                },
+                {
+                  "key": "vary",
+                  "value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-encoding",
+                  "value": "gzip"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Account orders found\",\n    \"data\": [\n        {\n            \"id\": 1000,\n            \"shipping_id\": 1000,\n            \"address_id\": 1000,\n            \"order_number\": \"ORD1000\",\n            \"status\": \"PROCESSING\",\n            \"total\": 59.99,\n            \"payment_id\": null\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get order",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/accounts/:id/orders/:orderId",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts",
+                ":id",
+                "orders",
+                ":orderId"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1000"
+                },
+                {
+                  "key": "orderId",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/accounts/:id/orders/:orderId",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "orders",
+                    ":orderId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1000"
+                    },
+                    {
+                      "key": "orderId",
+                      "value": "1000"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Tue, 05 Sep 2023 11:00:43 GMT"
+                },
+                {
+                  "key": "vary",
+                  "value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-encoding",
+                  "value": "gzip"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Account order found\",\n    \"data\": {\n        \"id\": 1000,\n        \"user_id\": 1000,\n        \"shipping_id\": 1000,\n        \"address_id\": 1000,\n        \"order_number\": \"ORD1000\",\n        \"status\": \"PROCESSING\",\n        \"total\": 59.99,\n        \"created_at\": \"2023-07-22T12:34:56.000Z\",\n        \"updated_at\": \"2023-07-22T12:34:56.000Z\",\n        \"payment_id\": null\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get payments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/accounts/:id/payments",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts",
+                ":id",
+                "payments"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/accounts/:id/payments",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "payments"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1000"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Tue, 05 Sep 2023 12:22:48 GMT"
+                },
+                {
+                  "key": "vary",
+                  "value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-encoding",
+                  "value": "gzip"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Account payments found\",\n    \"data\": [\n        {\n            \"id\": 1000,\n            \"order_id\": 1000,\n            \"method_id\": 1000,\n            \"amount\": 19.99,\n            \"status\": \"success\"\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get payment",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/accounts/:id/payments/:paymentId",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts",
+                ":id",
+                "payments",
+                ":paymentId"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1000"
+                },
+                {
+                  "key": "paymentId",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/accounts/:id/payments/:paymentId",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "payments",
+                    ":paymentId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1000"
+                    },
+                    {
+                      "key": "paymentId",
+                      "value": "1000"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Tue, 05 Sep 2023 12:24:01 GMT"
+                },
+                {
+                  "key": "vary",
+                  "value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-encoding",
+                  "value": "gzip"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Account payment found\",\n    \"data\": {\n        \"id\": 1000,\n        \"user_id\": 1000,\n        \"order_id\": 1000,\n        \"method_id\": 1000,\n        \"amount\": 19.99,\n        \"status\": \"success\",\n        \"created_at\": \"2023-09-05T12:21:04.133Z\",\n        \"updated_at\": \"2023-09-05T12:21:04.133Z\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get payment methods",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/accounts/:id/payment-methods",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts",
+                ":id",
+                "payment-methods"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/accounts/:id/payment-methods",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "payment-methods"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1000"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Tue, 05 Sep 2023 11:01:44 GMT"
+                },
+                {
+                  "key": "vary",
+                  "value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-encoding",
+                  "value": "gzip"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Account payment methods found\",\n    \"data\": [\n        {\n            \"id\": 1000,\n            \"name\": \"Credit Card\",\n            \"email\": null,\n            \"phone_number\": null,\n            \"card_number\": \"**** **** **** 1234\",\n            \"expiration_date\": \"12/25\",\n            \"cvv\": \"123\"\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get payment method",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/accounts/:id/payment-methods/:paymentMethodId",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts",
+                ":id",
+                "payment-methods",
+                ":paymentMethodId"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1000"
+                },
+                {
+                  "key": "paymentMethodId",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/accounts/:id/payment-methods/:paymentMethodId",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "payment-methods",
+                    ":paymentMethodId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1000"
+                    },
+                    {
+                      "key": "paymentMethodId",
+                      "value": "1000"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Tue, 05 Sep 2023 11:21:18 GMT"
+                },
+                {
+                  "key": "vary",
+                  "value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-encoding",
+                  "value": "gzip"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Account payment method found\",\n    \"data\": {\n        \"id\": 1000,\n        \"user_id\": 1000,\n        \"name\": \"Credit Card\",\n        \"email\": null,\n        \"phone_number\": null,\n        \"card_number\": \"**** **** **** 1234\",\n        \"expiration_date\": \"12/25\",\n        \"cvv\": \"123\",\n        \"created_at\": \"2023-09-05T10:32:50.429Z\",\n        \"updated_at\": \"2023-09-05T10:32:50.429Z\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get reviews",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/accounts/:id/reviews",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts",
+                ":id",
+                "reviews"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/accounts/:id/reviews",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "reviews"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1000"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Tue, 05 Sep 2023 11:23:42 GMT"
+                },
+                {
+                  "key": "vary",
+                  "value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-encoding",
+                  "value": "gzip"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Account reviews found\",\n    \"data\": [\n        {\n            \"id\": 1000,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Nice product, I recommend it!\"\n        },\n        {\n            \"id\": 1001,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 3,\n            \"comment\": \"It's okay, could have been better.\"\n        },\n        {\n            \"id\": 1002,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"Excellent product, exceeded my expectations!\"\n        },\n        {\n            \"id\": 1003,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 2,\n            \"comment\": \"Not satisfied with the quality.\"\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get review",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/accounts/:id/reviews/:reviewId",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts",
+                ":id",
+                "reviews",
+                ":reviewId"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1000"
+                },
+                {
+                  "key": "reviewId",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/accounts/:id/reviews/:reviewId",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "reviews",
+                    ":reviewId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1000"
+                    },
+                    {
+                      "key": "reviewId",
+                      "value": "1000"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Tue, 05 Sep 2023 11:24:22 GMT"
+                },
+                {
+                  "key": "vary",
+                  "value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-encoding",
+                  "value": "gzip"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Account review found\",\n    \"data\": {\n        \"id\": 1000,\n        \"user_id\": 1000,\n        \"product_id\": 1000,\n        \"variant_id\": 1000,\n        \"rating\": 4,\n        \"comment\": \"Nice product, I recommend it!\",\n        \"created_at\": \"2023-07-23T09:10:15.000Z\",\n        \"updated_at\": \"2023-07-23T09:10:15.000Z\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get roles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/accounts/:id/roles",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts",
+                ":id",
+                "roles"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/accounts/:id/roles",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "roles"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1000"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Tue, 05 Sep 2023 11:25:34 GMT"
+                },
+                {
+                  "key": "vary",
+                  "value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-encoding",
+                  "value": "gzip"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Account roles found\",\n    \"data\": [\n        {\n            \"id\": 1000,\n            \"name\": \"Admin\",\n            \"code\": \"role:admin\"\n        },\n        {\n            \"id\": 1001,\n            \"name\": \"SUB_ADMIN\",\n            \"code\": \"role:sub_admin\"\n        },\n        {\n            \"id\": 1002,\n            \"name\": \"CUSTOMER\",\n            \"code\": \"role:customer\"\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update roles",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"roles\": [1000, 1001, 1002]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/accounts/:id/roles",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts",
+                ":id",
+                "roles"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1003"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"roles\": [1000, 1001, 1002]\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/accounts/:id/roles",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "roles"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1003"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Tue, 05 Sep 2023 11:28:44 GMT"
+                },
+                {
+                  "key": "vary",
+                  "value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-encoding",
+                  "value": "gzip"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Updated account roles\",\n    \"data\": [\n        {\n            \"id\": 1000,\n            \"name\": \"Admin\",\n            \"code\": \"role:admin\"\n        },\n        {\n            \"id\": 1001,\n            \"name\": \"SUB_ADMIN\",\n            \"code\": \"role:sub_admin\"\n        },\n        {\n            \"id\": 1002,\n            \"name\": \"CUSTOMER\",\n            \"code\": \"role:customer\"\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get wishlist",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/accounts/:id/wishlist",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts",
+                ":id",
+                "wishlist"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "New Request",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/accounts/:id/wishlist",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "wishlist"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1000"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Tue, 05 Sep 2023 11:29:46 GMT"
+                },
+                {
+                  "key": "vary",
+                  "value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-encoding",
+                  "value": "gzip"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Account wishlist found\",\n    \"data\": [\n        {\n            \"id\": 1000,\n            \"product_id\": 1000\n        },\n        {\n            \"id\": 1001,\n            \"product_id\": 1001\n        },\n        {\n            \"id\": 1002,\n            \"product_id\": 1002\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get wishlist item",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/accounts/:id/wishlist/:wishlistItemId",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "accounts",
+                ":id",
+                "wishlist",
+                ":wishlistItemId"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1000"
+                },
+                {
+                  "key": "wishlistItemId",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/accounts/:id/wishlist/:wishlistItemId",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "wishlist",
+                    ":wishlistItemId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1000"
+                    },
+                    {
+                      "key": "wishlistItemId",
+                      "value": "1000"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Tue, 05 Sep 2023 11:30:52 GMT"
+                },
+                {
+                  "key": "vary",
+                  "value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-encoding",
+                  "value": "gzip"
+                },
+                {
+                  "key": "connection",
+                  "value": "close"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Account wishlist item found\",\n    \"data\": {\n        \"id\": 1000,\n        \"user_id\": 1000,\n        \"product_id\": 1000,\n        \"created_at\": \"2023-09-05T10:32:50.490Z\",\n        \"updated_at\": \"2023-09-05T10:32:50.490Z\"\n    }\n}"
+            }
+          ]
+        }
+      ],
+      "auth": {
+        "type": "jwt",
+        "jwt": [
+          {
+            "key": "secret",
+            "value": "{{access_token_secret}}",
+            "type": "string"
+          },
+          {
+            "key": "payload",
+            "value": "{\r\n    \"id\": 1000,\r\n    \"first_name\": \"Admin\",\r\n    \"last_name\": \"\",\r\n    \"email\": \"toraooo.1006@gmail.com\",\r\n    \"username\": \"admin\",\r\n    \"image_url\": \"\"\r\n}",
+            "type": "string"
+          },
+          {
+            "key": "algorithm",
+            "value": "HS256",
+            "type": "string"
+          },
+          {
+            "key": "isSecretBase64Encoded",
+            "value": false,
+            "type": "boolean"
+          },
+          {
+            "key": "addTokenTo",
+            "value": "header",
+            "type": "string"
+          },
+          {
+            "key": "headerPrefix",
+            "value": "Bearer",
+            "type": "string"
+          },
+          {
+            "key": "queryParamKey",
+            "value": "token",
+            "type": "string"
+          },
+          {
+            "key": "header",
+            "value": "{}",
+            "type": "string"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Hello",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/hello",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "hello"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Hello",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/hello",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "hello"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "date",
+              "value": "Tue, 05 Sep 2023 09:41:07 GMT"
+            },
+            {
+              "key": "vary",
+              "value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            },
+            {
+              "key": "content-encoding",
+              "value": "gzip"
+            },
+            {
+              "key": "connection",
+              "value": "close"
+            },
+            {
+              "key": "transfer-encoding",
+              "value": "chunked"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"status\": \"success\",\n    \"message\": \"Hello world!\"\n}"
+        }
+      ]
+    }
+  ]
 }
