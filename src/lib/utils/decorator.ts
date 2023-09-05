@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import Response from "@lib/http";
 import PermissionController from "@controller/permission.controller";
-import logger from "@utils/logging";
+import { getDatabaseLogger } from "@utils/logging";
 
 /**
  * Wrapper function to check if the user is permitted to access the resource
@@ -9,7 +9,7 @@ import logger from "@utils/logging";
  * @param target
  */
 export function withPermission<T extends Function>(target: T): T {
-    const wrapped = async function (this: typeof target, request: NextRequest, args : any[]) {
+    const wrapped = async function (this: typeof target, request: NextRequest, args: any[]) {
         const isAllowed = await PermissionController.isAllowed(request);
 
         return isAllowed ? target.call(this, request, args) : Response.forbidden;
@@ -74,7 +74,7 @@ export function AllowPermitted(...args: any[]): any {
  * @param method
  */
 export function checkMethod<T extends Function>(func: T, method: string | string[]): T {
-    const wrapped = async function (this: typeof func, request: NextRequest, args : any[]) {
+    const wrapped = async function (this: typeof func, request: NextRequest, args: any[]) {
         if (Array.isArray(method) && !method.includes(request.method)) return Response.methodNotAllowed;
 
         if (typeof method === "string" && method !== request.method) return Response.methodNotAllowed;
@@ -104,7 +104,7 @@ export function AllowMethod(method: string | string[]): MethodDecorator {
  * @param func
  */
 export function checkBody<T extends Function>(func: T): T {
-    const wrapped = async function (this: typeof func, request: NextRequest, args : any[]) {
+    const wrapped = async function (this: typeof func, request: NextRequest, args: any[]) {
 
         let body;
         try {
@@ -141,11 +141,12 @@ export function CheckBody(_target: any, _propertyKey: string, descriptor: Proper
  * @param func
  */
 export function checkError<T extends Function>(func: Function): T {
-    const wrapped = async function (this: typeof func, request: NextRequest, args : any[]) {
+    const databaseLogger = getDatabaseLogger({ name: "decorator:checkError" })
+    const wrapped = async function (this: typeof func, request: NextRequest, args: any[]) {
         try {
             return await func.call(this, request, args);
         } catch (err: any) {
-            logger.error(err);
+            await databaseLogger.error(err, err.message, true);
             return Response.internalServerError(err.message);
         }
     }
