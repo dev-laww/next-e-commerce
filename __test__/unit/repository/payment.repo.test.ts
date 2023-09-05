@@ -2,8 +2,6 @@ import PaymentRepository from "@repository/payment.repo";
 import prisma from "@lib/prisma";
 import { Payment } from "@prisma/client";
 
-jest.mock("@lib/prisma", require("@mocks/lib/prisma.mock"));
-
 describe("PaymentRepository", () => {
     let repo: PaymentRepository;
     beforeEach(() => {

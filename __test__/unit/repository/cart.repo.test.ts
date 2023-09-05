@@ -2,8 +2,6 @@ import CartRepository from "@repository/cart.repo";
 import prisma from "@lib/prisma";
 import { Prisma } from "@prisma/client";
 
-jest.mock("@lib/prisma", require("@mocks/lib/prisma.mock"));
-
 describe("CartRepository", () => {
     let repo: CartRepository;
     beforeEach(() => {

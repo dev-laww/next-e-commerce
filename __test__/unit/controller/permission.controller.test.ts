@@ -3,8 +3,6 @@ import PermissionController from "@controller/permission.controller";
 import { generateAccessToken } from "@utils/token";
 import { Permission } from "@prisma/client";
 
-jest.mock("@utils/logging", () => require("@mocks/lib/utils/logging.mock"));
-
 describe("PermissionController", () => {
     const mockGetAvailableResources = jest.spyOn(PermissionController["permissionRepo"], "getAvailableResources");
     const mockGetPermissions = jest.spyOn(PermissionController["repo"], "getPermissions");

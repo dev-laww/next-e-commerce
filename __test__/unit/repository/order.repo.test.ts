@@ -3,8 +3,6 @@ import prisma from "@lib/prisma";
 import { ORDER_STATUS } from "@lib/constants";
 import { Order } from "@prisma/client";
 
-jest.mock("@lib/prisma", require("@mocks/lib/prisma.mock"));
-
 describe("OrderRepository", () => {
     let repo: OrderRepository;
     beforeEach(() => {

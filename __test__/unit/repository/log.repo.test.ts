@@ -1,8 +1,6 @@
 import LogRepository from "@repository/log.repo";
 import prisma from "@lib/prisma";
 
-jest.mock("@lib/prisma", require("@mocks/lib/prisma.mock"));
-
 describe("LogRepository", () => {
     let repo: LogRepository;
     beforeEach(() => {

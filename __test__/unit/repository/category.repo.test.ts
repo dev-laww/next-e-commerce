@@ -2,8 +2,6 @@ import CategoryRepository from "@repository/category.repo";
 import prisma from "@lib/prisma";
 import { Prisma } from "@prisma/client";
 
-jest.mock("@lib/prisma", require("@mocks/lib/prisma.mock"));
-
 describe("CategoryRepository", () => {
     let repo: CategoryRepository;
     beforeEach(() => {

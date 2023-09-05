@@ -2,8 +2,6 @@ import ReviewRepository from "@repository/review.repo";
 import prisma from "@lib/prisma";
 import { Prisma } from "@prisma/client";
 
-jest.mock("@lib/prisma", require("@mocks/lib/prisma.mock"));
-
 describe("ReviewRepository", () => {
     let repo: ReviewRepository;
     beforeEach(() => {

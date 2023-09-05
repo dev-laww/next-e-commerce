@@ -2,8 +2,6 @@ import RoleRepository from "@repository/role.repo";
 import { Permission, Role } from "@prisma/client";
 import prisma from "@lib/prisma";
 
-jest.mock("@lib/prisma", require("@mocks/lib/prisma.mock"));
-
 describe("RoleRepository", () => {
     let repo: RoleRepository;
     const role = {

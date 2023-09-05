@@ -2,8 +2,6 @@ import PaymentMethodRepository from "@repository/payment-method.repo";
 import prisma from "@lib/prisma";
 import { PaymentMethod } from "@prisma/client";
 
-jest.mock("@lib/prisma", require("@mocks/lib/prisma.mock"));
-
 describe("PaymentMethodRepository", () => {
     let paymentMethods: PaymentMethod[];
 

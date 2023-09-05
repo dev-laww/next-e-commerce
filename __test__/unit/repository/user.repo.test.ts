@@ -15,9 +15,6 @@ import { mockReset } from "jest-mock-extended";
 import UserRepository from "@repository/user.repo";
 import prisma from "@lib/prisma";
 
-
-jest.mock("@lib/prisma", () => require("@mocks/lib/prisma.mock"));
-
 describe("UserRepository", () => {
     let repo: UserRepository;
     const data = {
