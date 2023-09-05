@@ -79,7 +79,7 @@ export default class AccountsController {
         const nextUrl = `${req.nextUrl.origin}/${req.nextUrl.pathname}?${nextSearchParams.toString()}`;
         const previousUrl = `${req.nextUrl.origin}/${req.nextUrl.pathname}?${previousSearchParams.toString()}`;
 
-        return Response.ok("Accounts found!", {
+        return Response.ok("Accounts found", {
             result,
             meta: {
                 hasNextPage,
@@ -110,7 +110,7 @@ export default class AccountsController {
 
         if (!account) return Response.notFound("Account not found");
 
-        return Response.ok("Account found!", account);
+        return Response.ok("Account found", account);
     };
 
     @CheckBody
@@ -168,7 +168,7 @@ export default class AccountsController {
 
         const roles = await this.repo.getRoles(account.id);
 
-        return Response.ok("Account roles found!", roles);
+        return Response.ok("Account roles found", roles);
     }
 
     @CheckBody
@@ -203,7 +203,7 @@ export default class AccountsController {
 
         if (!paymentMethods.length) return Response.notFound("No payment methods were found");
 
-        return Response.ok("Account payment methods found!", paymentMethods);
+        return Response.ok("Account payment methods found", paymentMethods);
     }
 
     public async getPaymentMethod(_req: NextRequest, params: { id: string, paymentMethodId: string }) {

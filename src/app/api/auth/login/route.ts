@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
 import AuthController from "@controller/auth.controller";
 import { getLogger } from "@utils/logging";
@@ -15,7 +15,6 @@ async function handler(req: NextRequest) {
 
     return NextResponse.json(response, { status: statusCode })
 }
-
 
 export {
     handler as GET,
