@@ -27,7 +27,7 @@ export default class PermissionController {
         return undefined;
     }
 
-    public static async isAllowed(req: NextRequest): Promise<boolean> {
+    public static async isAllowed(req: NextRequest): Promise<boolean | "unauthorized"> {
         const path = req.nextUrl.pathname;
         const token = req.headers.get("Authorization")?.split(" ")[1];
 
@@ -50,7 +50,7 @@ export default class PermissionController {
             session = await verifyAccessToken(token);
         } catch (err) {
             await this.logger.info("Failed to verify access token");
-            return false;
+            return "unauthorized";
         }
 
         const permissions = await this.repo.getPermissions(session.id);

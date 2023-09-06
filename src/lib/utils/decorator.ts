@@ -12,6 +12,8 @@ export function withPermission<T extends Function>(target: T): T {
     const wrapped = async function (this: typeof target, request: NextRequest, args: any[]) {
         const isAllowed = await PermissionController.isAllowed(request);
 
+        if (isAllowed === "unauthorized") return Response.unauthorized;
+
         return isAllowed ? target.call(this, request, args) : Response.forbidden;
     }
 

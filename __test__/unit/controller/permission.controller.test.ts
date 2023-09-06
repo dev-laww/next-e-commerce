@@ -84,7 +84,7 @@ describe("PermissionController", () => {
 
         const result = await PermissionController.isAllowed(req);
 
-        expect(result).toBe(false);
+        expect(result).toBe("unauthorized");
     });
 
     it("Denies access on non-common resources with valid token but no permission", async () => {
