@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Next E-Commerce Issues
+    url: https://github.com/tora-o/next-e-commerce/issues/new
+    about: Issues and requests should be opened in the Next E-Commerce repository
+  - name: Contact the repository owner
+    url: https://discordapp.com/users/738982726392217611/
+    about: Discord is the best way to contact the repository owner
