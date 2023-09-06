@@ -37,14 +37,12 @@ const badRequest = (message: string, errors?: any): Response => {
     }
 }
 
-const unauthorized = (message: string): Response => {
-    return {
-        statusCode: STATUS_CODE.UNAUTHORIZED,
-        response: {
-            code: ERROR_CODE.UNAUTHORIZED,
-            status: STATUS.FAILED,
-            message
-        }
+const unauthorized: Response = {
+    statusCode: STATUS_CODE.UNAUTHORIZED,
+    response: {
+        code: ERROR_CODE.UNAUTHORIZED,
+        status: STATUS.FAILED,
+        message: "Unauthorized please login"
     }
 }
 

@@ -184,7 +184,7 @@ export default class AuthController {
                 Constants.TOKEN_TYPE.PASSWORD_RESET_TOKEN
         );
 
-        if (!success) return Response.unauthorized("Invalid token");
+        if (!success) return Response.unauthorized;
 
         await this.userRepo.changePassword(data.id, requestData.data.password);
 
@@ -210,7 +210,7 @@ export default class AuthController {
                 Constants.TOKEN_TYPE.EMAIL_CONFIRMATION_TOKEN
         );
 
-        if (!success) return Response.unauthorized("Invalid token");
+        if (!success) return Response.unauthorized;
 
         if (data.confirmed) return Response.badRequest("Email already confirmed");
 
@@ -278,7 +278,7 @@ export default class AuthController {
         try {
             session = await verifyRefreshToken(requestData.data.token);
         } catch (err) {
-            return Response.unauthorized("Invalid token");
+            return Response.unauthorized;
         }
 
         await this.logger.debug(session, `User ${session.email} refreshed token`)
