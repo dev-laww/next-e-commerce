@@ -1,39 +1,318 @@
+import AccountsController from "@controller/accounts.controller";
+import PermissionController from "@controller/permission.controller";
+import * as Constants from "@lib/constants";
+import { STATUS_CODE } from "@lib/constants";
+import { NextRequest } from "next/server";
+import { TokenOTP, User } from "@prisma/client";
+
+
+jest.mock("@repository/user.repo", () => require("@mocks/repository/user.repo.mock"));
+
+const isAllowed = jest.spyOn(PermissionController, "isAllowed");
+
 describe("AccountsController", () => {
+    let controller: AccountsController;
+    let req: NextRequest;
+    const user = {
+        id: 1,
+        username: "username",
+        email: "email",
+        first_name: "name",
+        last_name: "name",
+        image_url: "https://image.com/image.jpg"
+    } as User;
+
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+        controller = new AccountsController();
+    });
+
     describe("Test getAccounts", () => {
-        it.todo("returns 200 with accounts data");
-        it.todo("returns 401 if unauthorized");
-        it.todo("returns 403 if user is not permitted");
-        it.todo("returns 404 if no accounts found");
+        beforeEach(() => {
+            req = new NextRequest("http://localhost:3000/api/accounts");
+        });
+
+        it("returns 200 with accounts data", async () => {
+            isAllowed.mockResolvedValueOnce(true);
+            (controller.repo.getAll as jest.Mock).mockImplementation(() => Promise.resolve([user]));
+
+            const result = await controller.getAccounts(req);
+
+            expect(result.statusCode).toBe(STATUS_CODE.OK);
+            expect(result.response).toBeDefined();
+        });
+
+        it("returns 401 if unauthorized", async () => {
+            isAllowed.mockResolvedValueOnce("unauthorized");
+
+            const result = await controller.getAccounts(req);
+
+            expect(result.statusCode).toBe(STATUS_CODE.UNAUTHORIZED);
+            expect(result.response).toBeDefined();
+        });
+
+        it("returns 403 if user is not permitted", async () => {
+            isAllowed.mockResolvedValueOnce(false);
+
+            const result = await controller.getAccounts(req);
+
+            expect(result.statusCode).toBe(STATUS_CODE.FORBIDDEN);
+            expect(result.response).toBeDefined();
+        });
+
+        it("returns 404 if no accounts found", async () => {
+            isAllowed.mockResolvedValueOnce(true);
+            (controller.repo.getAll as jest.Mock).mockImplementation(() => Promise.resolve([]));
+
+            const result = await controller.getAccounts(req);
+
+            expect(result.statusCode).toBe(STATUS_CODE.NOT_FOUND);
+            expect(result.response).toBeDefined();
+        });
     });
 
     describe("Test createAccount", () => {
-        it.todo("returns 201 with account data");
-        it.todo("returns 400 if invalid data");
-        it.todo("returns 401 if unauthorized");
-        it.todo("returns 403 if user is not permitted");
+        beforeEach(() => {
+            req = new NextRequest("http://localhost:3000/api/accounts", {
+                method: "POST",
+                body: JSON.stringify({
+                    "firstName": "test",
+                    "lastName": "test",
+                    "username": "test",
+                    "email": "test@mail.com",
+                    "password": "supersecretpassword",
+                    "confirmPassword": "supersecretpassword"
+                })
+            });
+        });
+
+        it("returns 201 with account data", async () => {
+            isAllowed.mockResolvedValueOnce(true);
+            (controller.repo.create as jest.Mock).mockResolvedValueOnce(user);
+            (controller.repo.getByEmail as jest.Mock).mockResolvedValueOnce(null);
+            (controller.repo.getByUsername as jest.Mock).mockResolvedValueOnce(null);
+            (controller.repo.generateTokenOTP as jest.Mock).mockResolvedValue({
+                id: 1,
+                user_id: 1,
+                token: "x",
+                type: Constants.TOKEN_TYPE.EMAIL_CONFIRMATION_OTP,
+            } as TokenOTP);
+
+            const result = await controller.createAccount(req);
+
+            expect(result.statusCode).toBe(STATUS_CODE.CREATED);
+            expect(result.response).toBeDefined();
+        });
+
+        it("returns 400 if invalid data", async () => {
+            isAllowed.mockResolvedValueOnce(true);
+            (controller.repo.create as jest.Mock).mockImplementation(() => Promise.resolve(user));
+
+            req = new NextRequest("http://localhost:3000/api/accounts", {
+                method: "POST"
+            });
+
+            const result = await controller.createAccount(req);
+
+            expect(result.statusCode).toBe(STATUS_CODE.BAD_REQUEST);
+            expect(result.response).toBeDefined();
+        });
+
+        it("returns 401 if unauthorized", async () => {
+            isAllowed.mockResolvedValueOnce("unauthorized");
+
+            const result = await controller.createAccount(req);
+
+            expect(result.statusCode).toBe(STATUS_CODE.UNAUTHORIZED);
+            expect(result.response).toBeDefined();
+        });
+
+        it("returns 403 if user is not permitted", async () => {
+            isAllowed.mockResolvedValueOnce(false);
+
+            const result = await controller.createAccount(req);
+
+            expect(result.statusCode).toBe(STATUS_CODE.FORBIDDEN);
+            expect(result.response).toBeDefined();
+        });
+
+        it("returns 422 if wrong body", async () => {
+            isAllowed.mockResolvedValueOnce(true);
+
+            req = new NextRequest("http://localhost:3000/api/accounts", {
+                method: "POST",
+                body: "{}"
+            });
+
+            const result = await controller.createAccount(req);
+
+            expect(result.statusCode).toBe(STATUS_CODE.UNPROCESSABLE_ENTITY);
+            expect(result.response).toBeDefined();
+        });
     });
 
     describe("Test getAccount", () => {
-        it.todo("returns 200 with account data");
-        it.todo("returns 401 if unauthorized");
-        it.todo("returns 403 if user is not permitted");
-        it.todo("returns 404 if account not found");
+        const params = { id: "1" };
+        beforeEach(() => {
+            req = new NextRequest("http://localhost:3000/api/accounts/1");
+        });
+
+        it("returns 200 with account data", async () => {
+            isAllowed.mockResolvedValueOnce(true);
+            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
+
+            const result = await controller.getAccount(req, params);
+
+            expect(result.statusCode).toBe(STATUS_CODE.OK);
+            expect(result.response).toBeDefined();
+        });
+
+        it("returns 401 if unauthorized", async () => {
+            isAllowed.mockResolvedValueOnce("unauthorized");
+
+            const result = await controller.getAccount(req, params);
+
+            expect(result.statusCode).toBe(STATUS_CODE.UNAUTHORIZED);
+            expect(result.response).toBeDefined();
+        });
+
+        it("returns 403 if user is not permitted", async () => {
+            isAllowed.mockResolvedValueOnce(false);
+
+            const result = await controller.getAccount(req, params);
+
+            expect(result.statusCode).toBe(STATUS_CODE.FORBIDDEN);
+            expect(result.response).toBeDefined();
+        });
+
+        it("returns 404 if account not found", async () => {
+            isAllowed.mockResolvedValueOnce(true);
+            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(null);
+
+            const result = await controller.getAccount(req, params);
+
+            expect(result.statusCode).toBe(STATUS_CODE.NOT_FOUND);
+            expect(result.response).toBeDefined();
+        });
     });
 
     describe("Test updateAccount", () => {
-        it.todo("returns 200 with account data");
-        it.todo("returns 400 if invalid body");
-        it.todo("returns 422 if wrong body");
-        it.todo("returns 401 if unauthorized");
-        it.todo("returns 403 if user is not permitted");
-        it.todo("returns 404 if account not found");
+        const params = { id: "1" };
+
+        beforeEach(() => {
+            req = new NextRequest("http://localhost:3000/api/accounts/1", {
+                method: "PUT",
+                body: JSON.stringify({
+                    "firstName": "test",
+                    "lastName": "test",
+                    "username": "test",
+                    "email": "test@mail.com",
+                    "password": "supersecretpassword",
+                    "confirmPassword": "supersecretpassword"
+                })
+            });
+        });
+
+        it("returns 200 with account data", async () => {
+            isAllowed.mockResolvedValueOnce(true);
+            (controller.repo.update as jest.Mock).mockResolvedValueOnce(user);
+            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
+
+            const result = await controller.updateAccount(req, params);
+
+            expect(result.statusCode).toBe(STATUS_CODE.OK);
+            expect(result.response).toBeDefined();
+        });
+
+        it("returns 400 if invalid body", async () => {
+            isAllowed.mockResolvedValueOnce(true);
+            (controller.repo.update as jest.Mock).mockResolvedValueOnce(user);
+
+            req = new NextRequest("http://localhost:3000/api/accounts/1", {
+                method: "PUT"
+            });
+
+            const result = await controller.updateAccount(req, params);
+
+            expect(result.statusCode).toBe(STATUS_CODE.BAD_REQUEST);
+            expect(result.response).toBeDefined();
+        });
+
+        it("returns 401 if unauthorized", async () => {
+            isAllowed.mockResolvedValueOnce("unauthorized");
+
+            const result = await controller.updateAccount(req, params);
+
+            expect(result.statusCode).toBe(STATUS_CODE.UNAUTHORIZED);
+            expect(result.response).toBeDefined();
+        });
+
+        it("returns 403 if user is not permitted", async () => {
+            isAllowed.mockResolvedValueOnce(false);
+
+            const result = await controller.updateAccount(req, params);
+
+            expect(result.statusCode).toBe(STATUS_CODE.FORBIDDEN);
+            expect(result.response).toBeDefined();
+        });
+
+        it("returns 404 if account not found", async () => {
+            isAllowed.mockResolvedValueOnce(true);
+            (controller.repo.update as jest.Mock).mockResolvedValueOnce(null);
+
+            const result = await controller.updateAccount(req, params);
+
+            expect(result.statusCode).toBe(STATUS_CODE.NOT_FOUND);
+            expect(result.response).toBeDefined();
+        });
     });
 
     describe("Test deleteAccount", () => {
-        it.todo("returns 204 if success");
-        it.todo("returns 401 if unauthorized");
-        it.todo("returns 403 if user is not permitted");
-        it.todo("returns 404 if account not found");
+        const params = { id: "1" };
+
+        beforeEach(() => {
+            req = new NextRequest("http://localhost:3000/api/accounts/1", { method: "DELETE" });
+        });
+
+        it("returns 200 if success", async () => {
+            isAllowed.mockResolvedValueOnce(true);
+            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
+            (controller.repo.delete as jest.Mock).mockResolvedValueOnce(user);
+
+            const result = await controller.deleteAccount(req, params);
+
+            expect(result.statusCode).toBe(STATUS_CODE.OK);
+            expect(result.response).toBeDefined();
+        });
+
+        it("returns 401 if unauthorized", async () => {
+            isAllowed.mockResolvedValueOnce("unauthorized");
+
+            const result = await controller.deleteAccount(req, params);
+
+            expect(result.statusCode).toBe(STATUS_CODE.UNAUTHORIZED);
+            expect(result.response).toBeDefined();
+        });
+
+        it("returns 403 if user is not permitted", async () => {
+            isAllowed.mockResolvedValueOnce(false);
+
+            const result = await controller.deleteAccount(req, params);
+
+            expect(result.statusCode).toBe(STATUS_CODE.FORBIDDEN);
+            expect(result.response).toBeDefined();
+        });
+
+        it("returns 404 if account not found", async () => {
+            isAllowed.mockResolvedValueOnce(true);
+            (controller.repo.delete as jest.Mock).mockResolvedValueOnce(null);
+
+            const result = await controller.deleteAccount(req, params);
+
+            expect(result.statusCode).toBe(STATUS_CODE.NOT_FOUND);
+            expect(result.response).toBeDefined();
+        });
     });
 
     describe("Test get accountRoles", () => {
