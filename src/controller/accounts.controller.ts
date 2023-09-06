@@ -441,7 +441,7 @@ export default class AccountsController {
         return Response.ok("Account review found", review);
     }
 
-    public async getPaymets(_req: NextRequest, params: { id: string }) {
+    public async getPayments(_req: NextRequest, params: { id: string }) {
         const { id } = params;
 
         const account = await this.repo.getById(parseInt(id, 10) || 0);

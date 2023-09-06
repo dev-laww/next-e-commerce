@@ -9,7 +9,7 @@ const logger = getLogger({ name: "api:accounts:id:payments" });
 async function handler(req: NextRequest, { params }: { params: { id: string } }) {
     const controller = new AccountsController();
 
-    const { statusCode, response } = await controller.getPaymets(req, params);
+    const { statusCode, response } = await controller.getPayments(req, params);
     const success = statusCode == STATUS_CODE.OK;
     logger.info(success ? response.message : response, success ? undefined : `Get wishlist failed: ${response.message}`);
 
