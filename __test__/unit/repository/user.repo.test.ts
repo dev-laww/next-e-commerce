@@ -14,6 +14,7 @@ import { mockReset } from "jest-mock-extended";
 
 import UserRepository from "@repository/user.repo";
 import prisma from "@lib/prisma";
+import { TOKEN_OTP_EXPIRY } from "@lib/constants";
 
 describe("UserRepository", () => {
     let repo: UserRepository;
@@ -381,7 +382,7 @@ describe("UserRepository", () => {
             token: "x",
             type: "x",
             user_id: 1,
-            created_at: new Date(new Date().getDate() - 60 * 60 * 1000),
+            created_at: new Date(),
             user: null
         };
 
@@ -394,7 +395,7 @@ describe("UserRepository", () => {
         expect(data).toBe(null);
 
         // fail expired
-        token.created_at = new Date();
+        token.created_at = new Date(Date.now() - TOKEN_OTP_EXPIRY - 1);
         (prisma.tokenOTP.findFirst as jest.Mock).mockResolvedValue(token);
         ({ success, data } = await repo.verifyTokenOTP("x", "x"))
 

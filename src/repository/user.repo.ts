@@ -341,7 +341,13 @@ export default class UserRepository {
         const tokenCreatedAt = new Date(tokenRecord.created_at);
         const now = new Date();
 
-        if (now.getTime() - tokenCreatedAt.getTime() < TOKEN_OTP_EXPIRY) {
+        if (now.getTime() - tokenCreatedAt.getTime() > TOKEN_OTP_EXPIRY) {
+            await prisma.tokenOTP.delete({
+                where: {
+                    id: tokenRecord.id
+                }
+            });
+
             return {
                 success: false,
                 data: {} as User
