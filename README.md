@@ -31,32 +31,24 @@ Then, install the dependencies:
 
 ```bash
 npm install
-# or
-yarn install
 ```
 
-Then, create a `.env` file in the root directory, see `.env.example` for an example.
+Then, create a `.env.development.local` file in the root directory, see `.env.example` for an example.
 
 Then, apply migrations and generate Prisma client (make sure you have a PostgreSQL database running)
 
 ```bash
-prisma generate
+# Make sure you have a PostgreSQL database running
+npm run prisma:generate
 
-prisma migrate dev
-
-# or
-
-npx prisma migrate dev
+# This will apply migrations and seed the database
+npm run migrate:dev
 ```
 
 Then, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-#or
-pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -88,10 +80,12 @@ npm run generate
 To build the app:
 
 ```bash
-npm run build
-```
+# Build the app locally
+npm run build:local
 
-See [documentation](./docs/README.md) for more information.
+# Run the app
+npm run start
+```
 
 ### NOTE: This project is still a work in progress. I will be adding more features and functionality in the future.
 
