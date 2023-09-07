@@ -1,6 +1,7 @@
-import { NextRequest } from "next/server";
 import PermissionController from "@controller/permission.controller";
 import { generateAccessToken } from "@utils/token";
+import { NextRequest } from "next/server";
+import Response from "@lib/http";
 import { Permission } from "@prisma/client";
 
 describe("PermissionController", () => {
@@ -16,6 +17,7 @@ describe("PermissionController", () => {
     };
 
     let token: string;
+    let req: NextRequest;
 
     beforeEach(() => {
         jest.clearAllMocks();
@@ -23,112 +25,118 @@ describe("PermissionController", () => {
         token = generateAccessToken(USER_SESSION);
     });
 
-    it("Allows access on /api/auth", async () => {
-        const req = new NextRequest("http://localhost:3000/api/auth/login", {
-            method: "POST",
-            body: JSON.stringify({
-                username: "test",
-                password: "test"
-            })
-        });
+    it("Allows access on auth resources", async () => {
+        req = new NextRequest("http://localhost:3000/api/auth/login");
 
-        const result = await PermissionController.isAllowed(req);
+        const response = await PermissionController.isAllowed(req);
 
-        expect(result).toBe(true);
+        expect(response).toMatchObject(Response.ok());
     });
 
-    it("Allows access on common resources", async () => {
-        const req = new NextRequest("http://localhost:3000/api/products/1", {
-            method: "GET"
-        });
+    it("Allow access to common resources", async () => {
+        req = new NextRequest("http://localhost:3000/api/products");
 
-        const result = await PermissionController.isAllowed(req);
+        const response = await PermissionController.isAllowed(req);
 
-        expect(result).toBe(true);
+        expect(response).toMatchObject(Response.ok());
     });
 
-    it("Denies access on non-common resources", async () => {
-        let req = new NextRequest("http://localhost:3000/api/accounts", {
-            method: "GET"
+    it("Allows if user has permission to access the resource", async () => {
+        req = new NextRequest("http://localhost:3000/api/accounts", {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
         });
 
         mockGetAvailableResources.mockResolvedValueOnce(["GET/api/accounts"]);
+        mockGetPermissions.mockResolvedValueOnce([{ resource: "GET/api/accounts" } as Permission]);
 
-        let result = await PermissionController.isAllowed(req);
+        const response = await PermissionController.isAllowed(req);
 
-        expect(result).toBe(false);
+        expect(response).toMatchObject(Response.ok());
+    });
 
-        req = new NextRequest("http://localhost:3000/api/accounts", {
-            method: "GET",
+    it("Allows access to profile resources", async () => {
+        req = new NextRequest("http://localhost:3000/api/profile", {
             headers: {
-                "Authorization": "Bearer x"
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        const response = await PermissionController.isAllowed(req);
+
+        expect(response).toMatchObject(Response.ok());
+    });
+
+    it("Denies access if no token is provided", async () => {
+        req = new NextRequest("http://localhost:3000/api/accounts");
+
+        const response = await PermissionController.isAllowed(req);
+
+        expect(response).toMatchObject(Response.unauthorized("Please login first"));
+    });
+
+    it("Denies access if token is invalid", async () => {
+        req = new NextRequest("http://localhost:3000/api/accounts", {
+            headers: {
+                Authorization: "Bearer invalid_token"
+            }
+        });
+
+        const response = await PermissionController.isAllowed(req);
+
+        expect(response).toMatchObject(Response.unauthorized("Invalid access token"));
+    });
+
+    it("Denies access if resource is not available", async () => {
+        req = new NextRequest("http://localhost:3000/api/accounts", {
+            headers: {
+                Authorization: `Bearer ${token}`
             }
         });
 
         mockGetAvailableResources.mockResolvedValueOnce([]);
 
-        result = await PermissionController.isAllowed(req);
+        const response = await PermissionController.isAllowed(req);
 
-        expect(result).toBe(false);
+        expect(response).toMatchObject(Response.notFound());
     });
 
-    it("Denies access on non-common resources with invalid token", async () => {
-        const req = new NextRequest("http://localhost:3000/api/accounts", {
-            method: "GET",
+    it("Denies access if user has no permission", async () => {
+        req = new NextRequest("http://localhost:3000/api/accounts", {
             headers: {
-                "Authorization": "Bearer x"
+                Authorization: `Bearer ${token}`
             }
         });
 
         mockGetAvailableResources.mockResolvedValueOnce(["GET/api/accounts"]);
-
-        const result = await PermissionController.isAllowed(req);
-
-        expect(result).toBe("unauthorized");
-    });
-
-    it("Denies access on non-common resources with valid token but no permission", async () => {
-        const req = new NextRequest("http://localhost:3000/api/accounts", {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
-        });
-
-        mockGetAvailableResources.mockResolvedValue(["GET/api/accounts"]);
         mockGetPermissions.mockResolvedValueOnce([]);
 
-        let result = await PermissionController.isAllowed(req);
+        let response = await PermissionController.isAllowed(req);
 
-        expect(result).toBe(false);
+        expect(response).toMatchObject(Response.forbidden);
 
+        mockGetAvailableResources.mockResolvedValueOnce(["GET/api/accounts"]);
         mockGetPermissions.mockResolvedValueOnce(null);
 
-        result = await PermissionController.isAllowed(req);
+        response = await PermissionController.isAllowed(req);
 
-        expect(result).toBe(false);
+        expect(response).toMatchObject(Response.forbidden);
     });
 
-    it("Allows access on non-common resources with valid token and permission", async () => {
-        const req = new NextRequest("http://localhost:3000/api/accounts", {
-            method: "GET",
+    it("Denies if user has no permission to access the resource", async () => {
+        req = new NextRequest("http://localhost:3000/api/accounts", {
             headers: {
-                "Authorization": `Bearer ${token}`
+                Authorization: `Bearer ${token}`
             }
         });
 
         mockGetAvailableResources.mockResolvedValueOnce(["GET/api/accounts"]);
-        mockGetPermissions.mockResolvedValueOnce([{
-            id: 1,
-            code: "permission:code",
-            name: "Permission Name",
-            action: "GET",
-            resource: "GET/api/accounts",
-        }] as Permission[]);
+        mockGetPermissions.mockResolvedValueOnce([{ resource: "GET/api/profile" } as Permission]);
 
-        const result = await PermissionController.isAllowed(req);
+        const response = await PermissionController.isAllowed(req);
 
-        expect(result).toBe(true);
+        expect(response).toMatchObject(Response.forbidden);
     });
 });
 
