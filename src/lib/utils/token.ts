@@ -38,30 +38,38 @@ export const generateRefreshToken = (
     );
 }
 
-export const verifyAccessToken = (
+export const verifyAccessToken = async (
     token: string,
-) => {
+): Promise<UserSession | undefined> => {
     if (!process.env.ACCESS_TOKEN_SECRET) {
         throw new Error('ACCESS_TOKEN_SECRET not found');
     }
 
-    return verifyToken(
-        token,
-        process.env.ACCESS_TOKEN_SECRET,
-    );
+    try {
+        return await verifyToken(
+            token,
+            process.env.ACCESS_TOKEN_SECRET,
+        );
+    } catch (err) {
+        return undefined;
+    }
 }
 
-export const verifyRefreshToken = (
+export const verifyRefreshToken = async (
     token: string,
-) => {
+): Promise<UserSession | undefined> => {
     if (!process.env.REFRESH_TOKEN_SECRET) {
         throw new Error('REFRESH_TOKEN_SECRET not found');
     }
 
-    return verifyToken(
-        token,
-        process.env.REFRESH_TOKEN_SECRET,
-    );
+    try {
+        return await verifyToken(
+            token,
+            process.env.REFRESH_TOKEN_SECRET,
+        );
+    } catch (err) {
+        return undefined;
+    }
 }
 
 export const generateRandomToken = () => crypto.randomBytes(32).toString('hex');
