@@ -3,24 +3,16 @@ import { User } from "@prisma/client";
 
 import humps from "humps";
 
-
 import Response from "@lib/http";
 import Validators from "@lib/validator/accounts.validator";
 import { PageToken, UserSession } from "@lib/types";
-import AddressRepository from "@repository/address.repo";
-import CartRepository from "@repository/cart.repo";
-import OrderRepository from "@repository/order.repo";
-import PaymentMethodRepository from "@repository/payment-method.repo";
-import ReviewRepository from "@repository/review.repo";
 import UserRepository from "@repository/user.repo";
-import WishlistRepository from "@repository/wishlist.repo";
 import { AllowPermitted, CheckBody, CheckError } from "@utils/decorator";
 import { generatePageToken, generateRandomToken, parsePageToken } from "@utils/token";
 import { hash } from "@utils/hashing";
 import * as Constants from "@lib/constants";
 import Email from "@utils/email";
 import { getDatabaseLogger } from "@utils/logging";
-import PaymentRepository from "@repository/payment.repo";
 
 // TODO: Add filters to all get methods that returns a list of items
 
@@ -224,6 +216,8 @@ export default class AccountsController {
 
         const roles = await this.repo.getRoles(account.id);
 
+        if (!roles.length) return Response.notFound("No roles were found");
+
         return Response.ok("Account roles found", roles);
     }
 
@@ -270,11 +264,7 @@ export default class AccountsController {
 
         if (!account) return Response.notFound("Account not found");
 
-        const repo = new PaymentMethodRepository();
-        const paymentMethod = await repo.getAll({
-            id: parseInt(paymentMethodId, 10) || 0,
-            user_id: account.id
-        }).then(res => res[0]);
+        const paymentMethod = await this.repo.getPaymentMethods(account.id).then(res => res.find(pm => pm.id === parseInt(paymentMethodId, 10) || 0));
 
         if (!paymentMethod) return Response.notFound("Payment method not found");
 
@@ -302,11 +292,7 @@ export default class AccountsController {
 
         if (!account) return Response.notFound("Account not found");
 
-        const repo = new AddressRepository();
-        const address = await repo.getAll({
-            id: parseInt(addressId, 10) || 0,
-            user_id: account.id
-        }).then(res => res[0]);
+        const address = await this.repo.getAddresses(account.id).then(res => res.find(a => a.id === parseInt(addressId, 10) || 0));
 
         if (!address) return Response.notFound("Address not found");
 
@@ -334,11 +320,7 @@ export default class AccountsController {
 
         if (!account) return Response.notFound("Account not found");
 
-        const repo = new OrderRepository();
-        const order = await repo.getAll({
-            id: parseInt(orderId, 10) || 0,
-            user_id: account.id
-        }).then(res => res[0]);
+        const order = await this.repo.getOrders(account.id).then(res => res.find(o => o.id === parseInt(orderId, 10) || 0));
 
         if (!order) return Response.notFound("Order not found");
 
@@ -366,11 +348,7 @@ export default class AccountsController {
 
         if (!account) return Response.notFound("Account not found");
 
-        const repo = new WishlistRepository();
-        const wishlistItem = await repo.getAll({
-            id: parseInt(wishlistItemId, 10) || 0,
-            user_id: account.id
-        }).then(res => res[0]);
+        const wishlistItem = await this.repo.getWishlist(account.id).then(res => res.find(w => w.id === parseInt(wishlistItemId, 10) || 0));
 
         if (!wishlistItem) return Response.notFound("Wishlist item not found");
 
@@ -398,11 +376,7 @@ export default class AccountsController {
 
         if (!account) return Response.notFound("Account not found");
 
-        const repo = new CartRepository();
-        const cartItem = await repo.getAll({
-            id: parseInt(cartItemId, 10) || 0,
-            user_id: account.id
-        }).then(res => res[0]);
+        const cartItem = await this.repo.getCart(account.id).then(res => res.find(w => w.id === parseInt(cartItemId, 10) || 0));
 
         if (!cartItem) return Response.notFound("Cart item not found");
 
@@ -430,11 +404,7 @@ export default class AccountsController {
 
         if (!account) return Response.notFound("Account not found");
 
-        const repo = new ReviewRepository();
-        const review = await repo.getAll({
-            id: parseInt(reviewId, 10) || 0,
-            user_id: account.id
-        }).then(res => res[0]);
+        const review = await this.repo.getReviews(account.id).then(res => res.find(r => r.id === parseInt(reviewId, 10) || 0));
 
         if (!review) return Response.notFound("Review not found");
 
@@ -462,12 +432,7 @@ export default class AccountsController {
 
         if (!account) return Response.notFound("Account not found");
 
-        const repo = new PaymentRepository();
-
-        const payment = await repo.getAll({
-            id: parseInt(paymentId, 10) || 0,
-            user_id: account.id
-        }).then(res => res[0]);
+        const payment = await this.repo.getPayments(account.id).then(res => res.find(p => p.id === parseInt(paymentId, 10) || 0));
 
         if (!payment) return Response.notFound("Payment not found");
 
