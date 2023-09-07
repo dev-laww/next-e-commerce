@@ -4,6 +4,7 @@ import * as Constants from "@lib/constants";
 import { STATUS_CODE } from "@lib/constants";
 import { NextRequest } from "next/server";
 import { TokenOTP, User } from "@prisma/client";
+import Response from "@lib/http";
 
 
 jest.mock("@repository/user.repo", () => require("@mocks/repository/user.repo.mock"));
@@ -34,7 +35,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 200 with accounts data", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getAll as jest.Mock).mockImplementation(() => Promise.resolve([user]));
 
             const result = await controller.getAccounts(req);
@@ -44,7 +45,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 401 if unauthorized", async () => {
-            isAllowed.mockResolvedValueOnce("unauthorized");
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
 
             const result = await controller.getAccounts(req);
 
@@ -53,7 +54,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 403 if user is not permitted", async () => {
-            isAllowed.mockResolvedValueOnce(false);
+            isAllowed.mockResolvedValueOnce(Response.forbidden);
 
             const result = await controller.getAccounts(req);
 
@@ -62,7 +63,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if no accounts found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getAll as jest.Mock).mockImplementation(() => Promise.resolve([]));
 
             const result = await controller.getAccounts(req);
@@ -88,7 +89,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 201 with account data", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.create as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getByEmail as jest.Mock).mockResolvedValueOnce(null);
             (controller.repo.getByUsername as jest.Mock).mockResolvedValueOnce(null);
@@ -106,7 +107,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 400 if invalid data", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.create as jest.Mock).mockImplementation(() => Promise.resolve(user));
 
             req = new NextRequest("http://localhost:3000/api/accounts", {
@@ -120,7 +121,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 401 if unauthorized", async () => {
-            isAllowed.mockResolvedValueOnce("unauthorized");
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
 
             const result = await controller.createAccount(req);
 
@@ -129,7 +130,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 403 if user is not permitted", async () => {
-            isAllowed.mockResolvedValueOnce(false);
+            isAllowed.mockResolvedValueOnce(Response.forbidden);
 
             const result = await controller.createAccount(req);
 
@@ -138,7 +139,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 422 if wrong body", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
 
             req = new NextRequest("http://localhost:3000/api/accounts", {
                 method: "POST",
@@ -159,7 +160,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 200 with account data", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
 
             const result = await controller.getAccount(req, params);
@@ -169,7 +170,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 401 if unauthorized", async () => {
-            isAllowed.mockResolvedValueOnce("unauthorized");
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
 
             const result = await controller.getAccount(req, params);
 
@@ -178,7 +179,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 403 if user is not permitted", async () => {
-            isAllowed.mockResolvedValueOnce(false);
+            isAllowed.mockResolvedValueOnce(Response.forbidden);
 
             const result = await controller.getAccount(req, params);
 
@@ -187,7 +188,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if account not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(null);
 
             const result = await controller.getAccount(req, params);
@@ -215,7 +216,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 200 with account data", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.update as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
 
@@ -226,7 +227,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 400 if invalid body", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.update as jest.Mock).mockResolvedValueOnce(user);
 
             req = new NextRequest("http://localhost:3000/api/accounts/1", {
@@ -240,7 +241,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 401 if unauthorized", async () => {
-            isAllowed.mockResolvedValueOnce("unauthorized");
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
 
             const result = await controller.updateAccount(req, params);
 
@@ -249,7 +250,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 403 if user is not permitted", async () => {
-            isAllowed.mockResolvedValueOnce(false);
+            isAllowed.mockResolvedValueOnce(Response.forbidden);
 
             const result = await controller.updateAccount(req, params);
 
@@ -258,7 +259,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if account not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.update as jest.Mock).mockResolvedValueOnce(null);
 
             const result = await controller.updateAccount(req, params);
@@ -276,7 +277,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 200 if success", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.delete as jest.Mock).mockResolvedValueOnce(user);
 
@@ -287,7 +288,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 401 if unauthorized", async () => {
-            isAllowed.mockResolvedValueOnce("unauthorized");
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
 
             const result = await controller.deleteAccount(req, params);
 
@@ -296,7 +297,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 403 if user is not permitted", async () => {
-            isAllowed.mockResolvedValueOnce(false);
+            isAllowed.mockResolvedValueOnce(Response.forbidden);
 
             const result = await controller.deleteAccount(req, params);
 
@@ -305,7 +306,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if account not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.delete as jest.Mock).mockResolvedValueOnce(null);
 
             const result = await controller.deleteAccount(req, params);
@@ -328,7 +329,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 200 with roles data", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getRoles as jest.Mock).mockResolvedValueOnce(roles);
 
@@ -339,7 +340,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 401 if unauthorized", async () => {
-            isAllowed.mockResolvedValueOnce("unauthorized");
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
 
             const result = await controller.getAccountRoles(req, params);
 
@@ -348,7 +349,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 403 if user is not permitted", async () => {
-            isAllowed.mockResolvedValueOnce(false);
+            isAllowed.mockResolvedValueOnce(Response.forbidden);
 
             const result = await controller.getAccountRoles(req, params);
 
@@ -357,7 +358,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if account not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(null);
 
             const result = await controller.getAccountRoles(req, params);
@@ -367,7 +368,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if roles not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getRoles as jest.Mock).mockResolvedValueOnce([]);
 
@@ -391,7 +392,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 200 with roles data", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.updateRoles as jest.Mock).mockResolvedValueOnce(user);
 
@@ -402,7 +403,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 400 if invalid body", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             req = new NextRequest("http://localhost:3000/api/accounts/1/roles", { method: "PUT" });
 
@@ -413,7 +414,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 401 if unauthorized", async () => {
-            isAllowed.mockResolvedValueOnce("unauthorized");
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
 
             const result = await controller.updateAccountRoles(req, params);
 
@@ -422,7 +423,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 403 if user is not permitted", async () => {
-            isAllowed.mockResolvedValueOnce(false);
+            isAllowed.mockResolvedValueOnce(Response.forbidden);
 
             const result = await controller.updateAccountRoles(req, params);
 
@@ -431,7 +432,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if account not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(null);
 
             const result = await controller.updateAccountRoles(req, params);
@@ -459,7 +460,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 200 with payment methods data", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getPaymentMethods as jest.Mock).mockResolvedValueOnce(paymentMethods);
 
@@ -470,7 +471,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 401 if unauthorized", async () => {
-            isAllowed.mockResolvedValueOnce("unauthorized");
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
 
             const result = await controller.getPaymentMethods(req, params);
 
@@ -479,7 +480,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 403 if user is not permitted", async () => {
-            isAllowed.mockResolvedValueOnce(false);
+            isAllowed.mockResolvedValueOnce(Response.forbidden);
 
             const result = await controller.getPaymentMethods(req, params);
 
@@ -488,7 +489,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if account not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(null);
 
             const result = await controller.getPaymentMethods(req, params);
@@ -498,7 +499,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if payment methods not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getPaymentMethods as jest.Mock).mockResolvedValueOnce([]);
 
@@ -526,7 +527,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 200 with payment method data", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getPaymentMethods as jest.Mock).mockResolvedValueOnce([paymentMethod]);
 
@@ -537,7 +538,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 401 if unauthorized", async () => {
-            isAllowed.mockResolvedValueOnce("unauthorized");
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
 
             const result = await controller.getPaymentMethod(req, params);
 
@@ -546,7 +547,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 403 if user is not permitted", async () => {
-            isAllowed.mockResolvedValueOnce(false);
+            isAllowed.mockResolvedValueOnce(Response.forbidden);
 
             const result = await controller.getPaymentMethod(req, params);
 
@@ -555,7 +556,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if account not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(null);
 
             const result = await controller.getPaymentMethod(req, params);
@@ -565,7 +566,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if payment method not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getPaymentMethods as jest.Mock).mockResolvedValueOnce([]);
 
@@ -592,7 +593,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 200 with addresses data", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getAddresses as jest.Mock).mockResolvedValueOnce(addresses);
 
@@ -603,7 +604,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 401 if unauthorized", async () => {
-            isAllowed.mockResolvedValueOnce("unauthorized");
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
 
             const result = await controller.getAddresses(req, params);
 
@@ -611,7 +612,7 @@ describe("AccountsController", () => {
             expect(result.response).toBeDefined();
         });
         it("returns 403 if user is not permitted", async () => {
-            isAllowed.mockResolvedValueOnce(false);
+            isAllowed.mockResolvedValueOnce(Response.forbidden);
 
             const result = await controller.getAddresses(req, params);
 
@@ -620,7 +621,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if account not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getAddresses as jest.Mock).mockResolvedValueOnce([]);
 
             const result = await controller.getAddresses(req, params);
@@ -642,7 +643,7 @@ describe("AccountsController", () => {
         }
 
         it("returns 200 with address data", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getAddresses as jest.Mock).mockResolvedValueOnce([address]);
 
@@ -653,7 +654,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 401 if unauthorized", async () => {
-            isAllowed.mockResolvedValueOnce("unauthorized");
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
 
             const result = await controller.getAddress(req, params);
 
@@ -662,7 +663,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 403 if user is not permitted", async () => {
-            isAllowed.mockResolvedValueOnce(false);
+            isAllowed.mockResolvedValueOnce(Response.forbidden);
 
             const result = await controller.getAddress(req, params);
 
@@ -671,7 +672,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if account not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getAddresses as jest.Mock).mockResolvedValueOnce([]);
 
             const result = await controller.getAddress(req, params);
@@ -681,7 +682,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if address not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getAddresses as jest.Mock).mockResolvedValueOnce([]);
 
@@ -709,7 +710,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 200 with orders data", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getOrders as jest.Mock).mockResolvedValueOnce(orders);
 
@@ -720,7 +721,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 401 if unauthorized", async () => {
-            isAllowed.mockResolvedValueOnce("unauthorized");
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
 
             const result = await controller.getOrders(req, params);
 
@@ -729,7 +730,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 403 if user is not permitted", async () => {
-            isAllowed.mockResolvedValueOnce(false);
+            isAllowed.mockResolvedValueOnce(Response.forbidden);
 
             const result = await controller.getOrders(req, params);
 
@@ -738,7 +739,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if account not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(null);
 
             const result = await controller.getOrders(req, params);
@@ -748,7 +749,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if orders not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getOrders as jest.Mock).mockResolvedValueOnce([]);
 
@@ -776,7 +777,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 200 with order data", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getOrders as jest.Mock).mockResolvedValueOnce([order]);
 
@@ -787,7 +788,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 401 if unauthorized", async () => {
-            isAllowed.mockResolvedValueOnce("unauthorized");
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
 
             const result = await controller.getOrder(req, params);
 
@@ -796,7 +797,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 403 if user is not permitted", async () => {
-            isAllowed.mockResolvedValueOnce(false);
+            isAllowed.mockResolvedValueOnce(Response.forbidden);
 
             const result = await controller.getOrder(req, params);
 
@@ -805,7 +806,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if account not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(null);
 
             const result = await controller.getOrder(req, params);
@@ -815,7 +816,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if order not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getOrders as jest.Mock).mockResolvedValueOnce([]);
 
@@ -838,7 +839,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 200 with wishlist data", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getWishlist as jest.Mock).mockResolvedValueOnce(wishlist);
 
@@ -849,7 +850,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 401 if unauthorized", async () => {
-            isAllowed.mockResolvedValueOnce("unauthorized");
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
 
             const result = await controller.getWishlist(req, params);
 
@@ -858,7 +859,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 403 if user is not permitted", async () => {
-            isAllowed.mockResolvedValueOnce(false);
+            isAllowed.mockResolvedValueOnce(Response.forbidden);
 
             const result = await controller.getWishlist(req, params);
 
@@ -867,7 +868,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if account not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(null);
 
             const result = await controller.getWishlist(req, params);
@@ -877,7 +878,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if no wishlist items found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getWishlist as jest.Mock).mockResolvedValueOnce([]);
 
@@ -900,7 +901,7 @@ describe("AccountsController", () => {
         })
 
         it("returns 200 with wishlist data", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getWishlist as jest.Mock).mockResolvedValueOnce([wishlistItem]);
 
@@ -911,7 +912,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 401 if unauthorized", async () => {
-            isAllowed.mockResolvedValueOnce("unauthorized");
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
             const result = await controller.getWishlistItem(req, params);
 
             expect(result.statusCode).toBe(STATUS_CODE.UNAUTHORIZED);
@@ -919,7 +920,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 403 if user is not permitted", async () => {
-            isAllowed.mockResolvedValueOnce(false);
+            isAllowed.mockResolvedValueOnce(Response.forbidden);
             const result = await controller.getWishlistItem(req, params);
 
             expect(result.statusCode).toBe(STATUS_CODE.FORBIDDEN);
@@ -927,7 +928,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if account not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(null);
             const result = await controller.getWishlistItem(req, params);
 
@@ -936,7 +937,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if wishlist item not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getWishlist as jest.Mock).mockResolvedValueOnce([]);
             const result = await controller.getWishlistItem(req, params);
@@ -961,7 +962,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 200 with cart data", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getCart as jest.Mock).mockResolvedValueOnce(cart);
 
@@ -972,7 +973,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 401 if unauthorized", async () => {
-            isAllowed.mockResolvedValueOnce("unauthorized");
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
 
             const result = await controller.getCart(req, params);
 
@@ -981,7 +982,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 403 if user is not permitted", async () => {
-            isAllowed.mockResolvedValueOnce(false);
+            isAllowed.mockResolvedValueOnce(Response.forbidden);
 
             const result = await controller.getCart(req, params);
 
@@ -990,7 +991,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if account not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(null);
 
             const result = await controller.getCart(req, params);
@@ -1000,7 +1001,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if orders not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getCart as jest.Mock).mockResolvedValueOnce([]);
 
@@ -1022,7 +1023,7 @@ describe("AccountsController", () => {
         }
 
         it("returns 200 with cart item data", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getCart as jest.Mock).mockResolvedValueOnce([cartItem]);
 
@@ -1033,7 +1034,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 401 if unauthorized", async () => {
-            isAllowed.mockResolvedValueOnce("unauthorized");
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
             const result = await controller.getCartItem(req, params);
 
             expect(result.statusCode).toBe(STATUS_CODE.UNAUTHORIZED);
@@ -1041,7 +1042,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 403 if user is not permitted", async () => {
-            isAllowed.mockResolvedValueOnce(false);
+            isAllowed.mockResolvedValueOnce(Response.forbidden);
             const result = await controller.getCartItem(req, params);
 
             expect(result.statusCode).toBe(STATUS_CODE.FORBIDDEN);
@@ -1049,7 +1050,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if account not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(null);
             const result = await controller.getCartItem(req, params);
 
@@ -1058,7 +1059,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if cart item not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getCart as jest.Mock).mockResolvedValueOnce([]);
             const result = await controller.getCartItem(req, params);
@@ -1083,7 +1084,7 @@ describe("AccountsController", () => {
         })
 
         it("returns 200 with reviews data", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getReviews as jest.Mock).mockResolvedValueOnce(reviews);
 
@@ -1094,7 +1095,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 401 if unauthorized", async () => {
-            isAllowed.mockResolvedValueOnce("unauthorized");
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
             const result = await controller.getReviews(req, params);
 
             expect(result.statusCode).toBe(STATUS_CODE.UNAUTHORIZED);
@@ -1102,7 +1103,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 403 if user is not permitted", async () => {
-            isAllowed.mockResolvedValueOnce(false);
+            isAllowed.mockResolvedValueOnce(Response.forbidden);
             const result = await controller.getReviews(req, params);
 
             expect(result.statusCode).toBe(STATUS_CODE.FORBIDDEN);
@@ -1110,7 +1111,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if account not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getReviews as jest.Mock).mockResolvedValueOnce([]);
             const result = await controller.getReviews(req, params);
 
@@ -1119,7 +1120,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if reviews not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getReviews as jest.Mock).mockResolvedValueOnce([]);
             const result = await controller.getReviews(req, params);
@@ -1144,7 +1145,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 200 with review data", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getReviews as jest.Mock).mockResolvedValueOnce([review]);
 
@@ -1155,7 +1156,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 401 if unauthorized", async () => {
-            isAllowed.mockResolvedValueOnce("unauthorized");
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
             const result = await controller.getReview(req, params);
 
             expect(result.statusCode).toBe(STATUS_CODE.UNAUTHORIZED);
@@ -1163,7 +1164,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 403 if user is not permitted", async () => {
-            isAllowed.mockResolvedValueOnce(false);
+            isAllowed.mockResolvedValueOnce(Response.forbidden);
             const result = await controller.getReview(req, params);
 
             expect(result.statusCode).toBe(STATUS_CODE.FORBIDDEN);
@@ -1171,7 +1172,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if account not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(null);
             const result = await controller.getReview(req, params);
 
@@ -1180,7 +1181,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if review not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getReviews as jest.Mock).mockResolvedValueOnce([]);
             const result = await controller.getReview(req, params);
@@ -1205,7 +1206,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 200 with payments data", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getPayments as jest.Mock).mockResolvedValueOnce(payments);
 
@@ -1216,7 +1217,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 401 if unauthorized", async () => {
-            isAllowed.mockResolvedValueOnce("unauthorized");
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
             const result = await controller.getPayments(req, params);
 
             expect(result.statusCode).toBe(STATUS_CODE.UNAUTHORIZED);
@@ -1224,7 +1225,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 403 if user is not permitted", async () => {
-            isAllowed.mockResolvedValueOnce(false);
+            isAllowed.mockResolvedValueOnce(Response.forbidden);
             const result = await controller.getPayments(req, params);
 
             expect(result.statusCode).toBe(STATUS_CODE.FORBIDDEN);
@@ -1232,7 +1233,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if account not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getPayments as jest.Mock).mockResolvedValueOnce([]);
             const result = await controller.getPayments(req, params);
 
@@ -1241,7 +1242,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if payments not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getPayments as jest.Mock).mockResolvedValueOnce([]);
             const result = await controller.getPayments(req, params);
@@ -1266,7 +1267,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 200 with payment data", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getPayments as jest.Mock).mockResolvedValueOnce([payment]);
 
@@ -1277,7 +1278,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 401 if unauthorized", async () => {
-            isAllowed.mockResolvedValueOnce("unauthorized");
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
             const result = await controller.getPayment(req, params);
 
             expect(result.statusCode).toBe(STATUS_CODE.UNAUTHORIZED);
@@ -1285,7 +1286,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 403 if user is not permitted", async () => {
-            isAllowed.mockResolvedValueOnce(false);
+            isAllowed.mockResolvedValueOnce(Response.forbidden);
             const result = await controller.getPayment(req, params);
 
             expect(result.statusCode).toBe(STATUS_CODE.FORBIDDEN);
@@ -1293,7 +1294,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if account not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(null);
             const result = await controller.getPayment(req, params);
 
@@ -1302,7 +1303,7 @@ describe("AccountsController", () => {
         });
 
         it("returns 404 if payment not found", async () => {
-            isAllowed.mockResolvedValueOnce(true);
+            isAllowed.mockResolvedValueOnce(Response.ok());
             (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
             (controller.repo.getPayments as jest.Mock).mockResolvedValueOnce([]);
             const result = await controller.getPayment(req, params);

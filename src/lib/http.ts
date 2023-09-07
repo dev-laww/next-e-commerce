@@ -3,31 +3,32 @@ import { ZodIssue } from "zod";
 import { ERROR_CODE, STATUS, STATUS_CODE } from "@lib/constants";
 import { Response } from "@lib/types";
 
-const ok = (message: string, data?: any): Response => ({
+const ok = (message?: string, data?: any): Response => ({
+
     statusCode: STATUS_CODE.OK,
     response: {
         status: STATUS.SUCCESS,
-        message,
+        message: message || "Success",
         data
     }
 })
 
-const created = (message: string, data?: any): Response => ({
+const created = (message?: string, data?: any): Response => ({
     statusCode: STATUS_CODE.CREATED,
     response: {
         status: STATUS.SUCCESS,
-        message,
+        message: message || "Created",
         data
     }
 
 })
 
-const badRequest = (message: string, errors?: any): Response => ({
+const badRequest = (message?: string, errors?: any): Response => ({
     statusCode: STATUS_CODE.BAD_REQUEST,
     response: {
         code: ERROR_CODE.BAD_REQUEST,
         status: STATUS.FAILED,
-        message,
+        message: message || "Bad request",
         errors
     }
 })
@@ -42,45 +43,45 @@ const unauthorized = (message?: string): Response => ({
     }
 })
 
-const notFound = (message: string): Response =>  ({
+const notFound = (message?: string): Response => ({
     statusCode: STATUS_CODE.NOT_FOUND,
     response: {
         code: ERROR_CODE.NOT_FOUND,
         status: STATUS.FAILED,
-        message
+        message: message || "Not found"
     }
 })
 
 
-const internalServerError = (message: string): Response => ({
+const internalServerError = (message?: string): Response => ({
     statusCode: STATUS_CODE.INTERNAL_SERVER_ERROR,
     response: {
         code: ERROR_CODE.INTERNAL_SERVER_ERROR,
         status: STATUS.FAILED,
-        message
+        message: message || "Unknown error"
     }
 })
 
 
-const validationError = (message: string, errors: ZodIssue[]): Response => {
+const validationError = (errors: ZodIssue[], message?: string,): Response => {
     const errorMessages = errors.map(error => error.message).join(", ");
     return {
         statusCode: STATUS_CODE.UNPROCESSABLE_ENTITY,
         response: {
             code: ERROR_CODE.VALIDATION_ERROR,
             status: STATUS.FAILED,
+            message: message || "Validation error",
             errors: errorMessages,
-            message,
         }
     }
 }
 
-const invalidCredentials = (message: string): Response => ({
+const invalidCredentials = (message?: string): Response => ({
     statusCode: STATUS_CODE.UNAUTHORIZED,
     response: {
         code: ERROR_CODE.INVALID_CREDENTIALS,
         status: STATUS.FAILED,
-        message
+        message: message || "Invalid credentials"
     }
 })
 

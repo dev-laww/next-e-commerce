@@ -97,7 +97,7 @@ export default class AccountsController {
 
         const requestData = Validators.create.safeParse(body);
 
-        if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
+        if (!requestData.success) return Response.validationError(requestData.error.errors);
 
         if (body.password !== body.confirmPassword) return Response.badRequest("Passwords do not match");
 
