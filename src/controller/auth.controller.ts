@@ -32,7 +32,7 @@ export default class AuthController {
 
         const requestData = Validators.registerSchema.safeParse(body);
 
-        if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
+        if (!requestData.success) return Response.validationError(requestData.error.errors);
 
         if (body.password !== body.confirmPassword) return Response.badRequest("Passwords do not match");
 
@@ -92,7 +92,7 @@ export default class AuthController {
 
         const requestData = Validators.loginSchema.safeParse(body);
 
-        if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
+        if (!requestData.success) return Response.validationError(requestData.error.errors);
 
         let user = await this.userRepo.getByEmail(body.email);
 
@@ -132,7 +132,7 @@ export default class AuthController {
 
         const requestData = Validators.resetPasswordSchema.safeParse(body);
 
-        if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
+        if (!requestData.success) return Response.validationError(requestData.error.errors);
 
         let user = await this.userRepo.getByEmail(requestData.data.email);
 
@@ -175,7 +175,7 @@ export default class AuthController {
 
         const requestData = Validators.confirmResetPasswordSchema.safeParse(body);
 
-        if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
+        if (!requestData.success) return Response.validationError(requestData.error.errors);
 
         const { success, data } = await this.userRepo.verifyTokenOTP(
             requestData.data.token,
@@ -201,7 +201,7 @@ export default class AuthController {
 
         const requestData = Validators.confirmEmailSchema.safeParse(body);
 
-        if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
+        if (!requestData.success) return Response.validationError(requestData.error.errors);
 
         const { success, data } = await this.userRepo.verifyTokenOTP(
             requestData.data.token,
@@ -229,7 +229,7 @@ export default class AuthController {
 
         const requestData = Validators.resendEmailSchema.safeParse(body);
 
-        if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
+        if (!requestData.success) return Response.validationError(requestData.error.errors);
 
         let user = await this.userRepo.getByEmail(requestData.data.email);
 
@@ -272,14 +272,11 @@ export default class AuthController {
 
         const requestData = Validators.refreshTokenSchema.safeParse(body);
 
-        if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
+        if (!requestData.success) return Response.validationError(requestData.error.errors);
 
-        let session: UserSession;
-        try {
-            session = await verifyRefreshToken(requestData.data.token);
-        } catch (err) {
-            return Response.unauthorized("Invalid token");
-        }
+        const session = await verifyRefreshToken(requestData.data.token);
+
+        if (!session) return Response.unauthorized("Invalid refresh token");
 
         await this.logger.debug(session, `User ${session.email} refreshed token`)
         await this.logger.info(`${session.email} refreshed token`, undefined, true);
