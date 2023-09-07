@@ -10,11 +10,11 @@ import { getDatabaseLogger } from "@utils/logging";
  */
 export function withPermission<T extends Function>(target: T): T {
     const wrapped = async function (this: typeof target, request: NextRequest, args: any[]) {
-        const isAllowed = await PermissionController.isAllowed(request);
+        const response = await PermissionController.isAllowed(request);
 
-        if (isAllowed === "unauthorized") return Response.unauthorized();
+        if (response.statusCode !== 200) return response;
 
-        return isAllowed ? target.call(this, request, args) : Response.forbidden;
+        return target.call(this, request, args);
     }
 
     return wrapped as unknown as T;

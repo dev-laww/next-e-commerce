@@ -5,7 +5,7 @@ import PermissionRepository from "@repository/permission.repo";
 import { getDatabaseLogger } from "@utils/logging";
 import { verifyAccessToken } from "@utils/token";
 import { COMMON_RESOURCES } from "@lib/constants";
-import { UserSession } from "@lib/types";
+import Response from "@lib/http";
 
 /**
  * Controller for permission
@@ -27,35 +27,35 @@ export default class PermissionController {
         return undefined;
     }
 
-    public static async isAllowed(req: NextRequest): Promise<boolean | "unauthorized"> {
+    public static async isAllowed(req: NextRequest): Promise<Response> {
         const path = req.nextUrl.pathname;
         const token = req.headers.get("Authorization")?.split(" ")[1];
 
         let resource = `${req.method}${path}`;
         await this.logger.info(`Checking permission for ${resource}`);
 
-        if (path.startsWith("/api/auth")) return true;
+        if (path.startsWith("/api/auth")) return Response.ok();
 
         const isCommonResource = this.getRequestedResource(resource, COMMON_RESOURCES);
 
-        if (isCommonResource) return true;
+        if (isCommonResource) return Response.ok();
+
+        if (!token) return Response.unauthorized("Please login first");
+
+        const session = await verifyAccessToken(token);
+
+        if (!session) return Response.unauthorized("Invalid access token");
+
+        if (path.startsWith("/api/profile")) return Response.ok();
 
         const resourceList = await this.permissionRepo.getAvailableResources();
         const requestedResource = this.getRequestedResource(resource, resourceList);
 
-        if (!requestedResource || !token) return false;
-
-        let session: UserSession;
-        try {
-            session = await verifyAccessToken(token);
-        } catch (err) {
-            await this.logger.info("Failed to verify access token");
-            return "unauthorized";
-        }
+        if (!requestedResource) return Response.notFound();
 
         const permissions = await this.repo.getPermissions(session.id);
 
-        if (!permissions || permissions.length === 0) return false;
+        if (!permissions || permissions.length === 0) return Response.forbidden;
 
         await this.logger.debug(permissions.map(permission => permission.resource), `${session.username} allowed resources`);
 
@@ -63,6 +63,6 @@ export default class PermissionController {
 
         await this.logger.info(`${allowed ? "Allowed" : "Denied"} ${session.username} to access ${requestedResource}`, undefined, allowed);
 
-        return allowed;
+        return allowed ? Response.ok() : Response.forbidden;
     }
 }
