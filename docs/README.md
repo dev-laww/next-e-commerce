@@ -53,6 +53,7 @@ to learn more about TypeScript and how to use it with Next.js.
 - [ ] Implement GraphQL api (Apollo)
 - [ ] Docker integration
 - [ ] Responsive design
+- [ ] Notifications
 
 ## NOTES
 - After installing dependencies, it will automatically install husky git hooks to ensure the code format.
