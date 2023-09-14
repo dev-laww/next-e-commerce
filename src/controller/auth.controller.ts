@@ -4,7 +4,6 @@ import humps from "humps";
 
 import * as Constants from "@lib/constants";
 import { UserSession } from "@lib/types";
-import UserRepository from "@repository/user.repo";
 import {
     generateAccessToken,
     generateOTP,
@@ -14,6 +13,7 @@ import {
 } from "@utils/token";
 import Validators from "@lib/validator/auth.validator";
 import Response from "@lib/http"
+import Repository from "@src/repository";
 import Email from "@utils/email";
 import { compare, hash } from "@utils/hashing";
 import { getDatabaseLogger } from "@utils/logging";
@@ -22,7 +22,7 @@ import { AllowMethod, AllowPermitted, CheckBody, CheckError } from "@utils/decor
 @CheckError
 @AllowPermitted
 export default class AuthController {
-    userRepo = new UserRepository();
+    userRepo = Repository.user;
     private logger = getDatabaseLogger({ name: "controller:auth", class: "AuthController" });
 
     @AllowMethod("POST")

@@ -6,7 +6,7 @@ import humps from "humps";
 import Response from "@lib/http";
 import Validators from "@lib/validator/accounts.validator";
 import { PageToken, UserSession } from "@lib/types";
-import UserRepository from "@repository/user.repo";
+import Repository from "@src/repository";
 import { AllowPermitted, CheckBody, CheckError } from "@utils/decorator";
 import { generatePageToken, generateRandomToken, parsePageToken } from "@utils/token";
 import { hash } from "@utils/hashing";
@@ -19,7 +19,7 @@ import { getDatabaseLogger } from "@utils/logging";
 @AllowPermitted
 @CheckError
 export default class AccountsController {
-    repo = new UserRepository();
+    repo = Repository.user;
     private logger = getDatabaseLogger({ name: "controller:accounts", class: "AccountsController" })
 
     public async getAccounts(req: NextRequest) {

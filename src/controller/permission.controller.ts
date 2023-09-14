@@ -1,31 +1,18 @@
 import { NextRequest } from "next/server";
-
-import UserRepository from "@repository/user.repo";
-import PermissionRepository from "@repository/permission.repo";
 import { getDatabaseLogger } from "@utils/logging";
 import { verifyAccessToken } from "@utils/token";
 import { COMMON_RESOURCES } from "@lib/constants";
 import Response from "@lib/http";
+import Repository from "@src/repository";
 
 /**
  * Controller for permission
  * Check if the user is allowed to access the resource
  */
 export default class PermissionController {
-    private static repo = new UserRepository();
-    private static permissionRepo = new PermissionRepository();
+    private static repo = Repository.user;
+    private static permissionRepo = Repository.permission;
     private static logger = getDatabaseLogger({ name: "controller:permission" });
-
-    private static getRequestedResource(resource: string, availableResource: string[]): string | undefined {
-        for (const available of availableResource) {
-            const pattern = available.replace(/:[^/]+/g, '([^/]+)')
-            const regex = new RegExp(`^${pattern}$`);
-
-            if (resource.match(regex)) return available;
-        }
-
-        return undefined;
-    }
 
     public static async isAllowed(req: NextRequest): Promise<Response> {
         const path = req.nextUrl.pathname;
@@ -64,5 +51,16 @@ export default class PermissionController {
         await this.logger.info(`${allowed ? "Allowed" : "Denied"} ${session.username} to access ${requestedResource}`, undefined, allowed);
 
         return allowed ? Response.ok() : Response.forbidden;
+    }
+
+    private static getRequestedResource(resource: string, availableResource: string[]): string | undefined {
+        for (const available of availableResource) {
+            const pattern = available.replace(/:[^/]+/g, '([^/]+)')
+            const regex = new RegExp(`^${pattern}$`);
+
+            if (resource.match(regex)) return available;
+        }
+
+        return undefined;
     }
 }
