@@ -99,6 +99,7 @@ CREATE TABLE "payment_method" (
     "card_number" TEXT,
     "expiration_date" TEXT,
     "cvv" TEXT,
+    "type" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
