@@ -490,6 +490,7 @@ List of all API endpoints.
             "username": "johndoe",
             "imageUrl": "https://example.com/profile.jpg",
             "email": "johndoe@mail.com"
+            "password": "secretpassword"
         }
         ```
     - **Response**:
