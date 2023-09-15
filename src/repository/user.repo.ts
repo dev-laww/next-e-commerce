@@ -16,6 +16,7 @@ import {
 import { TOKEN_OTP_EXPIRY } from "@lib/constants";
 import prisma from "@lib/prisma";
 import { hash } from "@utils/hashing";
+import { compare } from "bcryptjs";
 
 
 export default class UserRepository {
@@ -364,5 +365,18 @@ export default class UserRepository {
             success: true,
             data: tokenRecord.user
         };
+    }
+
+    public async verifyPassword(id: number, password: string): Promise<boolean> {
+        const user = await this.prismaClient.user.findUnique({
+            where: { id: id },
+            select: {
+                password: true
+            }
+        });
+
+        if (!user) return false;
+
+        return compare(password, user.password);
     }
 }
