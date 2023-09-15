@@ -5,9 +5,11 @@ import { STATUS_CODE } from "@lib/constants";
 import { NextRequest } from "next/server";
 import { TokenOTP, User } from "@prisma/client";
 import Response from "@lib/http";
+import Repository from "@src/repository";
+import { mockReset } from "jest-mock-extended";
 
 
-jest.mock("@repository/user.repo", () => require("@mocks/repository/user.repo.mock"));
+jest.mock("@repository/index", () => require("@mocks/repository/index.mock"));
 
 const isAllowed = jest.spyOn(PermissionController, "isAllowed");
 
@@ -25,7 +27,7 @@ describe("AccountsController", () => {
 
 
     beforeEach(() => {
-        jest.clearAllMocks();
+        mockReset(Repository.user);
         controller = new AccountsController();
     });
 
@@ -36,7 +38,7 @@ describe("AccountsController", () => {
 
         it("returns 200 with accounts data", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getAll as jest.Mock).mockImplementation(() => Promise.resolve([user]));
+            (Repository.user.getAll as jest.Mock).mockImplementation(() => Promise.resolve([user]));
 
             const result = await controller.getAccounts(req);
 
@@ -64,7 +66,7 @@ describe("AccountsController", () => {
 
         it("returns 404 if no accounts found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getAll as jest.Mock).mockImplementation(() => Promise.resolve([]));
+            (Repository.user.getAll as jest.Mock).mockImplementation(() => Promise.resolve([]));
 
             const result = await controller.getAccounts(req);
 
@@ -90,10 +92,10 @@ describe("AccountsController", () => {
 
         it("returns 201 with account data", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.create as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getByEmail as jest.Mock).mockResolvedValueOnce(null);
-            (controller.repo.getByUsername as jest.Mock).mockResolvedValueOnce(null);
-            (controller.repo.generateTokenOTP as jest.Mock).mockResolvedValue({
+            (Repository.user.create as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getByEmail as jest.Mock).mockResolvedValueOnce(null);
+            (Repository.user.getByUsername as jest.Mock).mockResolvedValueOnce(null);
+            (Repository.user.generateTokenOTP as jest.Mock).mockResolvedValue({
                 id: 1,
                 user_id: 1,
                 token: "x",
@@ -108,7 +110,7 @@ describe("AccountsController", () => {
 
         it("returns 400 if invalid data", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.create as jest.Mock).mockImplementation(() => Promise.resolve(user));
+            (Repository.user.create as jest.Mock).mockImplementation(() => Promise.resolve(user));
 
             req = new NextRequest("http://localhost:3000/api/accounts", {
                 method: "POST"
@@ -161,7 +163,7 @@ describe("AccountsController", () => {
 
         it("returns 200 with account data", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
 
             const result = await controller.getAccount(req, params);
 
@@ -189,7 +191,7 @@ describe("AccountsController", () => {
 
         it("returns 404 if account not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(null);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(null);
 
             const result = await controller.getAccount(req, params);
 
@@ -217,8 +219,8 @@ describe("AccountsController", () => {
 
         it("returns 200 with account data", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.update as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.update as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
 
             const result = await controller.updateAccount(req, params);
 
@@ -228,7 +230,7 @@ describe("AccountsController", () => {
 
         it("returns 400 if invalid body", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.update as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.update as jest.Mock).mockResolvedValueOnce(user);
 
             req = new NextRequest("http://localhost:3000/api/accounts/1", {
                 method: "PUT"
@@ -260,7 +262,7 @@ describe("AccountsController", () => {
 
         it("returns 404 if account not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.update as jest.Mock).mockResolvedValueOnce(null);
+            (Repository.user.update as jest.Mock).mockResolvedValueOnce(null);
 
             const result = await controller.updateAccount(req, params);
 
@@ -278,8 +280,8 @@ describe("AccountsController", () => {
 
         it("returns 200 if success", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.delete as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.delete as jest.Mock).mockResolvedValueOnce(user);
 
             const result = await controller.deleteAccount(req, params);
 
@@ -307,7 +309,7 @@ describe("AccountsController", () => {
 
         it("returns 404 if account not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.delete as jest.Mock).mockResolvedValueOnce(null);
+            (Repository.user.delete as jest.Mock).mockResolvedValueOnce(null);
 
             const result = await controller.deleteAccount(req, params);
 
@@ -330,8 +332,8 @@ describe("AccountsController", () => {
 
         it("returns 200 with roles data", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getRoles as jest.Mock).mockResolvedValueOnce(roles);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getRoles as jest.Mock).mockResolvedValueOnce(roles);
 
             const result = await controller.getAccountRoles(req, params);
 
@@ -359,7 +361,7 @@ describe("AccountsController", () => {
 
         it("returns 404 if account not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(null);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(null);
 
             const result = await controller.getAccountRoles(req, params);
 
@@ -369,8 +371,8 @@ describe("AccountsController", () => {
 
         it("returns 404 if roles not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getRoles as jest.Mock).mockResolvedValueOnce([]);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getRoles as jest.Mock).mockResolvedValueOnce([]);
 
             const result = await controller.getAccountRoles(req, params);
 
@@ -393,8 +395,8 @@ describe("AccountsController", () => {
 
         it("returns 200 with roles data", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.updateRoles as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.updateRoles as jest.Mock).mockResolvedValueOnce(user);
 
             const result = await controller.updateAccountRoles(req, params);
 
@@ -404,7 +406,7 @@ describe("AccountsController", () => {
 
         it("returns 400 if invalid body", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
             req = new NextRequest("http://localhost:3000/api/accounts/1/roles", { method: "PUT" });
 
             const result = await controller.updateAccountRoles(req, params);
@@ -433,7 +435,7 @@ describe("AccountsController", () => {
 
         it("returns 404 if account not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(null);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(null);
 
             const result = await controller.updateAccountRoles(req, params);
 
@@ -461,8 +463,8 @@ describe("AccountsController", () => {
 
         it("returns 200 with payment methods data", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getPaymentMethods as jest.Mock).mockResolvedValueOnce(paymentMethods);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getPaymentMethods as jest.Mock).mockResolvedValueOnce(paymentMethods);
 
             const result = await controller.getPaymentMethods(req, params);
 
@@ -490,7 +492,7 @@ describe("AccountsController", () => {
 
         it("returns 404 if account not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(null);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(null);
 
             const result = await controller.getPaymentMethods(req, params);
 
@@ -500,8 +502,8 @@ describe("AccountsController", () => {
 
         it("returns 404 if payment methods not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getPaymentMethods as jest.Mock).mockResolvedValueOnce([]);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getPaymentMethods as jest.Mock).mockResolvedValueOnce([]);
 
             const result = await controller.getPaymentMethods(req, params);
 
@@ -528,8 +530,8 @@ describe("AccountsController", () => {
 
         it("returns 200 with payment method data", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getPaymentMethods as jest.Mock).mockResolvedValueOnce([paymentMethod]);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getPaymentMethods as jest.Mock).mockResolvedValueOnce([paymentMethod]);
 
             const result = await controller.getPaymentMethod(req, params);
 
@@ -557,7 +559,7 @@ describe("AccountsController", () => {
 
         it("returns 404 if account not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(null);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(null);
 
             const result = await controller.getPaymentMethod(req, params);
 
@@ -567,8 +569,8 @@ describe("AccountsController", () => {
 
         it("returns 404 if payment method not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getPaymentMethods as jest.Mock).mockResolvedValueOnce([]);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getPaymentMethods as jest.Mock).mockResolvedValueOnce([]);
 
             const result = await controller.getPaymentMethod(req, params);
 
@@ -594,8 +596,8 @@ describe("AccountsController", () => {
 
         it("returns 200 with addresses data", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getAddresses as jest.Mock).mockResolvedValueOnce(addresses);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getAddresses as jest.Mock).mockResolvedValueOnce(addresses);
 
             const result = await controller.getAddresses(req, params);
 
@@ -622,7 +624,7 @@ describe("AccountsController", () => {
 
         it("returns 404 if account not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getAddresses as jest.Mock).mockResolvedValueOnce([]);
+            (Repository.user.getAddresses as jest.Mock).mockResolvedValueOnce([]);
 
             const result = await controller.getAddresses(req, params);
 
@@ -644,8 +646,8 @@ describe("AccountsController", () => {
 
         it("returns 200 with address data", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getAddresses as jest.Mock).mockResolvedValueOnce([address]);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getAddresses as jest.Mock).mockResolvedValueOnce([address]);
 
             const result = await controller.getAddress(req, params);
 
@@ -673,7 +675,7 @@ describe("AccountsController", () => {
 
         it("returns 404 if account not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getAddresses as jest.Mock).mockResolvedValueOnce([]);
+            (Repository.user.getAddresses as jest.Mock).mockResolvedValueOnce([]);
 
             const result = await controller.getAddress(req, params);
 
@@ -683,8 +685,8 @@ describe("AccountsController", () => {
 
         it("returns 404 if address not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getAddresses as jest.Mock).mockResolvedValueOnce([]);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getAddresses as jest.Mock).mockResolvedValueOnce([]);
 
             const result = await controller.getAddress(req, params);
 
@@ -711,8 +713,8 @@ describe("AccountsController", () => {
 
         it("returns 200 with orders data", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getOrders as jest.Mock).mockResolvedValueOnce(orders);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getOrders as jest.Mock).mockResolvedValueOnce(orders);
 
             const result = await controller.getOrders(req, params);
 
@@ -740,7 +742,7 @@ describe("AccountsController", () => {
 
         it("returns 404 if account not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(null);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(null);
 
             const result = await controller.getOrders(req, params);
 
@@ -750,8 +752,8 @@ describe("AccountsController", () => {
 
         it("returns 404 if orders not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getOrders as jest.Mock).mockResolvedValueOnce([]);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getOrders as jest.Mock).mockResolvedValueOnce([]);
 
             const result = await controller.getOrders(req, params);
 
@@ -778,8 +780,8 @@ describe("AccountsController", () => {
 
         it("returns 200 with order data", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getOrders as jest.Mock).mockResolvedValueOnce([order]);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getOrders as jest.Mock).mockResolvedValueOnce([order]);
 
             const result = await controller.getOrder(req, params);
 
@@ -807,7 +809,7 @@ describe("AccountsController", () => {
 
         it("returns 404 if account not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(null);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(null);
 
             const result = await controller.getOrder(req, params);
 
@@ -817,8 +819,8 @@ describe("AccountsController", () => {
 
         it("returns 404 if order not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getOrders as jest.Mock).mockResolvedValueOnce([]);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getOrders as jest.Mock).mockResolvedValueOnce([]);
 
             const result = await controller.getOrder(req, params);
 
@@ -840,8 +842,8 @@ describe("AccountsController", () => {
 
         it("returns 200 with wishlist data", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getWishlist as jest.Mock).mockResolvedValueOnce(wishlist);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getWishlist as jest.Mock).mockResolvedValueOnce(wishlist);
 
             const result = await controller.getWishlist(req, params);
 
@@ -869,7 +871,7 @@ describe("AccountsController", () => {
 
         it("returns 404 if account not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(null);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(null);
 
             const result = await controller.getWishlist(req, params);
 
@@ -879,8 +881,8 @@ describe("AccountsController", () => {
 
         it("returns 404 if no wishlist items found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getWishlist as jest.Mock).mockResolvedValueOnce([]);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getWishlist as jest.Mock).mockResolvedValueOnce([]);
 
             const result = await controller.getWishlist(req, params);
 
@@ -902,8 +904,8 @@ describe("AccountsController", () => {
 
         it("returns 200 with wishlist data", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getWishlist as jest.Mock).mockResolvedValueOnce([wishlistItem]);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getWishlist as jest.Mock).mockResolvedValueOnce([wishlistItem]);
 
             const result = await controller.getWishlistItem(req, params);
 
@@ -929,7 +931,7 @@ describe("AccountsController", () => {
 
         it("returns 404 if account not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(null);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(null);
             const result = await controller.getWishlistItem(req, params);
 
             expect(result.statusCode).toBe(STATUS_CODE.NOT_FOUND);
@@ -938,8 +940,8 @@ describe("AccountsController", () => {
 
         it("returns 404 if wishlist item not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getWishlist as jest.Mock).mockResolvedValueOnce([]);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getWishlist as jest.Mock).mockResolvedValueOnce([]);
             const result = await controller.getWishlistItem(req, params);
 
             expect(result.statusCode).toBe(STATUS_CODE.NOT_FOUND);
@@ -963,8 +965,8 @@ describe("AccountsController", () => {
 
         it("returns 200 with cart data", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getCart as jest.Mock).mockResolvedValueOnce(cart);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getCart as jest.Mock).mockResolvedValueOnce(cart);
 
             const result = await controller.getCart(req, params);
 
@@ -992,7 +994,7 @@ describe("AccountsController", () => {
 
         it("returns 404 if account not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(null);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(null);
 
             const result = await controller.getCart(req, params);
 
@@ -1002,8 +1004,8 @@ describe("AccountsController", () => {
 
         it("returns 404 if orders not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getCart as jest.Mock).mockResolvedValueOnce([]);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getCart as jest.Mock).mockResolvedValueOnce([]);
 
             const result = await controller.getCart(req, params);
 
@@ -1024,8 +1026,8 @@ describe("AccountsController", () => {
 
         it("returns 200 with cart item data", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getCart as jest.Mock).mockResolvedValueOnce([cartItem]);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getCart as jest.Mock).mockResolvedValueOnce([cartItem]);
 
             const result = await controller.getCartItem(req, params);
 
@@ -1051,7 +1053,7 @@ describe("AccountsController", () => {
 
         it("returns 404 if account not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(null);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(null);
             const result = await controller.getCartItem(req, params);
 
             expect(result.statusCode).toBe(STATUS_CODE.NOT_FOUND);
@@ -1060,8 +1062,8 @@ describe("AccountsController", () => {
 
         it("returns 404 if cart item not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getCart as jest.Mock).mockResolvedValueOnce([]);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getCart as jest.Mock).mockResolvedValueOnce([]);
             const result = await controller.getCartItem(req, params);
 
             expect(result.statusCode).toBe(STATUS_CODE.NOT_FOUND);
@@ -1085,8 +1087,8 @@ describe("AccountsController", () => {
 
         it("returns 200 with reviews data", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getReviews as jest.Mock).mockResolvedValueOnce(reviews);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getReviews as jest.Mock).mockResolvedValueOnce(reviews);
 
             const result = await controller.getReviews(req, params);
 
@@ -1112,7 +1114,7 @@ describe("AccountsController", () => {
 
         it("returns 404 if account not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getReviews as jest.Mock).mockResolvedValueOnce([]);
+            (Repository.user.getReviews as jest.Mock).mockResolvedValueOnce([]);
             const result = await controller.getReviews(req, params);
 
             expect(result.statusCode).toBe(STATUS_CODE.NOT_FOUND);
@@ -1121,8 +1123,8 @@ describe("AccountsController", () => {
 
         it("returns 404 if reviews not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getReviews as jest.Mock).mockResolvedValueOnce([]);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getReviews as jest.Mock).mockResolvedValueOnce([]);
             const result = await controller.getReviews(req, params);
 
             expect(result.statusCode).toBe(STATUS_CODE.NOT_FOUND);
@@ -1146,8 +1148,8 @@ describe("AccountsController", () => {
 
         it("returns 200 with review data", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getReviews as jest.Mock).mockResolvedValueOnce([review]);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getReviews as jest.Mock).mockResolvedValueOnce([review]);
 
             const result = await controller.getReview(req, params);
 
@@ -1173,7 +1175,7 @@ describe("AccountsController", () => {
 
         it("returns 404 if account not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(null);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(null);
             const result = await controller.getReview(req, params);
 
             expect(result.statusCode).toBe(STATUS_CODE.NOT_FOUND);
@@ -1182,8 +1184,8 @@ describe("AccountsController", () => {
 
         it("returns 404 if review not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getReviews as jest.Mock).mockResolvedValueOnce([]);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getReviews as jest.Mock).mockResolvedValueOnce([]);
             const result = await controller.getReview(req, params);
 
             expect(result.statusCode).toBe(STATUS_CODE.NOT_FOUND);
@@ -1207,8 +1209,8 @@ describe("AccountsController", () => {
 
         it("returns 200 with payments data", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getPayments as jest.Mock).mockResolvedValueOnce(payments);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getPayments as jest.Mock).mockResolvedValueOnce(payments);
 
             const result = await controller.getPayments(req, params);
 
@@ -1234,7 +1236,7 @@ describe("AccountsController", () => {
 
         it("returns 404 if account not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getPayments as jest.Mock).mockResolvedValueOnce([]);
+            (Repository.user.getPayments as jest.Mock).mockResolvedValueOnce([]);
             const result = await controller.getPayments(req, params);
 
             expect(result.statusCode).toBe(STATUS_CODE.NOT_FOUND);
@@ -1243,8 +1245,8 @@ describe("AccountsController", () => {
 
         it("returns 404 if payments not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getPayments as jest.Mock).mockResolvedValueOnce([]);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getPayments as jest.Mock).mockResolvedValueOnce([]);
             const result = await controller.getPayments(req, params);
 
             expect(result.statusCode).toBe(STATUS_CODE.NOT_FOUND);
@@ -1268,8 +1270,8 @@ describe("AccountsController", () => {
 
         it("returns 200 with payment data", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getPayments as jest.Mock).mockResolvedValueOnce([payment]);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getPayments as jest.Mock).mockResolvedValueOnce([payment]);
 
             const result = await controller.getPayment(req, params);
 
@@ -1295,7 +1297,7 @@ describe("AccountsController", () => {
 
         it("returns 404 if account not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(null);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(null);
             const result = await controller.getPayment(req, params);
 
             expect(result.statusCode).toBe(STATUS_CODE.NOT_FOUND);
@@ -1304,8 +1306,8 @@ describe("AccountsController", () => {
 
         it("returns 404 if payment not found", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
-            (controller.repo.getById as jest.Mock).mockResolvedValueOnce(user);
-            (controller.repo.getPayments as jest.Mock).mockResolvedValueOnce([]);
+            (Repository.user.getById as jest.Mock).mockResolvedValueOnce(user);
+            (Repository.user.getPayments as jest.Mock).mockResolvedValueOnce([]);
             const result = await controller.getPayment(req, params);
 
             expect(result.statusCode).toBe(STATUS_CODE.NOT_FOUND);
