@@ -612,6 +612,22 @@ List of all API endpoints.
                 }]
             }
             ```
+- `DELETE /profile/address`: Delete all address
+    - **Request**:
+       ```http request
+       DELETE /profile/address
+     
+       Authorization: Bearer <access_token>
+       ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Addresses deleted successfully"
+            } 
+            ```
 - `POST /profile/address`: Create new address
     - **Request**
         ```http request
@@ -928,39 +944,6 @@ List of all API endpoints.
                     "status": "Processing"
                 }
             } 
-            ```
-- `POST /profile/orders`: Create a new order.
-    - **Request**:
-        ```http request
-        POST /profile/orders
-      
-        Authorization: Bearer <access_token>
-        Content-Type: application/json
-        
-        {
-            "payment_id": 1,
-            "shipping_address_id": 1,
-            "shipping_method_id": 1,
-            "total_amount": 119.99,
-            "status": "Processing"
-        }
-        ```
-    - **Response**:
-        - Status: 201 CREATED
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Order created successfully",
-                "data": {
-                    "id": 3,
-                    "order_number": "ORD-003",
-                    "shipping_address_id": 1,
-                    "shipping_method_id": 1,
-                    "total_amount": 119.99,
-                    "status": "Processing"
-                }
-            }
             ```
 - `PUT /profile/orders/:id/cancel`: Cancel a specific order.
     - **Request**:
