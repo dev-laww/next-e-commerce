@@ -76,13 +76,13 @@ export const generateRandomToken = () => crypto.randomBytes(32).toString('hex');
 
 export const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 
-export const generatePageToken = (token: PageToken) => {
+export function generatePageToken<T>(token: T) {
     const userJson = JSON.stringify(token);
 
     return Buffer.from(userJson).toString("base64");
 }
 
-export const parsePageToken = (token: string): PageToken | undefined => {
+export function parsePageToken<T>(token: string): PageToken<T> | undefined {
     try {
         const userJson = Buffer.from(token, "base64").toString("ascii");
 

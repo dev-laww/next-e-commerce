@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { User } from "@prisma/client";
+import { Address, User } from "@prisma/client";
 
 import humps from "humps";
 
@@ -31,63 +31,62 @@ export default class AccountsController {
         limit = limit || 50;
 
         // Parse page token
-        let cursor: User | undefined;
-        let type: "next" | "previous" | undefined;
+        const parsedPageToken = parsePageToken<Address>(pageToken || "");
+
+        let isPrevious;
         if (pageToken) {
-            const token = parsePageToken(pageToken);
+            if (!parsedPageToken) return Response.badRequest("Invalid page token");
 
-            if (!token) return Response.badRequest("Invalid page token");
-
-            const { type: tokenType, ...cursorData } = token;
-
-            cursor = cursorData as User;
-            type = tokenType;
+            isPrevious = parsedPageToken.type === "previous";
         }
 
-        // If type is previous, make limit negative
-        const previous = type === "previous";
-        let result = await this.repo.getAll(filter, previous ? -limit : limit, cursor);
+        const pageSize = isPrevious ? -limit : limit;
 
-        if (result.length === 0) return Response.notFound("No accounts found");
+        // Fetch the addresses
+        const result = await Repository.user.getAll(filter, pageSize, parsedPageToken?.cursor as User);
 
-        // Parsing page tokens
-        const last = result[result.length - 1];
-        const first = result[0];
-        const nextPageToken: PageToken = {
-            id: last.id,
+        if (!result.length) return Response.notFound("No account found");
+
+        // Determine if there are more pages
+        const hasNextPage = await this.repo.getAll(filter, limit, result[result.length - 1]).then(res => res.length > 0);
+        const hasPreviousPage = await this.repo.getAll(filter, -limit, result[0]).then(res => res.length > 0);
+        console.log(hasPreviousPage, hasNextPage);
+
+        // Generate URLs
+        const nextPageToken: PageToken<User> = {
+            cursor: {
+                id: result[result.length - 1].id
+            },
             type: "next"
         };
-        const hasNextPage = await this.repo.getAll(filter, limit || 50, result[result.length - 1]).then(res => res.length > 0);
+
+        const previousPageToken: PageToken<User> = {
+            cursor: {
+                id: result[0].id
+            },
+            type: "previous"
+        };
 
         const nextSearchParams = new URLSearchParams({
             ...searchParams,
             pageToken: generatePageToken(nextPageToken)
         });
 
-        const hasPreviousPage = await this.repo.getAll(filter, limit ? -limit : -50, result[0]).then(res => res.length > 0);
-        const previousPageToken: PageToken = {
-            id: first.id,
-            type: "previous"
-        };
-
         const previousSearchParams = new URLSearchParams({
             ...searchParams,
             pageToken: generatePageToken(previousPageToken)
         });
 
-        // Generate urls
-        const nextUrl = `${req.nextUrl.origin}/${req.nextUrl.pathname}?${nextSearchParams.toString()}`;
-        const previousUrl = `${req.nextUrl.origin}/${req.nextUrl.pathname}?${previousSearchParams.toString()}`;
+        const meta = {
+            hasNextPage,
+            hasPreviousPage,
+            previousPageUrl: hasPreviousPage ? `${req.nextUrl.origin}/${req.nextUrl.pathname}?${previousSearchParams.toString()}` : undefined,
+            nextPageUrl: hasNextPage ? `${req.nextUrl.origin}/${req.nextUrl.pathname}?${nextSearchParams.toString()}` : undefined,
+        };
 
-        await this.logger.info("Accounts found");
         return Response.ok("Accounts found", {
             result,
-            meta: {
-                hasNextPage,
-                hasPreviousPage,
-                previousPageUrl: hasPreviousPage ? previousUrl : undefined,
-                nextPageUrl: hasNextPage ? nextUrl : undefined,
-            },
+            meta,
         });
     }
 
