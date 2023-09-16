@@ -6,7 +6,7 @@ import { AllowPermitted, CheckBody, CheckError } from "@utils/decorator";
 import { verifyAccessToken } from "@utils/token";
 import Repository from "@src/repository";
 import { hash } from "@utils/hashing";
-import { Address, Prisma } from "@prisma/client";
+import { Order, Prisma } from "@prisma/client";
 import { ORDER_STATUS, PAYMENT_METHODS } from "@lib/constants";
 import humps from "humps";
 
@@ -166,7 +166,7 @@ export default class ProfileController {
             user_id: session.id
         }) as Prisma.AddressCreateInput);
 
-        return Response.ok("Address added successfully", newAddress);
+        return Response.created("Address added successfully", newAddress);
     }
 
     public async getAddress(req: NextRequest, params: { id: string }) {
@@ -200,7 +200,7 @@ export default class ProfileController {
         return Response.ok("Address updated successfully", address);
     }
 
-    public async deleteAddress(req: NextRequest, params: { id: string }) {
+    public async deleteAddress(_req: NextRequest, params: { id: string }) {
         const { id } = params;
 
         let address = await Repository.address.getById(Number(id) || 0);
@@ -257,7 +257,7 @@ export default class ProfileController {
 
         const newPaymentMethod = await Repository.paymentMethod.create(humps.decamelizeKeys(paymentMethodData.data) as Prisma.PaymentMethodCreateInput);
 
-        return Response.ok("Payment method added successfully", newPaymentMethod);
+        return Response.created("Payment method added successfully", newPaymentMethod);
     }
 
     public async getPaymentMethod(req: NextRequest, params: { id: string }) {
@@ -305,7 +305,7 @@ export default class ProfileController {
         return Response.ok("Payment method updated successfully", paymentMethod);
     }
 
-    public async deletePaymentMethod(req: NextRequest, params: { id: string }) {
+    public async deletePaymentMethod(_req: NextRequest, params: { id: string }) {
         const { id } = params;
 
         const paymentMethod = await Repository.paymentMethod.getById(Number(id) || 0);
@@ -337,7 +337,7 @@ export default class ProfileController {
         return Response.ok("Order retrieved successfully", order);
     }
 
-    public async cancelOrder(req: NextRequest, params: { id: string }) {
+    public async cancelOrder(_req: NextRequest, params: { id: string }) {
         const { id } = params;
 
         let order = await Repository.order.getById(Number(id) || 0);
@@ -383,7 +383,7 @@ export default class ProfileController {
         return Response.ok("Wishlist item retrieved successfully", wishlistItem);
     }
 
-    public async deleteWishlistItem(req: NextRequest, params: { id: string }) {
+    public async deleteWishlistItem(_req: NextRequest, params: { id: string }) {
         const { id } = params;
 
         const wishlistItem = await Repository.wishlist.getById(Number(id) || 0);
@@ -408,7 +408,7 @@ export default class ProfileController {
 
         if (!wishlistItem) return Response.notFound("Wishlist item not found");
 
-        const {created_at, updated_at, id: itemId, ...data} = wishlistItem;
+        const { created_at, updated_at, id: itemId, ...data } = wishlistItem;
 
         const productVariant = await Repository.productVariant.getById(reqData.data.variantId);
 
@@ -430,5 +430,216 @@ export default class ProfileController {
         await Repository.wishlist.delete(Number(id));
 
         return Response.ok("Wishlist item moved to cart successfully", cartItem);
+    }
+
+    public async getCart(req: NextRequest) {
+        const session = await getSession(req);
+
+        const cart = await this.repo.getCart(session.id);
+
+        return Response.ok("Cart retrieved successfully", cart);
+    }
+
+    public async deleteCart(req: NextRequest) {
+        const session = await getSession(req);
+
+        const cartExists = await this.repo.getCart(session.id).then(cart => cart.length > 0);
+
+        if (!cartExists) return Response.notFound("No cart found");
+
+        let cart = await Repository.cart.deleteUserCart(session.id);
+
+        return Response.ok(`${cart.count} cart deleted successfully`);
+    }
+
+    public async getCartItem(req: NextRequest, params: { id: string }) {
+        const session = await getSession(req);
+
+        const { id } = params;
+
+        const cartItem = await this.repo.getCart(session.id).then(cart => cart.find(cartItem => cartItem.id === Number(id) || 0));
+
+        if (!cartItem) return Response.notFound("Cart item not found");
+
+        return Response.ok("Cart item retrieved successfully", cartItem);
+    }
+
+    public async updateQuantity(req: NextRequest, params: { id: string }) {
+        const { id } = params;
+
+        let cartItem = await Repository.cart.getById(Number(id) || 0);
+
+        if (!cartItem) return Response.notFound("Cart item not found");
+
+        const body = await req.json();
+
+        const quantity = Validators.quantity.safeParse(body);
+
+        if (!quantity.success) return Response.validationError(quantity.error.errors);
+
+        const productVariant = await Repository.productVariant.getById(cartItem.variant_id);
+
+        if (!productVariant) return Response.notFound("Product variant not found");
+
+        const updatedCartItem = await Repository.cart.update(Number(id), humps.decamelizeKeys({
+            quantity: quantity.data.quantity,
+            total_price: productVariant.price * quantity.data.quantity
+        }));
+
+        return Response.ok("Quantity updated successfully", updatedCartItem);
+    }
+
+    public async deleteCartItem(_req: NextRequest, params: { id: string }) {
+        const { id } = params;
+
+        let cartItem = await Repository.cart.getById(Number(id) || 0);
+
+        if (!cartItem) return Response.notFound("Cart item not found");
+
+        cartItem = await Repository.cart.delete(Number(id));
+
+        return Response.ok("Cart item deleted successfully", cartItem);
+    }
+
+    public async checkout(req: NextRequest) {
+        const session = await getSession(req);
+
+        const cart = await this.repo.getCart(session.id);
+
+        if (!cart.length) return Response.notFound("No cart found");
+
+        const body = await req.json();
+
+        const checkout = Validators.checkout.safeParse(body);
+
+        if (!checkout.success) return Response.validationError(checkout.error.errors);
+
+        let cartItems;
+        if (checkout.data.items) {
+            cartItems = await Repository.cart.getAll({
+                id: {
+                    in: checkout.data.items
+                }
+            });
+
+            if (cartItems.length !== checkout.data.items.length) return Response.badRequest("Cart item not found");
+        }
+
+        cartItems = await Repository.cart.getByUserId(session.id);
+        const address = await Repository.address.getById(checkout.data.addressId);
+        // const shipping = await Repository.shipping.getById(checkout.data.shippingId);
+        const paymentMethod = await Repository.paymentMethod.getById(checkout.data.paymentMethodId);
+        // const coupon = await Repository.coupon.getByCode(checkout.data.couponCode);
+
+        if (!address) return Response.notFound("Address not found");
+
+        // if (!shipping) return Response.notFound("Shipping not found");
+
+        if (!paymentMethod) return Response.notFound("Payment method not found");
+
+        const order = await Repository.order.create({
+            user_id: session.id,
+            shipping_id: 1, // TODO: Add shipping here
+            address_id: address.id,
+            status: ORDER_STATUS.PROCESSING,
+            payment_id: paymentMethod.id,
+            total: cartItems.reduce((total, cartItem) => total + cartItem.total_price, 0) // TODO: Add shipping cost here and subtract coupon discount
+        } as Order);
+
+        let orderItems = await Promise.all(cartItems.map(async cartItem => {
+            const { created_at, updated_at, id: itemId, ...data } = cartItem;
+
+            const product = await Repository.product.getById(cartItem.product_id);
+            const productVariant = await Repository.productVariant.getById(cartItem.variant_id);
+
+            if (!productVariant) return Response.notFound("Product variant not found");
+
+            return await Repository.order.createItem({
+                ...data,
+                order: order,
+                product: product,
+                variant: productVariant,
+                price: cartItem.total_price
+            } as Prisma.OrderItemCreateInput);
+        }));
+
+        await Repository.cart.deleteUserCart(session.id);
+
+        // TODO: Apply payment gateway here or use scheduled task to check for payment status
+
+        return Response.created("Order created successfully", {
+            order,
+            address,
+            // shipping,
+            paymentMethod,
+            // coupon,
+            orderItems
+        });
+    }
+
+    public async getReviews(req: NextRequest) {
+        const session = await getSession(req);
+
+        const reviews = await this.repo.getReviews(session.id);
+
+        return Response.ok("Reviews retrieved successfully", reviews);
+    }
+
+    public async deleteReviews(req: NextRequest) {
+        const session = await getSession(req);
+
+        const reviewsExists = await this.repo.getReviews(session.id).then(reviews => reviews.length > 0);
+
+        if (!reviewsExists) return Response.notFound("No reviews found");
+
+        let reviews = await Repository.review.deleteUserReviews(session.id);
+
+        return Response.ok(`${reviews.count} reviews deleted successfully`);
+    }
+
+    public async getReview(req: NextRequest, params: { id: string }) {
+        const session = await getSession(req);
+
+        const { id } = params;
+
+        const review = await this.repo.getReviews(session.id).then(reviews => reviews.find(review => review.id === Number(id) || 0));
+
+        if (!review) return Response.notFound("Review not found");
+
+        return Response.ok("Review retrieved successfully", review);
+    }
+
+    public async deleteReview(_req: NextRequest, params: { id: string }) {
+        const { id } = params;
+
+        let review = await Repository.review.getById(Number(id) || 0);
+
+        if (!review) return Response.notFound("Review not found");
+
+        review = await Repository.review.delete(Number(id));
+
+        return Response.ok("Review deleted successfully", review);
+    }
+
+    public async getPayments(req: NextRequest) {
+        const session = await getSession(req);
+
+        const payments = await this.repo.getPayments(session.id);
+
+        if (!payments.length) return Response.notFound("No payments found");
+
+        return Response.ok("Payments retrieved successfully", payments);
+    }
+
+    public async getPayment(req: NextRequest, params: { id: string }) {
+        const session = await getSession(req);
+
+        const { id } = params;
+
+        const payment = await this.repo.getPayments(session.id).then(payments => payments.find(payment => payment.id === Number(id) || 0));
+
+        if (!payment) return Response.notFound("Payment not found");
+
+        return Response.ok("Payment retrieved successfully", payment);
     }
 }

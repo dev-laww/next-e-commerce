@@ -175,6 +175,41 @@ namespace Validators {
                 .positive()
         )
     });
+
+    export const quantity = z.object({
+        quantity: z.preprocess(
+            a => parseInt(a as string, 10),
+            z.number({ required_error: "Quantity is required" })
+                .positive()
+        )
+    });
+
+    export const checkout = z.object({
+        items: z.array(
+            z.preprocess(
+                a => parseInt(a as string, 10),
+                z.number({ required_error: "Item ID is required" })
+                    .positive()
+            )
+        ).optional(),
+        shippingId: z.preprocess(
+            a => parseInt(a as string, 10),
+            z.number({ required_error: "Shipping ID is required" })
+                .positive()
+        ),
+        addressId: z.preprocess(
+            a => parseInt(a as string, 10),
+            z.number({ required_error: "Address ID is required" })
+                .positive()
+        ),
+        paymentMethodId: z.preprocess(
+            a => parseInt(a as string, 10),
+            z.number({ required_error: "Payment method ID is required" })
+                .positive()
+        ),
+        couponCode: z.string()
+            .optional()
+    });
 }
 
 export default Validators;
