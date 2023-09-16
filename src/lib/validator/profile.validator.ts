@@ -22,16 +22,12 @@ namespace Validators {
             .email("Email must be a valid email address")
             .optional(),
         password: z.string({ required_error: "Password is required" })
-            .min(8, "Password must be at least 8 characters long")
-            .max(50, "Password must not exceed 50 characters")
     });
 
     export const email = z.object({
         email: z.string({ required_error: "Email is required" })
             .email("Email must be a valid email address"),
         password: z.string({ required_error: "Password is required" })
-            .min(8, "Password must be at least 8 characters long")
-            .max(50, "Password must not exceed 50 characters")
     })
 
     export const username = z.object({
@@ -39,14 +35,10 @@ namespace Validators {
             .min(3, "Username must be at least 3 characters long")
             .max(50, "Username must not exceed 50 characters"),
         password: z.string({ required_error: "Password is required" })
-            .min(8, "Password must be at least 8 characters long")
-            .max(50, "Password must not exceed 50 characters")
     })
 
     export const password = z.object({
-        oldPassword: z.string({ required_error: "Old password is required" })
-            .min(8, "Old password must be at least 8 characters long")
-            .max(50, "Old password must not exceed 50 characters"),
+        currentPassword: z.string({ required_error: "Current password is required" }),
         newPassword: z.string({ required_error: "Password is required" })
             .min(8, "Password must be at least 8 characters long")
             .max(50, "Password must not exceed 50 characters"),
@@ -63,16 +55,14 @@ namespace Validators {
             .min(3, "City must be at least 3 characters long")
             .max(50, "City must not exceed 50 characters"),
         state: z.string({ required_error: "State is required" })
-            .min(3, "State must be at least 3 characters long")
             .max(50, "State must not exceed 50 characters"),
         country: z.string({ required_error: "Country is required" })
-            .min(3, "Country must be at least 3 characters long")
             .max(50, "Country must not exceed 50 characters"),
         zip: z.string({ required_error: "Zip is required" })
             .min(4, "Zip must be at least 4 characters long")
             .max(5, "Zip must not exceed 5 characters"),
         phone: z.string({ required_error: "Phone is required" })
-            .min(11, "Phone must be at least 11 characters long")
+            .min(10, "Phone must be at least 10 characters long")
             .max(11, "Phone must not exceed 11 characters")
     });
 
@@ -102,13 +92,13 @@ namespace Validators {
             .max(5, "Zip must not exceed 5 characters")
             .optional(),
         phone: z.string()
-            .min(11, "Phone must be at least 11 characters long")
+            .min(10, "Phone must be at least 10 characters long")
             .max(11, "Phone must not exceed 11 characters")
             .optional()
     });
 
     export const paymentMethod = z.object({
-        type: z.enum([PAYMENT_METHODS.CREDIT_CARD, PAYMENT_METHODS.GOOGLE, PAYMENT_METHODS.PAYPAL]),
+        type: z.enum([PAYMENT_METHODS.CREDIT_CARD, PAYMENT_METHODS.GOOGLE, PAYMENT_METHODS.PAYPAL], { required_error: "Payment method type is required" }),
     });
 
     export const paypalAndGoogle = z.object({

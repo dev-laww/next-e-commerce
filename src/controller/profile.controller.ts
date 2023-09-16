@@ -58,7 +58,7 @@ export default class ProfileController {
 
         delete body.password;
 
-        const updatedProfile = await this.repo.update(session.id, humps.decamelizeKeys(body));
+        const updatedProfile = await this.repo.update(session.id, humps.decamelizeKeys(body)).then(({ password, ...data }) => data);
 
         return Response.ok("Profile updated successfully", updatedProfile);
     }
@@ -81,7 +81,7 @@ export default class ProfileController {
 
         if (!passwordMatches) return Response.unauthorized("Password is incorrect");
 
-        const updatedProfile = await this.repo.update(session.id, email.data);
+        const updatedProfile = await this.repo.update(session.id, email.data).then(({ password, ...data }) => data);
 
         return Response.ok("Email updated successfully", updatedProfile);
     }
@@ -104,7 +104,7 @@ export default class ProfileController {
 
         if (!passwordMatches) return Response.unauthorized("Password is incorrect");
 
-        const updatedProfile = this.repo.update(session.id, { username: username.data.username });
+        const updatedProfile = await this.repo.update(session.id, { username: username.data.username }).then(({ password, ...data }) => data);
 
         return Response.ok("Username updated successfully", updatedProfile);
 
@@ -120,13 +120,13 @@ export default class ProfileController {
 
         if (!password.success) return Response.validationError(password.error.errors);
 
-        const passwordMatches = await this.repo.verifyPassword(session.id, password.data.oldPassword);
+        const passwordMatches = await this.repo.verifyPassword(session.id, password.data.currentPassword);
 
         if (!passwordMatches) return Response.unauthorized("Password is incorrect");
 
         const hashedPassword = await hash(password.data.newPassword);
 
-        const updatedProfile = await this.repo.update(session.id, { password: hashedPassword });
+        const updatedProfile = await this.repo.update(session.id, { password: hashedPassword }).then(({ password, ...data }) => data);
 
         return Response.ok("Password updated successfully", updatedProfile);
     }
@@ -135,6 +135,8 @@ export default class ProfileController {
         const session = await getSession(req);
 
         const addresses = await this.repo.getAddresses(session.id);
+
+        if (!addresses.length) return Response.notFound("No addresses found");
 
         return Response.ok("Addresses retrieved successfully", addresses);
     }
@@ -234,6 +236,7 @@ export default class ProfileController {
 
     @CheckBody
     public async addPaymentMethod(req: NextRequest) {
+        const session = await getSession(req);
         const body = await req.json();
 
         const paymentMethod = Validators.paymentMethod.safeParse(body);
@@ -251,11 +254,14 @@ export default class ProfileController {
                 break;
         }
 
-        const paymentMethodData = validator.safeParse(paymentMethod.data);
+        const paymentMethodData = validator.safeParse(body);
 
         if (!paymentMethodData.success) return Response.validationError(paymentMethodData.error.errors);
 
-        const newPaymentMethod = await Repository.paymentMethod.create(humps.decamelizeKeys(paymentMethodData.data) as Prisma.PaymentMethodCreateInput);
+        const newPaymentMethod = await Repository.paymentMethod.create(humps.decamelizeKeys({
+            ...body,
+            user_id: session.id
+        }) as Prisma.PaymentMethodCreateInput);
 
         return Response.created("Payment method added successfully", newPaymentMethod);
     }
@@ -296,7 +302,7 @@ export default class ProfileController {
                 break;
         }
 
-        const paymentMethodData = validator.safeParse(updatedPaymentMethod.data);
+        const paymentMethodData = validator.safeParse(body);
 
         if (!paymentMethodData.success) return Response.validationError(paymentMethodData.error.errors);
 
@@ -308,13 +314,13 @@ export default class ProfileController {
     public async deletePaymentMethod(_req: NextRequest, params: { id: string }) {
         const { id } = params;
 
-        const paymentMethod = await Repository.paymentMethod.getById(Number(id) || 0);
+        let paymentMethod = await Repository.paymentMethod.getById(Number(id) || 0);
 
         if (!paymentMethod) return Response.notFound("Payment method not found");
 
-        await Repository.paymentMethod.delete(Number(id));
+        paymentMethod = await Repository.paymentMethod.delete(Number(id));
 
-        return Response.ok("Payment method deleted successfully");
+        return Response.ok("Payment method deleted successfully", paymentMethod);
     }
 
     public async getOrders(req: NextRequest) {
