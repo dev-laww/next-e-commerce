@@ -123,4 +123,10 @@ export default class OrderRepository {
             }
         });
     }
+
+    public async createItem(data: Prisma.OrderItemCreateInput | OrderItem): Promise<OrderItem> {
+        return this.prismaClient.orderItem.create({
+            data: data
+        });
+    }
 }
