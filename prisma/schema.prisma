@@ -284,7 +284,7 @@ model WishlistItem {
 
 model Coupon {
   id         Int      @id @default(autoincrement())
-  code       String
+  code       String   @unique
   type       String
   discount   Float
   created_at DateTime @default(now())

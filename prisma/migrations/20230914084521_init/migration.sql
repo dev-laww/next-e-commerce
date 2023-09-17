@@ -324,6 +324,9 @@ CREATE UNIQUE INDEX "order_payment_id_key" ON "order"("payment_id");
 -- CreateIndex
 CREATE UNIQUE INDEX "payment_order_id_key" ON "payment"("order_id");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "coupon_code_key" ON "coupon"("code");
+
 -- AddForeignKey
 ALTER TABLE "user_role" ADD CONSTRAINT "user_role_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
