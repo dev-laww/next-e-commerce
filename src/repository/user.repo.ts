@@ -188,11 +188,15 @@ export default class UserRepository {
         const user = await this.prismaClient.user.findUnique({
             where: { id: id },
             select: {
-                orders: true
+                orders: {
+                    include: {
+                        order_items: true
+                    }
+                }
             }
         });
 
-        return user ? user.orders.map(({ created_at, updated_at, user_id, ...rest }) => rest as Order) : [];
+        return user ? user.orders.map(({ created_at, updated_at, user_id, ...rest }) => rest as unknown as Order) : [];
     }
 
     public async deleteOrders(id: number): Promise<Prisma.BatchPayload> {
