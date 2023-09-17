@@ -6,8 +6,8 @@ import { AllowPermitted, CheckBody, CheckError } from "@utils/decorator";
 import { verifyAccessToken } from "@utils/token";
 import Repository from "@src/repository";
 import { hash } from "@utils/hashing";
-import { Order, Prisma } from "@prisma/client";
-import { ORDER_STATUS, PAYMENT_METHODS } from "@lib/constants";
+import { Order, OrderItem, Prisma } from "@prisma/client";
+import { COUPON_TYPES, ORDER_STATUS, PAYMENT_METHODS } from "@lib/constants";
 import humps from "humps";
 
 const getSession = async (req: NextRequest) => {
@@ -15,6 +15,19 @@ const getSession = async (req: NextRequest) => {
 
     return (await verifyAccessToken(token))!;
 }
+
+const generateOrderNumber = () => {
+    const date = new Date();
+
+    const year = date.getFullYear().toString().slice(2);
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    const hour = date.getHours().toString().padStart(2, "0");
+    const minute = date.getMinutes().toString().padStart(2, "0");
+    const second = date.getSeconds().toString().padStart(2, "0");
+
+    return `${year}${month}${day}${hour}${minute}${second}`;
+};
 
 @AllowPermitted
 @CheckError
@@ -392,13 +405,13 @@ export default class ProfileController {
     public async deleteWishlistItem(_req: NextRequest, params: { id: string }) {
         const { id } = params;
 
-        const wishlistItem = await Repository.wishlist.getById(Number(id) || 0);
+        let wishlistItem = await Repository.wishlist.getById(Number(id) || 0);
 
         if (!wishlistItem) return Response.notFound("Wishlist item not found");
 
-        await Repository.wishlist.delete(Number(id));
+        wishlistItem = await Repository.wishlist.delete(Number(id));
 
-        return Response.ok("Wishlist item deleted successfully");
+        return Response.ok("Wishlist item deleted successfully", wishlistItem);
     }
 
     @CheckBody
@@ -435,7 +448,7 @@ export default class ProfileController {
 
         await Repository.wishlist.delete(Number(id));
 
-        return Response.ok("Wishlist item moved to cart successfully", cartItem);
+        return Response.created("Wishlist item moved to cart successfully", cartItem);
     }
 
     public async getCart(req: NextRequest) {
@@ -455,7 +468,7 @@ export default class ProfileController {
 
         let cart = await Repository.cart.deleteUserCart(session.id);
 
-        return Response.ok(`${cart.count} cart deleted successfully`);
+        return Response.ok(`${cart.count} cart item${cart.count > 1 ? "s" : ""} deleted successfully`);
     }
 
     public async getCartItem(req: NextRequest, params: { id: string }) {
@@ -470,6 +483,7 @@ export default class ProfileController {
         return Response.ok("Cart item retrieved successfully", cartItem);
     }
 
+    @CheckBody
     public async updateQuantity(req: NextRequest, params: { id: string }) {
         const { id } = params;
 
@@ -507,6 +521,7 @@ export default class ProfileController {
         return Response.ok("Cart item deleted successfully", cartItem);
     }
 
+    @CheckBody
     public async checkout(req: NextRequest) {
         const session = await getSession(req);
 
@@ -533,52 +548,66 @@ export default class ProfileController {
 
         cartItems = await Repository.cart.getByUserId(session.id);
         const address = await Repository.address.getById(checkout.data.addressId);
-        // const shipping = await Repository.shipping.getById(checkout.data.shippingId);
+        const shipping = await Repository.shipping.getById(checkout.data.shippingId);
         const paymentMethod = await Repository.paymentMethod.getById(checkout.data.paymentMethodId);
-        // const coupon = await Repository.coupon.getByCode(checkout.data.couponCode);
+
+        let coupon, couponType = COUPON_TYPES.PERCENT, couponDiscount = 0;
+        if (checkout.data.couponCode) {
+            coupon = await Repository.coupon.getByCode(checkout.data.couponCode);
+
+            if (!coupon) return Response.notFound("Invalid coupon code");
+
+            couponType = coupon.type as COUPON_TYPES;
+            couponDiscount = coupon.discount;
+        }
 
         if (!address) return Response.notFound("Address not found");
 
-        // if (!shipping) return Response.notFound("Shipping not found");
+        if (!shipping) return Response.notFound("Shipping not found");
 
         if (!paymentMethod) return Response.notFound("Payment method not found");
 
+        let total = cartItems.reduce((total, cartItem) => total + cartItem.total_price, 0);
+        couponType === COUPON_TYPES.PERCENT ? total -= total * (couponDiscount / 100) : total -= couponDiscount;
+
         const order = await Repository.order.create({
             user_id: session.id,
-            shipping_id: 1, // TODO: Add shipping here
+            shipping_id: shipping.id,
             address_id: address.id,
             status: ORDER_STATUS.PROCESSING,
             payment_id: paymentMethod.id,
-            total: cartItems.reduce((total, cartItem) => total + cartItem.total_price, 0) // TODO: Add shipping cost here and subtract coupon discount
+            order_number: generateOrderNumber(),
+            total:  total + shipping.price,
         } as Order);
 
-        let orderItems = await Promise.all(cartItems.map(async cartItem => {
-            const { created_at, updated_at, id: itemId, ...data } = cartItem;
+        const orderItems = await Promise.all(cartItems.map(async cartItem => {
+            const { created_at, updated_at, id: itemId, total_price, user_id, ...data } = cartItem;
 
             const product = await Repository.product.getById(cartItem.product_id);
             const productVariant = await Repository.productVariant.getById(cartItem.variant_id);
 
+            if (!product) return Response.notFound("Product not found");
             if (!productVariant) return Response.notFound("Product variant not found");
 
             return await Repository.order.createItem({
                 ...data,
-                order: order,
-                product: product,
-                variant: productVariant,
-                price: cartItem.total_price
-            } as Prisma.OrderItemCreateInput);
+                order_id: order.id,
+                product_id: product.id,
+                variant_id: productVariant.id,
+                price: total_price,
+            } as OrderItem);
         }));
 
-        await Repository.cart.deleteUserCart(session.id);
+        await Promise.all(cartItems.map(async cartItem => await Repository.cart.delete(cartItem.id)));
 
         // TODO: Apply payment gateway here or use scheduled task to check for payment status
 
         return Response.created("Order created successfully", {
             order,
             address,
-            // shipping,
+            shipping,
             paymentMethod,
-            // coupon,
+            coupon,
             orderItems
         });
     }

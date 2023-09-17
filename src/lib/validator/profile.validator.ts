@@ -178,27 +178,25 @@ namespace Validators {
         items: z.array(
             z.preprocess(
                 a => parseInt(a as string, 10),
-                z.number({ required_error: "Item ID is required" })
-                    .positive()
+                z.number().positive()
             )
         ).optional(),
         shippingId: z.preprocess(
             a => parseInt(a as string, 10),
-            z.number({ required_error: "Shipping ID is required" })
-                .positive()
+            z.number().positive(),
+            { required_error: "Shipping ID is required" }
         ),
         addressId: z.preprocess(
             a => parseInt(a as string, 10),
-            z.number({ required_error: "Address ID is required" })
-                .positive()
+            z.number().positive(),
+            { required_error: "Address ID is required" }
         ),
         paymentMethodId: z.preprocess(
             a => parseInt(a as string, 10),
-            z.number({ required_error: "Payment method ID is required" })
-                .positive()
+            z.number().positive(),
+            { required_error: "Payment method ID is required" }
         ),
-        couponCode: z.string()
-            .optional()
+        couponCode: z.string().optional()
     });
 }
 
