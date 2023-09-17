@@ -995,36 +995,6 @@ List of all API endpoints.
                 }]
             }
             ```
-- `POST /profile/wishlist`: Add a product to the user's wishlist.
-    - **Request**:
-        ```http request
-        POST /profile/wishlist
-        
-        Authorization: Bearer <access_token>
-        Content-Type: application/json
-        
-        {
-            "productId": 1
-        }
-        ```
-    - **Response**:
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Product added to wishlist successfully"
-            }
-            ```
-    - **Error**:
-        - Status: 400 BAD REQUEST
-        - Body:
-            ```json
-            {
-                "status": "error",
-                "message": "Product already in wishlist"
-            }
-            ```
 - `GET /profile/wishlist/:id`: Check if a product is in the user's wishlist.
     - **Request**:
         ```http request
