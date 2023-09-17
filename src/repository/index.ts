@@ -13,6 +13,7 @@ import RoleRepository from "@repository/role.repo";
 import UserRepository from "@repository/user.repo";
 import WishlistRepository from "@repository/wishlist.repo";
 import CouponRepository from "@repository/coupon.repo";
+import ShippingRepository from "@repository/shipping.repo";
 
 namespace Repository {
     export const address = new AddressRepository();
@@ -28,6 +29,7 @@ namespace Repository {
     export const productVariant = new ProductVariantRepository();
     export const review = new ReviewRepository();
     export const role = new RoleRepository();
+    export const shipping = new ShippingRepository();
     export const user = new UserRepository();
     export const wishlist = new WishlistRepository();
 }
