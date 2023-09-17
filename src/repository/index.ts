@@ -12,11 +12,13 @@ import ReviewRepository from "@repository/review.repo";
 import RoleRepository from "@repository/role.repo";
 import UserRepository from "@repository/user.repo";
 import WishlistRepository from "@repository/wishlist.repo";
+import CouponRepository from "@repository/coupon.repo";
 
 namespace Repository {
     export const address = new AddressRepository();
     export const cart = new CartRepository();
     export const category = new CategoryRepository();
+    export const coupon = new CouponRepository();
     export const log = new LogRepository();
     export const order = new OrderRepository();
     export const payment = new PaymentRepository();

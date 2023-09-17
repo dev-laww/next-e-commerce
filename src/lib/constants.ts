@@ -66,3 +66,8 @@ export enum PAYMENT_METHODS {
     PAYPAL = "payment-method:paypal",
     GOOGLE = "payment-method:google"
 }
+
+export enum COUPON_TYPES {
+    PERCENT = "percent",
+    FIXED = "fixed"
+}
