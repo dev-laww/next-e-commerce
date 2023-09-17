@@ -3,7 +3,7 @@ import { Coupon, Prisma } from "@prisma/client";
 import prisma from "@lib/prisma";
 
 export default class CouponRepository {
-    prismaClient = prisma;
+    private prismaClient = prisma;
 
     public async getAll(filters?: Prisma.CouponWhereInput, limit: number = 50, cursor?: Prisma.CouponWhereUniqueInput): Promise<Coupon[]> {
         return this.prismaClient.coupon.findMany({

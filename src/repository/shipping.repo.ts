@@ -3,7 +3,7 @@ import { Order, Prisma, ShippingMethod } from "@prisma/client";
 import prisma from "@lib/prisma";
 
 export default class ShippingRepository {
-    prismaClient = prisma;
+    private prismaClient = prisma;
 
     public async getAll(filters?: Prisma.ShippingMethodWhereInput, limit: number = 50, cursor?: Prisma.ShippingMethodWhereUniqueInput): Promise<ShippingMethod[]> {
         return this.prismaClient.shippingMethod.findMany({
