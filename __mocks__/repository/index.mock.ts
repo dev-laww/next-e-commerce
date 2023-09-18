@@ -1,4 +1,4 @@
-import { DeepMockProxy, mockDeep } from "jest-mock-extended";
+import { DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
 
 import AddressRepository from "@repository/address.repo";
 import CartRepository from "@repository/cart.repo";
@@ -15,10 +15,13 @@ import RoleRepository from "@repository/role.repo";
 import UserRepository from "@repository/user.repo";
 import WishlistRepository from "@repository/wishlist.repo";
 import Repository from "@src/repository";
+import CouponRepository from "@repository/coupon.repo";
+import ShippingRepository from "@repository/shipping.repo";
 
 const AddressRepositoryMock = mockDeep<AddressRepository>();
 const CartRepositoryMock = mockDeep<CartRepository>();
 const CategoryRepositoryMock = mockDeep<CategoryRepository>();
+const CouponRepositoryMock = mockDeep<CouponRepository>();
 const LogRepositoryMock = mockDeep<LogRepository>();
 const OrderRepositoryMock = mockDeep<OrderRepository>();
 const PaymentRepositoryMock = mockDeep<PaymentRepository>();
@@ -28,13 +31,34 @@ const ProductRepositoryMock = mockDeep<ProductRepository>();
 const ProductVariantRepositoryMock = mockDeep<ProductVariantRepository>();
 const ReviewRepositoryMock = mockDeep<ReviewRepository>();
 const RoleRepositoryMock = mockDeep<RoleRepository>();
+const ShippingRepositoryMock = mockDeep<ShippingRepository>();
 const UserRepositoryMock = mockDeep<UserRepository>();
 const WishlistRepositoryMock = mockDeep<WishlistRepository>();
+
+beforeEach(() => {
+    mockReset(AddressRepositoryMock);
+    mockReset(CartRepositoryMock);
+    mockReset(CategoryRepositoryMock);
+    mockReset(CouponRepositoryMock);
+    mockReset(LogRepositoryMock);
+    mockReset(OrderRepositoryMock);
+    mockReset(PaymentRepositoryMock);
+    mockReset(PaymentMethodRepositoryMock);
+    mockReset(PermissionRepositoryMock);
+    mockReset(ProductRepositoryMock);
+    mockReset(ProductVariantRepositoryMock);
+    mockReset(ReviewRepositoryMock);
+    mockReset(RoleRepositoryMock);
+    mockReset(ShippingRepositoryMock)
+    mockReset(UserRepositoryMock);
+    mockReset(WishlistRepositoryMock);
+});
 
 namespace RepositoryMock {
     export const address = AddressRepositoryMock;
     export const cart = CartRepositoryMock;
     export const category = CategoryRepositoryMock;
+    export const coupon = CouponRepositoryMock;
     export const log = LogRepositoryMock;
     export const order = OrderRepositoryMock;
     export const payment = PaymentRepositoryMock;
@@ -44,6 +68,7 @@ namespace RepositoryMock {
     export const productVariant = ProductVariantRepositoryMock;
     export const review = ReviewRepositoryMock;
     export const role = RoleRepositoryMock;
+    export const shipping = ShippingRepositoryMock;
     export const user = UserRepositoryMock;
     export const wishlist = WishlistRepositoryMock;
 }

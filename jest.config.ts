@@ -1,4 +1,4 @@
-const nextJest = require("next/jest")
+import nextJest from "next/jest"
 
 const createJestConfig = nextJest({
     // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
@@ -7,16 +7,18 @@ const createJestConfig = nextJest({
 
 // Add any custom config to be passed to Jest
 /** @type {import("jest").Config} */
-const config = {
+const config: import("jest").Config = {
     // Add more setup options before each test is run
     setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
     testEnvironment: "jest-environment-jsdom",
     collectCoverageFrom: [
         "src/**/*.{ts,tsx}",
         "!src/**/*.d.ts",
+        "!src/middleware.ts",
         "!src/app/**/*",
         "!src/stories/**/*",
         "!src/lib/prisma.ts",
+        "!src/repository/index.ts",
     ],
     moduleNameMapper: {
         "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy",
