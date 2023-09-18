@@ -515,17 +515,121 @@ describe("ProfileController", () => {
     });
 
     describe("Test getAddress", () => {
-        it.todo("returns 200 if user is logged in with data");
-        it.todo("returns 401 if user is not logged in");
-        it.todo("returns 404 if address not found");
+        const address = {
+            id: 1,
+            user_id: 1,
+            name: "test",
+            address: "test",
+            city: "test",
+            state: "test",
+            country: "test",
+            zip: "1234",
+            phone: "1234567890"
+        } as Address;
+        const params = { id: "1" }
+
+        beforeEach(() => {
+            req = new NextRequest("http://localhost:3000/api/profile/addresses/1", {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+        });
+
+        it("returns 200 if user is logged in with data", async () => {
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.user.getAddresses as jest.Mock).mockResolvedValueOnce([address]);
+
+            const res = await controller.getAddress(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.OK);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 401 if user is not logged in", async () => {
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
+
+            const res = await controller.getAddress(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.UNAUTHORIZED);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 404 if address not found", async () => {
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.user.getAddresses as jest.Mock).mockResolvedValueOnce([]);
+
+            const res = await controller.getAddress(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.NOT_FOUND);
+            expect(res.response).toBeDefined();
+        });
     });
 
     describe("Test updateAddress", () => {
-        it.todo("returns 200 if user is logged in with data");
-        it.todo("returns 400 if request body is invalid");
-        it.todo("returns 401 if user is not logged in");
-        it.todo("returns 404 if address not found");
-        it.todo("returns 422 if wrong body");
+        const address = {
+            name: "test",
+            address: "test",
+            city: "test",
+            state: "test",
+            country: "test",
+            zip: "1234",
+            phone: "1234567890"
+        } as Address;
+        const params = { id: "1" }
+
+        beforeEach(() => {
+            req = new NextRequest("http://localhost:3000/api/profile/addresses/1", {
+                method: "PUT",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify(address)
+            });
+        });
+
+        it("returns 200 if user is logged in with data", async () => {
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.address.getById as jest.Mock).mockResolvedValueOnce(address);
+            (Repository.address.update as jest.Mock).mockResolvedValueOnce(address);
+
+            const res = await controller.updateAddress(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.OK);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 400 if request body is invalid", async () => {
+            req = new NextRequest("http://localhost:3000/api/profile/addresses/1", {
+                method: "PUT",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            isAllowed.mockResolvedValueOnce(Response.ok());
+
+            const res = await controller.updateAddress(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.BAD_REQUEST);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 401 if user is not logged in", async () => {
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
+
+            const res = await controller.updateAddress(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.UNAUTHORIZED);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 404 if address not found", async () => {
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.user.getAddresses as jest.Mock).mockResolvedValueOnce([]);
+
+            const res = await controller.updateAddress(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.NOT_FOUND);
+            expect(res.response).toBeDefined();
+        });
     });
 
     describe("Test deleteAddress", () => {
