@@ -6,10 +6,7 @@ import { NextRequest } from "next/server";
 import { TokenOTP, User } from "@prisma/client";
 import Response from "@lib/http";
 import Repository from "@src/repository";
-import { mockReset } from "jest-mock-extended";
 
-
-jest.mock("@repository/index", () => require("@mocks/repository/index.mock"));
 
 const isAllowed = jest.spyOn(PermissionController, "isAllowed");
 
@@ -27,7 +24,6 @@ describe("AccountsController", () => {
 
 
     beforeEach(() => {
-        mockReset(Repository.user);
         controller = new AccountsController();
     });
 
