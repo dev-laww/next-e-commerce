@@ -343,6 +343,8 @@ export default class ProfileController {
 
         const orders = await this.repo.getOrders(session.id);
 
+        if (!orders.length) return Response.notFound("No orders found");
+
         return Response.ok("Orders retrieved successfully", orders);
     }
 
@@ -365,7 +367,7 @@ export default class ProfileController {
 
         if (!order) return Response.notFound("Order not found");
 
-        if (order.status !== "pending") return Response.badRequest("Order cannot be cancelled");
+        if (order.status !== ORDER_STATUS.PROCESSING) return Response.badRequest("Order cannot be cancelled");
 
         order = await Repository.order.update(Number(id), { status: ORDER_STATUS.CANCELLED });
 
