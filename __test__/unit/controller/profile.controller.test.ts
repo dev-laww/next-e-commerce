@@ -6,7 +6,7 @@ import { NextRequest } from "next/server";
 import { STATUS_CODE } from "@lib/constants";
 import { generateAccessToken } from "@utils/token";
 import { UserSession } from "@lib/types";
-import { Address, PaymentMethod } from "@prisma/client";
+import { Address, Order, PaymentMethod } from "@prisma/client";
 
 
 const isAllowed = jest.spyOn(PermissionController, "isAllowed");
@@ -486,7 +486,7 @@ describe("ProfileController", () => {
         it("returns 200 if user is logged in with data", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
             (Repository.user.getAddresses as jest.Mock).mockResolvedValueOnce([{ id: 1 }]);
-            (Repository.address.deleteUserAddresses as jest.Mock).mockResolvedValueOnce({count: 1});
+            (Repository.address.deleteUserAddresses as jest.Mock).mockResolvedValueOnce({ count: 1 });
 
             const res = await controller.deleteAddresses(req);
 
@@ -746,7 +746,7 @@ describe("ProfileController", () => {
         it("returns 200 if user is logged in with data", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
             (Repository.user.getPaymentMethods as jest.Mock).mockResolvedValueOnce([paymentMethod]);
-            (Repository.paymentMethod.deleteByUserId as jest.Mock).mockResolvedValueOnce({count: 1});
+            (Repository.paymentMethod.deleteByUserId as jest.Mock).mockResolvedValueOnce({ count: 1 });
 
             const res = await controller.deletePaymentMethods(req);
 
@@ -892,9 +892,9 @@ describe("ProfileController", () => {
                 method: "PUT",
                 headers: { Authorization: `Bearer ${token}` },
                 body: JSON.stringify({
-                    "name": "Updated name",
-                    "email": "updated@mail.com",
-                    "type": "payment-method:google"
+                    name: "Updated name",
+                    email: "updated@mail.com",
+                    type: "payment-method:google"
                 })
             });
         });
@@ -1009,20 +1009,164 @@ describe("ProfileController", () => {
     });
 
     describe("Test getOrders", () => {
-        it.todo("returns 200 if user is logged in with data");
-        it.todo("returns 401 if user is not logged in");
-        it.todo("returns 404 if no orders found");
+        const order = {
+            id: 1,
+            shipping_id: 1,
+            address_id: 1,
+            order_number: "1234567890",
+            status: "processing",
+            total: 59.99,
+            payment_id: null,
+            order_items: []
+        } as unknown as Order
+
+        beforeEach(() => {
+            req = new NextRequest("http://localhost:3000/api/profile/orders", {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+        });
+
+        it("returns 200 if user is logged in with data", async () => {
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.user.getOrders as jest.Mock).mockResolvedValueOnce([order]);
+
+            const res = await controller.getOrders(req);
+
+            expect(res.statusCode).toBe(STATUS_CODE.OK);
+            expect(res.response).toBeDefined();
+        });
+        it("returns 401 if user is not logged in", async () => {
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
+
+            const res = await controller.getOrders(req);
+
+            expect(res.statusCode).toBe(STATUS_CODE.UNAUTHORIZED);
+        });
+
+        it("returns 404 if no orders found", async () => {
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.user.getOrders as jest.Mock).mockResolvedValueOnce([]);
+
+            const res = await controller.getOrders(req);
+
+            expect(res.statusCode).toBe(STATUS_CODE.NOT_FOUND);
+            expect(res.response).toBeDefined();
+        });
     });
 
     describe("Test getOrder", () => {
-        it.todo("returns 200 if user is logged in with data");
-        it.todo("returns 401 if user is not logged in");
-        it.todo("returns 404 if order not found");
+        const order = {
+            id: 1,
+            shipping_id: 1,
+            address_id: 1,
+            order_number: "1234567890",
+            status: "processing",
+            total: 59.99,
+            payment_id: null,
+            order_items: []
+        } as unknown as Order
+        const params = { id: "1" }
+
+        beforeEach(() => {
+            req = new NextRequest("http://localhost:3000/api/profile/orders/1", {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+        });
+
+        it("returns 200 if user is logged in with data", async () => {
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.user.getOrders as jest.Mock).mockResolvedValueOnce([order]);
+
+            const res = await controller.getOrder(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.OK);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 401 if user is not logged in", async () => {
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
+
+            const res = await controller.getOrder(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.UNAUTHORIZED);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 404 if order not found", async () => {
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.user.getOrders as jest.Mock).mockResolvedValueOnce([]);
+
+            const res = await controller.getOrder(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.NOT_FOUND);
+            expect(res.response).toBeDefined();
+        });
     });
 
     describe("Test cancelOrder", () => {
-        it.todo("returns 200 if user is logged in with data");
-        it.todo("returns 401 if user is not logged in");
+        const order = {
+            id: 1,
+            shipping_id: 1,
+            address_id: 1,
+            order_number: "1234567890",
+            status: "processing",
+            total: 59.99,
+            payment_id: null,
+            order_items: []
+        } as unknown as Order
+        const params = { id: "1" }
+
+        beforeEach(() => {
+            req = new NextRequest("http://localhost:3000/api/profile/orders/1/cancel", {
+                method: "PUT",
+                headers: { Authorization: `Bearer ${token}` }
+            });
+        });
+
+        it("returns 200 if user is logged in with data", async () => {
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.order.getById as jest.Mock).mockResolvedValueOnce(order);
+            (Repository.order.update as jest.Mock).mockResolvedValueOnce(order);
+
+            const res = await controller.cancelOrder(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.OK);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 400 if order is not processing", async () => {
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.order.getById as jest.Mock).mockResolvedValueOnce({
+                ...order,
+                status: "shipped"
+            });
+
+            const res = await controller.cancelOrder(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.BAD_REQUEST);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 401 if user is not logged in", async () => {
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
+
+            const res = await controller.cancelOrder(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.UNAUTHORIZED);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 404 if order not found", async () => {
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.order.getById as jest.Mock).mockResolvedValueOnce(null);
+
+            const res = await controller.cancelOrder(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.NOT_FOUND);
+            expect(res.response).toBeDefined();
+        });
     });
 
     describe("Test getWishlist", () => {
