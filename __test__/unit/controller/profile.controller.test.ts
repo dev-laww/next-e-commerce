@@ -6,7 +6,7 @@ import { NextRequest } from "next/server";
 import { STATUS_CODE } from "@lib/constants";
 import { generateAccessToken } from "@utils/token";
 import { UserSession } from "@lib/types";
-import { Address } from "@prisma/client";
+import { Address, PaymentMethod } from "@prisma/client";
 
 
 const isAllowed = jest.spyOn(PermissionController, "isAllowed");
@@ -486,7 +486,7 @@ describe("ProfileController", () => {
         it("returns 200 if user is logged in with data", async () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
             (Repository.user.getAddresses as jest.Mock).mockResolvedValueOnce([{ id: 1 }]);
-            (Repository.address.deleteUserAddresses as jest.Mock).mockResolvedValueOnce({});
+            (Repository.address.deleteUserAddresses as jest.Mock).mockResolvedValueOnce({count: 1});
 
             const res = await controller.deleteAddresses(req);
 
@@ -633,42 +633,379 @@ describe("ProfileController", () => {
     });
 
     describe("Test deleteAddress", () => {
-        it.todo("returns 200 if user is logged in with data");
-        it.todo("returns 401 if user is not logged in");
-        it.todo("returns 404 if address not found");
+        const address = {
+            name: "test",
+            address: "test",
+            city: "test",
+            state: "test",
+            country: "test",
+            zip: "1234",
+            phone: "1234567890"
+        } as Address;
+        const params = { id: "1" }
+
+        beforeEach(() => {
+            req = new NextRequest("http://localhost:3000/api/profile/addresses/1", {
+                method: "DELETE",
+                headers: { Authorization: `Bearer ${token}` }
+            });
+        });
+
+
+        it("returns 200 if user is logged in with data", async () => {
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.address.getById as jest.Mock).mockResolvedValueOnce(address);
+            (Repository.address.delete as jest.Mock).mockResolvedValueOnce(address);
+
+            const res = await controller.deleteAddress(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.OK);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 401 if user is not logged in", async () => {
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
+
+            const res = await controller.deleteAddress(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.UNAUTHORIZED);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 404 if address not found", async () => {
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.address.getById as jest.Mock).mockResolvedValueOnce(null);
+
+            const res = await controller.deleteAddress(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.NOT_FOUND);
+            expect(res.response).toBeDefined();
+        });
     });
 
     describe("Test getPaymentMethods", () => {
-        it.todo("returns 200 if user is logged in with data");
-        it.todo("returns 401 if user is not logged in");
-        it.todo("returns 404 if no payment methods found");
+        beforeEach(() => {
+            req = new NextRequest("http://localhost:3000/api/profile/payment-methods", {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+        });
+
+        it("returns 200 if user is logged in with data", async () => {
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.user.getPaymentMethods as jest.Mock).mockResolvedValueOnce([{
+                id: 1
+            }]);
+
+            const res = await controller.getPaymentMethods(req);
+
+            expect(res.statusCode).toBe(STATUS_CODE.OK);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 401 if user is not logged in", async () => {
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
+
+            const res = await controller.getPaymentMethods(req);
+
+            expect(res.statusCode).toBe(STATUS_CODE.UNAUTHORIZED);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 404 if no payment methods found", async () => {
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.user.getPaymentMethods as jest.Mock).mockResolvedValueOnce([]);
+
+            const res = await controller.getPaymentMethods(req);
+
+            expect(res.statusCode).toBe(STATUS_CODE.NOT_FOUND);
+            expect(res.response).toBeDefined();
+        });
+    });
+
+    describe("Test deletePaymentMethods", () => {
+        const paymentMethod = {
+            id: 1,
+            name: "Credit Card",
+            email: null,
+            phone_number: null,
+            card_number: "**** **** **** 1234",
+            expiration_date: "12/25",
+            cvv: "123",
+            type: "payment-method:credit_card"
+        } as PaymentMethod;
+
+        beforeEach(() => {
+            req = new NextRequest("http://localhost:3000/api/profile/payment-methods/1", {
+                method: "DELETE",
+                headers: { Authorization: `Bearer ${token}` }
+            });
+        });
+
+        it("returns 200 if user is logged in with data", async () => {
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.user.getPaymentMethods as jest.Mock).mockResolvedValueOnce([paymentMethod]);
+            (Repository.paymentMethod.deleteByUserId as jest.Mock).mockResolvedValueOnce({count: 1});
+
+            const res = await controller.deletePaymentMethods(req);
+
+            expect(res.statusCode).toBe(STATUS_CODE.OK);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 401 if user is not logged in", async () => {
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
+
+            const res = await controller.deletePaymentMethods(req);
+
+            expect(res.statusCode).toBe(STATUS_CODE.UNAUTHORIZED);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 404 if no payment methods found", async () => {
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.user.getPaymentMethods as jest.Mock).mockResolvedValueOnce([]);
+
+            const res = await controller.deletePaymentMethods(req);
+
+            expect(res.statusCode).toBe(STATUS_CODE.NOT_FOUND);
+            expect(res.response).toBeDefined();
+        });
     });
 
     describe("Test addPaymentMethod", () => {
-        it.todo("returns 200 if user is logged in with data");
-        it.todo("returns 401 if user is not logged in");
-        it.todo("returns 400 if request body is invalid");
-        it.todo("returns 422 if wrong body");
+        beforeEach(() => {
+            req = new NextRequest("http://localhost:3000/api/profile/payment-methods", {
+                method: "POST",
+                headers: { Authorization: `Bearer ${token}` },
+                body: JSON.stringify({
+                    name: "Name",
+                    email: "test@mail.com",
+                    type: "payment-method:google"
+                })
+            })
+        })
+
+        it("returns 200 if user is logged in with data", async () => {
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.paymentMethod.create as jest.Mock).mockResolvedValueOnce({});
+
+            const res = await controller.addPaymentMethod(req);
+
+            expect(res.statusCode).toBe(STATUS_CODE.CREATED);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 401 if user is not logged in", async () => {
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
+
+            const res = await controller.addPaymentMethod(req);
+
+            expect(res.statusCode).toBe(STATUS_CODE.UNAUTHORIZED);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 400 if request body is invalid", async () => {
+            req = new NextRequest("http://localhost:3000/api/profile/payment-methods", {
+                method: "POST",
+                headers: { Authorization: `Bearer ${token}` }
+            })
+            isAllowed.mockResolvedValueOnce(Response.ok());
+
+            const res = await controller.addPaymentMethod(req);
+
+            expect(res.statusCode).toBe(STATUS_CODE.BAD_REQUEST);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 422 if wrong body", async () => {
+            req = new NextRequest("http://localhost:3000/api/profile/payment-methods", {
+                method: "POST",
+                headers: { Authorization: `Bearer ${token}` },
+                body: "{}"
+            })
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.paymentMethod.create as jest.Mock).mockRejectedValueOnce(new Error(""));
+
+            const res = await controller.addPaymentMethod(req);
+
+            expect(res.statusCode).toBe(STATUS_CODE.UNPROCESSABLE_ENTITY);
+            expect(res.response).toBeDefined();
+        });
     });
 
     describe("Test getPaymentMethod", () => {
-        it.todo("returns 200 if user is logged in with data");
-        it.todo("returns 401 if user is not logged in");
-        it.todo("returns 404 if payment method not found");
+        const params = { id: "1" }
+        const paymentMethod = {
+            id: 1,
+            name: "Credit Card",
+            email: null,
+            phone_number: null,
+            card_number: "**** **** **** 1234",
+            expiration_date: "12/25",
+            cvv: "123",
+            type: "payment-method:credit_card"
+        } as PaymentMethod;
+
+        beforeEach(() => {
+            req = new NextRequest("http://localhost:3000/api/profile/payment-methods/1", {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+        });
+
+        it("returns 200 if user is logged in with data", async () => {
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.user.getPaymentMethods as jest.Mock).mockResolvedValueOnce([paymentMethod]);
+
+            const res = await controller.getPaymentMethod(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.OK);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 401 if user is not logged in", async () => {
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
+
+            const res = await controller.getPaymentMethod(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.UNAUTHORIZED);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 404 if payment method not found", async () => {
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.user.getPaymentMethods as jest.Mock).mockResolvedValueOnce([]);
+
+            const res = await controller.getPaymentMethod(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.NOT_FOUND);
+            expect(res.response).toBeDefined();
+        });
     });
 
     describe("Test updatePaymentMethod", () => {
-        it.todo("returns 200 if user is logged in with data");
-        it.todo("returns 401 if user is not logged in");
-        it.todo("returns 400 if request body is invalid");
-        it.todo("returns 404 if payment method not found");
-        it.todo("returns 422 if wrong body");
+        const params = { id: "1" }
+
+        beforeEach(() => {
+            req = new NextRequest("http://localhost:3000/api/profile/payment-methods/1", {
+                method: "PUT",
+                headers: { Authorization: `Bearer ${token}` },
+                body: JSON.stringify({
+                    "name": "Updated name",
+                    "email": "updated@mail.com",
+                    "type": "payment-method:google"
+                })
+            });
+        });
+
+        it("returns 200 if user is logged in with data", async () => {
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.paymentMethod.getById as jest.Mock).mockResolvedValueOnce({});
+            (Repository.paymentMethod.update as jest.Mock).mockResolvedValueOnce({});
+
+            const res = await controller.updatePaymentMethod(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.OK);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 401 if user is not logged in", async () => {
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
+
+            const res = await controller.updatePaymentMethod(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.UNAUTHORIZED);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 400 if request body is invalid", async () => {
+            req = new NextRequest("http://localhost:3000/api/profile/payment-methods/1", {
+                method: "PUT",
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            isAllowed.mockResolvedValueOnce(Response.ok());
+
+            const res = await controller.updatePaymentMethod(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.BAD_REQUEST);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 404 if payment method not found", async () => {
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.paymentMethod.getById as jest.Mock).mockResolvedValueOnce(null);
+
+            const res = await controller.updatePaymentMethod(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.NOT_FOUND);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 422 if wrong body", async () => {
+            req = new NextRequest("http://localhost:3000/api/profile/payment-methods/1", {
+                method: "PUT",
+                headers: { Authorization: `Bearer ${token}` },
+                body: "{}"
+            });
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.paymentMethod.getById as jest.Mock).mockResolvedValueOnce({});
+
+            const res = await controller.updatePaymentMethod(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.UNPROCESSABLE_ENTITY);
+            expect(res.response).toBeDefined();
+        });
     });
 
     describe("Test deletePaymentMethod", () => {
-        it.todo("returns 200 if user is logged in with data");
-        it.todo("returns 401 if user is not logged in");
-        it.todo("returns 404 if payment method not found");
+        const params = { id: "1" }
+        const paymentMethod = {
+            id: 1,
+            name: "Credit Card",
+            email: null,
+            phone_number: null,
+            card_number: "**** **** **** 1234",
+            expiration_date: "12/25",
+            cvv: "123",
+            type: "payment-method:credit_card"
+        } as PaymentMethod;
+
+        beforeEach(() => {
+            req = new NextRequest("http://localhost:3000/api/profile/payment-methods/1", {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+        });
+
+        it("returns 200 if user is logged in with data", async () => {
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.paymentMethod.getById as jest.Mock).mockResolvedValueOnce(paymentMethod);
+            (Repository.paymentMethod.delete as jest.Mock).mockResolvedValueOnce(paymentMethod);
+
+            const res = await controller.deletePaymentMethod(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.OK);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 401 if user is not logged in", async () => {
+            isAllowed.mockResolvedValueOnce(Response.unauthorized());
+
+            const res = await controller.deletePaymentMethod(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.UNAUTHORIZED);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 404 if payment method not found", async () => {
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.paymentMethod.getById as jest.Mock).mockResolvedValueOnce(null);
+
+            const res = await controller.deletePaymentMethod(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.NOT_FOUND);
+            expect(res.response).toBeDefined();
+        });
     });
 
     describe("Test getOrders", () => {
