@@ -12,37 +12,55 @@ export default class OrderRepository {
             take: limit,
             skip: cursor ? 1 : 0,
             where: filter,
-        });
+            include: {
+                order_items: true,
+            }
+        }) as unknown as Promise<Order[]>;
     }
 
     public async getById(id: number): Promise<Order | null> {
         return this.prismaClient.order.findUnique({
             where: { id: id },
-        });
+            include: {
+                order_items: true,
+            }
+        }) as unknown as Promise<Order | null>;
     }
 
     public async getUserOrders(userId: number): Promise<Order[]> {
         return this.prismaClient.order.findMany({
             where: { user_id: userId },
-        });
+            include: {
+                order_items: true,
+            }
+        }) as unknown as Promise<Order[]>;
     }
 
     public async getByStatus(status: "processing" | "completed" | "cancelled" | "failed" | "pending payment"): Promise<Order[]> {
         return this.prismaClient.order.findMany({
             where: { status: status },
-        });
+            include: {
+                order_items: true,
+            }
+        }) as unknown as Promise<Order[]>;
     }
 
     public async getByAddressId(addressId: number): Promise<Order[]> {
         return this.prismaClient.order.findMany({
             where: { address_id: addressId },
-        });
+            include: {
+                order_items: true,
+            }
+        }) as unknown as Promise<Order[]>;
     }
 
     public async getByShippingId(shippingId: number): Promise<Order[]> {
         return this.prismaClient.order.findMany({
             where: { shipping_id: shippingId },
-        });
+            include: {
+                order_items: true,
+            }
+        }) as unknown as Promise<Order[]>;
     }
 
     public async getItems(id: number): Promise<OrderItem[]> {
@@ -69,7 +87,10 @@ export default class OrderRepository {
 
     public async delete(id: number): Promise<Order> {
         return this.prismaClient.order.delete({
-            where: { id: id }
+            where: { id: id },
+            include: {
+                order_items: true,
+            }
         });
     }
 
@@ -121,6 +142,12 @@ export default class OrderRepository {
                     connect: { id: paymentId }
                 }
             }
+        });
+    }
+
+    public async createItem(data: Prisma.OrderItemCreateInput | OrderItem): Promise<OrderItem> {
+        return this.prismaClient.orderItem.create({
+            data: data
         });
     }
 }

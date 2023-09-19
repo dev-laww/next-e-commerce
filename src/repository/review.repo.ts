@@ -50,4 +50,16 @@ export default class ReviewRepository {
             where: { id: id }
         });
     }
+
+    public async deleteProductReviews(productId: number): Promise<Prisma.BatchPayload> {
+        return this.prismaClient.review.deleteMany({
+            where: { product_id: productId }
+        });
+    }
+
+    public async deleteUserReviews(userId: number): Promise<Prisma.BatchPayload> {
+        return this.prismaClient.review.deleteMany({
+            where: { user_id: userId }
+        });
+    }
 }

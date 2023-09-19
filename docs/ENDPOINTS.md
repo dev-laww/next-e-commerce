@@ -490,6 +490,7 @@ List of all API endpoints.
             "username": "johndoe",
             "imageUrl": "https://example.com/profile.jpg",
             "email": "johndoe@mail.com"
+            "password": "secretpassword"
         }
         ```
     - **Response**:
@@ -610,6 +611,22 @@ List of all API endpoints.
                    "phone": "1234567890"
                 }]
             }
+            ```
+- `DELETE /profile/address`: Delete all address
+    - **Request**:
+       ```http request
+       DELETE /profile/address
+     
+       Authorization: Bearer <access_token>
+       ```
+    - **Response**:
+        - Status: 200 OK
+        - Body:
+            ```json
+            {
+                "status": "success",
+                "message": "Addresses deleted successfully"
+            } 
             ```
 - `POST /profile/address`: Create new address
     - **Request**
@@ -928,39 +945,6 @@ List of all API endpoints.
                 }
             } 
             ```
-- `POST /profile/orders`: Create a new order.
-    - **Request**:
-        ```http request
-        POST /profile/orders
-      
-        Authorization: Bearer <access_token>
-        Content-Type: application/json
-        
-        {
-            "payment_id": 1,
-            "shipping_address_id": 1,
-            "shipping_method_id": 1,
-            "total_amount": 119.99,
-            "status": "Processing"
-        }
-        ```
-    - **Response**:
-        - Status: 201 CREATED
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Order created successfully",
-                "data": {
-                    "id": 3,
-                    "order_number": "ORD-003",
-                    "shipping_address_id": 1,
-                    "shipping_method_id": 1,
-                    "total_amount": 119.99,
-                    "status": "Processing"
-                }
-            }
-            ```
 - `PUT /profile/orders/:id/cancel`: Cancel a specific order.
     - **Request**:
         ```http request
@@ -1009,36 +993,6 @@ List of all API endpoints.
                     "description": "Lorem ipsum dolor sit amet",
                     "image": "https://via.placeholder.com/150"
                 }]
-            }
-            ```
-- `POST /profile/wishlist`: Add a product to the user's wishlist.
-    - **Request**:
-        ```http request
-        POST /profile/wishlist
-        
-        Authorization: Bearer <access_token>
-        Content-Type: application/json
-        
-        {
-            "productId": 1
-        }
-        ```
-    - **Response**:
-        - Status: 200 OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Product added to wishlist successfully"
-            }
-            ```
-    - **Error**:
-        - Status: 400 BAD REQUEST
-        - Body:
-            ```json
-            {
-                "status": "error",
-                "message": "Product already in wishlist"
             }
             ```
 - `GET /profile/wishlist/:id`: Check if a product is in the user's wishlist.
@@ -1171,28 +1125,6 @@ List of all API endpoints.
                 }
             }
             ```
-- `POST /profile/cart`: Add a product to the user's shopping cart.
-    - **Request**:
-        ```http request
-        POST /profile/cart
-      
-        Authorization: Bearer <access_token>
-        Content-Type: application/json
-        
-        {
-            "productId": 1,
-            "quantity": 2
-        }
-        ```
-    - **Response**:
-        - Status: 201 CREATED
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Product added to cart successfully"
-            } 
-            ```
 - `PUT /profile/cart/:id`: Update the quantity of a product in the user's shopping cart.
     - **Request**:
         ```http request
@@ -1263,6 +1195,7 @@ List of all API endpoints.
         Content-Type: application/json
         
         {
+            "items": [1, 2, 3], // cart item ids to checkout (optional)
             "shippingMethodId": 1,
             "paymentMethodId": 1,
             "couponCode": "COUPON1"
@@ -1314,68 +1247,6 @@ List of all API endpoints.
                     "variantId": 1,
                     "rating": 4,
                     "comment": "Great product"
-                }
-            }
-            ```
-- `POST /profile/reviews`: Create a new review.
-    - **Request**:
-        ```http request
-        POST /profile/reviews
-      
-        Authorization: Bearer <access_token>
-        Content-Type: application/json
-        
-        {
-            "userId": 1,
-            "productId": 1,
-            "variantId": 1,
-            "rating": 4,
-            "comment": "Great product"
-        }
-        ```
-    - **Response**:
-        - Status: 201 CREATED
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Review created successfully",
-                "data": {
-                    "id": 3,
-                    "userId": 1,
-                    "productId": 1,
-                    "rating": 4,
-                    "comment": "Great product"
-                }
-            }
-            ```
-- `PUT /profile/reviews/:id`: Update the details of a specific review.
-    - **Request**:
-        ```http request
-        PUT /profile/reviews/1
-      
-        Authorization: Bearer <access_token>
-        Content-Type: application/json
-        
-        {
-            "rating": 5,
-            "comment": "Excellent product"
-        }
-        ```
-    - **Response**:
-        - Status: 20O OK
-        - Body:
-            ```json
-            {
-                "status": "success",
-                "message": "Review created successfully",
-                "data": {
-                    "id": 1,
-                    "userId": 1,
-                    "productId": 1,
-                    "variantId": 1,
-                    "rating": 5,
-                    "comment": "Excellent product"
                 }
             }
             ```

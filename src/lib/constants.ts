@@ -60,3 +60,14 @@ export const COMMON_RESOURCES = [
     "GET/api/shipping-methods/:id",
     "GET/api/coupons/:code"
 ];
+
+export enum PAYMENT_METHODS {
+    CREDIT_CARD= "payment-method:credit_card",
+    PAYPAL = "payment-method:paypal",
+    GOOGLE = "payment-method:google"
+}
+
+export enum COUPON_TYPES {
+    PERCENT = "percent",
+    FIXED = "fixed"
+}

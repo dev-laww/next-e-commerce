@@ -6,7 +6,7 @@ import { CheckError } from "@utils/decorator";
 
 @CheckError
 export default class {{pascalCase name}}Controller {
-    public async hello(req: NextApiRequest) {
+    public async hello(req: NextRequest) {
         return Response.ok("Hello World");
     }
 }

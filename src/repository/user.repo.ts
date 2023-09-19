@@ -16,6 +16,7 @@ import {
 import { TOKEN_OTP_EXPIRY } from "@lib/constants";
 import prisma from "@lib/prisma";
 import { hash } from "@utils/hashing";
+import { compare } from "bcryptjs";
 
 
 export default class UserRepository {
@@ -187,11 +188,15 @@ export default class UserRepository {
         const user = await this.prismaClient.user.findUnique({
             where: { id: id },
             select: {
-                orders: true
+                orders: {
+                    include: {
+                        order_items: true
+                    }
+                }
             }
         });
 
-        return user ? user.orders.map(({ created_at, updated_at, user_id, ...rest }) => rest as Order) : [];
+        return user ? user.orders.map(({ created_at, updated_at, user_id, ...rest }) => rest as unknown as Order) : [];
     }
 
     public async deleteOrders(id: number): Promise<Prisma.BatchPayload> {
@@ -341,7 +346,13 @@ export default class UserRepository {
         const tokenCreatedAt = new Date(tokenRecord.created_at);
         const now = new Date();
 
-        if (now.getTime() - tokenCreatedAt.getTime() < TOKEN_OTP_EXPIRY) {
+        if (now.getTime() - tokenCreatedAt.getTime() > TOKEN_OTP_EXPIRY) {
+            await prisma.tokenOTP.delete({
+                where: {
+                    id: tokenRecord.id
+                }
+            });
+
             return {
                 success: false,
                 data: {} as User
@@ -358,5 +369,18 @@ export default class UserRepository {
             success: true,
             data: tokenRecord.user
         };
+    }
+
+    public async verifyPassword(id: number, password: string): Promise<boolean> {
+        const user = await this.prismaClient.user.findUnique({
+            where: { id: id },
+            select: {
+                password: true
+            }
+        });
+
+        if (!user) return false;
+
+        return compare(password, user.password);
     }
 }
