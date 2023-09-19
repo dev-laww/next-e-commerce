@@ -232,6 +232,8 @@ export default class ProfileController {
 
         const paymentMethods = await this.repo.getPaymentMethods(session.id);
 
+        if (!paymentMethods.length) return Response.notFound("No payment methods found");
+
         return Response.ok("Payment methods retrieved successfully", paymentMethods);
     }
 
