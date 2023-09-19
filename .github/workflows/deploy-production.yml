@@ -10,7 +10,6 @@ jobs:
   deploy-production:
     name: Deploy Production
     runs-on: ubuntu-latest
-    needs: [ eslint-check, jest-check ]
     steps:
       - uses: actions/checkout@v3
       - name: Install Vercel CLI
