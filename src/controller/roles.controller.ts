@@ -41,7 +41,6 @@ export default class RolesController {
         // Determine if there are more pages
         const hasNextPage = await this.repo.getAll(filter, limit, result[result.length - 1]).then(res => res.length > 0);
         const hasPreviousPage = await this.repo.getAll(filter, -limit, result[0]).then(res => res.length > 0);
-        console.log(hasPreviousPage, hasNextPage);
 
         // Generate URLs
         const nextPageToken: PageToken<Role> = {
