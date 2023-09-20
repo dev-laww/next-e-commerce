@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { Address, User } from "@prisma/client";
+import { User } from "@prisma/client";
 
 import humps from "humps";
 
@@ -31,7 +31,7 @@ export default class AccountsController {
         limit = limit || 50;
 
         // Parse page token
-        const parsedPageToken = parsePageToken<Address>(pageToken || "");
+        const parsedPageToken = parsePageToken<User>(pageToken || "");
 
         let isPrevious;
         if (pageToken) {
