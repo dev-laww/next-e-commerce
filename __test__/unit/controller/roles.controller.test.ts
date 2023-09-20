@@ -49,15 +49,7 @@ describe("RolesController", () => {
         it.todo("returns 404 if role permissions not found")
     });
 
-    describe("Test getRolePermission", () => {
-        it.todo("returns 200 and role permission")
-        it.todo("returns 401 if user not authenticated")
-        it.todo("returns 403 if user not authorized")
-        it.todo("returns 404 if role not found")
-        it.todo("returns 404 if role permission not found")
-    });
-
-    describe("Test createRolePermission", () => {
+    describe("Test addRolePermission", () => {
         it.todo("returns 201 and role permission created")
         it.todo("returns 400 if invalid body")
         it.todo("returns 401 if user not authenticated")
@@ -79,30 +71,6 @@ describe("RolesController", () => {
         it.todo("returns 403 if user not authorized")
         it.todo("returns 404 if role not found")
         it.todo("returns 404 if role users not found")
-    });
-
-    describe("Test getRoleUser", () => {
-        it.todo("returns 200 and role user")
-        it.todo("returns 401 if user not authenticated")
-        it.todo("returns 403 if user not authorized")
-        it.todo("returns 404 if role not found")
-        it.todo("returns 404 if role user not found")
-    });
-
-    describe("Test createRoleUser", () => {
-        it.todo("returns 201 and role user created")
-        it.todo("returns 400 if invalid body")
-        it.todo("returns 401 if user not authenticated")
-        it.todo("returns 403 if user not authorized")
-        it.todo("returns 422 if wrong body")
-    });
-
-    describe("Test deleteRoleUser", () => {
-        it.todo("returns 200 and role user deleted")
-        it.todo("returns 401 if user not authenticated")
-        it.todo("returns 403 if user not authorized")
-        it.todo("returns 404 if role not found")
-        it.todo("returns 404 if role user not found")
     });
 });
 
