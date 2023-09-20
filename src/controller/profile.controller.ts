@@ -9,6 +9,7 @@ import { hash } from "@utils/hashing";
 import { Order, OrderItem, Prisma } from "@prisma/client";
 import { COUPON_TYPES, ORDER_STATUS, PAYMENT_METHODS } from "@lib/constants";
 import humps from "humps";
+import { getDatabaseLogger } from "@utils/logging";
 
 const getSession = async (req: NextRequest) => {
     const token = req.headers.get("Authorization")!.split(" ")[1];
@@ -33,10 +34,12 @@ const generateOrderNumber = () => {
 @CheckError
 export default class ProfileController {
     private repo = Repository.user;
+    private logger = getDatabaseLogger({ name: "ProfileController", class: "ProfileController" })
 
     public async getProfile(req: NextRequest) {
         const session = await getSession(req);
 
+        await this.logger.info(`User ${session.id} retrieved their profile`);
         return Response.ok("Profile retrieved successfully", session);
     }
 
@@ -71,8 +74,10 @@ export default class ProfileController {
 
         delete body.password;
 
-        const updatedProfile = await this.repo.update(session.id, humps.decamelizeKeys(body)).then(({ password, ...data }) => data);
+        const updatedProfile = await this.repo.update(session.id, humps.decamelizeKeys(body)
+        ).then(({ password, ...data }) => data);
 
+        await this.logger.info(`User ${session.id} updated their profile`, undefined, true);
         return Response.ok("Profile updated successfully", updatedProfile);
     }
 
@@ -96,6 +101,7 @@ export default class ProfileController {
 
         const updatedProfile = await this.repo.update(session.id, email.data).then(({ password, ...data }) => data);
 
+        await this.logger.info(`User ${session.id} updated their email`, undefined, true);
         return Response.ok("Email updated successfully", updatedProfile);
     }
 
@@ -117,10 +123,12 @@ export default class ProfileController {
 
         if (!passwordMatches) return Response.unauthorized("Password is incorrect");
 
-        const updatedProfile = await this.repo.update(session.id, { username: username.data.username }).then(({ password, ...data }) => data);
+        const updatedProfile = await this.repo.update(session.id, {
+            username: username.data.username
+        }).then(({ password, ...data }) => data);
 
+        await this.logger.info(`User ${session.id} updated their username`, undefined, true);
         return Response.ok("Username updated successfully", updatedProfile);
-
     }
 
     @CheckBody
@@ -139,8 +147,11 @@ export default class ProfileController {
 
         const hashedPassword = await hash(password.data.newPassword);
 
-        const updatedProfile = await this.repo.update(session.id, { password: hashedPassword }).then(({ password, ...data }) => data);
+        const updatedProfile = await this.repo.update(session.id, {
+            password: hashedPassword
+        }).then(({ password, ...data }) => data);
 
+        await this.logger.info(`User ${session.id} updated their password`, undefined, true);
         return Response.ok("Password updated successfully", updatedProfile);
     }
 
@@ -151,6 +162,7 @@ export default class ProfileController {
 
         if (!addresses.length) return Response.notFound("No addresses found");
 
+        await this.logger.info(`User ${session.id} retrieved their addresses`);
         return Response.ok("Addresses retrieved successfully", addresses);
     }
 
@@ -161,8 +173,9 @@ export default class ProfileController {
 
         if (!addressesExists) return Response.notFound("No address found");
 
-        let addresses = await Repository.address.deleteUserAddresses(session.id);
+        const addresses = await Repository.address.deleteUserAddresses(session.id);
 
+        await this.logger.info(`User ${session.id} deleted their addresses`, undefined, true);
         return Response.ok(`${addresses.count} address${addresses.count > 1 ? "es" : ""} deleted successfully`);
     }
 
@@ -181,6 +194,7 @@ export default class ProfileController {
             user_id: session.id
         }) as Prisma.AddressCreateInput);
 
+        await this.logger.info(address, `User ${session.id} added an address`, true);
         return Response.created("Address added successfully", newAddress);
     }
 
@@ -193,6 +207,7 @@ export default class ProfileController {
 
         if (!address) return Response.notFound("Address not found");
 
+        await this.logger.info(`User ${session.id} retrieved an address`);
         return Response.ok("Address retrieved successfully", address);
     }
 
@@ -212,6 +227,7 @@ export default class ProfileController {
 
         address = await Repository.address.update(Number(id), humps.decamelizeKeys(updatedAddress.data));
 
+        await this.logger.info(updatedAddress, `User ${address.user_id} updated an address`, true);
         return Response.ok("Address updated successfully", address);
     }
 
@@ -224,6 +240,7 @@ export default class ProfileController {
 
         address = await Repository.address.delete(Number(id));
 
+        await this.logger.info(`User ${address.user_id} deleted an address`, undefined, true);
         return Response.ok("Address deleted successfully", address);
     }
 
@@ -234,6 +251,7 @@ export default class ProfileController {
 
         if (!paymentMethods.length) return Response.notFound("No payment methods found");
 
+        await this.logger.info(`User ${session.id} retrieved their payment methods`);
         return Response.ok("Payment methods retrieved successfully", paymentMethods);
     }
 
@@ -244,8 +262,9 @@ export default class ProfileController {
 
         if (!paymentMethodsExists) return Response.notFound("No payment method found");
 
-        let paymentMethods = await Repository.paymentMethod.deleteByUserId(session.id);
+        const paymentMethods = await Repository.paymentMethod.deleteByUserId(session.id);
 
+        await this.logger.info(`User ${session.id} deleted their payment methods`, undefined, true);
         return Response.ok(`${paymentMethods.count} payment method${paymentMethods.count > 1 ? "s" : ""} deleted successfully`);
     }
 
@@ -278,6 +297,7 @@ export default class ProfileController {
             user_id: session.id
         }) as Prisma.PaymentMethodCreateInput);
 
+        await this.logger.info(paymentMethodData, `User ${session.id} added a payment method`, true);
         return Response.created("Payment method added successfully", newPaymentMethod);
     }
 
@@ -290,6 +310,7 @@ export default class ProfileController {
 
         if (!paymentMethod) return Response.notFound("Payment method not found");
 
+        await this.logger.info(`User ${session.id} retrieved a payment method`);
         return Response.ok("Payment method retrieved successfully", paymentMethod);
     }
 
@@ -323,6 +344,7 @@ export default class ProfileController {
 
         paymentMethod = await Repository.paymentMethod.update(Number(id), humps.decamelizeKeys(paymentMethodData.data));
 
+        await this.logger.info(paymentMethodData, `User ${paymentMethod.user_id} updated a payment method`, true);
         return Response.ok("Payment method updated successfully", paymentMethod);
     }
 
@@ -335,6 +357,7 @@ export default class ProfileController {
 
         paymentMethod = await Repository.paymentMethod.delete(Number(id));
 
+        await this.logger.info(paymentMethod, `User ${paymentMethod.user_id} deleted a payment method`, true);
         return Response.ok("Payment method deleted successfully", paymentMethod);
     }
 
@@ -345,6 +368,7 @@ export default class ProfileController {
 
         if (!orders.length) return Response.notFound("No orders found");
 
+        await this.logger.info(`User ${session.id} retrieved their orders`);
         return Response.ok("Orders retrieved successfully", orders);
     }
 
@@ -357,6 +381,7 @@ export default class ProfileController {
 
         if (!order) return Response.notFound("Order not found");
 
+        await this.logger.info(`User ${session.id} retrieved an order`);
         return Response.ok("Order retrieved successfully", order);
     }
 
@@ -371,6 +396,7 @@ export default class ProfileController {
 
         order = await Repository.order.update(Number(id), { status: ORDER_STATUS.CANCELLED });
 
+        await this.logger.info(order, `User ${order.user_id} cancelled an order`, true);
         return Response.ok("Order cancelled successfully", order);
     }
 
@@ -381,6 +407,7 @@ export default class ProfileController {
 
         if (!wishlist.length) return Response.notFound("No wishlist found");
 
+        await this.logger.info(`User ${session.id} retrieved their wishlist`);
         return Response.ok("Wishlist retrieved successfully", wishlist);
     }
 
@@ -391,8 +418,9 @@ export default class ProfileController {
 
         if (!wishlistExists) return Response.notFound("No wishlist found");
 
-        let wishlist = await Repository.wishlist.deleteUserWishlist(session.id);
+        const wishlist = await Repository.wishlist.deleteUserWishlist(session.id);
 
+        await this.logger.info(`User ${session.id} deleted their wishlist`, undefined, true);
         return Response.ok(`${wishlist.count} wishlist${wishlist.count > 1 ? "s" : ""} deleted successfully`);
     }
 
@@ -405,6 +433,7 @@ export default class ProfileController {
 
         if (!wishlistItem) return Response.notFound("Wishlist item not found");
 
+        await this.logger.info(`User ${session.id} retrieved a wishlist item`);
         return Response.ok("Wishlist item retrieved successfully", wishlistItem);
     }
 
@@ -417,6 +446,7 @@ export default class ProfileController {
 
         wishlistItem = await Repository.wishlist.delete(Number(id));
 
+        await this.logger.info(wishlistItem, `User ${wishlistItem.user_id} deleted a wishlist item`, true);
         return Response.ok("Wishlist item deleted successfully", wishlistItem);
     }
 
@@ -454,6 +484,7 @@ export default class ProfileController {
 
         await Repository.wishlist.delete(Number(id));
 
+        await this.logger.info(cartItem, `User ${cartItem.user_id} moved a wishlist item to cart`, true);
         return Response.created("Wishlist item moved to cart successfully", cartItem);
     }
 
@@ -464,6 +495,7 @@ export default class ProfileController {
 
         if (!cart.length) return Response.notFound("No cart found");
 
+        await this.logger.info(`User ${session.id} retrieved their cart`);
         return Response.ok("Cart retrieved successfully", cart);
     }
 
@@ -476,6 +508,7 @@ export default class ProfileController {
 
         let cart = await Repository.cart.deleteUserCart(session.id);
 
+        await this.logger.info(`User ${session.id} deleted their cart`, undefined, true);
         return Response.ok(`${cart.count} cart item${cart.count > 1 ? "s" : ""} deleted successfully`);
     }
 
@@ -488,6 +521,7 @@ export default class ProfileController {
 
         if (!cartItem) return Response.notFound("Cart item not found");
 
+        await this.logger.info(`User ${session.id} retrieved a cart item`);
         return Response.ok("Cart item retrieved successfully", cartItem);
     }
 
@@ -510,6 +544,7 @@ export default class ProfileController {
             total_price: (cartItem.total_price / cartItem.quantity) * quantity.data.quantity
         }));
 
+        await this.logger.info(updatedCartItem, `User ${updatedCartItem.user_id} updated a cart item`, true);
         return Response.ok("Quantity updated successfully", updatedCartItem);
     }
 
@@ -522,6 +557,7 @@ export default class ProfileController {
 
         cartItem = await Repository.cart.delete(Number(id));
 
+        await this.logger.info(cartItem, `User ${cartItem.user_id} deleted a cart item`, true);
         return Response.ok("Cart item deleted successfully", cartItem);
     }
 
@@ -581,7 +617,7 @@ export default class ProfileController {
             status: ORDER_STATUS.PROCESSING,
             payment_id: paymentMethod.id,
             order_number: generateOrderNumber(),
-            total:  total + shipping.price,
+            total: total + shipping.price,
         } as Order);
 
         const orderItems = await Promise.all(cartItems.map(async cartItem => {
@@ -606,14 +642,17 @@ export default class ProfileController {
 
         // TODO: Apply payment gateway here or use scheduled task to check for payment status
 
-        return Response.created("Order created successfully", {
+        const orderSummary = {
             order,
             address,
             shipping,
             paymentMethod,
             coupon,
             orderItems
-        });
+        }
+
+        await this.logger.info(orderSummary, `User ${session.id} checked out`, true);
+        return Response.created("Order created successfully", orderSummary);
     }
 
     public async getReviews(req: NextRequest) {
@@ -623,6 +662,7 @@ export default class ProfileController {
 
         if (!reviews.length) return Response.notFound("No reviews found");
 
+        await this.logger.info(`User ${session.id} retrieved their reviews`);
         return Response.ok("Reviews retrieved successfully", reviews);
     }
 
@@ -633,8 +673,9 @@ export default class ProfileController {
 
         if (!reviewsExists) return Response.notFound("No reviews found");
 
-        let reviews = await Repository.review.deleteUserReviews(session.id);
+        const reviews = await Repository.review.deleteUserReviews(session.id);
 
+        await this.logger.info(`User ${session.id} deleted their reviews`, undefined, true);
         return Response.ok(`${reviews.count} reviews deleted successfully`);
     }
 
@@ -647,6 +688,7 @@ export default class ProfileController {
 
         if (!review) return Response.notFound("Review not found");
 
+        await this.logger.info(`User ${session.id} retrieved a review`);
         return Response.ok("Review retrieved successfully", review);
     }
 
@@ -659,6 +701,7 @@ export default class ProfileController {
 
         review = await Repository.review.delete(Number(id));
 
+        await this.logger.info(review, `User ${review.user_id} deleted a review`, true);
         return Response.ok("Review deleted successfully", review);
     }
 
@@ -669,6 +712,7 @@ export default class ProfileController {
 
         if (!payments.length) return Response.notFound("No payments found");
 
+        await this.logger.info(`User ${session.id} retrieved their payments`);
         return Response.ok("Payments retrieved successfully", payments);
     }
 
@@ -681,6 +725,7 @@ export default class ProfileController {
 
         if (!payment) return Response.notFound("Payment not found");
 
+        await this.logger.info(`User ${session.id} retrieved a payment`);
         return Response.ok("Payment retrieved successfully", payment);
     }
 }
