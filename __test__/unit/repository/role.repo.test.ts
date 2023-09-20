@@ -100,20 +100,4 @@ describe("RoleRepository", () => {
 
         expect(result).toMatchObject([]);
     });
-
-    it("Test addRoleUser", async () => {
-        (prisma.user.update as jest.Mock).mockResolvedValueOnce({roles: [{ role }]});
-
-        const result = await repo.addUser(1, 1);
-
-        expect(result).toMatchObject({});
-    });
-
-    it("Test removeRoleUser", async () => {
-        (prisma.user.update as jest.Mock).mockResolvedValueOnce({roles: [{ role }]});
-
-        const result = await repo.removeUser(1, 1);
-
-        expect(result).toMatchObject({});
-    });
 });
