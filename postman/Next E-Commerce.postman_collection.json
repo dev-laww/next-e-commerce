@@ -2,6 +2,7 @@
 	"info": {
 		"_postman_id": "b1e6f4a8-ec54-4fda-af6d-cc846e90aba9",
 		"name": "Next E-Commerce",
+		"description": "API endpoints available in the app",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "20011538"
 	},
@@ -650,7 +651,7 @@
 			"name": "Accounts",
 			"item": [
 				{
-					"name": "Address",
+					"name": "Addresses",
 					"item": [
 						{
 							"name": "Get addresses",
@@ -2583,7 +2584,7 @@
 			"name": "Profile",
 			"item": [
 				{
-					"name": "Address",
+					"name": "Addresses",
 					"item": [
 						{
 							"name": "Get addresses",
@@ -2591,13 +2592,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{base_url}}/profile/address",
+									"raw": "{{base_url}}/profile/addresses",
 									"host": [
 										"{{base_url}}"
 									],
 									"path": [
 										"profile",
-										"address"
+										"addresses"
 									]
 								}
 							},
@@ -2667,13 +2668,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{base_url}}/profile/address",
+									"raw": "{{base_url}}/profile/addresses",
 									"host": [
 										"{{base_url}}"
 									],
 									"path": [
 										"profile",
-										"address"
+										"addresses"
 									]
 								}
 							},
@@ -2743,13 +2744,13 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "{{base_url}}/profile/address",
+									"raw": "{{base_url}}/profile/addresses",
 									"host": [
 										"{{base_url}}"
 									],
 									"path": [
 										"profile",
-										"address"
+										"addresses"
 									]
 								}
 							},
@@ -2810,13 +2811,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{base_url}}/profile/address/:id",
+									"raw": "{{base_url}}/profile/addresses/:id",
 									"host": [
 										"{{base_url}}"
 									],
 									"path": [
 										"profile",
-										"address",
+										"addresses",
 										":id"
 									],
 									"variable": [
@@ -2900,13 +2901,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{base_url}}/profile/address/:id",
+									"raw": "{{base_url}}/profile/addresses/:id",
 									"host": [
 										"{{base_url}}"
 									],
 									"path": [
 										"profile",
-										"address",
+										"addresses",
 										":id"
 									],
 									"variable": [
@@ -2990,13 +2991,13 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "{{base_url}}/profile/address/:id",
+									"raw": "{{base_url}}/profile/addresses/:id",
 									"host": [
 										"{{base_url}}"
 									],
 									"path": [
 										"profile",
-										"address",
+										"addresses",
 										":id"
 									],
 									"variable": [
@@ -5542,6 +5543,824 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Password updated successfully\",\n    \"data\": {\n        \"id\": 1000,\n        \"first_name\": \"Admin\",\n        \"last_name\": \"\",\n        \"image_url\": \"\",\n        \"email\": \"toraooo.1006@gmail.com\",\n        \"username\": \"username\",\n        \"created_at\": \"2023-09-16T12:58:33.574Z\",\n        \"updated_at\": \"2023-09-16T13:03:12.734Z\",\n        \"confirmed\": true\n    }\n}"
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{access_token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Roles",
+			"item": [
+				{
+					"name": "Get roles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/roles",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"roles"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "code",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/roles",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"roles"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "name",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "code",
+											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "date",
+									"value": "Wed, 20 Sep 2023 12:49:41 GMT"
+								},
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "content-encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "connection",
+									"value": "close"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Roles found\",\n    \"data\": {\n        \"result\": [\n            {\n                \"id\": 1000,\n                \"name\": \"Admin\",\n                \"code\": \"role:admin\",\n                \"created_at\": \"2023-09-20T12:47:57.852Z\",\n                \"updated_at\": \"2023-09-20T12:47:57.852Z\"\n            },\n            {\n                \"id\": 1001,\n                \"name\": \"SUB_ADMIN\",\n                \"code\": \"role:sub_admin\",\n                \"created_at\": \"2023-09-20T12:47:57.852Z\",\n                \"updated_at\": \"2023-09-20T12:47:57.852Z\"\n            },\n            {\n                \"id\": 1002,\n                \"name\": \"CUSTOMER\",\n                \"code\": \"role:customer\",\n                \"created_at\": \"2023-09-20T12:47:57.852Z\",\n                \"updated_at\": \"2023-09-20T12:47:57.852Z\"\n            }\n        ],\n        \"meta\": {\n            \"hasNextPage\": false,\n            \"hasPreviousPage\": false\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Create role",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Test Role\",\r\n    \"code\": \"role:test\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/roles",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"roles"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "201",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Test Role\",\r\n    \"code\": \"role:test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/roles",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"roles"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "date",
+									"value": "Wed, 20 Sep 2023 12:54:25 GMT"
+								},
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "content-encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "connection",
+									"value": "close"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Role created\",\n    \"data\": {\n        \"id\": 1000,\n        \"name\": \"Test Role\",\n        \"code\": \"role:test\",\n        \"created_at\": \"2023-09-20T12:54:25.199Z\",\n        \"updated_at\": \"2023-09-20T12:54:25.199Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get role",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/roles/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"roles",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1000"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/roles/:id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"roles",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1000"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "date",
+									"value": "Wed, 20 Sep 2023 12:59:01 GMT"
+								},
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "content-encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "connection",
+									"value": "close"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Role found\",\n    \"data\": {\n        \"id\": 1000,\n        \"name\": \"Admin\",\n        \"code\": \"role:admin\",\n        \"created_at\": \"2023-09-20T12:47:57.852Z\",\n        \"updated_at\": \"2023-09-20T12:47:57.852Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Update role",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Updated name\",\r\n    \"code\": \"role:udpated\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/roles/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"roles",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "100000"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Update role",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Updated name\",\r\n    \"code\": \"role:udpated\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/roles/:id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"roles",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "100000"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "date",
+									"value": "Wed, 20 Sep 2023 13:00:26 GMT"
+								},
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "content-encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "connection",
+									"value": "close"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Role updated\",\n    \"data\": {\n        \"id\": 1000,\n        \"name\": \"Updated name\",\n        \"code\": \"role:udpated\",\n        \"created_at\": \"2023-09-20T12:54:25.199Z\",\n        \"updated_at\": \"2023-09-20T13:00:26.640Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete role",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/roles/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"roles",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1000"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/roles/:id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"roles",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1000"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "date",
+									"value": "Wed, 20 Sep 2023 13:02:05 GMT"
+								},
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "content-encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "connection",
+									"value": "close"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Role deleted\",\n    \"data\": {\n        \"id\": 1000,\n        \"name\": \"Updated name\",\n        \"code\": \"role:udpated\",\n        \"created_at\": \"2023-09-20T12:54:25.199Z\",\n        \"updated_at\": \"2023-09-20T13:00:26.640Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get permissions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/roles/:id/permissions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"roles",
+								":id",
+								"permissions"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/roles/:id/permissions",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"roles",
+										":id",
+										"permissions"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1000"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "date",
+									"value": "Wed, 20 Sep 2023 13:13:01 GMT"
+								},
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "content-encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "connection",
+									"value": "close"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Role permissions found\",\n    \"data\": [\n        {\n            \"id\": 1000,\n            \"code\": \"permission:read:users\",\n            \"name\": \"View Users\",\n            \"action\": \"GET\",\n            \"resource\": \"GET/api/accounts\"\n        },\n        {\n            \"id\": 1001,\n            \"code\": \"permission:create:user\",\n            \"name\": \"Create User\",\n            \"action\": \"POST\",\n            \"resource\": \"POST/api/accounts\"\n        },\n        {\n            \"id\": 1002,\n            \"code\": \"permission:read:user\",\n            \"name\": \"View User\",\n            \"action\": \"GET\",\n            \"resource\": \"GET/api/accounts/:id\"\n        },\n        {\n            \"id\": 1003,\n            \"code\": \"permission:update:user\",\n            \"name\": \"Update User\",\n            \"action\": \"PUT\",\n            \"resource\": \"PUT/api/accounts/:id\"\n        },\n        {\n            \"id\": 1004,\n            \"code\": \"permission:delete:user\",\n            \"name\": \"Delete User\",\n            \"action\": \"DELETE\",\n            \"resource\": \"DELETE/api/accounts/:id\"\n        },\n        {\n            \"id\": 1005,\n            \"code\": \"permission:read:user-roles\",\n            \"name\": \"View User Roles\",\n            \"action\": \"GET\",\n            \"resource\": \"GET/api/accounts/:id/roles\"\n        },\n        {\n            \"id\": 1006,\n            \"code\": \"permission:read:user-payment-methods\",\n            \"name\": \"View user payment methods\",\n            \"action\": \"GET\",\n            \"resource\": \"GET/api/accounts/:id/payment-methods\"\n        },\n        {\n            \"id\": 1007,\n            \"code\": \"permission:read:user-payment-method\",\n            \"name\": \"View user payment method\",\n            \"action\": \"GET\",\n            \"resource\": \"GET/api/accounts/:id/payment-methods/:paymentMethodId\"\n        },\n        {\n            \"id\": 1008,\n            \"code\": \"permission:read:user-addresses\",\n            \"name\": \"View user addresses\",\n            \"action\": \"GET\",\n            \"resource\": \"GET/api/accounts/:id/addresses\"\n        },\n        {\n            \"id\": 1009,\n            \"code\": \"permission:read:user-address\",\n            \"name\": \"View user address\",\n            \"action\": \"GET\",\n            \"resource\": \"GET/api/accounts/:id/addresses/:addressId\"\n        },\n        {\n            \"id\": 1010,\n            \"code\": \"permission:read:user-orders\",\n            \"name\": \"View user orders\",\n            \"action\": \"GET\",\n            \"resource\": \"GET/api/accounts/:id/orders\"\n        },\n        {\n            \"id\": 1011,\n            \"code\": \"permission:read:user-order\",\n            \"name\": \"View user order\",\n            \"action\": \"GET\",\n            \"resource\": \"GET/api/accounts/:id/orders/:orderId\"\n        },\n        {\n            \"id\": 1012,\n            \"code\": \"permission:read:user-wishlist\",\n            \"name\": \"View user wishlist\",\n            \"action\": \"GET\",\n            \"resource\": \"GET/api/accounts/:id/wishlist\"\n        },\n        {\n            \"id\": 1013,\n            \"code\": \"permission:read:user-wishlist-item\",\n            \"name\": \"View user wishlist item\",\n            \"action\": \"GET\",\n            \"resource\": \"GET/api/accounts/:id/wishlist/:wishlistItemId\"\n        },\n        {\n            \"id\": 1014,\n            \"code\": \"permission:read:user-cart\",\n            \"name\": \"View user cart\",\n            \"action\": \"GET\",\n            \"resource\": \"GET/api/accounts/:id/cart\"\n        },\n        {\n            \"id\": 1015,\n            \"code\": \"permission:read:user-cart-item\",\n            \"name\": \"View user cart item\",\n            \"action\": \"GET\",\n            \"resource\": \"GET/api/accounts/:id/cart/:cartItemId\"\n        },\n        {\n            \"id\": 1016,\n            \"code\": \"permission:read:user-reviews\",\n            \"name\": \"View user reviews\",\n            \"action\": \"GET\",\n            \"resource\": \"GET/api/accounts/:id/reviews\"\n        },\n        {\n            \"id\": 1017,\n            \"code\": \"permission:read:user-review\",\n            \"name\": \"View user review\",\n            \"action\": \"GET\",\n            \"resource\": \"GET/api/accounts/:id/reviews/:reviewId\"\n        },\n        {\n            \"id\": 1018,\n            \"code\": \"permission:read:roles\",\n            \"name\": \"View roles\",\n            \"action\": \"GET\",\n            \"resource\": \"GET/api/roles\"\n        },\n        {\n            \"id\": 1019,\n            \"code\": \"permission:create:role\",\n            \"name\": \"Create role\",\n            \"action\": \"POST\",\n            \"resource\": \"POST/api/roles\"\n        },\n        {\n            \"id\": 1020,\n            \"code\": \"permission:read:role\",\n            \"name\": \"View role\",\n            \"action\": \"GET\",\n            \"resource\": \"GET/api/roles/:id\"\n        },\n        {\n            \"id\": 1021,\n            \"code\": \"permission:update:role\",\n            \"name\": \"Update role\",\n            \"action\": \"PUT\",\n            \"resource\": \"PUT/api/roles/:id\"\n        },\n        {\n            \"id\": 1022,\n            \"code\": \"permission:delete:role\",\n            \"name\": \"Delete role\",\n            \"action\": \"DELETE\",\n            \"resource\": \"DELETE/api/roles/:id\"\n        },\n        {\n            \"id\": 1023,\n            \"code\": \"permission:read:role-permissions\",\n            \"name\": \"View role permissions\",\n            \"action\": \"GET\",\n            \"resource\": \"GET/api/roles/:id/permissions\"\n        },\n        {\n            \"id\": 1024,\n            \"code\": \"permission:create:role-permission\",\n            \"name\": \"Create role permissions\",\n            \"action\": \"POST\",\n            \"resource\": \"POST/api/roles/:id/permissions/:permissionId\"\n        },\n        {\n            \"id\": 1025,\n            \"code\": \"permission:delete:role-permission\",\n            \"name\": \"Delete role permission\",\n            \"action\": \"DELETE\",\n            \"resource\": \"DELETE/api/roles/:id/permissions/:permissionId\"\n        },\n        {\n            \"id\": 1026,\n            \"code\": \"permission:read:role-users\",\n            \"name\": \"View role users\",\n            \"action\": \"GET\",\n            \"resource\": \"GET/api/roles/:id/users\"\n        },\n        {\n            \"id\": 1027,\n            \"code\": \"permission:create:user-role\",\n            \"name\": \"Create user role\",\n            \"action\": \"POST\",\n            \"resource\": \"POST/api/roles/:id/users/:userId\"\n        },\n        {\n            \"id\": 1028,\n            \"code\": \"permission:delete:user-role\",\n            \"name\": \"Delete user role\",\n            \"action\": \"DELETE\",\n            \"resource\": \"DELETE/api/roles/:id/users/:userId\"\n        },\n        {\n            \"id\": 1029,\n            \"code\": \"permission:read:permissions\",\n            \"name\": \"View permissions\",\n            \"action\": \"GET\",\n            \"resource\": \"GET/api/permissions\"\n        },\n        {\n            \"id\": 1030,\n            \"code\": \"permission:create:permission\",\n            \"name\": \"Create permission\",\n            \"action\": \"POST\",\n            \"resource\": \"POST/api/permissions\"\n        },\n        {\n            \"id\": 1031,\n            \"code\": \"permission:read:permission\",\n            \"name\": \"View permission\",\n            \"action\": \"GET\",\n            \"resource\": \"GET/api/permissions/:id\"\n        },\n        {\n            \"id\": 1032,\n            \"code\": \"permission:update:permission\",\n            \"name\": \"Update permission\",\n            \"action\": \"PUT\",\n            \"resource\": \"PUT/api/permissions/:id\"\n        },\n        {\n            \"id\": 1033,\n            \"code\": \"permission:delete:permission\",\n            \"name\": \"Delete permission\",\n            \"action\": \"DELETE\",\n            \"resource\": \"DELETE/api/permissions/:id\"\n        },\n        {\n            \"id\": 1034,\n            \"code\": \"permission:read:role-permission\",\n            \"name\": \"View role permission\",\n            \"action\": \"GET\",\n            \"resource\": \"GET/api/permissions/:id/roles\"\n        },\n        {\n            \"id\": 1035,\n            \"code\": \"permission:create:role-permission\",\n            \"name\": \"Create role permission\",\n            \"action\": \"POST\",\n            \"resource\": \"POST/api/permissions/:id/roles/:roleId\"\n        },\n        {\n            \"id\": 1036,\n            \"code\": \"permission:delete:role-permission\",\n            \"name\": \"Delete role permission\",\n            \"action\": \"DELETE\",\n            \"resource\": \"DELETE/api/permissions/:id/roles/:roleId\"\n        },\n        {\n            \"id\": 1037,\n            \"code\": \"permission:create:product\",\n            \"name\": \"Create product\",\n            \"action\": \"POST\",\n            \"resource\": \"POST/api/products\"\n        },\n        {\n            \"id\": 1038,\n            \"code\": \"permission:update:product\",\n            \"name\": \"Update product\",\n            \"action\": \"PUT\",\n            \"resource\": \"PUT/api/products/:id\"\n        },\n        {\n            \"id\": 1039,\n            \"code\": \"permission:delete:product\",\n            \"name\": \"Delete product\",\n            \"action\": \"DELETE\",\n            \"resource\": \"DELETE/api/products/:id\"\n        },\n        {\n            \"id\": 1040,\n            \"code\": \"permission:create:product-variant\",\n            \"name\": \"Create product variant\",\n            \"action\": \"POST\",\n            \"resource\": \"POST/api/products/:id/variants\"\n        },\n        {\n            \"id\": 1041,\n            \"code\": \"permission:delete:product-variants\",\n            \"name\": \"Delete all product variants\",\n            \"action\": \"DELETE\",\n            \"resource\": \"DELETE/api/products/:id/variants\"\n        },\n        {\n            \"id\": 1042,\n            \"code\": \"permission:update:product-variant\",\n            \"name\": \"Update product variant\",\n            \"action\": \"PUT\",\n            \"resource\": \"PUT/api/products/:id/variants/:variantId\"\n        },\n        {\n            \"id\": 1043,\n            \"code\": \"permission:delete:product-variant\",\n            \"name\": \"Delete product variant\",\n            \"action\": \"DELETE\",\n            \"resource\": \"DELETE/api/products/:id/variants/:variantId\"\n        },\n        {\n            \"id\": 1044,\n            \"code\": \"permission:create:product-category\",\n            \"name\": \"Create product category\",\n            \"action\": \"POST\",\n            \"resource\": \"POST/api/products/:id/categories/:categoryId\"\n        },\n        {\n            \"id\": 1045,\n            \"code\": \"permission:delete:product-category\",\n            \"name\": \"Delete product category\",\n            \"action\": \"DELETE\",\n            \"resource\": \"DELETE/api/products/:id/categories/:categoryId\"\n        },\n        {\n            \"id\": 1046,\n            \"code\": \"permission:create:product-review\",\n            \"name\": \"Create product review\",\n            \"action\": \"POST\",\n            \"resource\": \"POST/api/products/:id/reviews\"\n        },\n        {\n            \"id\": 1047,\n            \"code\": \"permission:delete:product-reviews\",\n            \"name\": \"Delete all product reviews\",\n            \"action\": \"DELETE\",\n            \"resource\": \"DELETE/api/products/:id/reviews\"\n        },\n        {\n            \"id\": 1048,\n            \"code\": \"permission:update:product-review\",\n            \"name\": \"Update product review\",\n            \"action\": \"PUT\",\n            \"resource\": \"PUT/api/products/:id/reviews/:reviewId\"\n        },\n        {\n            \"id\": 1049,\n            \"code\": \"permission:create:variant\",\n            \"name\": \"Create product variant\",\n            \"action\": \"POST\",\n            \"resource\": \"POST/api/variants\"\n        },\n        {\n            \"id\": 1050,\n            \"code\": \"permission:update:variant\",\n            \"name\": \"Update product variant\",\n            \"action\": \"PUT\",\n            \"resource\": \"PUT/api/variants/:id\"\n        },\n        {\n            \"id\": 1051,\n            \"code\": \"permission:delete:variant\",\n            \"name\": \"Delete product variant\",\n            \"action\": \"DELETE\",\n            \"resource\": \"DELETE/api/variants/:id\"\n        },\n        {\n            \"id\": 1052,\n            \"code\": \"permission:create:variant-review\",\n            \"name\": \"Create variant review\",\n            \"action\": \"POST\",\n            \"resource\": \"POST/api/variants/:id/reviews\"\n        },\n        {\n            \"id\": 1053,\n            \"code\": \"permission:delete:variant-reviews\",\n            \"name\": \"Delete all variant reviews\",\n            \"action\": \"DELETE\",\n            \"resource\": \"DELETE/api/variants/:id/reviews\"\n        },\n        {\n            \"id\": 1054,\n            \"code\": \"permission:update:variant-review\",\n            \"name\": \"Update variant review\",\n            \"action\": \"PUT\",\n            \"resource\": \"PUT/api/variants/:id/reviews/:reviewId\"\n        },\n        {\n            \"id\": 1055,\n            \"code\": \"permission:delete:variant-review\",\n            \"name\": \"Delete variant review\",\n            \"action\": \"DELETE\",\n            \"resource\": \"DELETE/api/variants/:id/reviews/:reviewId\"\n        },\n        {\n            \"id\": 1056,\n            \"code\": \"permission:create:category\",\n            \"name\": \"Create category\",\n            \"action\": \"POST\",\n            \"resource\": \"POST/api/categories\"\n        },\n        {\n            \"id\": 1057,\n            \"code\": \"permission:update:category\",\n            \"name\": \"Update category\",\n            \"action\": \"PUT\",\n            \"resource\": \"PUT/api/categories/:id\"\n        },\n        {\n            \"id\": 1058,\n            \"code\": \"permission:delete:category\",\n            \"name\": \"Delete category\",\n            \"action\": \"DELETE\",\n            \"resource\": \"DELETE/api/categories/:id\"\n        },\n        {\n            \"id\": 1059,\n            \"code\": \"permission:read:orders\",\n            \"name\": \"View orders\",\n            \"action\": \"GET\",\n            \"resource\": \"GET/api/orders\"\n        },\n        {\n            \"id\": 1060,\n            \"code\": \"permission:delete:order\",\n            \"name\": \"Delete order\",\n            \"action\": \"DELETE\",\n            \"resource\": \"DELETE/api/orders/:id\"\n        },\n        {\n            \"id\": 1061,\n            \"code\": \"permission:create:shipping-method\",\n            \"name\": \"Create shipping method\",\n            \"action\": \"POST\",\n            \"resource\": \"POST/api/shipping-methods\"\n        },\n        {\n            \"id\": 1062,\n            \"code\": \"permission:update:shipping-method\",\n            \"name\": \"Update shipping method\",\n            \"action\": \"PUT\",\n            \"resource\": \"PUT/api/shipping-methods/:id\"\n        },\n        {\n            \"id\": 1063,\n            \"code\": \"permission:delete:shipping-method\",\n            \"name\": \"Delete shipping method\",\n            \"action\": \"DELETE\",\n            \"resource\": \"DELETE/api/shipping-methods/:id\"\n        },\n        {\n            \"id\": 1064,\n            \"code\": \"permission:read:coupons\",\n            \"name\": \"View coupons\",\n            \"action\": \"GET\",\n            \"resource\": \"GET/api/coupons\"\n        },\n        {\n            \"id\": 1065,\n            \"code\": \"permission:create:coupon\",\n            \"name\": \"Create coupon\",\n            \"action\": \"POST\",\n            \"resource\": \"POST/api/coupons\"\n        },\n        {\n            \"id\": 1066,\n            \"code\": \"permission:update:coupon\",\n            \"name\": \"Update coupon\",\n            \"action\": \"PUT\",\n            \"resource\": \"PUT/api/coupons/:id\"\n        },\n        {\n            \"id\": 1067,\n            \"code\": \"permission:delete:coupon\",\n            \"name\": \"Delete coupon\",\n            \"action\": \"DELETE\",\n            \"resource\": \"DELETE/api/coupons/:id\"\n        },\n        {\n            \"id\": 1068,\n            \"code\": \"permission:read:logs\",\n            \"name\": \"View logs\",\n            \"action\": \"GET\",\n            \"resource\": \"GET/api/logs\"\n        },\n        {\n            \"id\": 1069,\n            \"code\": \"permission:update:user-role\",\n            \"name\": \"Update User Roles\",\n            \"action\": \"PUT\",\n            \"resource\": \"PUT/api/accounts/:id/roles\"\n        },\n        {\n            \"id\": 1070,\n            \"code\": \"permission:read:user-payments\",\n            \"name\": \"View user payments\",\n            \"action\": \"GET\",\n            \"resource\": \"GET/api/accounts/:id/payments\"\n        },\n        {\n            \"id\": 1071,\n            \"code\": \"permission:read:user-payment\",\n            \"name\": \"View user payment\",\n            \"action\": \"GET\",\n            \"resource\": \"GET/api/accounts/:id/payments/:paymentId\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Add permission to role",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/roles/:id/permissions/:permissionId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"roles",
+								":id",
+								"permissions",
+								":permissionId"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								},
+								{
+									"key": "permissionId",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/roles/:id/permissions/:permissionId",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"roles",
+										":id",
+										"permissions",
+										":permissionId"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1000"
+										},
+										{
+											"key": "permissionId",
+											"value": "1000"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "date",
+									"value": "Wed, 20 Sep 2023 13:23:52 GMT"
+								},
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "content-encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "connection",
+									"value": "close"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Role permission added\",\n    \"data\": {\n        \"id\": 1000,\n        \"code\": \"permission:read:users\",\n        \"name\": \"View Users\",\n        \"action\": \"GET\",\n        \"resource\": \"GET/api/accounts\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Remove permission to role",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/roles/:id/permissions/:permissionId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"roles",
+								":id",
+								"permissions",
+								":permissionId"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								},
+								{
+									"key": "permissionId",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/roles/:id/permissions/:permissionId",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"roles",
+										":id",
+										"permissions",
+										":permissionId"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1000"
+										},
+										{
+											"key": "permissionId",
+											"value": "1000"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "date",
+									"value": "Wed, 20 Sep 2023 13:36:58 GMT"
+								},
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "content-encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "connection",
+									"value": "close"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Role permission removed\",\n    \"data\": {\n        \"id\": 1000,\n        \"code\": \"permission:read:users\",\n        \"name\": \"View Users\",\n        \"action\": \"GET\",\n        \"resource\": \"GET/api/accounts\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get role users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/roles/:id/users/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"roles",
+								":id",
+								"users",
+								""
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1000"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/roles/:id/users/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"roles",
+										":id",
+										"users",
+										""
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1000"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "date",
+									"value": "Wed, 20 Sep 2023 13:42:55 GMT"
+								},
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "content-encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "connection",
+									"value": "close"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Role users found\",\n    \"data\": [\n        {\n            \"id\": 1000,\n            \"first_name\": \"Admin\",\n            \"last_name\": \"\",\n            \"image_url\": \"\",\n            \"email\": \"toraooo.1006@gmail.com\",\n            \"username\": \"admin\",\n            \"confirmed\": true\n        }\n    ]\n}"
 						}
 					]
 				}
