@@ -379,6 +379,8 @@ export default class ProfileController {
 
         const wishlist = await this.repo.getWishlist(session.id);
 
+        if (!wishlist.length) return Response.notFound("No wishlist found");
+
         return Response.ok("Wishlist retrieved successfully", wishlist);
     }
 
@@ -460,6 +462,8 @@ export default class ProfileController {
 
         const cart = await this.repo.getCart(session.id);
 
+        if (!cart.length) return Response.notFound("No cart found");
+
         return Response.ok("Cart retrieved successfully", cart);
     }
 
@@ -501,13 +505,9 @@ export default class ProfileController {
 
         if (!quantity.success) return Response.validationError(quantity.error.errors);
 
-        const productVariant = await Repository.productVariant.getById(cartItem.variant_id);
-
-        if (!productVariant) return Response.notFound("Product variant not found");
-
         const updatedCartItem = await Repository.cart.update(Number(id), humps.decamelizeKeys({
             quantity: quantity.data.quantity,
-            total_price: productVariant.price * quantity.data.quantity
+            total_price: (cartItem.total_price / cartItem.quantity) * quantity.data.quantity
         }));
 
         return Response.ok("Quantity updated successfully", updatedCartItem);
@@ -620,6 +620,8 @@ export default class ProfileController {
         const session = await getSession(req);
 
         const reviews = await this.repo.getReviews(session.id);
+
+        if (!reviews.length) return Response.notFound("No reviews found");
 
         return Response.ok("Reviews retrieved successfully", reviews);
     }
