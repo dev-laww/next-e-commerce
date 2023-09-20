@@ -237,14 +237,6 @@ export default class UserRepository {
         return user ? user.wishlist.map(({ created_at, updated_at, user_id, ...rest }) => rest as WishlistItem) : [];
     }
 
-    public async deleteWishlist(id: number): Promise<Prisma.BatchPayload> {
-        return this.prismaClient.wishlistItem.deleteMany({
-            where: {
-                user_id: id
-            }
-        });
-    }
-
     public async getCart(id: number): Promise<CartItem[]> {
         const user = await this.prismaClient.user.findUnique({
             where: { id: id },
