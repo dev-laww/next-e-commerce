@@ -1,19 +1,23 @@
 import { NextRequest } from "next/server";
 
 import Validators from "@lib/validator/roles.validator";
-import Response from "@lib/http";
+import Response, { getSession } from "@lib/http";
 import { AllowPermitted, CheckBody, CheckError } from "@utils/decorator";
 import Repository from "@src/repository";
 import { generatePageToken, parsePageToken } from "@utils/token";
 import { Role } from "@prisma/client";
 import { PageToken } from "@lib/types";
+import { getDatabaseLogger } from "@utils/logging";
 
 @AllowPermitted
 @CheckError
 export default class RolesController {
     private repo = Repository.role;
+    private logger = getDatabaseLogger({ name: "controller:roles", class: "RolesController" });
 
     public async getRoles(req: NextRequest) {
+        const session = await getSession(req);
+
         const searchParams = Object.fromEntries(req.nextUrl.searchParams);
 
         const filters = Validators.search.parse(searchParams);
@@ -74,25 +78,31 @@ export default class RolesController {
             nextPageUrl: hasNextPage ? `${req.nextUrl.origin}/${req.nextUrl.pathname}?${nextSearchParams.toString()}` : undefined,
         };
 
+        await this.logger.info(`User ${session.id} fetched roles`)
         return Response.ok("Roles found", {
             result,
             meta,
         });
     }
 
-    public async getRole(_req: NextRequest, params: { id: string }) {
+    public async getRole(req: NextRequest, params: { id: string }) {
+        const session = await getSession(req);
+
         const id = parseInt(params.id, 10);
 
         const result = await this.repo.getById(id);
 
         if (!result) return Response.notFound("Role not found");
 
+        await this.logger.info(`User ${session.id} fetched role ${id}`)
         return Response.ok("Role found", result);
     }
 
     @CheckBody
-    public async createRole(_req: NextRequest) {
-        const body = await _req.json();
+    public async createRole(req: NextRequest) {
+        const session = await getSession(req);
+
+        const body = await req.json();
 
         const data = Validators.create.safeParse(body);
 
@@ -100,47 +110,62 @@ export default class RolesController {
 
         const result = await this.repo.create(data.data);
 
+        await this.logger.info(result, `User ${session.id} created role ${result.id}`, true)
         return Response.created("Role created", result);
     }
 
     @CheckBody
-    public async updateRole(_req: NextRequest, params: { id: string }) {
+    public async updateRole(req: NextRequest, params: { id: string }) {
+        const session = await getSession(req);
+
         const id = parseInt(params.id, 10);
 
-        const body = await _req.json();
+        const body = await req.json();
 
         const data = Validators.update.safeParse(body);
 
         if (!data.success) return Response.badRequest("Invalid data", data.error);
 
-        const result = await this.repo.update(id, data.data);
+        let result = await this.repo.getById(id);
 
         if (!result) return Response.notFound("Role not found");
 
+        result = await this.repo.update(id, data.data);
+
+        await this.logger.info(result, `User ${session.id} updated role ${id}`, true)
         return Response.ok("Role updated", result);
     }
 
-    public async deleteRole(_req: NextRequest, params: { id: string }) {
+    public async deleteRole(req: NextRequest, params: { id: string }) {
+        const session = await getSession(req);
+
         const { id } = params;
 
-        const result = await this.repo.delete(Number(id) || 0);
+        let result = await this.repo.getById(Number(id) || 0);
 
         if (!result) return Response.notFound("Role not found");
 
+        result = await this.repo.delete(Number(id) || 0);
+
+        await this.logger.info(result, `User ${session.id} deleted role ${id}`, true)
         return Response.ok("Role deleted", result);
     }
 
-    public async getRolePermissions(_req: NextRequest, params: { id: string }) {
+    public async getRolePermissions(req: NextRequest, params: { id: string }) {
+        const session = await getSession(req);
+
         const { id } = params;
 
         const result = await this.repo.getPermissions(Number(id) || 0);
 
         if (!result.length) return Response.notFound("Role not found");
 
+        await this.logger.info(`User ${session.id} fetched role ${id} permissions`)
         return Response.ok("Role permissions found", result);
     }
 
-    public async addRolePermission(_req: NextRequest, params: { id: string, permissionId: string }) {
+    public async addRolePermission(req: NextRequest, params: { id: string, permissionId: string }) {
+        const session = await getSession(req);
         const { id, permissionId } = params;
 
         const role = await this.repo.getById(Number(id) || 0);
@@ -155,10 +180,13 @@ export default class RolesController {
 
         if (!result) return Response.notFound("Role not found");
 
+        await this.logger.info(result, `User ${session.id} added permission ${permissionId} to role ${id}`, true)
         return Response.ok("Role permission added", result);
     }
 
     public async removeRolePermission(_req: NextRequest, params: { id: string, permissionId: string }) {
+        const session = await getSession(_req);
+
         const { id, permissionId } = params;
 
         const role = await this.repo.getById(Number(id) || 0);
@@ -171,16 +199,19 @@ export default class RolesController {
 
         const result = await this.repo.removePermission(Number(id) || 0, Number(permissionId) || 0);
 
+        await this.logger.info(result, `User ${session.id} removed permission ${permissionId} from role ${id}`, true)
         return Response.ok("Role permission removed", result);
     }
 
-    public async getRoleUsers(_req: NextRequest, params: { id: string }) {
+    public async getRoleUsers(req: NextRequest, params: { id: string }) {
+        const session = await getSession(req);
         const { id } = params;
 
         const result = await this.repo.getUsers(Number(id) || 0);
 
         if (!result) return Response.notFound("Role not found");
 
+        await this.logger.info(`User ${session.id} fetched role ${id} users`)
         return Response.ok("Role users found", result);
     }
 }
