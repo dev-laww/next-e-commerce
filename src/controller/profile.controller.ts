@@ -1,21 +1,14 @@
 import { type NextRequest } from "next/server";
 
 import Validators from "@lib/validator/profile.validator";
-import Response from "@lib/http";
+import Response, { getSession } from "@lib/http";
 import { AllowPermitted, CheckBody, CheckError } from "@utils/decorator";
-import { verifyAccessToken } from "@utils/token";
 import Repository from "@src/repository";
 import { hash } from "@utils/hashing";
 import { Order, OrderItem, Prisma } from "@prisma/client";
 import { COUPON_TYPES, ORDER_STATUS, PAYMENT_METHODS } from "@lib/constants";
 import humps from "humps";
 import { getDatabaseLogger } from "@utils/logging";
-
-const getSession = async (req: NextRequest) => {
-    const token = req.headers.get("Authorization")!.split(" ")[1];
-
-    return (await verifyAccessToken(token))!;
-}
 
 const generateOrderNumber = () => {
     const date = new Date();

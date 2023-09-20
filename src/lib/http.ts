@@ -2,6 +2,8 @@ import { ZodIssue } from "zod";
 
 import { ERROR_CODE, STATUS, STATUS_CODE } from "@lib/constants";
 import { Response } from "@lib/types";
+import { NextRequest } from "next/server";
+import { verifyAccessToken } from "@utils/token";
 
 namespace Response {
     export const ok = (message?: string, data?: any): Response => ({
@@ -114,6 +116,12 @@ namespace Response {
             message: "User is not allowed to perform this action"
         }
     }
+}
+
+export const getSession = async (req: NextRequest) => {
+    const token = req.headers.get("Authorization")!.split(" ")[1];
+
+    return (await verifyAccessToken(token))!;
 }
 
 export default Response;
