@@ -6,6 +6,7 @@ const search = z.object({
         z.number().positive()
     ).optional(),
     name: z.string().optional(),
+    categories: z.string().optional(),
     pageToken: z.string().optional(),
     limit: z.preprocess(
         (a) => parseInt(a as string, 10),

@@ -7,12 +7,27 @@ export default class ProductRepository {
     private prismaClient = prisma;
 
     public async getAll(filter?: Prisma.ProductWhereInput, limit: number = 50, cursor?: Prisma.ProductWhereUniqueInput): Promise<Product[]> {
-        return this.prismaClient.product.findMany({
-            cursor: cursor,
-            take: limit,
-            skip: cursor ? 1 : 0,
-            where: filter,
-        });
+        if (!filter?.categories) {
+            return this.prismaClient.product.findMany({
+                cursor: cursor,
+                take: limit,
+                skip: cursor ? 1 : 0,
+                where: filter
+            });
+        }
+
+        let productCategories = await this.prismaClient.productCategory.findMany({
+            where: {
+                category_id: {
+                    in: filter.categories as any
+                }
+            },
+            select: {
+                product: true
+            }
+        })
+
+        return productCategories.map((res: any) => res.product)
     }
 
     public async getById(id: number): Promise<Product | null> {

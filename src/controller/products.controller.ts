@@ -17,72 +17,79 @@ export default class ProductsController {
     repo = new ProductRepository()
 
     public async getProducts(req: NextRequest) {
-        // const searchParams = Object.fromEntries(req.nextUrl.searchParams);
+        const searchParams = Object.fromEntries(req.nextUrl.searchParams);
 
-        // const filters = Validators.search.parse(searchParams);
+        const filters = Validators.search.parse(searchParams);
 
-        // let { pageToken, limit, ...filter } = filters;
-        // limit = limit || 50;
+        let { pageToken, limit, ...filter } = filters;
+        limit = limit || 50;
 
-        // // Parse page token
-        // let cursor: Product | undefined;
-        // let type: "next" | "previous" | undefined;
-        // if (pageToken) {
-        //     const token = parsePageToken(pageToken);
+        let cFilter: any = filter
 
-        //     if (!token) return Response.badRequest("Invalid page token");
+        if (cFilter.categories) {
+            cFilter.categories = cFilter.categories
+                .split(",")
+                .map((categoryId: string) => parseInt(categoryId, 10) || 0)
+        }
 
-        //     const { type: tokenType, ...cursorData } = token;
+        let cursor: Product | undefined;
+        let type: "next" | "previous" | undefined;
+        if (pageToken) {
+            const token = parsePageToken(pageToken);
 
-        //     cursor = cursorData as Product;
-        //     type = tokenType;
-        // }
+            if (!token) return Response.badRequest("Invalid page token");
 
-        // // If type is previous, make limit negative
-        // const previous = type === "previous";
-        // let result = await this.repo.getAll(filter, previous ? -limit : limit, cursor);
+            const { type: tokenType, ...cursorData } = token;
 
-        // if (result.length === 0) return Response.notFound("No accounts found");
+            cursor = cursorData as Product;
+            type = tokenType;
+        }
 
-        // // Parsing page tokens
-        // const last = result[result.length - 1];
-        // const first = result[0];
-        // const nextPageToken: PageToken = {
-        //     id: last.id,
-        //     type: "next"
-        // };
-        // const hasNextPage = await this.repo.getAll(filter, limit || 50, result[result.length - 1]).then(res => res.length > 0);
+        // If type is previous, make limit negative
+        const previous = type === "previous";
+        let result = await this.repo.getAll(cFilter, previous ? -limit : limit, cursor);
 
-        // const nextSearchParams = new URLSearchParams({
-        //     ...searchParams,
-        //     pageToken: generatePageToken(nextPageToken)
-        // });
+        if (result.length === 0) return Response.notFound("No products found");
 
-        // const hasPreviousPage = await this.repo.getAll(filter, limit ? -limit : -50, result[0]).then(res => res.length > 0);
-        // const previousPageToken: PageToken = {
-        //     id: first.id,
-        //     type: "previous"
-        // };
+        // Parsing page tokens
+        const last = result[result.length - 1];
+        const first = result[0];
+        const nextPageToken: PageToken = {
+            id: last.id,
+            type: "next"
+        };
+        const hasNextPage = await this.repo.getAll(cFilter, limit || 50, result[result.length - 1]).then(res => res.length > 0);
 
-        // const previousSearchParams = new URLSearchParams({
-        //     ...searchParams,
-        //     pageToken: generatePageToken(previousPageToken)
-        // });
+        const nextSearchParams = new URLSearchParams({
+            ...searchParams,
+            pageToken: generatePageToken(nextPageToken)
+        });
 
-        // // Generate urls
-        // const nextUrl = `${req.nextUrl.origin}/${req.nextUrl.pathname}?${nextSearchParams.toString()}`;
-        // const previousUrl = `${req.nextUrl.origin}/${req.nextUrl.pathname}?${previousSearchParams.toString()}`;
+        const hasPreviousPage = await this.repo.getAll(cFilter, limit ? -limit : -50, result[0]).then(res => res.length > 0);
+        const previousPageToken: PageToken = {
+            id: first.id,
+            type: "previous"
+        };
 
-        // await this.logger.info("Accounts found");
-        // return Response.ok("Accounts found", {
-        //     result,
-        //     meta: {
-        //         hasNextPage,
-        //         hasPreviousPage,
-        //         previousPageUrl: hasPreviousPage ? previousUrl : undefined,
-        //         nextPageUrl: hasNextPage ? nextUrl : undefined,
-        //     },
-        // });
+        const previousSearchParams = new URLSearchParams({
+            ...searchParams,
+            pageToken: generatePageToken(previousPageToken)
+        });
+
+        // Generate urls
+        const nextUrl = `${req.nextUrl.origin}/${req.nextUrl.pathname}?${nextSearchParams.toString()}`;
+        const previousUrl = `${req.nextUrl.origin}/${req.nextUrl.pathname}?${previousSearchParams.toString()}`;
+
+        await this.logger.info("Products found");
+        return Response.ok("Products found", {
+            result,
+            meta: {
+                hasNextPage,
+                hasPreviousPage,
+                previousPageUrl: hasPreviousPage ? previousUrl : undefined,
+                nextPageUrl: hasNextPage ? nextUrl : undefined,
+            },
+        });
     }
 
     @AllowMethod("GET")
@@ -97,7 +104,6 @@ export default class ProductsController {
     };
 
     @AllowMethod("POST")
-    @AllowPermitted
     @CheckBody
     async createProduct(req: NextRequest) {
         const body = await req.json();
@@ -112,7 +118,6 @@ export default class ProductsController {
     }
 
     @AllowMethod("PUT")
-    @AllowPermitted
     @CheckBody
     async updateProduct(req: NextRequest, params: { id: string }) {
         const { id } = params;
@@ -161,7 +166,6 @@ export default class ProductsController {
     }
 
     @AllowMethod("DELETE")
-    @AllowPermitted
     public async deleteVariant(_req: NextRequest, params: { id: string, variantId: string }) {
         const { id, variantId } = params;
 
@@ -191,7 +195,6 @@ export default class ProductsController {
     }
 
     @AllowMethod("DELETE")
-    @AllowPermitted
     public async deleteCategory(_req: NextRequest, params: { id: string, categoryId: string }) {
         const { id, categoryId } = params;
 
