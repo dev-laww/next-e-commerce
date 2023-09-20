@@ -122,26 +122,4 @@ export default class RoleRepository {
             return rest as User;
         }));
     }
-
-    public async addUser(id: number, userId: number): Promise<User> {
-        return this.prismaClient.user.update({
-            where: { id: userId },
-            data: {
-                roles: {
-                    connect: { id: id }
-                }
-            }
-        }).then(({ created_at, updated_at, password, ...rest }) => rest as User);
-    }
-
-    public async removeUser(id: number, userId: number): Promise<User> {
-        return this.prismaClient.user.update({
-            where: { id: userId },
-            data: {
-                roles: {
-                    disconnect: { id: id }
-                }
-            }
-        }).then(({ created_at, updated_at, password, ...rest }) => rest as User);
-    }
 }
