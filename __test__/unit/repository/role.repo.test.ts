@@ -85,7 +85,8 @@ describe("RoleRepository", () => {
     });
 
     it("Test removeRolePermission", async () => {
-        (prisma.role.update as jest.Mock).mockResolvedValueOnce({permissions: [{ permission }]});
+        (prisma.rolePermission.findFirst as jest.Mock).mockResolvedValueOnce({});
+        (prisma.rolePermission.delete as jest.Mock).mockResolvedValueOnce({ permission });
 
         const result = await repo.removePermission(1, 1);
 

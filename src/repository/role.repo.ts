@@ -69,7 +69,7 @@ export default class RoleRepository {
             where: { id: id },
             data: {
                 permissions: {
-                    connect: { permission_id: permissionId }
+                    connect: { id: permissionId }
                 }
             },
             select: {
@@ -87,29 +87,26 @@ export default class RoleRepository {
         })
     }
 
-    public async removePermission(id: number, permissionId: number): Promise<Permission> {
-        return this.prismaClient.role.update({
+    public async removePermission(id: number, permissionId: number): Promise<Permission | null> {
+        const rolePermission = await this.prismaClient.rolePermission.findFirst({
             where: {
-                id: id
-            },
-            data: {
-                permissions: {
-                    disconnect: { permission_id: permissionId },
-                }
-            },
-            select: {
-                permissions: {
-                    where: { permission_id: permissionId },
-                    select: {
-                        permission: true
-                    }
-                }
+                role_id: id,
+                permission_id: permissionId
             }
-        }).then(role => {
-            const { created_at, updated_at, ...rest } = role.permissions[0].permission;
+        });
+
+        if (!rolePermission) return null;
+
+        return this.prismaClient.rolePermission.delete({
+            where: { id: rolePermission.id },
+            select: {
+                permission: true
+            }
+        }).then(({ permission }) => {
+            const { created_at, updated_at, ...rest } = permission;
 
             return rest as Permission;
-        })
+        });
     }
 
     public async getUsers(id: number): Promise<User[]> {
