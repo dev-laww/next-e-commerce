@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:postgresql://localhost:5432/next-e-commerce</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="verceldb@ep-hidden-rice-61404687-pooler.ap-southeast-1.postgres.vercel-storage.com" uuid="9dcdd088-b20b-46e5-a7c6-24bcf9095528">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://ep-hidden-rice-61404687-pooler.ap-southeast-1.postgres.vercel-storage.com:5432/verceldb</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
