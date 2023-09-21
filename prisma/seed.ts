@@ -39,17 +39,22 @@ async function main() {
         const func = seedMap[entityName];
 
         if (!func) {
-            console.log(`Invalid entity name: ${entityName}`);
-            return;
+            console.info(`Invalid entity name: ${entityName}`);
+            continue;
         }
 
-        const entity = await func.findMany({
-            take: 1
-        });
+        for (const seeder of seeders[entityName]) {
+            const existing = await func.findUnique({ where: { id: seeder.id } });
 
-        if (entity.length === 1) return;
+            if (existing) {
+                console.debug(`Skipping existing ${entityName} with id: ${seeder.id}`);
+                continue;
+            }
 
-        await func.createMany({ data: seeders[entityName] });
+            await func.create({
+                data: seeder
+            });
+        }
     }
 }
 
