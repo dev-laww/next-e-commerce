@@ -106,7 +106,7 @@ export default class RolesController {
 
         const data = Validators.create.safeParse(body);
 
-        if (!data.success) return Response.badRequest("Invalid data", data.error);
+        if (!data.success) return Response.validationError(data.error.errors, "Invalid data");
 
         const result = await this.repo.create(data.data);
 
@@ -156,9 +156,13 @@ export default class RolesController {
 
         const { id } = params;
 
+        const role = await this.repo.getById(Number(id) || 0);
+
+        if (!role) return Response.notFound("Role not found");
+
         const result = await this.repo.getPermissions(Number(id) || 0);
 
-        if (!result.length) return Response.notFound("Role not found");
+        if (!result.length) return Response.notFound("Permissions not found");
 
         await this.logger.info(`User ${session.id} fetched role ${id} permissions`)
         return Response.ok("Role permissions found", result);
