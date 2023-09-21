@@ -3,6 +3,15 @@ import {{pascalCase name}}Controller from "@controller/{{camelCase name}}.contro
 
 
 describe("{{pascalCase name}}Controller", () => {
-    it.todo("write tests");
+    let controller: {{pascalCase name}}Controller;
+    let req: NextRequest;
+
+    beforeEach(() => {
+        controller = new {{pascalCase name}}Controller();
+    });
+
+    describe("Test method", () => {
+        it.todo("write test");
+    });
 });
 
