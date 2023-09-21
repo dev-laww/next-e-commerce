@@ -20,7 +20,7 @@ export default class ProductVariantRepository {
         });
     }
 
-    public async create(data: Prisma.ProductVariantCreateInput): Promise<ProductVariant> {
+    public async create(data: Prisma.ProductVariantCreateInput | ProductVariant): Promise<ProductVariant> {
         return this.prismaClient.productVariant.create({
             data: data
         });
