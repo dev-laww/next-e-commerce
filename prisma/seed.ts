@@ -1,12 +1,24 @@
+import humps from "humps";
+import pino from 'pino';
+import pretty from "pino-pretty";
 import { PrismaClient } from '@prisma/client';
 
 import seeders from './seeders';
 
 const prisma = new PrismaClient()
 
+const stream = pretty({
+    colorize: true,
+    ignore: "hostname,pid",
+    translateTime: "SYS:standard"
+})
+const logger = pino({ level: 'info', name: 'Seeder' }, stream);
+
 interface SeedMap {
     [key: string]: any;
 }
+
+const env = process.env.NODE_ENV || 'development';
 
 const seedMap: SeedMap = {
     'addresses': prisma.address,
@@ -32,22 +44,30 @@ const seedMap: SeedMap = {
 }
 
 async function main() {
-    console.log('Start seeding ...')
+    logger.info('Start seeding ...')
+    Object.keys(seeders).filter(entityName => {
+        if (!env || env.trim() !== 'production') return false;
+
+        return !['users', 'roles', 'permissions', 'rolePermissions'].includes(entityName);
+    }).forEach(entityName => delete seeders[entityName]);
 
     for (const entityName in seeders) {
 
         const func = seedMap[entityName];
+        const entity = humps.decamelize(entityName).replace(/_/g, " ");
 
         if (!func) {
-            console.info(`Invalid entity name: ${entityName}`);
+            logger.info(`Invalid entity name: ${entityName}`);
             continue;
         }
+
+        logger.info(`Seeding [${entity}]`);
 
         for (const seeder of seeders[entityName]) {
             const existing = await func.findUnique({ where: { id: seeder.id } });
 
             if (existing) {
-                console.debug(`Skipping existing ${entityName} with id: ${seeder.id}`);
+                logger.debug(`Skipping existing [${entity}] with id: ${seeder.id}`);
                 continue;
             }
 
@@ -55,17 +75,19 @@ async function main() {
                 data: seeder
             });
         }
+
+        logger.info(`Seeded [${entity}]`);
     }
 }
 
 main()
     .then(async () => {
-        console.info('Seeding done.')
+        logger.info(`Seeding for ${env} environment completed`);
         await prisma.$disconnect()
     })
-    .catch(async (e) => {
+    .catch(async e => {
         await prisma.$disconnect()
-        console.error(e)
+        logger.error(e)
         process.exit(1)
     })
 
