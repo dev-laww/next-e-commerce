@@ -34,7 +34,7 @@
     "prisma:seed:dev": "dotenv -e .env.development.local -- prisma db seed",
     "prisma:studio": "dotenv -e .env.development.local prisma studio",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "storybook:build": "storybook build"
   },
   "dependencies": {
     "@prisma/client": "^5.2.0",
