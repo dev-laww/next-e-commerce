@@ -32,6 +32,12 @@ export default class ReviewRepository {
         });
     }
 
+    public async getVariantReviews(variantId: number): Promise<Review[]> {
+        return this.prismaClient.review.findMany({
+            where: { variant_id: variantId },
+        });
+    }
+
     public async create(data: Prisma.ReviewCreateInput | Review): Promise<Review> {
         return this.prismaClient.review.create({
             data: data
@@ -60,6 +66,12 @@ export default class ReviewRepository {
     public async deleteUserReviews(userId: number): Promise<Prisma.BatchPayload> {
         return this.prismaClient.review.deleteMany({
             where: { user_id: userId }
+        });
+    }
+
+    public async deleteVariantReviews(variantId: number): Promise<Prisma.BatchPayload> {
+        return this.prismaClient.review.deleteMany({
+            where: { variant_id: variantId }
         });
     }
 }
