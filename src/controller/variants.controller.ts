@@ -37,6 +37,7 @@ export default class VariantsController {
         const pageSize = isPrevious ? -limit : limit;
 
         // Fetch the addresses
+        filter = humps.decamelizeKeys(filter);
         const result = await Repository.productVariant.getAll(filter, pageSize, parsedPageToken?.cursor as ProductVariant);
 
         if (!result.length) return Response.notFound("No account found");
@@ -78,7 +79,7 @@ export default class VariantsController {
         };
 
         await this.logger.info(`Retrieved ${result.length} variants`);
-        return Response.ok("Accounts found", {
+        return Response.ok("Variants found", {
             result,
             meta,
         });
@@ -247,7 +248,7 @@ export default class VariantsController {
 
         const result = await Repository.review.delete(Number(reviewId) || 0);
 
-        await this.logger.info(result, `User ${session.id} updated review ${result.id}`, true)
-        return Response.ok("Review updated", result);
+        await this.logger.info(result, `User ${session.id} deleted review ${result.id}`, true)
+        return Response.ok("Review deleted", result);
     }
 }
