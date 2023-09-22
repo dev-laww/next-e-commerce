@@ -19,38 +19,51 @@ namespace Validators {
         imageUrl: z.string({required_error: "Image is required"})
             .url(),
         productId: z.number({required_error: "Product ID is required"})
-            .positive(),
+            .positive("Must be positive"),
         price: z.number({required_error: "Price is required"})
-            .positive(),
+            .positive("Must be positive"),
         rawPrice: z.number({required_error: "Raw price is required"})
-            .positive(),
+            .positive("Must be positive"),
         stock: z.number({required_error: "Quantity is required"})
-            .positive(),
+            .positive("Must be positive"),
         name: z.string({required_error: "Name is required"})
             .min(3, "Name must be at least 3 characters long")
             .max(50, "Name must not exceed 255 characters"),
     });
 
     export const update = z.object({
-        imageUrl: z.string({required_error: "Image is required"})
+        imageUrl: z.string()
             .url()
             .optional(),
-        productId: z.number({required_error: "Product ID is required"})
-            .positive()
+        price: z.number()
+            .positive("Price must be positive")
             .optional(),
-        price: z.number({required_error: "Price is required"})
-            .positive()
+        rawPrice: z.number()
+            .positive("Raw price must be positive")
             .optional(),
-        rawPrice: z.number({required_error: "Raw price is required"})
-            .positive()
+        stock: z.number()
+            .positive("stock must be positive")
             .optional(),
-        stock: z.number({required_error: "Quantity is required"})
-            .positive()
-            .optional(),
-        name: z.string({required_error: "Name is required"})
+        name: z.string()
             .min(3, "Name must be at least 3 characters long")
             .max(50, "Name must not exceed 255 characters")
             .optional(),
+    });
+
+    export const createReview = z.object({
+        rating: z.number({required_error: "Rating is required"})
+            .positive("Must be positive")
+            .max(5, "Rating must be at most 5"),
+        comment: z.string({required_error: "Comment is required"})
+    });
+
+    export const updateReview = z.object({
+        rating: z.number()
+            .positive("Must be positive")
+            .max(5, "Rating must be at most 5")
+            .optional(),
+        comment: z.string()
+            .optional()
     });
 }
 

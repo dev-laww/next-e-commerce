@@ -6,7 +6,7 @@ import { AllowPermitted, CheckBody, CheckError } from "@utils/decorator";
 import Repository from "@src/repository";
 import { getDatabaseLogger } from "@utils/logging";
 import { generatePageToken, parsePageToken } from "@utils/token";
-import { ProductVariant } from "@prisma/client";
+import { ProductVariant, Review } from "@prisma/client";
 import { PageToken } from "@lib/types";
 import humps from "humps";
 
@@ -87,9 +87,7 @@ export default class VariantsController {
     @CheckBody
     public async createVariant(req: NextRequest) {
         const session = await getSession(req);
-
         const body = await req.json();
-
         const data = Validators.create.safeParse(body);
 
         if (!data.success) return Response.validationError(data.error.errors, "Invalid data");
@@ -103,9 +101,8 @@ export default class VariantsController {
         return Response.created("Variant created", result);
     }
 
-    public async getVariant(req: NextRequest, params: { id: string }) {
+    public async getVariant(_req: NextRequest, params: { id: string }) {
         const { id } = params;
-
         const result = await this.repo.getById(Number(id) || 0);
 
         if (!result) return Response.notFound("Variant not found");
@@ -117,9 +114,7 @@ export default class VariantsController {
     @CheckBody
     public async updateVariant(req: NextRequest, params: { id: string }) {
         const { id } = params;
-
         const session = await getSession(req);
-
         const body = await req.json();
 
         let result = await this.repo.getById(Number(id));
@@ -138,16 +133,108 @@ export default class VariantsController {
 
     public async deleteVariant(req: NextRequest, params: { id: string }) {
         const session = await getSession(req);
-
         const { id } = params;
-
         let result = await this.repo.getById(Number(id) || 0);
 
         if (!result) return Response.notFound("Variant not found");
 
         result = await this.repo.delete(result.id);
 
-        await this.logger.info(result,`User ${session.id} deleted variant ${result.id}`, true);
+        await this.logger.info(result, `User ${session.id} deleted variant ${result.id}`, true);
         return Response.ok("Variant deleted", result);
+    }
+
+    public async getReviews(_req: NextRequest, params: { id: string }) {
+        const { id } = params;
+        const result = await Repository.review.getVariantReviews(Number(id) || 0);
+
+        if (!result.length) return Response.notFound("Variant not found");
+
+        await this.logger.info(`Retrieved reviews for variant ${id}`);
+        return Response.ok("Reviews found", result);
+    }
+
+    public async getReview(_req: NextRequest, params: { id: string, reviewId: string }) {
+        const { id, reviewId } = params;
+        const variant = await this.repo.getById(Number(id) || 0);
+
+        if (!variant) return Response.notFound("Variant not found");
+
+        const result = await Repository.review.getById(Number(reviewId) || 0);
+
+        if (!result) return Response.notFound("Review not found");
+
+        await this.logger.info(`Retrieved review ${result.id} for variant ${variant.id}`);
+        return Response.ok("Review found", result);
+    }
+
+    @CheckBody
+    public async createReview(req: NextRequest, params: { id: string }) {
+        const { id } = params;
+        const session = await getSession(req);
+        const body = await req.json();
+
+        const variant = await this.repo.getById(Number(id) || 0);
+
+        if (!variant) return Response.notFound("Variant not found");
+
+        const data = Validators.createReview.safeParse(body);
+
+        if (!data.success) return Response.validationError(data.error.errors, "Invalid data");
+
+        const result = await Repository.review.create(humps.decamelizeKeys({
+            ...data.data,
+            variantId: variant.id,
+            userId: session.id,
+            productId: variant.product_id,
+        }) as Review);
+
+        await this.logger.info(result, `User ${session.id} created review ${result.id}`, true)
+        return Response.created("Review created", result);
+    }
+
+    @CheckBody
+    public async updateReview(req: NextRequest, params: { id: string, reviewId: string }) {
+        const { id, reviewId } = params;
+        const session = await getSession(req);
+        const body = await req.json();
+        const variant = await this.repo.getById(Number(id) || 0);
+
+        if (!variant) return Response.notFound("Variant not found");
+
+        const review = await Repository.review.getById(Number(reviewId) || 0);
+
+        if (!review) return Response.notFound("Review not found");
+
+        const data = Validators.updateReview.safeParse(body);
+
+        if (!data.success) return Response.validationError(data.error.errors, "Invalid data");
+
+        const result = await Repository.review.update(Number(reviewId) || 0, humps.decamelizeKeys(data.data) as Review);
+
+        await this.logger.info(result, `User ${session.id} updated review ${result.id}`, true)
+        return Response.ok("Review updated", result);
+    }
+
+    public async deleteReview(req: NextRequest, params: { id: string, reviewId: string }) {
+        const { id, reviewId } = params;
+        const session = await getSession(req);
+        const body = await req.json();
+        const variant = await this.repo.getById(Number(id) || 0);
+
+        if (!variant) return Response.notFound("Variant not found");
+
+        const review = await Repository.review.getById(Number(reviewId) || 0);
+
+        if (!review) return Response.notFound("Review not found");
+
+        const data = Validators.updateReview.safeParse(body);
+
+        if (!data.success) return Response.validationError(data.error.errors, "Invalid data");
+
+        const result = await Repository.review.delete(Number(reviewId) || 0);
+
+        await this.logger.info(result, `User ${session.id} updated review ${result.id}`, true)
+        return Response.ok("Review updated", result);
     }
 }
