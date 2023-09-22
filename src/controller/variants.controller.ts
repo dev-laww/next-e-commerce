@@ -146,12 +146,30 @@ export default class VariantsController {
 
     public async getReviews(_req: NextRequest, params: { id: string }) {
         const { id } = params;
-        const result = await Repository.review.getVariantReviews(Number(id) || 0);
+
+        const variant = await this.repo.getById(Number(id) || 0);
+
+        if (!variant) return Response.notFound("Variant not found");
+
+        const result = await Repository.review.getVariantReviews(variant.id);
 
         if (!result.length) return Response.notFound("Variant not found");
 
         await this.logger.info(`Retrieved reviews for variant ${id}`);
         return Response.ok("Reviews found", result);
+    }
+
+    public async deleteReviews(req: NextRequest, params: { id: string }) {
+        const session = await getSession(req);
+        const { id } = params;
+        const variant = await this.repo.getById(Number(id) || 0);
+
+        if (!variant) return Response.notFound("Variant not found");
+
+        const result = await Repository.review.deleteVariantReviews(variant.id);
+
+        await this.logger.info(`User ${session.id} deleted reviews for variant ${variant.id}`, undefined,true);
+        return Response.ok(`${result.count} review${result.count > 1 ? "s" : ""} deleted successfully`);
     }
 
     public async getReview(_req: NextRequest, params: { id: string, reviewId: string }) {
@@ -219,7 +237,6 @@ export default class VariantsController {
     public async deleteReview(req: NextRequest, params: { id: string, reviewId: string }) {
         const { id, reviewId } = params;
         const session = await getSession(req);
-        const body = await req.json();
         const variant = await this.repo.getById(Number(id) || 0);
 
         if (!variant) return Response.notFound("Variant not found");
@@ -227,10 +244,6 @@ export default class VariantsController {
         const review = await Repository.review.getById(Number(reviewId) || 0);
 
         if (!review) return Response.notFound("Review not found");
-
-        const data = Validators.updateReview.safeParse(body);
-
-        if (!data.success) return Response.validationError(data.error.errors, "Invalid data");
 
         const result = await Repository.review.delete(Number(reviewId) || 0);
 
