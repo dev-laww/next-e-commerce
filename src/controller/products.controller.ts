@@ -5,6 +5,7 @@ import humps from 'humps';
 import Validators from "@lib/validator/products.validator";
 import Response from "@lib/http";
 import ProductRepository from "@src/repository/product.repo";
+import CategoryRepository from "@src/repository/category.repo";
 import { getDatabaseLogger } from "@src/lib/utils/logging";
 import { PageToken } from "@src/lib/types";
 import { generatePageToken, parsePageToken } from "@src/lib/utils/token";
@@ -15,7 +16,9 @@ import { CheckError, CheckBody, AllowMethod, AllowPermitted } from "@utils/decor
 export default class ProductsController {
     private logger = getDatabaseLogger({ name: "controller:products", class: "ProductsController" })
     repo = new ProductRepository()
+    categoryRepo = new CategoryRepository()
 
+    @AllowMethod("GET")
     public async getProducts(req: NextRequest) {
         const searchParams = Object.fromEntries(req.nextUrl.searchParams);
 
@@ -142,11 +145,11 @@ export default class ProductsController {
     public async deleteProduct(_req: NextRequest, params: { id: string }) {
         const { id } = params;
 
-        const account = await this.repo.getById(parseInt(id, 10) || 0);
+        const product = await this.repo.getById(parseInt(id, 10) || 0);
 
-        if (!account) return Response.notFound("Product not found");
+        if (!product) return Response.notFound("Product not found");
 
-        const deletedProduct = await this.repo.delete(account.id);
+        const deletedProduct = await this.repo.delete(product.id);
 
         await this.logger.info(deletedProduct, `Product [${id}] deleted`, true);
         return Response.ok("Product delete successful", deletedProduct);
@@ -161,6 +164,8 @@ export default class ProductsController {
         if (!product) return Response.notFound("Product not found");
 
         const variants = await this.repo.getVariants(product.id);
+
+        if (!variants.length) return Response.notFound("Product variants not found");
 
         return Response.ok("Product variants found", variants);  // idk if we need to check the length, we should just return the result as is, empty or not
     }
@@ -192,6 +197,23 @@ export default class ProductsController {
         const categories = await this.repo.getCategories(product.id);
 
         return Response.ok("Product categories found", categories);
+    }
+
+    @AllowMethod("POST")
+    public async addCategory(_req: NextRequest, params: { id: string, categoryId: string }) {
+        const { id, categoryId } = params;
+
+        const product = await this.repo.getById(parseInt(id, 10) || 0);
+
+        if (!product) return Response.notFound("Product not found")
+
+        const category = await this.categoryRepo.getById(parseInt(categoryId, 10) || 0);
+
+        if (!category) return Response.notFound("Category not found")
+
+        const productCategory = await this.repo.addCategory(product.id, category.id);
+
+        return Response.ok("Category added to product", productCategory);
     }
 
     @AllowMethod("DELETE")

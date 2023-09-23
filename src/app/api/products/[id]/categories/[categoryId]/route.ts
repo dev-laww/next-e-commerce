@@ -12,11 +12,16 @@ async function handler(req: NextRequest, { params }: { params: { id: string, cat
     const method = req.method
     let statusCode, response, success;
 
-    switch (method) {  // needs insert category
+    switch (method) {
+        case "POST":
+            ({ statusCode, response } = await controller.addCategory(req, params));
+            success = statusCode == STATUS_CODE.OK;
+            logger.info(success ? response.message : response, success ? undefined : `Add product category failed: ${response.message}`);
+            break;
         case "DELETE":
             ({ statusCode, response } = await controller.deleteCategory(req, params));
             success = statusCode == STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Delete product categories failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Delete product category failed: ${response.message}`);
             break;
         default:
             ({ statusCode, response } = Response.methodNotAllowed);

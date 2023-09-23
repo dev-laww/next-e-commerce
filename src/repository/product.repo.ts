@@ -64,6 +64,20 @@ export default class ProductRepository {
         return product ? product.categories.map(({ created_at, updated_at, ...rest }) => rest as ProductCategory) : []
     }
 
+    public async addCategory(id: number, categoryId: number): Promise<Product> {
+        const product = await this.prismaClient.productCategory.create({
+            data: {
+                product_id: id,
+                category_id: categoryId
+            },
+            select: {
+                product: true
+            }
+        });
+
+        return product.product;
+    }
+
     public async deleteCategory(product_id: number, id: number): Promise<ProductCategory> {
         return this.prismaClient.productCategory.delete({
             where: { product_id: product_id, id: id }
