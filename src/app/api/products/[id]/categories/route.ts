@@ -1,7 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 
 import ProductsController from "@src/controller/products.controller";
-import Response from "@src/lib/http";
 import { getLogger } from "@utils/logging";
 import { STATUS_CODE } from "@lib/constants";
 
