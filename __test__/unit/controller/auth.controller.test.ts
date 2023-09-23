@@ -7,7 +7,6 @@ import Email from "@utils/email";
 import { generateRefreshToken } from "@utils/token";
 import { UserSession } from "@lib/types";
 
-jest.mock("@repository/user.repo", () => require("@mocks/repository/user.repo.mock"));
 
 describe("Auth Controller", () => {
     let controller: AuthController;

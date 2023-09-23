@@ -73,9 +73,6 @@ export default class PermissionRepository {
         const rolesToAdd = roles.filter(role => !permissionRoles.includes(role));
         const rolesToRemove = permissionRoles.filter(role => !roles.includes(role));
 
-        console.log(rolesToAdd)
-        console.log(rolesToRemove)
-
         const permission = await this.prismaClient.permission.update({
             where: { id: id },
             data: {

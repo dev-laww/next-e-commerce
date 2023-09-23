@@ -1,7 +1,6 @@
 import pino from 'pino';
 import pretty from 'pino-pretty';
-
-import LogRepository from "@repository/log.repo";
+import Repository from "@src/repository";
 
 
 const environment = new Map<string, string>(Object.entries({
@@ -35,7 +34,7 @@ interface LoggerArgs {
  * @param args
  */
 export const getDatabaseLogger = (args: LoggerArgs) => {
-    const logRepo = new LogRepository();
+    const logRepo = Repository.log;
     const childLogger = logger.child(args);
 
     return {
