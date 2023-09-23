@@ -1,0 +1,39 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
+{
+    "name": "Next E-Commerce",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "app",
+    "workspaceMount": "source=.,target=/workspace,type=bind,consistency=delegated",
+    "workspaceFolder": "/workspace",
+    "features": {
+        "git": "latest"
+    },
+
+    // Features to add to the dev container. More info: https://containers.dev/features.
+    // "features": {},
+
+    // Use 'forwardPorts' to make a list of ports inside the container available locally.
+    "forwardPorts": [3000, 5432, 5555],
+    
+    // Configure tool-specific properties.
+    "customizations": {
+        // Configure properties specific to VS Code.
+        "vscode": {
+            // Set *default* container specific settings.json values on container create.
+            "settings": {
+                "editor.defaultFormatter": "esbenp.prettier-vscode",
+                "editor.formatOnSave": true
+            },
+            "extensions": [
+                "github.copilot",
+                "GitHub.vscode-pull-request-github",
+                "esbenp.prettier-vscode",
+                "dbaeumer.vscode-eslint"
+            ]
+        }
+    },
+
+    // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+    "remoteUser": "root"
+}
