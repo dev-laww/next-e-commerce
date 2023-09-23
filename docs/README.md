@@ -24,6 +24,7 @@ to learn more about TypeScript and how to use it with Next.js.
 - [x] Code formatting
 - [x] CI/CD
 - [x] Rest API
+- [x] React storybook
 
 ## Scripts
 
@@ -49,11 +50,11 @@ to learn more about TypeScript and how to use it with Next.js.
 
 ## TODO
 - [ ] Add prettier
-- [ ] Add react storybook
 - [ ] Implement GraphQL api (Apollo)
 - [ ] Docker integration
 - [ ] Responsive design
 - [ ] Notifications
+- [ ] Improve test coverage
 
 ## NOTES
 - After installing dependencies, it will automatically install husky git hooks to ensure the code format.

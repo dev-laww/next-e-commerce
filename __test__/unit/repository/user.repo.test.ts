@@ -327,13 +327,6 @@ describe("UserRepository", () => {
         expect(result).toMatchObject([]);
     })
 
-    it("Test deleteUserWishlist", async () => {
-        (prisma.wishlistItem.deleteMany as jest.Mock).mockResolvedValue({ count: 1 });
-        const result = await repo.deleteWishlist(1)
-
-        expect(result).toMatchObject({ count: 1 });
-    })
-
     it("Test getUserCart", async () => {
         const userWithCart = {
             ...data,

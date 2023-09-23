@@ -1436,9 +1436,6 @@ List of all API endpoints.
     - **Users**
         - Format: `REQ /roles/:id/users`
             - `GET`: Get a list of all users for a specific role.
-        - Format: `REQ /roles/:id/users/:id`
-            - `POST`: Link a specific user to a specific role.
-            - `DELETE`: Unlink a specific user from a specific role.
 
 ## Permissions
 

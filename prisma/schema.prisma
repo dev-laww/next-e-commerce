@@ -142,6 +142,7 @@ model ProductVariant {
   name       String
   image_url  String
   stock      Int
+  sold       Int         @default(0)
   price      Float
   raw_price  Float
   created_at DateTime    @default(now())

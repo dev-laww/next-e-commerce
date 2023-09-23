@@ -27,7 +27,7 @@ const rolePermissions = [
     {
         id: 1005,
         role_id: 1000,
-        permission_id: 1003
+        permission_id: 1002
     },
     {
         id: 1006,
@@ -563,6 +563,21 @@ const rolePermissions = [
         id: 1112,
         role_id: 1001,
         permission_id: 1071
+    },
+    {
+        id: 1113,
+        role_id: 1002,
+        permission_id: 1052
+    },
+    {
+        id: 1114,
+        role_id: 1002,
+        permission_id: 1054
+    },
+    {
+        id: 1115,
+        role_id: 1002,
+        permission_id: 1055
     }
 ];
 
