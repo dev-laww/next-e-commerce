@@ -39,7 +39,6 @@ export default class ProductsController {
         const token = parsePageToken(pageToken || "");
 
         if (pageToken) {
-
             if (!token) return Response.badRequest("Invalid page token");
 
             const { type: tokenType, ...cursorData } = token;
@@ -51,7 +50,7 @@ export default class ProductsController {
         const previous = type === "previous";
         let result = await this.repo.getAll(cFilter, previous ? -limit : limit, token?.cursor as Product);
 
-        if (result.length === 0) return Response.notFound("No products found");
+        if (!result.length) return Response.notFound("No products found");
 
         // Parsing page tokens
         const last = result[result.length - 1];
