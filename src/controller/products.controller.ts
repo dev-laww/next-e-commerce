@@ -4,8 +4,7 @@ import humps from 'humps';
 
 import Validators from "@lib/validator/products.validator";
 import Response from "@lib/http";
-import ProductRepository from "@src/repository/product.repo";
-import CategoryRepository from "@src/repository/category.repo";
+import Repository from "@src/repository";
 import { getDatabaseLogger } from "@src/lib/utils/logging";
 import { PageToken } from "@src/lib/types";
 import { generatePageToken, parsePageToken } from "@src/lib/utils/token";
@@ -15,8 +14,8 @@ import { CheckError, CheckBody, AllowMethod, AllowPermitted } from "@utils/decor
 @CheckError
 export default class ProductsController {
     private logger = getDatabaseLogger({ name: "controller:products", class: "ProductsController" })
-    repo = new ProductRepository()
-    categoryRepo = new CategoryRepository()
+    repo = Repository.product;
+    categoryRepo = Repository.category;
 
     @AllowMethod("GET")
     public async getProducts(req: NextRequest) {
