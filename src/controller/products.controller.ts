@@ -142,7 +142,7 @@ export default class ProductsController {
         return Response.ok("Product update successful", updatedProduct);
     }
 
-    @AllowMethod("GET")
+    @AllowMethod("DELETE")
     public async deleteProduct(_req: NextRequest, params: { id: string }) {
         const { id } = params;
 
