@@ -19,7 +19,7 @@ const create = z.object({
         .min(3, "Product name must be atleast 3 characters")
         .max(50, "Product name must be at most 50 characters"),
     description: z.string({ required_error: "Product name is required" })
-        .min(15, "Product description must be atleast 10 characters")
+        .min(15, "Product description must be atleast 15 characters")
         .max(2000, "Product description must be at most 2000 characters"),
 });
 
@@ -29,7 +29,7 @@ const update = z.object({
         .max(50, "Product name must be at most 50 characters")
         .optional(),
     description: z.string({ required_error: "Product name is required" })
-        .min(15, "Product description must be atleast 10 characters")
+        .min(15, "Product description must be atleast 15 characters")
         .max(2000, "Product description must be at most 2000 characters")
         .optional(),
 });
