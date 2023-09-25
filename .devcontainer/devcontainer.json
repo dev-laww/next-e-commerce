@@ -1,21 +1,25 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
-// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
+// README at: https://github.com/devcontainers/templates/tree/main/src/javascript-node-postgres
 {
     "name": "Next E-Commerce",
     "dockerComposeFile": "docker-compose.yml",
     "service": "app",
     "workspaceMount": "source=.,target=/workspace,type=bind,consistency=delegated",
     "workspaceFolder": "/workspace",
-    "features": {
-        "git": "latest"
-    },
 
     // Features to add to the dev container. More info: https://containers.dev/features.
-    // "features": {},
+    "features": {
+        "ghcr.io/devcontainers/features/git:1": {},
+        "ghcr.io/frntn/devcontainers-features/postman:1": {},
+    },
 
     // Use 'forwardPorts' to make a list of ports inside the container available locally.
+    // This can be used to network with other containers or with the host.
     "forwardPorts": [3000, 5432, 5555],
-    
+
+    // Use 'postCreateCommand' to run commands after the container is created.
+    // "postCreateCommand": "yarn install",
+
     // Configure tool-specific properties.
     "customizations": {
         // Configure properties specific to VS Code.
@@ -29,7 +33,8 @@
                 "github.copilot",
                 "GitHub.vscode-pull-request-github",
                 "esbenp.prettier-vscode",
-                "dbaeumer.vscode-eslint"
+                "dbaeumer.vscode-eslint",
+                "cweijan.vscode-database-client2"
             ]
         }
     },
