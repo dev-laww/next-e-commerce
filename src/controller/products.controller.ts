@@ -4,8 +4,7 @@ import humps from 'humps';
 
 import Validators from "@lib/validator/products.validator";
 import Response from "@lib/http";
-import ProductRepository from "@src/repository/product.repo";
-import CategoryRepository from "@src/repository/category.repo";
+import Repository from "@src/repository";
 import { getDatabaseLogger } from "@src/lib/utils/logging";
 import { PageToken } from "@src/lib/types";
 import { generatePageToken, parsePageToken } from "@src/lib/utils/token";
@@ -15,8 +14,8 @@ import { CheckError, CheckBody, AllowMethod, AllowPermitted } from "@utils/decor
 @CheckError
 export default class ProductsController {
     private logger = getDatabaseLogger({ name: "controller:products", class: "ProductsController" })
-    repo = new ProductRepository()
-    categoryRepo = new CategoryRepository()
+    repo = Repository.product;
+    categoryRepo = Repository.category;
 
     @AllowMethod("GET")
     public async getProducts(req: NextRequest) {
@@ -39,7 +38,6 @@ export default class ProductsController {
         const token = parsePageToken(pageToken || "");
 
         if (pageToken) {
-
             if (!token) return Response.badRequest("Invalid page token");
 
             const { type: tokenType, ...cursorData } = token;
@@ -51,7 +49,7 @@ export default class ProductsController {
         const previous = type === "previous";
         let result = await this.repo.getAll(cFilter, previous ? -limit : limit, token?.cursor as Product);
 
-        if (result.length === 0) return Response.notFound("No products found");
+        if (!result.length) return Response.notFound("No products found");
 
         // Parsing page tokens
         const last = result[result.length - 1];
@@ -144,7 +142,7 @@ export default class ProductsController {
         return Response.ok("Product update successful", updatedProduct);
     }
 
-    @AllowMethod("GET")
+    @AllowMethod("DELETE")
     public async deleteProduct(_req: NextRequest, params: { id: string }) {
         const { id } = params;
 

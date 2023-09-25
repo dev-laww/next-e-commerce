@@ -4,17 +4,17 @@ import humps from 'humps';
 
 import Validators from "@lib/validator/category.validator";
 import Response from "@lib/http";
-import CategoryRepository from "@src/repository/category.repo";
 import { PageToken } from "@src/lib/types";
 import { generatePageToken, parsePageToken } from "@src/lib/utils/token";
 import { getDatabaseLogger } from "@src/lib/utils/logging";
 import { CheckError, AllowPermitted, AllowMethod, CheckBody } from "@utils/decorator";
+import Repository from "@src/repository";
 
 @AllowPermitted
 @CheckError
 export default class CategoryController {
     private logger = getDatabaseLogger({ name: "controller:categories", class: "CategoryController" })
-    repo = new CategoryRepository()
+    repo = Repository.category;
 
     @AllowMethod("GET")
     public async getCategories(req: NextRequest) {
@@ -25,24 +25,23 @@ export default class CategoryController {
         let { pageToken, limit, ...filter } = filters;
         limit = limit || 50;
 
-        // Parse page token
-        let cursor: Category | undefined;
+        // Parse page token;
         let type: "next" | "previous" | undefined;
-        const token = parsePageToken(pageToken || "");
 
+        const parsedPageToken = parsePageToken<Category>(pageToken || "");
+
+        let isPrevious;
         if (pageToken) {
-            if (!token) return Response.badRequest("Invalid page token");
+            if (!parsedPageToken) return Response.badRequest("Invalid page token");
 
-            const { type: tokenType, ...cursorData } = token;
-
-            type = tokenType;
+            isPrevious = parsedPageToken.type === "previous";
         }
 
         // If type is previous, make limit negative
         const previous = type === "previous";
-        let result = await this.repo.getAll(filter, previous ? -limit : limit, token?.cursor as Category);
+        let result = await this.repo.getAll(filter, previous ? -limit : limit, parsedPageToken?.cursor as Category);
 
-        if (result.length === 0) return Response.notFound("No categories found");
+        if (!result.length) return Response.notFound("No categories found");
 
         // Parsing page tokens
         const last = result[result.length - 1];
