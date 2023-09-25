@@ -1,6 +1,7 @@
-import { Prisma, Product, ProductCategory, ProductVariant } from "@prisma/client";
+import { Category, Prisma, Product, ProductCategory, ProductVariant } from "@prisma/client";
 
 import prisma from "@src/lib/prisma";
+import categories from "../../prisma/seeders/categories";
 
 
 export default class ProductRepository {
@@ -55,15 +56,19 @@ export default class ProductRepository {
         });
     }
 
-    public async getCategories(id: number): Promise<ProductCategory[]> {
+    public async getCategories(id: number): Promise<Category[]> {
         const product = await this.prismaClient.product.findUnique({
             where: { id: id },
             select: {
-                categories: true
+                categories: {
+                    select: {
+                        category: true
+                    }
+                }
             }
         });
 
-        return product ? product.categories.map(({ created_at, updated_at, ...rest }) => rest as ProductCategory) : []
+        return product ? product.categories.map(category => category.category as Category) : []
     }
 
     public async addCategory(id: number, categoryId: number): Promise<Product> {

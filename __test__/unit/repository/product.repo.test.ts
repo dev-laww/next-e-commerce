@@ -82,7 +82,9 @@ describe("ProductRepository", () => {
 
         (prisma.product.findUnique as jest.Mock).mockResolvedValueOnce({
             categories: [{
-                id: 1,
+                category: {
+                    id: 1,
+                }
             }]
         });
 
