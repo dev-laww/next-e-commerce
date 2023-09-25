@@ -16,3 +16,5 @@ RUN apt-get -qq update && apt-get install -qq -y git curl bash zip \
 
 COPY . .
 RUN npm install
+RUN chmod ug+x .husky/*
+RUN chmod ug+x .git/hooks/*
