@@ -33,5 +33,6 @@ async function handler(req: NextRequest, { params }: { params: { id: string, cat
 
 
 export {
+    handler as POST,
     handler as DELETE
 }
