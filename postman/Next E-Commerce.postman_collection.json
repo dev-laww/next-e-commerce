@@ -6397,6 +6397,1798 @@
 			]
 		},
 		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Variants",
+					"item": [
+						{
+							"name": "Get product variants",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/products/:id/variants",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"products",
+										":id",
+										"variants"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1000"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "200",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/products/:id/variants",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"products",
+												":id",
+												"variants"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "1000"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Tue, 26 Sep 2023 09:12:52 GMT"
+										},
+										{
+											"key": "vary",
+											"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										},
+										{
+											"key": "content-encoding",
+											"value": "gzip"
+										},
+										{
+											"key": "connection",
+											"value": "close"
+										},
+										{
+											"key": "transfer-encoding",
+											"value": "chunked"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"success\",\n    \"message\": \"Product variants found\",\n    \"data\": [\n        {\n            \"id\": 1000,\n            \"product_id\": 1000,\n            \"name\": \"Variant 1\",\n            \"image_url\": \"https://via.placeholder.com/150\",\n            \"stock\": 50,\n            \"sold\": 0,\n            \"price\": 25.99,\n            \"raw_price\": 15\n        },\n        {\n            \"id\": 1001,\n            \"product_id\": 1000,\n            \"name\": \"Variant 2\",\n            \"image_url\": \"https://via.placeholder.com/150\",\n            \"stock\": 100,\n            \"sold\": 0,\n            \"price\": 30.99,\n            \"raw_price\": 20\n        },\n        {\n            \"id\": 1002,\n            \"product_id\": 1000,\n            \"name\": \"Variant 3\",\n            \"image_url\": \"https://via.placeholder.com/150\",\n            \"stock\": 75,\n            \"sold\": 0,\n            \"price\": 35.99,\n            \"raw_price\": 25\n        }\n    ]\n}"
+								}
+							]
+						},
+						{
+							"name": "Create variant",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Test Variant\",\r\n    \"price\": 199.99,\r\n    \"rawPrice\": 150.99,\r\n    \"stock\": 10,\r\n    \"imageUrl\": \"https://via.placeholder.com/150\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/products/:id/variants",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"products",
+										":id",
+										"variants"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1000"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "201",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"Test Variant\",\r\n    \"price\": 199.99,\r\n    \"rawPrice\": 150.99,\r\n    \"stock\": 10,\r\n    \"imageUrl\": \"https://via.placeholder.com/150\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base_url}}/products/:id/variants",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"products",
+												":id",
+												"variants"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "1000"
+												}
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Tue, 26 Sep 2023 09:16:04 GMT"
+										},
+										{
+											"key": "vary",
+											"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										},
+										{
+											"key": "content-encoding",
+											"value": "gzip"
+										},
+										{
+											"key": "connection",
+											"value": "close"
+										},
+										{
+											"key": "transfer-encoding",
+											"value": "chunked"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"success\",\n    \"message\": \"Product variant added\",\n    \"data\": {\n        \"id\": 100000,\n        \"product_id\": 1000,\n        \"name\": \"Test Variant\",\n        \"image_url\": \"https://via.placeholder.com/150\",\n        \"stock\": 10,\n        \"sold\": 0,\n        \"price\": 199.99,\n        \"raw_price\": 150.99,\n        \"created_at\": \"2023-09-26T09:16:04.239Z\",\n        \"updated_at\": \"2023-09-26T09:16:04.239Z\"\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Delete product variants",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/products/:id/variants",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"products",
+										":id",
+										"variants"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1000"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Delete product variants",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/products/:id/variants",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"products",
+												":id",
+												"variants"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "1000"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Tue, 26 Sep 2023 09:21:48 GMT"
+										},
+										{
+											"key": "vary",
+											"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										},
+										{
+											"key": "content-encoding",
+											"value": "gzip"
+										},
+										{
+											"key": "connection",
+											"value": "close"
+										},
+										{
+											"key": "transfer-encoding",
+											"value": "chunked"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"success\",\n    \"message\": \"3 product variants deleted successfully\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Update product variant",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Updated \",\r\n    \"price\": 199.99,\r\n    \"rawPrice\": 150.99,\r\n    \"productId\": 1000,\r\n    \"stock\": 10,\r\n    \"imageUrl\": \"https://via.placeholder.com/250\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/products/:id/variants/:variantId",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"products",
+										":id",
+										"variants",
+										":variantId"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1000"
+										},
+										{
+											"key": "variantId",
+											"value": "1000"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "200",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"Updated \",\r\n    \"price\": 199.99,\r\n    \"rawPrice\": 150.99,\r\n    \"productId\": 1000,\r\n    \"stock\": 10,\r\n    \"imageUrl\": \"https://via.placeholder.com/250\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base_url}}/products/:id/variants/:variantId",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"products",
+												":id",
+												"variants",
+												":variantId"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "1000"
+												},
+												{
+													"key": "variantId",
+													"value": "1000"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Tue, 26 Sep 2023 09:19:30 GMT"
+										},
+										{
+											"key": "vary",
+											"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										},
+										{
+											"key": "content-encoding",
+											"value": "gzip"
+										},
+										{
+											"key": "connection",
+											"value": "close"
+										},
+										{
+											"key": "transfer-encoding",
+											"value": "chunked"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"success\",\n    \"message\": \"Product variant update successful\",\n    \"data\": {\n        \"id\": 1000,\n        \"product_id\": 1000,\n        \"name\": \"Updated \",\n        \"image_url\": \"https://via.placeholder.com/250\",\n        \"stock\": 10,\n        \"sold\": 0,\n        \"price\": 199.99,\n        \"raw_price\": 150.99,\n        \"created_at\": \"2023-09-25T14:15:02.251Z\",\n        \"updated_at\": \"2023-09-26T09:19:30.358Z\"\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Delete product variant",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/products/:id/variants/:variantId",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"products",
+										":id",
+										"variants",
+										":variantId"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1000"
+										},
+										{
+											"key": "variantId",
+											"value": "100000"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "New Request",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/products/:id/variants/:variantId",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"products",
+												":id",
+												"variants",
+												":variantId"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "1000"
+												},
+												{
+													"key": "variantId",
+													"value": "100000"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Tue, 26 Sep 2023 09:20:30 GMT"
+										},
+										{
+											"key": "vary",
+											"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										},
+										{
+											"key": "content-encoding",
+											"value": "gzip"
+										},
+										{
+											"key": "connection",
+											"value": "close"
+										},
+										{
+											"key": "transfer-encoding",
+											"value": "chunked"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"success\",\n    \"message\": \"Product variant delete successful\",\n    \"data\": {\n        \"id\": 1000,\n        \"product_id\": 1000,\n        \"name\": \"Test Variant\",\n        \"image_url\": \"https://via.placeholder.com/150\",\n        \"stock\": 10,\n        \"sold\": 0,\n        \"price\": 199.99,\n        \"raw_price\": 150.99,\n        \"created_at\": \"2023-09-26T09:16:04.239Z\",\n        \"updated_at\": \"2023-09-26T09:16:04.239Z\"\n    }\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Reviews",
+					"item": [
+						{
+							"name": "Get reviews",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/products/:id/reviews",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"products",
+										":id",
+										"reviews"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1000"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "200",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/products/:id/reviews",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"products",
+												":id",
+												"reviews"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "1000"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Tue, 26 Sep 2023 09:28:21 GMT"
+										},
+										{
+											"key": "vary",
+											"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										},
+										{
+											"key": "content-encoding",
+											"value": "gzip"
+										},
+										{
+											"key": "connection",
+											"value": "close"
+										},
+										{
+											"key": "transfer-encoding",
+											"value": "chunked"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"success\",\n    \"message\": \"Product reviews found\",\n    \"data\": [\n        {\n            \"id\": 1000,\n            \"user_id\": 1000,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Nice product, I recommend it!\",\n            \"created_at\": \"2023-09-26T09:27:51.381Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.381Z\"\n        },\n        {\n            \"id\": 1001,\n            \"user_id\": 1000,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 3,\n            \"comment\": \"It's okay, could have been better.\",\n            \"created_at\": \"2023-09-26T09:27:51.384Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.384Z\"\n        },\n        {\n            \"id\": 1002,\n            \"user_id\": 1000,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"Excellent product, exceeded my expectations!\",\n            \"created_at\": \"2023-09-26T09:27:51.386Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.386Z\"\n        },\n        {\n            \"id\": 1003,\n            \"user_id\": 1000,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 2,\n            \"comment\": \"Not satisfied with the quality.\",\n            \"created_at\": \"2023-09-26T09:27:51.388Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.388Z\"\n        },\n        {\n            \"id\": 1004,\n            \"user_id\": 1001,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"This is a great product!\",\n            \"created_at\": \"2023-09-26T09:27:51.390Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.390Z\"\n        },\n        {\n            \"id\": 1005,\n            \"user_id\": 1001,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Good product but could be better.\",\n            \"created_at\": \"2023-09-26T09:27:51.391Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.391Z\"\n        },\n        {\n            \"id\": 1006,\n            \"user_id\": 1001,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 3,\n            \"comment\": \"Average product, not too impressed.\",\n            \"created_at\": \"2023-09-26T09:27:51.393Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.393Z\"\n        },\n        {\n            \"id\": 1007,\n            \"user_id\": 1001,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 2,\n            \"comment\": \"Could have been better.\",\n            \"created_at\": \"2023-09-26T09:27:51.394Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.394Z\"\n        },\n        {\n            \"id\": 1008,\n            \"user_id\": 1002,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"The product is good, but the delivery was slow.\",\n            \"created_at\": \"2023-09-26T09:27:51.395Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.395Z\"\n        },\n        {\n            \"id\": 1009,\n            \"user_id\": 1002,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"Great quality and value for money!\",\n            \"created_at\": \"2023-09-26T09:27:51.397Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.397Z\"\n        },\n        {\n            \"id\": 1010,\n            \"user_id\": 1002,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 3,\n            \"comment\": \"It was okay, but I expected more.\",\n            \"created_at\": \"2023-09-26T09:27:51.398Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.398Z\"\n        },\n        {\n            \"id\": 1011,\n            \"user_id\": 1002,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Good product, but the packaging could be improved.\",\n            \"created_at\": \"2023-09-26T09:27:51.399Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.399Z\"\n        },\n        {\n            \"id\": 1012,\n            \"user_id\": 1003,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"Totally worth it! I love it!\",\n            \"created_at\": \"2023-09-26T09:27:51.400Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.400Z\"\n        },\n        {\n            \"id\": 1013,\n            \"user_id\": 1003,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 3,\n            \"comment\": \"The product is decent, nothing special.\",\n            \"created_at\": \"2023-09-26T09:27:51.402Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.402Z\"\n        },\n        {\n            \"id\": 1014,\n            \"user_id\": 1003,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"I'm mostly satisfied, but there were a few issues.\",\n            \"created_at\": \"2023-09-26T09:27:51.403Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.403Z\"\n        },\n        {\n            \"id\": 1015,\n            \"user_id\": 1003,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"Amazing product! Can't recommend it enough!\",\n            \"created_at\": \"2023-09-26T09:27:51.405Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.405Z\"\n        },\n        {\n            \"id\": 1016,\n            \"user_id\": 1004,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Very satisfied with my purchase!\",\n            \"created_at\": \"2023-09-26T09:27:51.406Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.406Z\"\n        },\n        {\n            \"id\": 1017,\n            \"user_id\": 1004,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"Excellent product! Will buy from this seller again!\",\n            \"created_at\": \"2023-09-26T09:27:51.407Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.407Z\"\n        },\n        {\n            \"id\": 1018,\n            \"user_id\": 1004,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 3,\n            \"comment\": \"Not bad, but not exceptional either.\",\n            \"created_at\": \"2023-09-26T09:27:51.409Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.409Z\"\n        },\n        {\n            \"id\": 1019,\n            \"user_id\": 1004,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Pretty good! But I had some minor issues.\",\n            \"created_at\": \"2023-09-26T09:27:51.410Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.410Z\"\n        },\n        {\n            \"id\": 1020,\n            \"user_id\": 1005,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"Absolutely fantastic! I'm thrilled with my purchase!\",\n            \"created_at\": \"2023-09-26T09:27:51.411Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.411Z\"\n        },\n        {\n            \"id\": 1021,\n            \"user_id\": 1005,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Very good product. I highly recommend it.\",\n            \"created_at\": \"2023-09-26T09:27:51.412Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.412Z\"\n        },\n        {\n            \"id\": 1022,\n            \"user_id\": 1005,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 3,\n            \"comment\": \"It's decent, but not the best.\",\n            \"created_at\": \"2023-09-26T09:27:51.414Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.414Z\"\n        },\n        {\n            \"id\": 1023,\n            \"user_id\": 1005,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"I'm loving it! The product exceeded my expectations.\",\n            \"created_at\": \"2023-09-26T09:27:51.415Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.415Z\"\n        },\n        {\n            \"id\": 1024,\n            \"user_id\": 1006,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"The product is good. I have no major complaints.\",\n            \"created_at\": \"2023-09-26T09:27:51.416Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.416Z\"\n        },\n        {\n            \"id\": 1025,\n            \"user_id\": 1006,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"Extremely satisfied! The product arrived on time and in perfect condition.\",\n            \"created_at\": \"2023-09-26T09:27:51.418Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.418Z\"\n        },\n        {\n            \"id\": 1026,\n            \"user_id\": 1006,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 3,\n            \"comment\": \"It's okay, but I expected more features.\",\n            \"created_at\": \"2023-09-26T09:27:51.419Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.419Z\"\n        },\n        {\n            \"id\": 1027,\n            \"user_id\": 1006,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Overall a good product for the price.\",\n            \"created_at\": \"2023-09-26T09:27:51.421Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.421Z\"\n        },\n        {\n            \"id\": 1028,\n            \"user_id\": 1007,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"Fantastic product! I'm very happy with my purchase.\",\n            \"created_at\": \"2023-09-26T09:27:51.422Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.422Z\"\n        },\n        {\n            \"id\": 1029,\n            \"user_id\": 1007,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Pretty good, but it could be improved.\",\n            \"created_at\": \"2023-09-26T09:27:51.424Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.424Z\"\n        },\n        {\n            \"id\": 1030,\n            \"user_id\": 1007,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 3,\n            \"comment\": \"The product is decent, but not exceptional.\",\n            \"created_at\": \"2023-09-26T09:27:51.425Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.425Z\"\n        },\n        {\n            \"id\": 1031,\n            \"user_id\": 1007,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"Amazing product! It met all my expectations.\",\n            \"created_at\": \"2023-09-26T09:27:51.427Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.427Z\"\n        },\n        {\n            \"id\": 1032,\n            \"user_id\": 1008,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"I would recommend this product to others.\",\n            \"created_at\": \"2023-09-26T09:27:51.428Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.428Z\"\n        },\n        {\n            \"id\": 1033,\n            \"user_id\": 1008,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"Excellent product and fast delivery!\",\n            \"created_at\": \"2023-09-26T09:27:51.429Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.429Z\"\n        },\n        {\n            \"id\": 1034,\n            \"user_id\": 1008,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 3,\n            \"comment\": \"It's okay, but I had some issues with it.\",\n            \"created_at\": \"2023-09-26T09:27:51.431Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.431Z\"\n        },\n        {\n            \"id\": 1035,\n            \"user_id\": 1008,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Overall a good product. It served its purpose.\",\n            \"created_at\": \"2023-09-26T09:27:51.432Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.432Z\"\n        },\n        {\n            \"id\": 1036,\n            \"user_id\": 1009,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"I'm in love with this product! Highly recommended!\",\n            \"created_at\": \"2023-09-26T09:27:51.434Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.434Z\"\n        },\n        {\n            \"id\": 1037,\n            \"user_id\": 1009,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Pretty good! The product lived up to its description.\",\n            \"created_at\": \"2023-09-26T09:27:51.436Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.436Z\"\n        },\n        {\n            \"id\": 1038,\n            \"user_id\": 1009,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 3,\n            \"comment\": \"The product is decent, but it has some downsides.\",\n            \"created_at\": \"2023-09-26T09:27:51.438Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.438Z\"\n        },\n        {\n            \"id\": 1039,\n            \"user_id\": 1009,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"Superb product! I'm completely satisfied!\",\n            \"created_at\": \"2023-09-26T09:27:51.440Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.440Z\"\n        },\n        {\n            \"id\": 1040,\n            \"user_id\": 1010,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"The product is good, but it could use some improvements.\",\n            \"created_at\": \"2023-09-26T09:27:51.441Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.441Z\"\n        },\n        {\n            \"id\": 1041,\n            \"user_id\": 1010,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"Excellent product! It exceeded my expectations.\",\n            \"created_at\": \"2023-09-26T09:27:51.442Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.442Z\"\n        },\n        {\n            \"id\": 1042,\n            \"user_id\": 1010,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 3,\n            \"comment\": \"Not bad, but not perfect either.\",\n            \"created_at\": \"2023-09-26T09:27:51.443Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.443Z\"\n        },\n        {\n            \"id\": 1043,\n            \"user_id\": 1010,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Overall, a decent product for the price.\",\n            \"created_at\": \"2023-09-26T09:27:51.445Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.445Z\"\n        },\n        {\n            \"id\": 1044,\n            \"user_id\": 1011,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"Fantastic purchase! I'm really happy with it.\",\n            \"created_at\": \"2023-09-26T09:27:51.446Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.446Z\"\n        },\n        {\n            \"id\": 1045,\n            \"user_id\": 1011,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Pretty good product. It met my expectations.\",\n            \"created_at\": \"2023-09-26T09:27:51.448Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.448Z\"\n        },\n        {\n            \"id\": 1046,\n            \"user_id\": 1011,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 3,\n            \"comment\": \"It's okay, but it has some minor flaws.\",\n            \"created_at\": \"2023-09-26T09:27:51.449Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.449Z\"\n        },\n        {\n            \"id\": 1047,\n            \"user_id\": 1011,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"Amazing product! I highly recommend it!\",\n            \"created_at\": \"2023-09-26T09:27:51.451Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.451Z\"\n        },\n        {\n            \"id\": 1048,\n            \"user_id\": 1012,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Very satisfied with my purchase.\",\n            \"created_at\": \"2023-09-26T09:27:51.452Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.452Z\"\n        },\n        {\n            \"id\": 1049,\n            \"user_id\": 1012,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"Excellent product! It was exactly what I needed.\",\n            \"created_at\": \"2023-09-26T09:27:51.453Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.453Z\"\n        },\n        {\n            \"id\": 1050,\n            \"user_id\": 1012,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 3,\n            \"comment\": \"Not bad, but it could be better.\",\n            \"created_at\": \"2023-09-26T09:27:51.454Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.454Z\"\n        },\n        {\n            \"id\": 1051,\n            \"user_id\": 1012,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Good product for everyday use.\",\n            \"created_at\": \"2023-09-26T09:27:51.456Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.456Z\"\n        },\n        {\n            \"id\": 1052,\n            \"user_id\": 1013,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"I'm extremely happy with my purchase!\",\n            \"created_at\": \"2023-09-26T09:27:51.457Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.457Z\"\n        },\n        {\n            \"id\": 1053,\n            \"user_id\": 1013,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Pretty good product. It exceeded my expectations.\",\n            \"created_at\": \"2023-09-26T09:27:51.458Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.458Z\"\n        },\n        {\n            \"id\": 1054,\n            \"user_id\": 1013,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 3,\n            \"comment\": \"It's decent, but it has some room for improvement.\",\n            \"created_at\": \"2023-09-26T09:27:51.460Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.460Z\"\n        },\n        {\n            \"id\": 1055,\n            \"user_id\": 1013,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"Highly recommended! The product is top-notch!\",\n            \"created_at\": \"2023-09-26T09:27:51.461Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.461Z\"\n        },\n        {\n            \"id\": 1056,\n            \"user_id\": 1014,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Very satisfied with the product.\",\n            \"created_at\": \"2023-09-26T09:27:51.462Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.462Z\"\n        },\n        {\n            \"id\": 1057,\n            \"user_id\": 1014,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"Excellent purchase! I'm impressed with the quality.\",\n            \"created_at\": \"2023-09-26T09:27:51.464Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.464Z\"\n        },\n        {\n            \"id\": 1058,\n            \"user_id\": 1014,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 3,\n            \"comment\": \"The product is decent, but it has some flaws.\",\n            \"created_at\": \"2023-09-26T09:27:51.465Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.465Z\"\n        },\n        {\n            \"id\": 1059,\n            \"user_id\": 1014,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Overall, a good product for the price.\",\n            \"created_at\": \"2023-09-26T09:27:51.467Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.467Z\"\n        },\n        {\n            \"id\": 1060,\n            \"user_id\": 1015,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"Absolutely fantastic! I'm thrilled with my purchase!\",\n            \"created_at\": \"2023-09-26T09:27:51.468Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.468Z\"\n        },\n        {\n            \"id\": 1061,\n            \"user_id\": 1015,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Very good product. I highly recommend it.\",\n            \"created_at\": \"2023-09-26T09:27:51.469Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.469Z\"\n        },\n        {\n            \"id\": 1062,\n            \"user_id\": 1015,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 3,\n            \"comment\": \"It's decent, but not the best.\",\n            \"created_at\": \"2023-09-26T09:27:51.471Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.471Z\"\n        },\n        {\n            \"id\": 1063,\n            \"user_id\": 1015,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"I'm loving it! The product exceeded my expectations.\",\n            \"created_at\": \"2023-09-26T09:27:51.472Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.472Z\"\n        },\n        {\n            \"id\": 1064,\n            \"user_id\": 1016,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Very satisfied with my purchase!\",\n            \"created_at\": \"2023-09-26T09:27:51.473Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.473Z\"\n        },\n        {\n            \"id\": 1065,\n            \"user_id\": 1016,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"Excellent product! Will buy from this seller again!\",\n            \"created_at\": \"2023-09-26T09:27:51.474Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.474Z\"\n        },\n        {\n            \"id\": 1066,\n            \"user_id\": 1016,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 3,\n            \"comment\": \"Not bad, but it could use some improvements.\",\n            \"created_at\": \"2023-09-26T09:27:51.476Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.476Z\"\n        },\n        {\n            \"id\": 1067,\n            \"user_id\": 1016,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Pretty good! But I had some minor issues.\",\n            \"created_at\": \"2023-09-26T09:27:51.477Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.477Z\"\n        },\n        {\n            \"id\": 1068,\n            \"user_id\": 1017,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"Absolutely fantastic! I'm thrilled with my purchase!\",\n            \"created_at\": \"2023-09-26T09:27:51.478Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.478Z\"\n        },\n        {\n            \"id\": 1069,\n            \"user_id\": 1017,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Very good product. I highly recommend it.\",\n            \"created_at\": \"2023-09-26T09:27:51.480Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.480Z\"\n        },\n        {\n            \"id\": 1070,\n            \"user_id\": 1017,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 3,\n            \"comment\": \"It's decent, but not the best.\",\n            \"created_at\": \"2023-09-26T09:27:51.481Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.481Z\"\n        },\n        {\n            \"id\": 1071,\n            \"user_id\": 1017,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"I'm loving it! The product exceeded my expectations.\",\n            \"created_at\": \"2023-09-26T09:27:51.482Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.482Z\"\n        },\n        {\n            \"id\": 1072,\n            \"user_id\": 1018,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Very satisfied with my purchase.\",\n            \"created_at\": \"2023-09-26T09:27:51.484Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.484Z\"\n        },\n        {\n            \"id\": 1073,\n            \"user_id\": 1018,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"Excellent product! It was exactly what I needed.\",\n            \"created_at\": \"2023-09-26T09:27:51.485Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.485Z\"\n        },\n        {\n            \"id\": 1074,\n            \"user_id\": 1018,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 3,\n            \"comment\": \"Not bad, but it could be better.\",\n            \"created_at\": \"2023-09-26T09:27:51.486Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.486Z\"\n        },\n        {\n            \"id\": 1075,\n            \"user_id\": 1018,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Good product for everyday use.\",\n            \"created_at\": \"2023-09-26T09:27:51.489Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.489Z\"\n        },\n        {\n            \"id\": 1076,\n            \"user_id\": 1019,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"I'm extremely happy with my purchase!\",\n            \"created_at\": \"2023-09-26T09:27:51.490Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.490Z\"\n        },\n        {\n            \"id\": 1077,\n            \"user_id\": 1019,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Pretty good product. It exceeded my expectations.\",\n            \"created_at\": \"2023-09-26T09:27:51.492Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.492Z\"\n        },\n        {\n            \"id\": 1078,\n            \"user_id\": 1019,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 3,\n            \"comment\": \"It's decent, but it has some room for improvement.\",\n            \"created_at\": \"2023-09-26T09:27:51.493Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.493Z\"\n        },\n        {\n            \"id\": 1079,\n            \"user_id\": 1019,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"Highly recommended! The product is top-notch!\",\n            \"created_at\": \"2023-09-26T09:27:51.494Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.494Z\"\n        },\n        {\n            \"id\": 1080,\n            \"user_id\": 1020,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Very satisfied with my purchase!\",\n            \"created_at\": \"2023-09-26T09:27:51.496Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.496Z\"\n        },\n        {\n            \"id\": 1081,\n            \"user_id\": 1020,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"Excellent product! Will buy from this seller again!\",\n            \"created_at\": \"2023-09-26T09:27:51.497Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.497Z\"\n        },\n        {\n            \"id\": 1082,\n            \"user_id\": 1020,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 3,\n            \"comment\": \"Not bad, but it could use some improvements.\",\n            \"created_at\": \"2023-09-26T09:27:51.499Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.499Z\"\n        },\n        {\n            \"id\": 1083,\n            \"user_id\": 1020,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Pretty good! But I had some minor issues.\",\n            \"created_at\": \"2023-09-26T09:27:51.500Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.500Z\"\n        },\n        {\n            \"id\": 1084,\n            \"user_id\": 1021,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"Absolutely fantastic! I'm thrilled with my purchase!\",\n            \"created_at\": \"2023-09-26T09:27:51.501Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.501Z\"\n        },\n        {\n            \"id\": 1085,\n            \"user_id\": 1021,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Very good product. I highly recommend it.\",\n            \"created_at\": \"2023-09-26T09:27:51.502Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.502Z\"\n        },\n        {\n            \"id\": 1086,\n            \"user_id\": 1021,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 3,\n            \"comment\": \"It's decent, but not the best.\",\n            \"created_at\": \"2023-09-26T09:27:51.504Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.504Z\"\n        },\n        {\n            \"id\": 1087,\n            \"user_id\": 1021,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"I'm loving it! The product exceeded my expectations.\",\n            \"created_at\": \"2023-09-26T09:27:51.505Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.505Z\"\n        },\n        {\n            \"id\": 1088,\n            \"user_id\": 1022,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Very satisfied with my purchase.\",\n            \"created_at\": \"2023-09-26T09:27:51.507Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.507Z\"\n        },\n        {\n            \"id\": 1089,\n            \"user_id\": 1022,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"Excellent product! It was exactly what I needed.\",\n            \"created_at\": \"2023-09-26T09:27:51.508Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.508Z\"\n        },\n        {\n            \"id\": 1090,\n            \"user_id\": 1022,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 3,\n            \"comment\": \"Not bad, but it could be better.\",\n            \"created_at\": \"2023-09-26T09:27:51.509Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.509Z\"\n        },\n        {\n            \"id\": 1091,\n            \"user_id\": 1022,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Good product for everyday use.\",\n            \"created_at\": \"2023-09-26T09:27:51.511Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.511Z\"\n        },\n        {\n            \"id\": 1092,\n            \"user_id\": 1023,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"I'm extremely happy with my purchase!\",\n            \"created_at\": \"2023-09-26T09:27:51.513Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.513Z\"\n        },\n        {\n            \"id\": 1093,\n            \"user_id\": 1023,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Pretty good product. It exceeded my expectations.\",\n            \"created_at\": \"2023-09-26T09:27:51.515Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.515Z\"\n        },\n        {\n            \"id\": 1094,\n            \"user_id\": 1023,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 3,\n            \"comment\": \"It's decent, but it has some room for improvement.\",\n            \"created_at\": \"2023-09-26T09:27:51.517Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.517Z\"\n        },\n        {\n            \"id\": 1095,\n            \"user_id\": 1023,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"Highly recommended! The product is top-notch!\",\n            \"created_at\": \"2023-09-26T09:27:51.518Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.518Z\"\n        },\n        {\n            \"id\": 1096,\n            \"user_id\": 1024,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Very satisfied with my purchase!\",\n            \"created_at\": \"2023-09-26T09:27:51.520Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.520Z\"\n        },\n        {\n            \"id\": 1097,\n            \"user_id\": 1024,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 5,\n            \"comment\": \"Excellent product! It was exactly what I needed.\",\n            \"created_at\": \"2023-09-26T09:27:51.522Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.522Z\"\n        },\n        {\n            \"id\": 1098,\n            \"user_id\": 1024,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 3,\n            \"comment\": \"Not bad, but it could be better.\",\n            \"created_at\": \"2023-09-26T09:27:51.523Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.523Z\"\n        },\n        {\n            \"id\": 1099,\n            \"user_id\": 1024,\n            \"product_id\": 1000,\n            \"variant_id\": 1000,\n            \"rating\": 4,\n            \"comment\": \"Good product for everyday use.\",\n            \"created_at\": \"2023-09-26T09:27:51.524Z\",\n            \"updated_at\": \"2023-09-26T09:27:51.524Z\"\n        }\n    ]\n}"
+								}
+							]
+						},
+						{
+							"name": "Create review",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"rating\": 5,\r\n    \"comment\": \"Test comment\",\r\n    \"variantId\": 1000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/products/:id/reviews",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"products",
+										":id",
+										"reviews"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1000"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "201",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"rating\": 5,\r\n    \"comment\": \"Test comment\",\r\n    \"variantId\": 1000\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base_url}}/products/:id/reviews",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"products",
+												":id",
+												"reviews"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "1000"
+												}
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Tue, 26 Sep 2023 09:35:50 GMT"
+										},
+										{
+											"key": "vary",
+											"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										},
+										{
+											"key": "content-encoding",
+											"value": "gzip"
+										},
+										{
+											"key": "connection",
+											"value": "close"
+										},
+										{
+											"key": "transfer-encoding",
+											"value": "chunked"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"success\",\n    \"message\": \"Product review added\",\n    \"data\": {\n        \"id\": 1000,\n        \"user_id\": 1000,\n        \"product_id\": 1000,\n        \"variant_id\": 1000,\n        \"rating\": 5,\n        \"comment\": \"Test comment\",\n        \"created_at\": \"2023-09-26T09:35:50.128Z\",\n        \"updated_at\": \"2023-09-26T09:35:50.128Z\"\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Delete reviews",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/products/:id/reviews",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"products",
+										":id",
+										"reviews"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1000"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "200",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/products/:id/reviews",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"products",
+												":id",
+												"reviews"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "1000"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Tue, 26 Sep 2023 09:47:45 GMT"
+										},
+										{
+											"key": "vary",
+											"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										},
+										{
+											"key": "content-encoding",
+											"value": "gzip"
+										},
+										{
+											"key": "connection",
+											"value": "close"
+										},
+										{
+											"key": "transfer-encoding",
+											"value": "chunked"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"success\",\n    \"message\": \"99 reviews deleted successfully\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Update review",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"rating\": 4,\r\n    \"comment\": \"Updated comment\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/products/:id/reviews/:reviewId",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"products",
+										":id",
+										"reviews",
+										":reviewId"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1000"
+										},
+										{
+											"key": "reviewId",
+											"value": "100000"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "200",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"rating\": 4,\r\n    \"comment\": \"Updated comment\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base_url}}/products/:id/reviews/:reviewId",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"products",
+												":id",
+												"reviews",
+												":reviewId"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "1000"
+												},
+												{
+													"key": "reviewId",
+													"value": "1000"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Tue, 26 Sep 2023 09:37:43 GMT"
+										},
+										{
+											"key": "vary",
+											"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										},
+										{
+											"key": "content-encoding",
+											"value": "gzip"
+										},
+										{
+											"key": "connection",
+											"value": "close"
+										},
+										{
+											"key": "transfer-encoding",
+											"value": "chunked"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"success\",\n    \"message\": \"Product review update successful\",\n    \"data\": {\n        \"id\": 1000,\n        \"user_id\": 1000,\n        \"product_id\": 1000,\n        \"variant_id\": 1000,\n        \"rating\": 4,\n        \"comment\": \"Updated comment\",\n        \"created_at\": \"2023-09-26T09:35:50.128Z\",\n        \"updated_at\": \"2023-09-26T09:37:43.944Z\"\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "New Request",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/products/:id/reviews/:reviewId",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"products",
+										":id",
+										"reviews",
+										":reviewId"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1000"
+										},
+										{
+											"key": "reviewId",
+											"value": "1000"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "200",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/products/:id/reviews/:reviewId",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"products",
+												":id",
+												"reviews",
+												":reviewId"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "1000"
+												},
+												{
+													"key": "reviewId",
+													"value": "1000"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Tue, 26 Sep 2023 09:47:17 GMT"
+										},
+										{
+											"key": "vary",
+											"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										},
+										{
+											"key": "content-encoding",
+											"value": "gzip"
+										},
+										{
+											"key": "connection",
+											"value": "close"
+										},
+										{
+											"key": "transfer-encoding",
+											"value": "chunked"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"success\",\n    \"message\": \"Product review removed\",\n    \"data\": {\n        \"id\": 1000,\n        \"user_id\": 1000,\n        \"product_id\": 1000,\n        \"variant_id\": 1000,\n        \"rating\": 4,\n        \"comment\": \"Nice product, I recommend it!\",\n        \"created_at\": \"2023-09-26T09:47:13.514Z\",\n        \"updated_at\": \"2023-09-26T09:47:13.514Z\"\n    }\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Categories",
+					"item": [
+						{
+							"name": "Get categories",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/products/:id/categories",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"products",
+										":id",
+										"categories"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1000"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "200",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/products/:id/categories",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"products",
+												":id",
+												"categories"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "1000"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Tue, 26 Sep 2023 09:51:10 GMT"
+										},
+										{
+											"key": "vary",
+											"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										},
+										{
+											"key": "content-encoding",
+											"value": "gzip"
+										},
+										{
+											"key": "connection",
+											"value": "close"
+										},
+										{
+											"key": "transfer-encoding",
+											"value": "chunked"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"success\",\n    \"message\": \"Product categories found\",\n    \"data\": [\n        {\n            \"id\": 1000,\n            \"name\": \"Category 1\",\n            \"created_at\": \"2023-09-26T09:48:14.978Z\",\n            \"updated_at\": \"2023-09-26T09:48:14.978Z\"\n        },\n        {\n            \"id\": 1001,\n            \"name\": \"Category 2\",\n            \"created_at\": \"2023-09-26T09:48:14.980Z\",\n            \"updated_at\": \"2023-09-26T09:48:14.980Z\"\n        }\n    ]\n}"
+								}
+							]
+						},
+						{
+							"name": "Add category to product",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/products/:id/categories/:categoryId",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"products",
+										":id",
+										"categories",
+										":categoryId"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1000"
+										},
+										{
+											"key": "categoryId",
+											"value": "1001"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "200",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/products/:id/categories/:categoryId",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"products",
+												":id",
+												"categories",
+												":categoryId"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "1000"
+												},
+												{
+													"key": "categoryId",
+													"value": "1001"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Tue, 26 Sep 2023 09:51:42 GMT"
+										},
+										{
+											"key": "vary",
+											"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										},
+										{
+											"key": "content-encoding",
+											"value": "gzip"
+										},
+										{
+											"key": "connection",
+											"value": "close"
+										},
+										{
+											"key": "transfer-encoding",
+											"value": "chunked"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"success\",\n    \"message\": \"Category added to product\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Remove category from product",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/products/:id/categories/:categoryId",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"products",
+										":id",
+										"categories",
+										":categoryId"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1000"
+										},
+										{
+											"key": "categoryId",
+											"value": "1000"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "200",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/products/:id/categories/:categoryId",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"products",
+												":id",
+												"categories",
+												":categoryId"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "1000"
+												},
+												{
+													"key": "categoryId",
+													"value": "1000"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Tue, 26 Sep 2023 09:55:58 GMT"
+										},
+										{
+											"key": "vary",
+											"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										},
+										{
+											"key": "content-encoding",
+											"value": "gzip"
+										},
+										{
+											"key": "connection",
+											"value": "close"
+										},
+										{
+											"key": "transfer-encoding",
+											"value": "chunked"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"success\",\n    \"message\": \"Product category removed\"\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Get products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/products",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "categories",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "pageToken",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/products",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"products"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": null,
+											"disabled": true
+										},
+										{
+											"key": "name",
+											"value": null,
+											"disabled": true
+										},
+										{
+											"key": "categories",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "pageToken",
+											"value": null,
+											"disabled": true
+										},
+										{
+											"key": "limit",
+											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "date",
+									"value": "Tue, 26 Sep 2023 08:59:08 GMT"
+								},
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "content-encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "connection",
+									"value": "close"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Products found\",\n    \"data\": {\n        \"result\": [\n            {\n                \"id\": 1000,\n                \"name\": \"Product 1\",\n                \"description\": \"This is the description for Product 1\",\n                \"created_at\": \"2023-09-25T14:15:01.674Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.674Z\"\n            },\n            {\n                \"id\": 1001,\n                \"name\": \"Product 2\",\n                \"description\": \"This is the description for Product 2\",\n                \"created_at\": \"2023-09-25T14:15:01.676Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.676Z\"\n            },\n            {\n                \"id\": 1002,\n                \"name\": \"Product 3\",\n                \"description\": \"This is the description for Product 3\",\n                \"created_at\": \"2023-09-25T14:15:01.678Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.678Z\"\n            },\n            {\n                \"id\": 1003,\n                \"name\": \"Product 4\",\n                \"description\": \"This is the description for Product 4\",\n                \"created_at\": \"2023-09-25T14:15:01.680Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.680Z\"\n            },\n            {\n                \"id\": 1004,\n                \"name\": \"Product 5\",\n                \"description\": \"This is the description for Product 5\",\n                \"created_at\": \"2023-09-25T14:15:01.682Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.682Z\"\n            },\n            {\n                \"id\": 1005,\n                \"name\": \"Product 6\",\n                \"description\": \"This is the description for Product 6\",\n                \"created_at\": \"2023-09-25T14:15:01.684Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.684Z\"\n            },\n            {\n                \"id\": 1006,\n                \"name\": \"Product 7\",\n                \"description\": \"This is the description for Product 7\",\n                \"created_at\": \"2023-09-25T14:15:01.685Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.685Z\"\n            },\n            {\n                \"id\": 1007,\n                \"name\": \"Product 8\",\n                \"description\": \"This is the description for Product 8\",\n                \"created_at\": \"2023-09-25T14:15:01.687Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.687Z\"\n            },\n            {\n                \"id\": 1008,\n                \"name\": \"Product 9\",\n                \"description\": \"This is the description for Product 9\",\n                \"created_at\": \"2023-09-25T14:15:01.688Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.688Z\"\n            },\n            {\n                \"id\": 1009,\n                \"name\": \"Product 10\",\n                \"description\": \"This is the description for Product 10\",\n                \"created_at\": \"2023-09-25T14:15:01.690Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.690Z\"\n            },\n            {\n                \"id\": 1010,\n                \"name\": \"Product 11\",\n                \"description\": \"This is the description for Product 11\",\n                \"created_at\": \"2023-09-25T14:15:01.692Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.692Z\"\n            },\n            {\n                \"id\": 1011,\n                \"name\": \"Product 12\",\n                \"description\": \"This is the description for Product 12\",\n                \"created_at\": \"2023-09-25T14:15:01.694Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.694Z\"\n            },\n            {\n                \"id\": 1012,\n                \"name\": \"Product 13\",\n                \"description\": \"This is the description for Product 13\",\n                \"created_at\": \"2023-09-25T14:15:01.696Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.696Z\"\n            },\n            {\n                \"id\": 1013,\n                \"name\": \"Product 14\",\n                \"description\": \"This is the description for Product 14\",\n                \"created_at\": \"2023-09-25T14:15:01.698Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.698Z\"\n            },\n            {\n                \"id\": 1014,\n                \"name\": \"Product 15\",\n                \"description\": \"This is the description for Product 15\",\n                \"created_at\": \"2023-09-25T14:15:01.699Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.699Z\"\n            },\n            {\n                \"id\": 1015,\n                \"name\": \"Product 16\",\n                \"description\": \"This is the description for Product 16\",\n                \"created_at\": \"2023-09-25T14:15:01.701Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.701Z\"\n            },\n            {\n                \"id\": 1016,\n                \"name\": \"Product 17\",\n                \"description\": \"This is the description for Product 17\",\n                \"created_at\": \"2023-09-25T14:15:01.703Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.703Z\"\n            },\n            {\n                \"id\": 1017,\n                \"name\": \"Product 18\",\n                \"description\": \"This is the description for Product 18\",\n                \"created_at\": \"2023-09-25T14:15:01.705Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.705Z\"\n            },\n            {\n                \"id\": 1018,\n                \"name\": \"Product 19\",\n                \"description\": \"This is the description for Product 19\",\n                \"created_at\": \"2023-09-25T14:15:01.707Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.707Z\"\n            },\n            {\n                \"id\": 1019,\n                \"name\": \"Product 20\",\n                \"description\": \"This is the description for Product 20\",\n                \"created_at\": \"2023-09-25T14:15:01.708Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.708Z\"\n            },\n            {\n                \"id\": 1020,\n                \"name\": \"Product 21\",\n                \"description\": \"This is the description for Product 21\",\n                \"created_at\": \"2023-09-25T14:15:01.710Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.710Z\"\n            },\n            {\n                \"id\": 1021,\n                \"name\": \"Product 22\",\n                \"description\": \"This is the description for Product 22\",\n                \"created_at\": \"2023-09-25T14:15:01.712Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.712Z\"\n            },\n            {\n                \"id\": 1022,\n                \"name\": \"Product 23\",\n                \"description\": \"This is the description for Product 23\",\n                \"created_at\": \"2023-09-25T14:15:01.713Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.713Z\"\n            },\n            {\n                \"id\": 1023,\n                \"name\": \"Product 24\",\n                \"description\": \"This is the description for Product 24\",\n                \"created_at\": \"2023-09-25T14:15:01.715Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.715Z\"\n            },\n            {\n                \"id\": 1024,\n                \"name\": \"Product 25\",\n                \"description\": \"This is the description for Product 25\",\n                \"created_at\": \"2023-09-25T14:15:01.716Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.716Z\"\n            },\n            {\n                \"id\": 1025,\n                \"name\": \"Product 26\",\n                \"description\": \"This is the description for Product 26\",\n                \"created_at\": \"2023-09-25T14:15:01.718Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.718Z\"\n            },\n            {\n                \"id\": 1026,\n                \"name\": \"Product 27\",\n                \"description\": \"This is the description for Product 27\",\n                \"created_at\": \"2023-09-25T14:15:01.719Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.719Z\"\n            },\n            {\n                \"id\": 1027,\n                \"name\": \"Product 28\",\n                \"description\": \"This is the description for Product 28\",\n                \"created_at\": \"2023-09-25T14:15:01.721Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.721Z\"\n            },\n            {\n                \"id\": 1028,\n                \"name\": \"Product 29\",\n                \"description\": \"This is the description for Product 29\",\n                \"created_at\": \"2023-09-25T14:15:01.723Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.723Z\"\n            },\n            {\n                \"id\": 1029,\n                \"name\": \"Product 30\",\n                \"description\": \"This is the description for Product 30\",\n                \"created_at\": \"2023-09-25T14:15:01.725Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.725Z\"\n            },\n            {\n                \"id\": 1030,\n                \"name\": \"Product 31\",\n                \"description\": \"This is the description for Product 31\",\n                \"created_at\": \"2023-09-25T14:15:01.727Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.727Z\"\n            },\n            {\n                \"id\": 1031,\n                \"name\": \"Product 32\",\n                \"description\": \"This is the description for Product 32\",\n                \"created_at\": \"2023-09-25T14:15:01.729Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.729Z\"\n            },\n            {\n                \"id\": 1032,\n                \"name\": \"Product 33\",\n                \"description\": \"This is the description for Product 33\",\n                \"created_at\": \"2023-09-25T14:15:01.731Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.731Z\"\n            },\n            {\n                \"id\": 1033,\n                \"name\": \"Product 34\",\n                \"description\": \"This is the description for Product 34\",\n                \"created_at\": \"2023-09-25T14:15:01.733Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.733Z\"\n            },\n            {\n                \"id\": 1034,\n                \"name\": \"Product 35\",\n                \"description\": \"This is the description for Product 35\",\n                \"created_at\": \"2023-09-25T14:15:01.734Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.734Z\"\n            },\n            {\n                \"id\": 1035,\n                \"name\": \"Product 36\",\n                \"description\": \"This is the description for Product 36\",\n                \"created_at\": \"2023-09-25T14:15:01.736Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.736Z\"\n            },\n            {\n                \"id\": 1036,\n                \"name\": \"Product 37\",\n                \"description\": \"This is the description for Product 37\",\n                \"created_at\": \"2023-09-25T14:15:01.737Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.737Z\"\n            },\n            {\n                \"id\": 1037,\n                \"name\": \"Product 38\",\n                \"description\": \"This is the description for Product 38\",\n                \"created_at\": \"2023-09-25T14:15:01.739Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.739Z\"\n            },\n            {\n                \"id\": 1038,\n                \"name\": \"Product 39\",\n                \"description\": \"This is the description for Product 39\",\n                \"created_at\": \"2023-09-25T14:15:01.741Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.741Z\"\n            },\n            {\n                \"id\": 1039,\n                \"name\": \"Product 40\",\n                \"description\": \"This is the description for Product 40\",\n                \"created_at\": \"2023-09-25T14:15:01.742Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.742Z\"\n            },\n            {\n                \"id\": 1040,\n                \"name\": \"Product 41\",\n                \"description\": \"This is the description for Product 41\",\n                \"created_at\": \"2023-09-25T14:15:01.743Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.743Z\"\n            },\n            {\n                \"id\": 1041,\n                \"name\": \"Product 42\",\n                \"description\": \"This is the description for Product 42\",\n                \"created_at\": \"2023-09-25T14:15:01.745Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.745Z\"\n            },\n            {\n                \"id\": 1042,\n                \"name\": \"Product 43\",\n                \"description\": \"This is the description for Product 43\",\n                \"created_at\": \"2023-09-25T14:15:01.746Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.746Z\"\n            },\n            {\n                \"id\": 1043,\n                \"name\": \"Product 44\",\n                \"description\": \"This is the description for Product 44\",\n                \"created_at\": \"2023-09-25T14:15:01.748Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.748Z\"\n            },\n            {\n                \"id\": 1044,\n                \"name\": \"Product 45\",\n                \"description\": \"This is the description for Product 45\",\n                \"created_at\": \"2023-09-25T14:15:01.749Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.749Z\"\n            },\n            {\n                \"id\": 1045,\n                \"name\": \"Product 46\",\n                \"description\": \"This is the description for Product 46\",\n                \"created_at\": \"2023-09-25T14:15:01.751Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.751Z\"\n            },\n            {\n                \"id\": 1046,\n                \"name\": \"Product 47\",\n                \"description\": \"This is the description for Product 47\",\n                \"created_at\": \"2023-09-25T14:15:01.753Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.753Z\"\n            },\n            {\n                \"id\": 1047,\n                \"name\": \"Product 48\",\n                \"description\": \"This is the description for Product 48\",\n                \"created_at\": \"2023-09-25T14:15:01.755Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.755Z\"\n            },\n            {\n                \"id\": 1048,\n                \"name\": \"Product 49\",\n                \"description\": \"This is the description for Product 49\",\n                \"created_at\": \"2023-09-25T14:15:01.756Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.756Z\"\n            },\n            {\n                \"id\": 1049,\n                \"name\": \"Product 50\",\n                \"description\": \"This is the description for Product 50\",\n                \"created_at\": \"2023-09-25T14:15:01.758Z\",\n                \"updated_at\": \"2023-09-25T14:15:01.758Z\"\n            }\n        ],\n        \"meta\": {\n            \"hasNextPage\": true,\n            \"hasPreviousPage\": false,\n            \"nextPageUrl\": \"http://localhost:3000//api/products?pageToken=eyJjdXJzb3IiOnsiaWQiOjEwNDl9LCJ0eXBlIjoibmV4dCJ9\"\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Create product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Test Product\",\r\n    \"description\": \"This is description.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/products",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Test Product\",\r\n    \"description\": \"This is description.\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/products",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"products"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "date",
+									"value": "Tue, 26 Sep 2023 08:58:29 GMT"
+								},
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "content-encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "connection",
+									"value": "close"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Product created successfully\",\n    \"data\": {\n        \"id\": 1000,\n        \"name\": \"Test Product\",\n        \"description\": \"This is description.\",\n        \"created_at\": \"2023-09-26T08:58:29.958Z\",\n        \"updated_at\": \"2023-09-26T08:58:29.958Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get product",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/products/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1000"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/products/:id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"products",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1000"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "date",
+									"value": "Tue, 26 Sep 2023 09:04:00 GMT"
+								},
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "content-encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "connection",
+									"value": "close"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Product found\",\n    \"data\": {\n        \"id\": 1000,\n        \"name\": \"Product 1\",\n        \"description\": \"This is the description for Product 1\",\n        \"created_at\": \"2023-09-25T14:15:01.674Z\",\n        \"updated_at\": \"2023-09-25T14:15:01.674Z\",\n        \"variants\": [\n            {\n                \"id\": 1000,\n                \"product_id\": 1000,\n                \"name\": \"Variant 1\",\n                \"image_url\": \"https://via.placeholder.com/150\",\n                \"stock\": 50,\n                \"sold\": 0,\n                \"price\": 25.99,\n                \"raw_price\": 15,\n                \"created_at\": \"2023-09-25T14:15:02.251Z\",\n                \"updated_at\": \"2023-09-25T14:15:02.251Z\",\n                \"reviews\": [\n                    {\n                        \"id\": 1000,\n                        \"user_id\": 1000,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Nice product, I recommend it!\",\n                        \"created_at\": \"2023-09-25T14:15:02.706Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.706Z\"\n                    },\n                    {\n                        \"id\": 1001,\n                        \"user_id\": 1000,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 3,\n                        \"comment\": \"It's okay, could have been better.\",\n                        \"created_at\": \"2023-09-25T14:15:02.709Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.709Z\"\n                    },\n                    {\n                        \"id\": 1002,\n                        \"user_id\": 1000,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"Excellent product, exceeded my expectations!\",\n                        \"created_at\": \"2023-09-25T14:15:02.711Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.711Z\"\n                    },\n                    {\n                        \"id\": 1003,\n                        \"user_id\": 1000,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 2,\n                        \"comment\": \"Not satisfied with the quality.\",\n                        \"created_at\": \"2023-09-25T14:15:02.713Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.713Z\"\n                    },\n                    {\n                        \"id\": 1004,\n                        \"user_id\": 1001,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"This is a great product!\",\n                        \"created_at\": \"2023-09-25T14:15:02.714Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.714Z\"\n                    },\n                    {\n                        \"id\": 1005,\n                        \"user_id\": 1001,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Good product but could be better.\",\n                        \"created_at\": \"2023-09-25T14:15:02.716Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.716Z\"\n                    },\n                    {\n                        \"id\": 1006,\n                        \"user_id\": 1001,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 3,\n                        \"comment\": \"Average product, not too impressed.\",\n                        \"created_at\": \"2023-09-25T14:15:02.718Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.718Z\"\n                    },\n                    {\n                        \"id\": 1007,\n                        \"user_id\": 1001,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 2,\n                        \"comment\": \"Could have been better.\",\n                        \"created_at\": \"2023-09-25T14:15:02.719Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.719Z\"\n                    },\n                    {\n                        \"id\": 1008,\n                        \"user_id\": 1002,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"The product is good, but the delivery was slow.\",\n                        \"created_at\": \"2023-09-25T14:15:02.721Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.721Z\"\n                    },\n                    {\n                        \"id\": 1009,\n                        \"user_id\": 1002,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"Great quality and value for money!\",\n                        \"created_at\": \"2023-09-25T14:15:02.722Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.722Z\"\n                    },\n                    {\n                        \"id\": 1010,\n                        \"user_id\": 1002,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 3,\n                        \"comment\": \"It was okay, but I expected more.\",\n                        \"created_at\": \"2023-09-25T14:15:02.723Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.723Z\"\n                    },\n                    {\n                        \"id\": 1011,\n                        \"user_id\": 1002,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Good product, but the packaging could be improved.\",\n                        \"created_at\": \"2023-09-25T14:15:02.725Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.725Z\"\n                    },\n                    {\n                        \"id\": 1012,\n                        \"user_id\": 1003,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"Totally worth it! I love it!\",\n                        \"created_at\": \"2023-09-25T14:15:02.726Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.726Z\"\n                    },\n                    {\n                        \"id\": 1013,\n                        \"user_id\": 1003,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 3,\n                        \"comment\": \"The product is decent, nothing special.\",\n                        \"created_at\": \"2023-09-25T14:15:02.728Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.728Z\"\n                    },\n                    {\n                        \"id\": 1014,\n                        \"user_id\": 1003,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"I'm mostly satisfied, but there were a few issues.\",\n                        \"created_at\": \"2023-09-25T14:15:02.729Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.729Z\"\n                    },\n                    {\n                        \"id\": 1015,\n                        \"user_id\": 1003,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"Amazing product! Can't recommend it enough!\",\n                        \"created_at\": \"2023-09-25T14:15:02.731Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.731Z\"\n                    },\n                    {\n                        \"id\": 1016,\n                        \"user_id\": 1004,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Very satisfied with my purchase!\",\n                        \"created_at\": \"2023-09-25T14:15:02.732Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.732Z\"\n                    },\n                    {\n                        \"id\": 1017,\n                        \"user_id\": 1004,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"Excellent product! Will buy from this seller again!\",\n                        \"created_at\": \"2023-09-25T14:15:02.734Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.734Z\"\n                    },\n                    {\n                        \"id\": 1018,\n                        \"user_id\": 1004,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 3,\n                        \"comment\": \"Not bad, but not exceptional either.\",\n                        \"created_at\": \"2023-09-25T14:15:02.735Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.735Z\"\n                    },\n                    {\n                        \"id\": 1019,\n                        \"user_id\": 1004,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Pretty good! But I had some minor issues.\",\n                        \"created_at\": \"2023-09-25T14:15:02.736Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.736Z\"\n                    },\n                    {\n                        \"id\": 1020,\n                        \"user_id\": 1005,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"Absolutely fantastic! I'm thrilled with my purchase!\",\n                        \"created_at\": \"2023-09-25T14:15:02.738Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.738Z\"\n                    },\n                    {\n                        \"id\": 1021,\n                        \"user_id\": 1005,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Very good product. I highly recommend it.\",\n                        \"created_at\": \"2023-09-25T14:15:02.739Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.739Z\"\n                    },\n                    {\n                        \"id\": 1022,\n                        \"user_id\": 1005,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 3,\n                        \"comment\": \"It's decent, but not the best.\",\n                        \"created_at\": \"2023-09-25T14:15:02.740Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.740Z\"\n                    },\n                    {\n                        \"id\": 1023,\n                        \"user_id\": 1005,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"I'm loving it! The product exceeded my expectations.\",\n                        \"created_at\": \"2023-09-25T14:15:02.742Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.742Z\"\n                    },\n                    {\n                        \"id\": 1024,\n                        \"user_id\": 1006,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"The product is good. I have no major complaints.\",\n                        \"created_at\": \"2023-09-25T14:15:02.743Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.743Z\"\n                    },\n                    {\n                        \"id\": 1025,\n                        \"user_id\": 1006,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"Extremely satisfied! The product arrived on time and in perfect condition.\",\n                        \"created_at\": \"2023-09-25T14:15:02.745Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.745Z\"\n                    },\n                    {\n                        \"id\": 1026,\n                        \"user_id\": 1006,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 3,\n                        \"comment\": \"It's okay, but I expected more features.\",\n                        \"created_at\": \"2023-09-25T14:15:02.746Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.746Z\"\n                    },\n                    {\n                        \"id\": 1027,\n                        \"user_id\": 1006,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Overall a good product for the price.\",\n                        \"created_at\": \"2023-09-25T14:15:02.748Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.748Z\"\n                    },\n                    {\n                        \"id\": 1028,\n                        \"user_id\": 1007,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"Fantastic product! I'm very happy with my purchase.\",\n                        \"created_at\": \"2023-09-25T14:15:02.749Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.749Z\"\n                    },\n                    {\n                        \"id\": 1029,\n                        \"user_id\": 1007,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Pretty good, but it could be improved.\",\n                        \"created_at\": \"2023-09-25T14:15:02.751Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.751Z\"\n                    },\n                    {\n                        \"id\": 1030,\n                        \"user_id\": 1007,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 3,\n                        \"comment\": \"The product is decent, but not exceptional.\",\n                        \"created_at\": \"2023-09-25T14:15:02.752Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.752Z\"\n                    },\n                    {\n                        \"id\": 1031,\n                        \"user_id\": 1007,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"Amazing product! It met all my expectations.\",\n                        \"created_at\": \"2023-09-25T14:15:02.754Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.754Z\"\n                    },\n                    {\n                        \"id\": 1032,\n                        \"user_id\": 1008,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"I would recommend this product to others.\",\n                        \"created_at\": \"2023-09-25T14:15:02.755Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.755Z\"\n                    },\n                    {\n                        \"id\": 1033,\n                        \"user_id\": 1008,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"Excellent product and fast delivery!\",\n                        \"created_at\": \"2023-09-25T14:15:02.756Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.756Z\"\n                    },\n                    {\n                        \"id\": 1034,\n                        \"user_id\": 1008,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 3,\n                        \"comment\": \"It's okay, but I had some issues with it.\",\n                        \"created_at\": \"2023-09-25T14:15:02.758Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.758Z\"\n                    },\n                    {\n                        \"id\": 1035,\n                        \"user_id\": 1008,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Overall a good product. It served its purpose.\",\n                        \"created_at\": \"2023-09-25T14:15:02.760Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.760Z\"\n                    },\n                    {\n                        \"id\": 1036,\n                        \"user_id\": 1009,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"I'm in love with this product! Highly recommended!\",\n                        \"created_at\": \"2023-09-25T14:15:02.761Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.761Z\"\n                    },\n                    {\n                        \"id\": 1037,\n                        \"user_id\": 1009,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Pretty good! The product lived up to its description.\",\n                        \"created_at\": \"2023-09-25T14:15:02.763Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.763Z\"\n                    },\n                    {\n                        \"id\": 1038,\n                        \"user_id\": 1009,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 3,\n                        \"comment\": \"The product is decent, but it has some downsides.\",\n                        \"created_at\": \"2023-09-25T14:15:02.764Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.764Z\"\n                    },\n                    {\n                        \"id\": 1039,\n                        \"user_id\": 1009,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"Superb product! I'm completely satisfied!\",\n                        \"created_at\": \"2023-09-25T14:15:02.766Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.766Z\"\n                    },\n                    {\n                        \"id\": 1040,\n                        \"user_id\": 1010,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"The product is good, but it could use some improvements.\",\n                        \"created_at\": \"2023-09-25T14:15:02.767Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.767Z\"\n                    },\n                    {\n                        \"id\": 1041,\n                        \"user_id\": 1010,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"Excellent product! It exceeded my expectations.\",\n                        \"created_at\": \"2023-09-25T14:15:02.768Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.768Z\"\n                    },\n                    {\n                        \"id\": 1042,\n                        \"user_id\": 1010,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 3,\n                        \"comment\": \"Not bad, but not perfect either.\",\n                        \"created_at\": \"2023-09-25T14:15:02.769Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.769Z\"\n                    },\n                    {\n                        \"id\": 1043,\n                        \"user_id\": 1010,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Overall, a decent product for the price.\",\n                        \"created_at\": \"2023-09-25T14:15:02.771Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.771Z\"\n                    },\n                    {\n                        \"id\": 1044,\n                        \"user_id\": 1011,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"Fantastic purchase! I'm really happy with it.\",\n                        \"created_at\": \"2023-09-25T14:15:02.772Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.772Z\"\n                    },\n                    {\n                        \"id\": 1045,\n                        \"user_id\": 1011,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Pretty good product. It met my expectations.\",\n                        \"created_at\": \"2023-09-25T14:15:02.773Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.773Z\"\n                    },\n                    {\n                        \"id\": 1046,\n                        \"user_id\": 1011,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 3,\n                        \"comment\": \"It's okay, but it has some minor flaws.\",\n                        \"created_at\": \"2023-09-25T14:15:02.775Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.775Z\"\n                    },\n                    {\n                        \"id\": 1047,\n                        \"user_id\": 1011,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"Amazing product! I highly recommend it!\",\n                        \"created_at\": \"2023-09-25T14:15:02.776Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.776Z\"\n                    },\n                    {\n                        \"id\": 1048,\n                        \"user_id\": 1012,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Very satisfied with my purchase.\",\n                        \"created_at\": \"2023-09-25T14:15:02.778Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.778Z\"\n                    },\n                    {\n                        \"id\": 1049,\n                        \"user_id\": 1012,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"Excellent product! It was exactly what I needed.\",\n                        \"created_at\": \"2023-09-25T14:15:02.779Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.779Z\"\n                    },\n                    {\n                        \"id\": 1050,\n                        \"user_id\": 1012,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 3,\n                        \"comment\": \"Not bad, but it could be better.\",\n                        \"created_at\": \"2023-09-25T14:15:02.780Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.780Z\"\n                    },\n                    {\n                        \"id\": 1051,\n                        \"user_id\": 1012,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Good product for everyday use.\",\n                        \"created_at\": \"2023-09-25T14:15:02.782Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.782Z\"\n                    },\n                    {\n                        \"id\": 1052,\n                        \"user_id\": 1013,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"I'm extremely happy with my purchase!\",\n                        \"created_at\": \"2023-09-25T14:15:02.783Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.783Z\"\n                    },\n                    {\n                        \"id\": 1053,\n                        \"user_id\": 1013,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Pretty good product. It exceeded my expectations.\",\n                        \"created_at\": \"2023-09-25T14:15:02.784Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.784Z\"\n                    },\n                    {\n                        \"id\": 1054,\n                        \"user_id\": 1013,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 3,\n                        \"comment\": \"It's decent, but it has some room for improvement.\",\n                        \"created_at\": \"2023-09-25T14:15:02.786Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.786Z\"\n                    },\n                    {\n                        \"id\": 1055,\n                        \"user_id\": 1013,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"Highly recommended! The product is top-notch!\",\n                        \"created_at\": \"2023-09-25T14:15:02.787Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.787Z\"\n                    },\n                    {\n                        \"id\": 1056,\n                        \"user_id\": 1014,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Very satisfied with the product.\",\n                        \"created_at\": \"2023-09-25T14:15:02.788Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.788Z\"\n                    },\n                    {\n                        \"id\": 1057,\n                        \"user_id\": 1014,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"Excellent purchase! I'm impressed with the quality.\",\n                        \"created_at\": \"2023-09-25T14:15:02.790Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.790Z\"\n                    },\n                    {\n                        \"id\": 1058,\n                        \"user_id\": 1014,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 3,\n                        \"comment\": \"The product is decent, but it has some flaws.\",\n                        \"created_at\": \"2023-09-25T14:15:02.792Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.792Z\"\n                    },\n                    {\n                        \"id\": 1059,\n                        \"user_id\": 1014,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Overall, a good product for the price.\",\n                        \"created_at\": \"2023-09-25T14:15:02.794Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.794Z\"\n                    },\n                    {\n                        \"id\": 1060,\n                        \"user_id\": 1015,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"Absolutely fantastic! I'm thrilled with my purchase!\",\n                        \"created_at\": \"2023-09-25T14:15:02.795Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.795Z\"\n                    },\n                    {\n                        \"id\": 1061,\n                        \"user_id\": 1015,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Very good product. I highly recommend it.\",\n                        \"created_at\": \"2023-09-25T14:15:02.796Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.796Z\"\n                    },\n                    {\n                        \"id\": 1062,\n                        \"user_id\": 1015,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 3,\n                        \"comment\": \"It's decent, but not the best.\",\n                        \"created_at\": \"2023-09-25T14:15:02.798Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.798Z\"\n                    },\n                    {\n                        \"id\": 1063,\n                        \"user_id\": 1015,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"I'm loving it! The product exceeded my expectations.\",\n                        \"created_at\": \"2023-09-25T14:15:02.799Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.799Z\"\n                    },\n                    {\n                        \"id\": 1064,\n                        \"user_id\": 1016,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Very satisfied with my purchase!\",\n                        \"created_at\": \"2023-09-25T14:15:02.800Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.800Z\"\n                    },\n                    {\n                        \"id\": 1065,\n                        \"user_id\": 1016,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"Excellent product! Will buy from this seller again!\",\n                        \"created_at\": \"2023-09-25T14:15:02.802Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.802Z\"\n                    },\n                    {\n                        \"id\": 1066,\n                        \"user_id\": 1016,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 3,\n                        \"comment\": \"Not bad, but it could use some improvements.\",\n                        \"created_at\": \"2023-09-25T14:15:02.803Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.803Z\"\n                    },\n                    {\n                        \"id\": 1067,\n                        \"user_id\": 1016,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Pretty good! But I had some minor issues.\",\n                        \"created_at\": \"2023-09-25T14:15:02.804Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.804Z\"\n                    },\n                    {\n                        \"id\": 1068,\n                        \"user_id\": 1017,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"Absolutely fantastic! I'm thrilled with my purchase!\",\n                        \"created_at\": \"2023-09-25T14:15:02.806Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.806Z\"\n                    },\n                    {\n                        \"id\": 1069,\n                        \"user_id\": 1017,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Very good product. I highly recommend it.\",\n                        \"created_at\": \"2023-09-25T14:15:02.807Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.807Z\"\n                    },\n                    {\n                        \"id\": 1070,\n                        \"user_id\": 1017,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 3,\n                        \"comment\": \"It's decent, but not the best.\",\n                        \"created_at\": \"2023-09-25T14:15:02.808Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.808Z\"\n                    },\n                    {\n                        \"id\": 1071,\n                        \"user_id\": 1017,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"I'm loving it! The product exceeded my expectations.\",\n                        \"created_at\": \"2023-09-25T14:15:02.810Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.810Z\"\n                    },\n                    {\n                        \"id\": 1072,\n                        \"user_id\": 1018,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Very satisfied with my purchase.\",\n                        \"created_at\": \"2023-09-25T14:15:02.811Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.811Z\"\n                    },\n                    {\n                        \"id\": 1073,\n                        \"user_id\": 1018,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"Excellent product! It was exactly what I needed.\",\n                        \"created_at\": \"2023-09-25T14:15:02.812Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.812Z\"\n                    },\n                    {\n                        \"id\": 1074,\n                        \"user_id\": 1018,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 3,\n                        \"comment\": \"Not bad, but it could be better.\",\n                        \"created_at\": \"2023-09-25T14:15:02.814Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.814Z\"\n                    },\n                    {\n                        \"id\": 1075,\n                        \"user_id\": 1018,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Good product for everyday use.\",\n                        \"created_at\": \"2023-09-25T14:15:02.816Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.816Z\"\n                    },\n                    {\n                        \"id\": 1076,\n                        \"user_id\": 1019,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"I'm extremely happy with my purchase!\",\n                        \"created_at\": \"2023-09-25T14:15:02.818Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.818Z\"\n                    },\n                    {\n                        \"id\": 1077,\n                        \"user_id\": 1019,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Pretty good product. It exceeded my expectations.\",\n                        \"created_at\": \"2023-09-25T14:15:02.819Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.819Z\"\n                    },\n                    {\n                        \"id\": 1078,\n                        \"user_id\": 1019,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 3,\n                        \"comment\": \"It's decent, but it has some room for improvement.\",\n                        \"created_at\": \"2023-09-25T14:15:02.820Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.820Z\"\n                    },\n                    {\n                        \"id\": 1079,\n                        \"user_id\": 1019,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"Highly recommended! The product is top-notch!\",\n                        \"created_at\": \"2023-09-25T14:15:02.822Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.822Z\"\n                    },\n                    {\n                        \"id\": 1080,\n                        \"user_id\": 1020,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Very satisfied with my purchase!\",\n                        \"created_at\": \"2023-09-25T14:15:02.823Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.823Z\"\n                    },\n                    {\n                        \"id\": 1081,\n                        \"user_id\": 1020,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"Excellent product! Will buy from this seller again!\",\n                        \"created_at\": \"2023-09-25T14:15:02.824Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.824Z\"\n                    },\n                    {\n                        \"id\": 1082,\n                        \"user_id\": 1020,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 3,\n                        \"comment\": \"Not bad, but it could use some improvements.\",\n                        \"created_at\": \"2023-09-25T14:15:02.826Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.826Z\"\n                    },\n                    {\n                        \"id\": 1083,\n                        \"user_id\": 1020,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Pretty good! But I had some minor issues.\",\n                        \"created_at\": \"2023-09-25T14:15:02.827Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.827Z\"\n                    },\n                    {\n                        \"id\": 1084,\n                        \"user_id\": 1021,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"Absolutely fantastic! I'm thrilled with my purchase!\",\n                        \"created_at\": \"2023-09-25T14:15:02.828Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.828Z\"\n                    },\n                    {\n                        \"id\": 1085,\n                        \"user_id\": 1021,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Very good product. I highly recommend it.\",\n                        \"created_at\": \"2023-09-25T14:15:02.830Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.830Z\"\n                    },\n                    {\n                        \"id\": 1086,\n                        \"user_id\": 1021,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 3,\n                        \"comment\": \"It's decent, but not the best.\",\n                        \"created_at\": \"2023-09-25T14:15:02.831Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.831Z\"\n                    },\n                    {\n                        \"id\": 1087,\n                        \"user_id\": 1021,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"I'm loving it! The product exceeded my expectations.\",\n                        \"created_at\": \"2023-09-25T14:15:02.832Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.832Z\"\n                    },\n                    {\n                        \"id\": 1088,\n                        \"user_id\": 1022,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Very satisfied with my purchase.\",\n                        \"created_at\": \"2023-09-25T14:15:02.834Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.834Z\"\n                    },\n                    {\n                        \"id\": 1089,\n                        \"user_id\": 1022,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"Excellent product! It was exactly what I needed.\",\n                        \"created_at\": \"2023-09-25T14:15:02.835Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.835Z\"\n                    },\n                    {\n                        \"id\": 1090,\n                        \"user_id\": 1022,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 3,\n                        \"comment\": \"Not bad, but it could be better.\",\n                        \"created_at\": \"2023-09-25T14:15:02.836Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.836Z\"\n                    },\n                    {\n                        \"id\": 1091,\n                        \"user_id\": 1022,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Good product for everyday use.\",\n                        \"created_at\": \"2023-09-25T14:15:02.837Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.837Z\"\n                    },\n                    {\n                        \"id\": 1092,\n                        \"user_id\": 1023,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"I'm extremely happy with my purchase!\",\n                        \"created_at\": \"2023-09-25T14:15:02.839Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.839Z\"\n                    },\n                    {\n                        \"id\": 1093,\n                        \"user_id\": 1023,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Pretty good product. It exceeded my expectations.\",\n                        \"created_at\": \"2023-09-25T14:15:02.840Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.840Z\"\n                    },\n                    {\n                        \"id\": 1094,\n                        \"user_id\": 1023,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 3,\n                        \"comment\": \"It's decent, but it has some room for improvement.\",\n                        \"created_at\": \"2023-09-25T14:15:02.842Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.842Z\"\n                    },\n                    {\n                        \"id\": 1095,\n                        \"user_id\": 1023,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"Highly recommended! The product is top-notch!\",\n                        \"created_at\": \"2023-09-25T14:15:02.843Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.843Z\"\n                    },\n                    {\n                        \"id\": 1096,\n                        \"user_id\": 1024,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Very satisfied with my purchase!\",\n                        \"created_at\": \"2023-09-25T14:15:02.844Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.844Z\"\n                    },\n                    {\n                        \"id\": 1097,\n                        \"user_id\": 1024,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 5,\n                        \"comment\": \"Excellent product! It was exactly what I needed.\",\n                        \"created_at\": \"2023-09-25T14:15:02.846Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.846Z\"\n                    },\n                    {\n                        \"id\": 1098,\n                        \"user_id\": 1024,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 3,\n                        \"comment\": \"Not bad, but it could be better.\",\n                        \"created_at\": \"2023-09-25T14:15:02.847Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.847Z\"\n                    },\n                    {\n                        \"id\": 1099,\n                        \"user_id\": 1024,\n                        \"product_id\": 1000,\n                        \"variant_id\": 1000,\n                        \"rating\": 4,\n                        \"comment\": \"Good product for everyday use.\",\n                        \"created_at\": \"2023-09-25T14:15:02.848Z\",\n                        \"updated_at\": \"2023-09-25T14:15:02.848Z\"\n                    }\n                ]\n            },\n            {\n                \"id\": 1001,\n                \"product_id\": 1000,\n                \"name\": \"Variant 2\",\n                \"image_url\": \"https://via.placeholder.com/150\",\n                \"stock\": 100,\n                \"sold\": 0,\n                \"price\": 30.99,\n                \"raw_price\": 20,\n                \"created_at\": \"2023-09-25T14:15:02.253Z\",\n                \"updated_at\": \"2023-09-25T14:15:02.253Z\",\n                \"reviews\": []\n            },\n            {\n                \"id\": 1002,\n                \"product_id\": 1000,\n                \"name\": \"Variant 3\",\n                \"image_url\": \"https://via.placeholder.com/150\",\n                \"stock\": 75,\n                \"sold\": 0,\n                \"price\": 35.99,\n                \"raw_price\": 25,\n                \"created_at\": \"2023-09-25T14:15:02.255Z\",\n                \"updated_at\": \"2023-09-25T14:15:02.255Z\",\n                \"reviews\": []\n            }\n        ],\n        \"categories\": [\n            {\n                \"id\": 1000,\n                \"product_id\": 1000,\n                \"category_id\": 1000,\n                \"created_at\": \"2023-09-25T14:15:02.118Z\",\n                \"updated_at\": \"2023-09-25T14:15:02.118Z\"\n            }\n        ]\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Update product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Test Update\",\r\n    \"description\":\"Updated description.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/products/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "100000"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Test Update\",\r\n    \"description\":\"Updated description.\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/products/:id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"products",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1000"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "date",
+									"value": "Tue, 26 Sep 2023 09:09:57 GMT"
+								},
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "content-encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "connection",
+									"value": "close"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Product update successful\",\n    \"data\": {\n        \"id\": 100000,\n        \"name\": \"Test Update\",\n        \"description\": \"Updated description.\",\n        \"created_at\": \"2023-09-26T08:58:29.958Z\",\n        \"updated_at\": \"2023-09-26T09:09:57.716Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/products/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "100000"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/products/:id",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"products",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "100000"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "date",
+									"value": "Tue, 26 Sep 2023 09:11:07 GMT"
+								},
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "content-encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "connection",
+									"value": "close"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Product delete successful\",\n    \"data\": {\n        \"id\": 1000,\n        \"name\": \"Test Product\",\n        \"description\": \"Product description.\",\n        \"created_at\": \"2023-09-26T08:58:29.958Z\",\n        \"updated_at\": \"2023-09-26T09:09:57.716Z\",\n        \"variants\": [],\n        \"categories\": []\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
 			"name": "Variants",
 			"item": [
 				{
