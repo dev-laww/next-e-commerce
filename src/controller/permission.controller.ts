@@ -38,7 +38,7 @@ export default class PermissionController {
         const resourceList = await this.permissionRepo.getAvailableResources();
         const requestedResource = this.getRequestedResource(resource, resourceList);
 
-        if (!requestedResource) return Response.notFound();
+        if (!requestedResource) return Response.notFound("Requested resource not found");
 
         const permissions = await this.repo.getPermissions(session.id);
 
