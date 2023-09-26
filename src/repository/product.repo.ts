@@ -14,23 +14,18 @@ export default class ProductRepository {
             where: filter
         });
 
-        if (filter?.categories) {
-            let productCategories = await this.prismaClient.productCategory.findMany({
-                where: {
-                    category_id: { in: filter.categories as any }
-                },
-                select: { product: true }
-            })
-
-            products = productCategories.map((res: any) => res.product)
-        }
-
         return products || []
     }
 
     public async getById(id: number): Promise<Product | null> {
         return this.prismaClient.product.findUnique({
-            where: { id: id }
+            where: { id: id },
+            include: {
+                variants: {
+                    include: { reviews: true }
+                },
+                categories: true
+            }
         });
     }
 
@@ -117,16 +112,5 @@ export default class ProductRepository {
                 categories: true
             }
         });
-    }
-
-    public async getReviews(id: number): Promise<Review[]> {
-        return this.prismaClient.product.findUnique({
-            where: { id: id },
-            include: {
-                variants: {
-                    include: { reviews: true }
-                }
-            }
-        }).then(res => res?.variants.flatMap(variant => variant.reviews) || []);
     }
 }

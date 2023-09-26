@@ -28,9 +28,17 @@ export default class ProductsController {
         let cFilter: any = filter
 
         if (cFilter.categories) {
-            cFilter.categories = cFilter.categories
+            const filters = cFilter.categories
                 .split(",")
                 .map((categoryId: string) => Number(categoryId) || 0)
+
+            cFilter.categories = {
+                some: {
+                    category: {
+                        id: { in: filters }
+                    }
+                }
+            }
         }
 
         let type: "next" | "previous" | undefined;
@@ -112,7 +120,7 @@ export default class ProductsController {
         const body = await req.json();
         const requestData = Validators.create.safeParse(body);
 
-        if (!requestData.success) return Response.validationError(requestData.error.errors);
+        if (!requestData.success) return Response.validationError(requestData.error.errors, "Invalid data");
 
         const product = await this.repo.create(humps.decamelizeKeys(body) as Product);
 
@@ -133,7 +141,7 @@ export default class ProductsController {
 
         if (!product.success) return Response.badRequest(product.error.message);
 
-        const updatedProduct = this.repo.update(productInfo.id, humps.decamelizeKeys(body) as Product)
+        const updatedProduct = await this.repo.update(productInfo.id, humps.decamelizeKeys(product.data) as Product)
 
         await this.logger.info(updatedProduct, `User [${session.id}] updated product [${id}]`, true);
         return Response.ok("Product update successful", updatedProduct);
@@ -178,11 +186,11 @@ export default class ProductsController {
 
         const variant = Validators.variant.safeParse(body);
 
-        if (!variant.success) return Response.badRequest(variant.error.message);
+        if (!variant.success) return Response.validationError(variant.error.errors, "Invalid data");
 
         const productVariant = await this.repo.addVariant(product.id, humps.decamelizeKeys(variant.data) as ProductVariant);
 
-        await this.logger.info(productVariant, `User [${session.id}] added product variant [${id}] for product [${product.id}]`, true);
+        await this.logger.info(productVariant, `User [${session.id}] added product variant [${productVariant.id}] for product [${product.id}]`, true);
         return Response.created("Product variant added", productVariant);
     }
 
@@ -201,11 +209,11 @@ export default class ProductsController {
         const body = await req.json();
         const variant = Validators.variantUpdate.safeParse(body);
 
-        if (!variant.success) return Response.badRequest(variant.error.message);
+        if (!variant.success) return Response.validationError(variant.error.errors, "Invalid data");
 
-        const updatedVariant = await Repository.productVariant.update(variantInfo.id ,humps.decamelizeKeys(variant.data) as ProductVariant);
+        const updatedVariant = await Repository.productVariant.update(variantInfo.id, humps.decamelizeKeys(variant.data) as ProductVariant);
 
-        await this.logger.info(updatedVariant, `User [${session.id}] updated product variant [${id}] for product [${product.id}]`, true);
+        await this.logger.info(updatedVariant, `User [${session.id}] updated product variant [${variantInfo.id}] for product [${product.id}]`, true);
         return Response.ok("Product variant update successful", updatedVariant);
     }
 
@@ -234,7 +242,7 @@ export default class ProductsController {
         const result = await Repository.productVariant.deleteProductVariants(product.id);
 
         await this.logger.info(undefined, `User [${session.id}] deleted product variants [${id}] for product [${product.id}]`, true)
-        return Response.ok(`${result.count} review${result.count > 1 ? "s" : ""} deleted successfully`)
+        return Response.ok(`${result.count} product variant${result.count > 1 ? "s" : ""} deleted successfully`)
     }
 
     public async getCategories(_req: NextRequest, params: { id: string }) {
@@ -260,7 +268,11 @@ export default class ProductsController {
 
         if (!category) return Response.notFound("Category not found")
 
-        const productCategory = await this.repo.addCategory(product.id, category.id);
+        let productCategory = await this.repo.getCategories(product.id).then(res => res.find(category => category.id === Number(categoryId) || 0));
+
+        if (productCategory) return Response.badRequest(`Category already in product [${product.id}] exists`);
+
+        productCategory = await this.repo.addCategory(product.id, category.id);
 
         await this.logger.info(productCategory, `User [${session.id}] added category [${category.id}] to product [${product.id}]`, true);
         return Response.ok("Category added to product");
@@ -287,7 +299,7 @@ export default class ProductsController {
 
         if (!product) return Response.notFound("Product not found");
 
-        const reviews = await this.repo.getReviews(product.id)
+        const reviews = await Repository.review.getProductReviews(product.id)
 
         if (!reviews.length) return Response.notFound("Product reviews not found");
 
@@ -304,7 +316,7 @@ export default class ProductsController {
 
         const result = await Repository.review.deleteProductReviews(product.id);
 
-        await this.logger.info(`User [${session.id}] deleted reviews for product [${product.id}]`, undefined,true);
+        await this.logger.info(`User [${session.id}] deleted reviews for product [${product.id}]`, undefined, true);
         return Response.ok(`${result.count} review${result.count > 1 ? "s" : ""} deleted successfully`);
     }
 
@@ -320,7 +332,7 @@ export default class ProductsController {
 
         const review = Validators.review.safeParse(body);
 
-        if (!review.success) return Response.badRequest(review.error.message);
+        if (!review.success) return Response.validationError(review.error.errors, "Invalid data");
 
         const productReview = await Repository.review.create(humps.decamelizeKeys({
             ...review.data,
@@ -347,7 +359,7 @@ export default class ProductsController {
         const body = await req.json();
         const review = Validators.reviewUpdate.safeParse(body);
 
-        if (!review.success) return Response.badRequest(review.error.message);
+        if (!review.success) return Response.validationError(review.error.errors, "Invalid data");
 
         const updatedReview = await Repository.review.update(reviewInfo.id, humps.decamelizeKeys(review.data) as Review);
 
@@ -368,9 +380,7 @@ export default class ProductsController {
 
         const deletedReview = await Repository.review.delete(review.id);
 
-        if (!deletedReview) return Response.notFound("Product review not found")
-
         await this.logger.info(deletedReview, `User [${session.id}] removed review [${reviewId}] from product [${product.id}]`, true);
-        return Response.ok("Product review removed")
+        return Response.ok("Product review removed", deletedReview)
     }
 }
