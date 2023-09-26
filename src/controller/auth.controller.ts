@@ -29,7 +29,6 @@ export default class AuthController {
     @CheckBody
     public async signup(req: NextRequest) {
         const body = await req.json()
-
         const requestData = Validators.registerSchema.safeParse(body);
 
         if (!requestData.success) return Response.validationError(requestData.error.errors);
@@ -89,7 +88,6 @@ export default class AuthController {
     @CheckBody
     public async login(req: NextRequest) {
         const body = await req.json()
-
         const requestData = Validators.loginSchema.safeParse(body);
 
         if (!requestData.success) return Response.validationError(requestData.error.errors);
@@ -129,7 +127,6 @@ export default class AuthController {
     @CheckBody
     public async resetPassword(req: NextRequest) {
         const body = await req.json()
-
         const requestData = Validators.resetPasswordSchema.safeParse(body);
 
         if (!requestData.success) return Response.validationError(requestData.error.errors);
@@ -143,7 +140,6 @@ export default class AuthController {
         }
 
         const token = requestData.data.type === "otp" ? generateOTP() : generateRandomToken();
-
         const resetPasswordToken = await this.userRepo.generateTokenOTP(
             user.id,
             token,
@@ -172,7 +168,6 @@ export default class AuthController {
     @CheckBody
     public async confirmResetPassword(req: NextRequest) {
         const body = await req.json()
-
         const requestData = Validators.confirmResetPasswordSchema.safeParse(body);
 
         if (!requestData.success) return Response.validationError(requestData.error.errors);
@@ -187,7 +182,6 @@ export default class AuthController {
         if (!success) return Response.unauthorized("Invalid token");
 
         await this.userRepo.changePassword(data.id, requestData.data.password);
-
         await this.logger.debug(data, `User ${data.email} changed password`)
         await this.logger.info(`${data.email} changed password`, undefined, true);
 
@@ -198,7 +192,6 @@ export default class AuthController {
     @CheckBody
     public async confirmEmail(req: NextRequest) {
         const body = await req.json()
-
         const requestData = Validators.confirmEmailSchema.safeParse(body);
 
         if (!requestData.success) return Response.validationError(requestData.error.errors);
@@ -215,7 +208,6 @@ export default class AuthController {
         if (data.confirmed) return Response.badRequest("Email already confirmed");
 
         await this.userRepo.update(data.id, { confirmed: true });
-
         await this.logger.debug(data, `User ${data.email} confirmed email`)
         await this.logger.info(`${data.email} confirmed`, undefined, true);
 
@@ -226,7 +218,6 @@ export default class AuthController {
     @CheckBody
     public async resendEmailConfirmation(req: NextRequest) {
         const body = await req.json()
-
         const requestData = Validators.resendEmailSchema.safeParse(body);
 
         if (!requestData.success) return Response.validationError(requestData.error.errors);
@@ -242,7 +233,6 @@ export default class AuthController {
         if (user.confirmed) return Response.badRequest("Email already confirmed");
 
         const token = requestData.data.type === "token" ? generateRandomToken() : generateOTP();
-
         const emailConfirmationToken = await this.userRepo.generateTokenOTP(
             user.id,
             token,
@@ -269,7 +259,6 @@ export default class AuthController {
     @CheckBody
     public async refreshToken(req: NextRequest) {
         const body = await req.json()
-
         const requestData = Validators.refreshTokenSchema.safeParse(body);
 
         if (!requestData.success) return Response.validationError(requestData.error.errors);

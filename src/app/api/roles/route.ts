@@ -8,7 +8,6 @@ const logger = getLogger({ name: "api:profile" });
 
 async function handler(req: NextRequest) {
     const controller = new RolesController();
-
     let statusCode, response, success;
 
     switch (req.method) {

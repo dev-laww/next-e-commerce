@@ -1,33 +1,28 @@
 import { NextRequest } from "next/server";
-import { Category } from "@prisma/client";
+import { Category, Role } from "@prisma/client";
 import humps from 'humps';
 
-import Validators from "@lib/validator/category.validator";
-import Response from "@lib/http";
+import Validators from "@lib/validator/categories.validator";
+import Response, { getSession } from "@lib/http";
 import { PageToken } from "@src/lib/types";
 import { generatePageToken, parsePageToken } from "@src/lib/utils/token";
 import { getDatabaseLogger } from "@src/lib/utils/logging";
-import { CheckError, AllowPermitted, AllowMethod, CheckBody } from "@utils/decorator";
+import { AllowPermitted, CheckBody, CheckError } from "@utils/decorator";
 import Repository from "@src/repository";
 
 @AllowPermitted
 @CheckError
-export default class CategoryController {
+export default class CategoriesController {
     private logger = getDatabaseLogger({ name: "controller:categories", class: "CategoryController" })
-    repo = Repository.category;
+    private repo = Repository.category;
 
-    @AllowMethod("GET")
     public async getCategories(req: NextRequest) {
         const searchParams = Object.fromEntries(req.nextUrl.searchParams);
-
         const filters = Validators.search.parse(searchParams);
-
         let { pageToken, limit, ...filter } = filters;
         limit = limit || 50;
 
-        // Parse page token;
-        let type: "next" | "previous" | undefined;
-
+        // Parse page token
         const parsedPageToken = parsePageToken<Category>(pageToken || "");
 
         let isPrevious;
@@ -37,73 +32,67 @@ export default class CategoryController {
             isPrevious = parsedPageToken.type === "previous";
         }
 
-        // If type is previous, make limit negative
-        const previous = type === "previous";
-        let result = await this.repo.getAll(filter, previous ? -limit : limit, parsedPageToken?.cursor as Category);
+        const pageSize = isPrevious ? -limit : limit;
 
-        if (!result.length) return Response.notFound("No categories found");
+        // Fetch the addresses
+        const result = await this.repo.getAll(filter, pageSize, parsedPageToken?.cursor as Role);
 
-        // Parsing page tokens
-        const last = result[result.length - 1];
-        const first = result[0];
+        if (!result.length) return Response.notFound("No role found");
+
+        // Determine if there are more pages
+        const hasNextPage = await this.repo.getAll(filter, limit, result[result.length - 1]).then(res => res.length > 0);
+        const hasPreviousPage = await this.repo.getAll(filter, -limit, result[0]).then(res => res.length > 0);
+
+        // Generate URLs
         const nextPageToken: PageToken<Category> = {
             cursor: {
-                id: last.id,
+                id: result[result.length - 1].id
             },
             type: "next"
         };
-        const hasNextPage = await this.repo.getAll(filter, limit || 50, result[result.length - 1]).then(res => res.length > 0);
+
+        const previousPageToken: PageToken<Category> = {
+            cursor: {
+                id: result[0].id
+            },
+            type: "previous"
+        };
 
         const nextSearchParams = new URLSearchParams({
             ...searchParams,
             pageToken: generatePageToken(nextPageToken)
         });
 
-        const hasPreviousPage = await this.repo.getAll(filter, limit ? -limit : -50, result[0]).then(res => res.length > 0);
-        const previousPageToken: PageToken<Category> = {
-            cursor: {
-                id: first.id,
-            },
-            type: "previous"
-        };
-
         const previousSearchParams = new URLSearchParams({
             ...searchParams,
             pageToken: generatePageToken(previousPageToken)
         });
 
-        // Generate urls
-        const nextUrl = `${req.nextUrl.origin}/${req.nextUrl.pathname}?${nextSearchParams.toString()}`;
-        const previousUrl = `${req.nextUrl.origin}/${req.nextUrl.pathname}?${previousSearchParams.toString()}`;
+        const meta = {
+            hasNextPage,
+            hasPreviousPage,
+            previousPageUrl: hasPreviousPage ? `${req.nextUrl.origin}/${req.nextUrl.pathname}?${previousSearchParams.toString()}` : undefined,
+            nextPageUrl: hasNextPage ? `${req.nextUrl.origin}/${req.nextUrl.pathname}?${nextSearchParams.toString()}` : undefined,
+        };
 
-        await this.logger.info("Categories found");
         return Response.ok("Categories found", {
             result,
-            meta: {
-                hasNextPage,
-                hasPreviousPage,
-                previousPageUrl: hasPreviousPage ? previousUrl : undefined,
-                nextPageUrl: hasNextPage ? nextUrl : undefined,
-            },
+            meta,
         });
     }
 
-    @AllowMethod("GET")
     public async getCategory(_req: NextRequest, params: { id: string }) {
         const { id } = params;
-
-        const category = await this.repo.getById(parseInt(id, 10) || 0);
+        const category = await this.repo.getById(Number(id) || 0);
 
         if (!category) return Response.notFound("Category not found");
 
         return Response.ok("Category found", category);
     }
 
-    @AllowMethod("POST")
     @CheckBody
     public async createCategory(req: NextRequest) {
         const body = await req.json();
-
         const requestData = Validators.create.safeParse(body);
 
         if (!requestData.success) return Response.validationError(requestData.error.errors);
@@ -113,46 +102,41 @@ export default class CategoryController {
         return Response.created("Category created successfully", category)
     }
 
-    @AllowMethod("PUT")
     @CheckBody
     public async updateCategory(req: NextRequest, params: { id: string }) {
+        const session = await getSession(req);
         const { id } = params;
-
-        const categoryInfo = await this.repo.getById(parseInt(id, 10) || 0);
+        const categoryInfo = await this.repo.getById(Number(id) || 0);
 
         if (!categoryInfo) return Response.notFound("Category not found");
 
         const body = await req.json();
-
         const category = Validators.update.safeParse(body);
 
         if (!category.success) return Response.badRequest(category.error.message);
 
         const updatedCategory = this.repo.update(categoryInfo.id, humps.decamelizeKeys(body) as Category)
 
-        await this.logger.info(updatedCategory, `Category [${id}] has been updated`, true);
+        await this.logger.info(updatedCategory, `User [${session.id}] updated category [${id}] `, true);
         return Response.ok("Category update successful", updatedCategory);
     }
 
-    @AllowMethod("DELETE")
-    public async deleteCategory(_req: NextRequest, params: { id: string }) {
+    public async deleteCategory(req: NextRequest, params: { id: string }) {
+        const session = await getSession(req);
         const { id } = params;
-
-        const category = await this.repo.getById(parseInt(id, 10) || 0);
+        const category = await this.repo.getById(Number(id) || 0);
 
         if (!category) return Response.notFound("Category not found");
 
         const deletedCategory = await this.repo.delete(category.id);
 
-        await this.logger.info(deletedCategory, `Category [${id}] deleted`, true);
+        await this.logger.info(deletedCategory, `User [${session.id}] deleted category [${id}] `, true);
         return Response.ok("Category delete successful", deletedCategory);
     }
 
-    @AllowMethod("GET")
     public async getProducts(_req: NextRequest, params: { id: string }) {
         const { id } = params;
-
-        const category = await this.repo.getById(parseInt(id, 10) || 0);
+        const category = await this.repo.getById(Number(id) || 0);
 
         if (!category) return Response.notFound("Category not found");
 

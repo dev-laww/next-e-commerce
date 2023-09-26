@@ -8,7 +8,6 @@ const logger = getLogger({ name: "api:variants:id" });
 
 async function handler(req: NextRequest, { params }: { params: { id: string } }) {
     const controller = new VariantsController();
-
     let statusCode, response, success;
 
     switch (req.method) {

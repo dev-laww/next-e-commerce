@@ -6,9 +6,9 @@ import { getLogger } from "@utils/logging";
 import { STATUS_CODE } from "@lib/constants";
 
 const logger = getLogger({ name: "api:products" })
-const controller = new ProductsController()
 
 async function handler(req: NextRequest) {
+    const controller = new ProductsController()
     const method = req.method
     let statusCode, response, success;
 

@@ -87,9 +87,7 @@ export default class RolesController {
 
     public async getRole(req: NextRequest, params: { id: string }) {
         const session = await getSession(req);
-
         const id = parseInt(params.id, 10);
-
         const result = await this.repo.getById(id);
 
         if (!result) return Response.notFound("Role not found");
@@ -101,9 +99,7 @@ export default class RolesController {
     @CheckBody
     public async createRole(req: NextRequest) {
         const session = await getSession(req);
-
         const body = await req.json();
-
         const data = Validators.create.safeParse(body);
 
         if (!data.success) return Response.validationError(data.error.errors, "Invalid data");
@@ -117,11 +113,8 @@ export default class RolesController {
     @CheckBody
     public async updateRole(req: NextRequest, params: { id: string }) {
         const session = await getSession(req);
-
         const id = parseInt(params.id, 10);
-
         const body = await req.json();
-
         const data = Validators.update.safeParse(body);
 
         if (!data.success) return Response.badRequest("Invalid data", data.error);
@@ -138,7 +131,6 @@ export default class RolesController {
 
     public async deleteRole(req: NextRequest, params: { id: string }) {
         const session = await getSession(req);
-
         const { id } = params;
 
         let result = await this.repo.getById(Number(id) || 0);
@@ -153,9 +145,7 @@ export default class RolesController {
 
     public async getRolePermissions(req: NextRequest, params: { id: string }) {
         const session = await getSession(req);
-
         const { id } = params;
-
         const role = await this.repo.getById(Number(id) || 0);
 
         if (!role) return Response.notFound("Role not found");
@@ -171,7 +161,6 @@ export default class RolesController {
     public async addRolePermission(req: NextRequest, params: { id: string, permissionId: string }) {
         const session = await getSession(req);
         const { id, permissionId } = params;
-
         const role = await this.repo.getById(Number(id) || 0);
 
         if (!role) return Response.notFound("Role not found");
@@ -190,9 +179,7 @@ export default class RolesController {
 
     public async removeRolePermission(_req: NextRequest, params: { id: string, permissionId: string }) {
         const session = await getSession(_req);
-
         const { id, permissionId } = params;
-
         const role = await this.repo.getById(Number(id) || 0);
 
         if (!role) return Response.notFound("Role not found");
@@ -210,7 +197,6 @@ export default class RolesController {
     public async getRoleUsers(req: NextRequest, params: { id: string }) {
         const session = await getSession(req);
         const { id } = params;
-
         const result = await this.repo.getUsers(Number(id) || 0);
 
         if (!result) return Response.notFound("Role not found");

@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 
-import CategoryController from "@src/controller/category.controller";
+import CategoriesController from "@controller/categories.controller";
 import PermissionController from "@controller/permission.controller";
 import Response from "@lib/http";
 import { Product, Category } from "@prisma/client";
@@ -12,12 +12,12 @@ import { UserSession } from "@lib/types";
 const isAllowed = jest.spyOn(PermissionController, "isAllowed");
 
 describe("CategoryController", () => {
-    let controller: CategoryController;
+    let controller: CategoriesController;
     let req: NextRequest;
     const token = generateAccessToken({ id: 1, username: "test" } as UserSession);
 
     beforeEach(() => {
-        controller = new CategoryController();
+        controller = new CategoriesController();
     });
 
     describe("Test getCategories", () => {

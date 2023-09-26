@@ -9,12 +9,10 @@ const logger = getLogger({ name: "api:accounts:id" });
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
     const controller = new AccountsController();
-
     const { statusCode, response } = await controller.getAccount(req, params);
     const success = statusCode == STATUS_CODE.OK;
 
     logger.info(success ? response.message : response, success ? undefined : `Get account failed: ${response.message}`);
-
     return NextResponse.json(response, { status: statusCode })
 }
 
