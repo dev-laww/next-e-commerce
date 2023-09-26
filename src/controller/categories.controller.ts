@@ -146,4 +146,17 @@ export default class CategoriesController {
 
         return Response.ok("Category products found", products)
     }
+
+    public async getProduct(_req: NextRequest, params: { id: string, productId: string }) {
+        const { id, productId } = params;
+        const category = await this.repo.getById(Number(id) || 0);
+
+        if (!category) return Response.notFound("Category not found");
+
+        const product = await Repository.product.getById(Number(productId) || 0);
+
+        if (!product) return Response.notFound("Product not found");
+
+        return Response.ok("Category product found", product)
+    }
 }
