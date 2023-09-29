@@ -239,6 +239,10 @@ export default class ProductsController {
 
         if (!product) return Response.notFound("Product not found");
 
+        const variants = await this.repo.getVariants(product.id);
+
+        if (!variants.length) return Response.notFound("No variants found");
+
         const result = await Repository.productVariant.deleteProductVariants(product.id);
 
         await this.logger.info(undefined, `User [${session.id}] deleted product variants [${id}] for product [${product.id}]`, true)
@@ -253,6 +257,8 @@ export default class ProductsController {
         if (!product) return Response.notFound("Product not found");
 
         const categories = await this.repo.getCategories(product.id);
+
+        if (!categories.length) return Response.notFound("Product categories not found");
 
         return Response.ok("Product categories found", categories);
     }
@@ -285,9 +291,11 @@ export default class ProductsController {
 
         if (!product) return Response.notFound("Product not found");
 
-        const deletedCategory = await this.repo.deleteCategory(product.id, Number(categoryId) || 0);
+        const category = await this.repo.getCategories(product.id).then(res => res.find(category => category.id === Number(categoryId) || 0));
 
-        if (!deletedCategory) return Response.notFound("Product category not found")
+        if (!category) return Response.notFound("Product category not found")
+
+        const deletedCategory = await this.repo.deleteCategory(product.id, Number(categoryId) || 0);
 
         await this.logger.info(deletedCategory, `User [${session.id}] removed category [${categoryId}] from product [${product.id}]`, true);
         return Response.ok("Product category removed")
@@ -313,6 +321,10 @@ export default class ProductsController {
         const product = await this.repo.getById(Number(id) || 0);
 
         if (!product) return Response.notFound("Product not found");
+
+        const reviews = await Repository.review.getProductReviews(product.id);
+
+        if (!reviews.length) return Response.notFound("No reviews found");
 
         const result = await Repository.review.deleteProductReviews(product.id);
 
