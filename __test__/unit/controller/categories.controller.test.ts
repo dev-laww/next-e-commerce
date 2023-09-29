@@ -3,7 +3,7 @@ import { NextRequest } from "next/server";
 import CategoriesController from "@controller/categories.controller";
 import PermissionController from "@controller/permission.controller";
 import Response from "@lib/http";
-import { Product, Category } from "@prisma/client";
+import { Category } from "@prisma/client";
 import Repository from "@src/repository";
 import { STATUS_CODE } from "@lib/constants";
 import { generateAccessToken } from "@utils/token";
@@ -88,7 +88,7 @@ describe("CategoryController", () => {
             id: 1,
             name: "testing"
         } as Category;
-        
+
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/categories", {
                 method: "POST",
@@ -275,6 +275,51 @@ describe("CategoryController", () => {
         });
     });
 
-    it.todo("Create test for getProducts")
+    describe("Test getProducts", () => {
+        const category = {
+            products: [{
+                product: { id: 1 }
+            }]
+        }
+        const params = { id: "1" };
+
+        beforeEach(() => {
+            req = new NextRequest("http://localhost:3000/api/categories/1/products", {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+        });
+
+        it("returns 200 with data", async () => {
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.category.getById as jest.Mock).mockResolvedValueOnce(category);
+            (Repository.category.getProducts as jest.Mock).mockResolvedValueOnce(category.products);
+
+            const res = await controller.getProducts(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.OK);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 404 if category not found", async () => {
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.category.getById as jest.Mock).mockResolvedValueOnce(null);
+
+            const res = await controller.getProducts(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.NOT_FOUND);
+            expect(res.response).toBeDefined();
+        });
+
+        it("returns 404 if no products found", async () => {
+            isAllowed.mockResolvedValueOnce(Response.ok());
+            (Repository.category.getById as jest.Mock).mockResolvedValueOnce(category);
+            (Repository.category.getProducts as jest.Mock).mockResolvedValueOnce([]);
+
+            const res = await controller.getProducts(req, params);
+
+            expect(res.statusCode).toBe(STATUS_CODE.NOT_FOUND);
+            expect(res.response).toBeDefined();
+        });
+    });
 });
 
