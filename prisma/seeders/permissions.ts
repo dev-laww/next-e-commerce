@@ -421,10 +421,10 @@ const permissions = [
     },
     {
         id: 1060,
-        name: "Delete order",
-        code: "permission:delete:order",
-        action: "DELETE",
-        resource: "DELETE/api/orders/:id",
+        name: "Cancel order",
+        code: "permission:update:order",
+        action: "POST",
+        resource: "POST/api/orders/:id/cancel",
     },
     {
         id: 1061,
@@ -509,6 +509,13 @@ const permissions = [
         code: "permission:delete:product-review",
         action: "DELETE",
         resource: "DELETE/api/products/:id/reviews/:reviewId",
+    },
+    {
+        id: 1073,
+        name: "Get order",
+        code: "permission:read:order",
+        action: "GET",
+        resource: "GET/api/orders/:id",
     }
 ];
 
