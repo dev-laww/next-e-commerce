@@ -6,9 +6,9 @@ import { ORDER_STATUS } from "@lib/constants";
 export default class OrderRepository {
     private prismaClient = prisma;
 
-    public async getAll(filter?: Prisma.OrderWhereInput, limit: number = 50, cursor?: Prisma.OrderWhereUniqueInput): Promise<Order[]> {
+    public async getAll(filter?: Prisma.OrderWhereInput| Order, limit: number = 50, cursor?: Prisma.OrderWhereUniqueInput | Order): Promise<Order[]> {
         return this.prismaClient.order.findMany({
-            cursor: cursor,
+            cursor: cursor ? { id: cursor.id } : undefined,
             take: limit,
             skip: cursor ? 1 : 0,
             where: filter,
