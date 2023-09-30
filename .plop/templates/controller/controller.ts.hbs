@@ -3,6 +3,7 @@ import { NextRequest } from "next/server";
 import Validators from "@lib/validator/{{kebabCase name}}.validator";
 import Response from "@lib/http";
 import { AllowPermitted, CheckError } from "@utils/decorator";
+import { getDatabaseLogger } from "@utils/logging";
 
 @AllowPermitted
 @CheckError
