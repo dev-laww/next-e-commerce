@@ -55,6 +55,8 @@ to learn more about TypeScript and how to use it with Next.js.
 - [ ] Responsive design
 - [ ] Notifications
 - [ ] Improve test coverage
+- [ ] Add new pipelines for staging and production
+- [ ] Integrate redis
 
 ## NOTES
 - After installing dependencies, it will automatically install husky git hooks to ensure the code format.
