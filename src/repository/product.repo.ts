@@ -1,4 +1,4 @@
-import { Prisma, Product, ProductCategory, ProductVariant } from "@prisma/client";
+import { Category, Prisma, Product, ProductVariant, Review } from "@prisma/client";
 
 import prisma from "@src/lib/prisma";
 
@@ -7,41 +7,32 @@ export default class ProductRepository {
     private prismaClient = prisma;
 
     public async getAll(filter?: Prisma.ProductWhereInput, limit: number = 50, cursor?: Prisma.ProductWhereUniqueInput): Promise<Product[]> {
-        if (!filter?.categories) {
-            return this.prismaClient.product.findMany({
-                cursor: cursor,
-                take: limit,
-                skip: cursor ? 1 : 0,
-                where: filter
-            });
-        }
+        let products = await this.prismaClient.product.findMany({
+            cursor: cursor,
+            take: limit,
+            skip: cursor ? 1 : 0,
+            where: filter
+        });
 
-        let productCategories = await this.prismaClient.productCategory.findMany({
-            where: {
-                category_id: {
-                    in: filter.categories as any
-                }
-            },
-            select: {
-                product: true
-            }
-        })
-
-        return productCategories.map((res: any) => res.product)
+        return products || []
     }
 
     public async getById(id: number): Promise<Product | null> {
         return this.prismaClient.product.findUnique({
-            where: { id: id }
+            where: { id: id },
+            include: {
+                variants: {
+                    include: { reviews: true }
+                },
+                categories: true
+            }
         });
     }
 
     public async getVariants(id: number): Promise<ProductVariant[]> {
         const products = await this.prismaClient.product.findUnique({
             where: { id: id },
-            select: {
-                variants: true
-            }
+            select: { variants: true }
         });
 
         return products ? products.variants.map(({ created_at, updated_at, ...rest }) => rest as ProductVariant) : [];
@@ -53,41 +44,55 @@ export default class ProductRepository {
         });
     }
 
-    public async getCategories(id: number): Promise<ProductCategory[]> {
+    public async getCategories(id: number): Promise<Category[]> {
         const product = await this.prismaClient.product.findUnique({
             where: { id: id },
             select: {
-                categories: true
+                categories: {
+                    select: { category: true }
+                }
             }
         });
 
-        return product ? product.categories.map(({ created_at, updated_at, ...rest }) => rest as ProductCategory) : []
+        return product ? product.categories.map(category => category.category as Category) : []
     }
 
-    public async addCategory(id: number, categoryId: number): Promise<Product> {
+    public async addVariant(id: number, data: Prisma.ProductVariantCreateInput | ProductVariant): Promise<ProductVariant> {
+        return this.prismaClient.product.update({
+            where: { id: id },
+            data: {
+                variants: { create: data }
+            },
+            select: {
+                variants: {
+                    orderBy: { created_at: "desc" },
+                    take: 1
+                }
+            }
+        }).then(res => res.variants[0] as ProductVariant)
+    }
+
+    public async addCategory(id: number, categoryId: number): Promise<Category> {
         const product = await this.prismaClient.productCategory.create({
             data: {
                 product_id: id,
                 category_id: categoryId
             },
-            select: {
-                product: true
-            }
+            select: { category: true, }
         });
 
-        return product.product;
+        return product.category as Category;
     }
 
-    public async deleteCategory(product_id: number, id: number): Promise<ProductCategory> {
+    public async deleteCategory(product_id: number, id: number): Promise<Category> {
         return this.prismaClient.productCategory.delete({
-            where: { product_id: product_id, id: id }
-        });
+            where: { product_id: product_id, id: id },
+            select: { category: true }
+        }).then(res => res.category as Category);
     }
 
     public async create(data: Prisma.ProductCreateInput): Promise<Product> {
-        return this.prismaClient.product.create({
-            data: data
-        });
+        return this.prismaClient.product.create({ data: data });
     }
 
     public async update(id: number, data: Prisma.ProductUpdateInput): Promise<Product> {
@@ -99,7 +104,13 @@ export default class ProductRepository {
 
     public async delete(id: number): Promise<Product> {
         return this.prismaClient.product.delete({
-            where: { id: id }
+            where: { id: id },
+            include: {
+                variants: {
+                    include: { reviews: true }
+                },
+                categories: true
+            }
         });
     }
 }

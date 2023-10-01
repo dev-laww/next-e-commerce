@@ -38,4 +38,10 @@ export default class ProductVariantRepository {
             where: { id: id }
         });
     }
+
+    public async deleteProductVariants(productId: number): Promise<Prisma.BatchPayload> {
+        return this.prismaClient.productVariant.deleteMany({
+            where: { product_id: productId }
+        });
+    }
 }

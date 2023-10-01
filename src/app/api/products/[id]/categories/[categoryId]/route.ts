@@ -6,9 +6,9 @@ import { getLogger } from "@src/lib/utils/logging";
 import { STATUS_CODE } from "@lib/constants";
 
 const logger = getLogger({ name: "api:products:categories:id" })
-const controller = new ProductsController()
 
-async function handler(req: NextRequest, { params }: { params: { id: string, categoryId: string }}) {
+async function handler(req: NextRequest, { params }: { params: { id: string, categoryId: string } }) {
+    const controller = new ProductsController()
     const method = req.method
     let statusCode, response, success;
 
@@ -33,5 +33,6 @@ async function handler(req: NextRequest, { params }: { params: { id: string, cat
 
 
 export {
+    handler as POST,
     handler as DELETE
 }

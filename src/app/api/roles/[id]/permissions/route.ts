@@ -7,7 +7,6 @@ const logger = getLogger({ name: "api:profile" });
 
 async function handler(req: NextRequest, { params }: { params: { id: string } }) {
     const controller = new RolesController();
-
     const { statusCode, response } = await controller.getRolePermissions(req, params);
     const success = statusCode === STATUS_CODE.OK;
 

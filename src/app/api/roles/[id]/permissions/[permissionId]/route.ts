@@ -8,7 +8,6 @@ const logger = getLogger({ name: "api:profile" });
 
 async function handler(req: NextRequest, { params }: { params: { id: string, permissionId: string } }) {
     const controller = new RolesController();
-
     let statusCode, response, success;
 
     switch (req.method) {

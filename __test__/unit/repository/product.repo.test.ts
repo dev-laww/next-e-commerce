@@ -82,7 +82,9 @@ describe("ProductRepository", () => {
 
         (prisma.product.findUnique as jest.Mock).mockResolvedValueOnce({
             categories: [{
-                id: 1,
+                category: {
+                    id: 1,
+                }
             }]
         });
 
@@ -102,10 +104,10 @@ describe("ProductRepository", () => {
     });
 
     it("Test deleteCategory", async () => {
-        (prisma.productCategory.delete as jest.Mock).mockResolvedValueOnce({})
+        (prisma.productCategory.delete as jest.Mock).mockResolvedValueOnce({ category: { id: 1 } })
 
         const result = await repo.deleteCategory(1, 1);
 
-        expect(result).toEqual({})
+        expect(result).toEqual({id: 1})
     });
 });

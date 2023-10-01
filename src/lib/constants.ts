@@ -57,6 +57,7 @@ export const COMMON_RESOURCES = [
     "GET/api/variants/:id/reviews/:reviewId",
     "GET/api/categories",
     "GET/api/categories/:id",
+    "GET/api/categories/:id/products",
     "GET/api/shipping-methods",
     "GET/api/shipping-methods/:id",
     "GET/api/coupons/:code"

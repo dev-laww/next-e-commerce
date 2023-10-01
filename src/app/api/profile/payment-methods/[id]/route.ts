@@ -8,7 +8,6 @@ const logger = getLogger({ name: "api:profile:payment-methods:id" });
 
 async function handler(req: NextRequest, { params }: { params: { id: string } }) {
     const controller = new ProfileController();
-
     let statusCode, response, success;
 
     switch (req.method) {

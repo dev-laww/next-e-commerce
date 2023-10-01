@@ -8,7 +8,6 @@ const logger = getLogger({ name: "api:profile:address" });
 
 async function handler(req: NextRequest) {
     const controller = new ProfileController();
-
     let statusCode, response, success;
 
     switch (req.method) {

@@ -19,12 +19,11 @@ import { getDatabaseLogger } from "@utils/logging";
 @AllowPermitted
 @CheckError
 export default class AccountsController {
-    repo = Repository.user;
+    private repo = Repository.user;
     private logger = getDatabaseLogger({ name: "controller:accounts", class: "AccountsController" })
 
     public async getAccounts(req: NextRequest) {
         const searchParams = Object.fromEntries(req.nextUrl.searchParams);
-
         const filters = Validators.search.parse(searchParams);
 
         let { pageToken, limit, ...filter } = filters;
@@ -92,7 +91,6 @@ export default class AccountsController {
     @CheckBody
     public async createAccount(req: NextRequest) {
         const body = await req.json();
-
         const requestData = Validators.create.safeParse(body);
 
         if (!requestData.success) return Response.validationError(requestData.error.errors);
@@ -145,7 +143,6 @@ export default class AccountsController {
 
     public async getAccount(_req: NextRequest, params: { id: string }) {
         const { id } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
@@ -156,7 +153,6 @@ export default class AccountsController {
     @CheckBody
     public async updateAccount(req: NextRequest, params: { id: string }) {
         const { id } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
@@ -194,7 +190,6 @@ export default class AccountsController {
 
     public async deleteAccount(_req: NextRequest, params: { id: string }) {
         const { id } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
@@ -207,7 +202,6 @@ export default class AccountsController {
 
     public async getAccountRoles(_req: NextRequest, params: { id: string }) {
         const { id } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
@@ -222,19 +216,16 @@ export default class AccountsController {
     @CheckBody
     public async updateAccountRoles(req: NextRequest, params: { id: string }) {
         const { id } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
 
         const body = await req.json();
-
         const roles = Validators.updateRole.safeParse(body);
 
         if (!roles.success) return Response.badRequest(roles.error.message);
 
         const updatedAccount = await this.repo.updateRoles(account.id, roles.data.roles);
-
         const accountRoles = await this.repo.getRoles(updatedAccount.id);
 
         await this.logger.info(accountRoles, `Account [${id}] roles updated`, true);
@@ -243,7 +234,6 @@ export default class AccountsController {
 
     public async getPaymentMethods(_req: NextRequest, params: { id: string }) {
         const { id } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
@@ -257,7 +247,6 @@ export default class AccountsController {
 
     public async getPaymentMethod(_req: NextRequest, params: { id: string, paymentMethodId: string }) {
         const { id, paymentMethodId } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
@@ -271,7 +260,6 @@ export default class AccountsController {
 
     public async getAddresses(_req: NextRequest, params: { id: string }) {
         const { id } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
@@ -285,7 +273,6 @@ export default class AccountsController {
 
     public async getAddress(_req: NextRequest, params: { id: string, addressId: string }) {
         const { id, addressId } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
@@ -299,7 +286,6 @@ export default class AccountsController {
 
     public async getOrders(_req: NextRequest, params: { id: string }) {
         const { id } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
@@ -313,7 +299,6 @@ export default class AccountsController {
 
     public async getOrder(_req: NextRequest, params: { id: string, orderId: string }) {
         const { id, orderId } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
@@ -327,7 +312,6 @@ export default class AccountsController {
 
     public async getWishlist(_req: NextRequest, params: { id: string }) {
         const { id } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
@@ -341,7 +325,6 @@ export default class AccountsController {
 
     public async getWishlistItem(_req: NextRequest, params: { id: string, wishlistItemId: string }) {
         const { id, wishlistItemId } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
@@ -355,7 +338,6 @@ export default class AccountsController {
 
     public async getCart(_req: NextRequest, params: { id: string }) {
         const { id } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
@@ -369,7 +351,6 @@ export default class AccountsController {
 
     public async getCartItem(_req: NextRequest, params: { id: string, cartItemId: string }) {
         const { id, cartItemId } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
@@ -383,7 +364,6 @@ export default class AccountsController {
 
     public async getReviews(_req: NextRequest, params: { id: string }) {
         const { id } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
@@ -397,7 +377,6 @@ export default class AccountsController {
 
     public async getReview(_req: NextRequest, params: { id: string, reviewId: string }) {
         const { id, reviewId } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
@@ -411,7 +390,6 @@ export default class AccountsController {
 
     public async getPayments(_req: NextRequest, params: { id: string }) {
         const { id } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
@@ -425,7 +403,6 @@ export default class AccountsController {
 
     public async getPayment(_req: NextRequest, params: { id: string, paymentId: string }) {
         const { id, paymentId } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");

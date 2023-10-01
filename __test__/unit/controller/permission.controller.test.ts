@@ -99,7 +99,7 @@ describe("PermissionController", () => {
 
         const response = await PermissionController.isAllowed(req);
 
-        expect(response).toMatchObject(Response.notFound());
+        expect(response).toMatchObject(Response.notFound("Requested resource not found"));
     });
 
     it("Denies access if user has no permission", async () => {

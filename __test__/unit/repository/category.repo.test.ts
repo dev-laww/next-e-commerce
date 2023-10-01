@@ -24,9 +24,25 @@ describe("CategoryRepository", () => {
     it("Test getById", async () => {
         (prisma.category.findUnique as jest.Mock).mockResolvedValueOnce(null);
 
-        const result = await repo.getById(1);
+        let result = await repo.getById(1);
 
         expect(result).toEqual(null);
+
+        (prisma.category.findUnique as jest.Mock).mockResolvedValueOnce({
+            id: 1,
+            products: [{
+                product: { id: 1 }
+            }]
+        });
+
+        result = await repo.getById(1);
+
+        expect(result).toEqual({
+            id: 1,
+            products: [{
+                id: 1
+            }]
+        });
     });
 
     it("Test create", async () => {
@@ -62,7 +78,7 @@ describe("CategoryRepository", () => {
 
         (prisma.category.findUnique as jest.Mock).mockResolvedValueOnce({
             products: [{
-                id: 1
+                product: { id: 1 }
             }]
         });
 

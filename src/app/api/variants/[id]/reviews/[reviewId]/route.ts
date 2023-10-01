@@ -8,7 +8,6 @@ const logger = getLogger({ name: "api:variants:id:reviews:review-id" });
 
 async function handler(req: NextRequest, { params }: { params: { id: string, reviewId: string } }) {
     const controller = new VariantsController();
-
     let statusCode, response, success;
 
     switch (req.method) {
