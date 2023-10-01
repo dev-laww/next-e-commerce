@@ -5,7 +5,7 @@ import prisma from "@lib/prisma";
 export default class ShippingRepository {
     private prismaClient = prisma;
 
-    public async getAll(filters?: Prisma.ShippingMethodWhereInput, limit: number = 50, cursor?: Prisma.ShippingMethodWhereUniqueInput): Promise<ShippingMethod[]> {
+    public async getAll(filters?: Prisma.ShippingMethodWhereInput | ShippingMethod, limit: number = 50, cursor?: Prisma.ShippingMethodWhereUniqueInput | ShippingMethod): Promise<ShippingMethod[]> {
         return this.prismaClient.shippingMethod.findMany({
             cursor: cursor,
             take: limit,
@@ -41,7 +41,8 @@ export default class ShippingRepository {
 
     public async getShippingOrders(id: number): Promise<Order[]> {
         return this.prismaClient.order.findMany({
-            where: { shipping_id: id }
+            where: { shipping_id: id },
+            include: { order_items: true }
         });
     }
 }
