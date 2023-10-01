@@ -113,6 +113,11 @@ export default class ShippingMethodsController {
     public async updateShippingMethod(req: NextRequest, params: {id: string}) {
         const session = await getSession(req);
         const { id } = params;
+
+        const shippingMethodExists = await this.repo.getById(Number(id) || 0);
+
+        if (!shippingMethodExists) return Response.notFound("Shipping method not found");
+
         const body = await req.json();
         const reqData = Validators.update.safeParse(body);
 
