@@ -516,6 +516,13 @@ const permissions = [
         code: "permission:read:order",
         action: "GET",
         resource: "GET/api/orders/:id",
+    },
+    {
+        id: 1074,
+        name: "Get shipping method orders",
+        code: "permission:read:shipping-method-orders",
+        action: "GET",
+        resource: "GET/api/shipping-methods/:id/orders",
     }
 ];
 
