@@ -15,6 +15,7 @@ export type Response = {
     }
 }
 
-export type PageToken = {
+export type PageToken<T> = {
     type: "next" | "previous",
-} & Partial<User>;
+    cursor: Partial<T>,
+};

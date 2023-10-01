@@ -1,4 +1,4 @@
-import { Category, Prisma, ProductCategory } from "@prisma/client";
+import { Category, Prisma, Product, ProductCategory } from "@prisma/client";
 
 import prisma from "@lib/prisma";
 
@@ -16,19 +16,37 @@ export default class CategoryRepository {
 
     public async getById(id: number): Promise<Category | null> {
         return this.prismaClient.category.findUnique({
-            where: { id: id }
+            where: { id: id },
+            include: {
+                products: {
+                    select: {
+                        product: true
+                    }
+                }
+            }
+        }).then(category => {
+            if (!category) return null;
+
+            return {
+                ...category,
+                products: category.products.map(({ product }) => product as Product)
+            } as Category
         });
     }
 
-    public async getProducts(id: number): Promise<ProductCategory[]> {
+    public async getProducts(id: number): Promise<Product[]> {
         const category = await this.prismaClient.category.findUnique({
             where: { id: id },
             select: {
-                products: true
+                products: {
+                    select: {
+                        product: true
+                    }
+                }
             }
         });
 
-        return category ? category.products.map(({ created_at, updated_at, ...rest }) => rest as ProductCategory) : [];
+        return category ? category.products.map(({product}) => product as Product) : [];
     }
 
     public async create(data: Prisma.CategoryCreateInput): Promise<Category> {

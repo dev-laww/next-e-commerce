@@ -3,109 +3,97 @@ import { User } from "@prisma/client";
 
 import humps from "humps";
 
-
 import Response from "@lib/http";
 import Validators from "@lib/validator/accounts.validator";
 import { PageToken, UserSession } from "@lib/types";
-import AddressRepository from "@repository/address.repo";
-import CartRepository from "@repository/cart.repo";
-import OrderRepository from "@repository/order.repo";
-import PaymentMethodRepository from "@repository/payment-method.repo";
-import ReviewRepository from "@repository/review.repo";
-import UserRepository from "@repository/user.repo";
-import WishlistRepository from "@repository/wishlist.repo";
+import Repository from "@src/repository";
 import { AllowPermitted, CheckBody, CheckError } from "@utils/decorator";
 import { generatePageToken, generateRandomToken, parsePageToken } from "@utils/token";
 import { hash } from "@utils/hashing";
 import * as Constants from "@lib/constants";
 import Email from "@utils/email";
 import { getDatabaseLogger } from "@utils/logging";
-import PaymentRepository from "@repository/payment.repo";
 
 // TODO: Add filters to all get methods that returns a list of items
 
 @AllowPermitted
 @CheckError
 export default class AccountsController {
-    repo = new UserRepository();
+    private repo = Repository.user;
     private logger = getDatabaseLogger({ name: "controller:accounts", class: "AccountsController" })
 
     public async getAccounts(req: NextRequest) {
         const searchParams = Object.fromEntries(req.nextUrl.searchParams);
-
         const filters = Validators.search.parse(searchParams);
 
         let { pageToken, limit, ...filter } = filters;
         limit = limit || 50;
 
         // Parse page token
-        let cursor: User | undefined;
-        let type: "next" | "previous" | undefined;
+        const parsedPageToken = parsePageToken<User>(pageToken || "");
+
+        let isPrevious;
         if (pageToken) {
-            const token = parsePageToken(pageToken);
+            if (!parsedPageToken) return Response.badRequest("Invalid page token");
 
-            if (!token) return Response.badRequest("Invalid page token");
-
-            const { type: tokenType, ...cursorData } = token;
-
-            cursor = cursorData as User;
-            type = tokenType;
+            isPrevious = parsedPageToken.type === "previous";
         }
 
-        // If type is previous, make limit negative
-        const previous = type === "previous";
-        let result = await this.repo.getAll(filter, previous ? -limit : limit, cursor);
+        const pageSize = isPrevious ? -limit : limit;
 
-        if (result.length === 0) return Response.notFound("No accounts found");
+        // Fetch the addresses
+        const result = await Repository.user.getAll(filter, pageSize, parsedPageToken?.cursor as User);
 
-        // Parsing page tokens
-        const last = result[result.length - 1];
-        const first = result[0];
-        const nextPageToken: PageToken = {
-            id: last.id,
+        if (!result.length) return Response.notFound("No account found");
+
+        // Determine if there are more pages
+        const hasNextPage = await this.repo.getAll(filter, limit, result[result.length - 1]).then(res => res.length > 0);
+        const hasPreviousPage = await this.repo.getAll(filter, -limit, result[0]).then(res => res.length > 0);
+
+        // Generate URLs
+        const nextPageToken: PageToken<User> = {
+            cursor: {
+                id: result[result.length - 1].id
+            },
             type: "next"
         };
-        const hasNextPage = await this.repo.getAll(filter, limit || 50, result[result.length - 1]).then(res => res.length > 0);
+
+        const previousPageToken: PageToken<User> = {
+            cursor: {
+                id: result[0].id
+            },
+            type: "previous"
+        };
 
         const nextSearchParams = new URLSearchParams({
             ...searchParams,
             pageToken: generatePageToken(nextPageToken)
         });
 
-        const hasPreviousPage = await this.repo.getAll(filter, limit ? -limit : -50, result[0]).then(res => res.length > 0);
-        const previousPageToken: PageToken = {
-            id: first.id,
-            type: "previous"
-        };
-
         const previousSearchParams = new URLSearchParams({
             ...searchParams,
             pageToken: generatePageToken(previousPageToken)
         });
 
-        // Generate urls
-        const nextUrl = `${req.nextUrl.origin}/${req.nextUrl.pathname}?${nextSearchParams.toString()}`;
-        const previousUrl = `${req.nextUrl.origin}/${req.nextUrl.pathname}?${previousSearchParams.toString()}`;
+        const meta = {
+            hasNextPage,
+            hasPreviousPage,
+            previousPageUrl: hasPreviousPage ? `${req.nextUrl.origin}/${req.nextUrl.pathname}?${previousSearchParams.toString()}` : undefined,
+            nextPageUrl: hasNextPage ? `${req.nextUrl.origin}/${req.nextUrl.pathname}?${nextSearchParams.toString()}` : undefined,
+        };
 
-        await this.logger.info("Accounts found");
         return Response.ok("Accounts found", {
             result,
-            meta: {
-                hasNextPage,
-                hasPreviousPage,
-                previousPageUrl: hasPreviousPage ? previousUrl : undefined,
-                nextPageUrl: hasNextPage ? nextUrl : undefined,
-            },
+            meta,
         });
     }
 
     @CheckBody
     public async createAccount(req: NextRequest) {
         const body = await req.json();
-
         const requestData = Validators.create.safeParse(body);
 
-        if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
+        if (!requestData.success) return Response.validationError(requestData.error.errors);
 
         if (body.password !== body.confirmPassword) return Response.badRequest("Passwords do not match");
 
@@ -155,7 +143,6 @@ export default class AccountsController {
 
     public async getAccount(_req: NextRequest, params: { id: string }) {
         const { id } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
@@ -166,7 +153,6 @@ export default class AccountsController {
     @CheckBody
     public async updateAccount(req: NextRequest, params: { id: string }) {
         const { id } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
@@ -204,7 +190,6 @@ export default class AccountsController {
 
     public async deleteAccount(_req: NextRequest, params: { id: string }) {
         const { id } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
@@ -217,12 +202,13 @@ export default class AccountsController {
 
     public async getAccountRoles(_req: NextRequest, params: { id: string }) {
         const { id } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
 
         const roles = await this.repo.getRoles(account.id);
+
+        if (!roles.length) return Response.notFound("No roles were found");
 
         return Response.ok("Account roles found", roles);
     }
@@ -230,19 +216,16 @@ export default class AccountsController {
     @CheckBody
     public async updateAccountRoles(req: NextRequest, params: { id: string }) {
         const { id } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
 
         const body = await req.json();
-
         const roles = Validators.updateRole.safeParse(body);
 
         if (!roles.success) return Response.badRequest(roles.error.message);
 
         const updatedAccount = await this.repo.updateRoles(account.id, roles.data.roles);
-
         const accountRoles = await this.repo.getRoles(updatedAccount.id);
 
         await this.logger.info(accountRoles, `Account [${id}] roles updated`, true);
@@ -251,7 +234,6 @@ export default class AccountsController {
 
     public async getPaymentMethods(_req: NextRequest, params: { id: string }) {
         const { id } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
@@ -265,16 +247,11 @@ export default class AccountsController {
 
     public async getPaymentMethod(_req: NextRequest, params: { id: string, paymentMethodId: string }) {
         const { id, paymentMethodId } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
 
-        const repo = new PaymentMethodRepository();
-        const paymentMethod = await repo.getAll({
-            id: parseInt(paymentMethodId, 10) || 0,
-            user_id: account.id
-        }).then(res => res[0]);
+        const paymentMethod = await this.repo.getPaymentMethods(account.id).then(res => res.find(pm => pm.id === parseInt(paymentMethodId, 10) || 0));
 
         if (!paymentMethod) return Response.notFound("Payment method not found");
 
@@ -283,7 +260,6 @@ export default class AccountsController {
 
     public async getAddresses(_req: NextRequest, params: { id: string }) {
         const { id } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
@@ -297,16 +273,11 @@ export default class AccountsController {
 
     public async getAddress(_req: NextRequest, params: { id: string, addressId: string }) {
         const { id, addressId } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
 
-        const repo = new AddressRepository();
-        const address = await repo.getAll({
-            id: parseInt(addressId, 10) || 0,
-            user_id: account.id
-        }).then(res => res[0]);
+        const address = await this.repo.getAddresses(account.id).then(res => res.find(a => a.id === parseInt(addressId, 10) || 0));
 
         if (!address) return Response.notFound("Address not found");
 
@@ -315,7 +286,6 @@ export default class AccountsController {
 
     public async getOrders(_req: NextRequest, params: { id: string }) {
         const { id } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
@@ -329,16 +299,11 @@ export default class AccountsController {
 
     public async getOrder(_req: NextRequest, params: { id: string, orderId: string }) {
         const { id, orderId } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
 
-        const repo = new OrderRepository();
-        const order = await repo.getAll({
-            id: parseInt(orderId, 10) || 0,
-            user_id: account.id
-        }).then(res => res[0]);
+        const order = await this.repo.getOrders(account.id).then(res => res.find(o => o.id === parseInt(orderId, 10) || 0));
 
         if (!order) return Response.notFound("Order not found");
 
@@ -347,7 +312,6 @@ export default class AccountsController {
 
     public async getWishlist(_req: NextRequest, params: { id: string }) {
         const { id } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
@@ -361,16 +325,11 @@ export default class AccountsController {
 
     public async getWishlistItem(_req: NextRequest, params: { id: string, wishlistItemId: string }) {
         const { id, wishlistItemId } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
 
-        const repo = new WishlistRepository();
-        const wishlistItem = await repo.getAll({
-            id: parseInt(wishlistItemId, 10) || 0,
-            user_id: account.id
-        }).then(res => res[0]);
+        const wishlistItem = await this.repo.getWishlist(account.id).then(res => res.find(w => w.id === parseInt(wishlistItemId, 10) || 0));
 
         if (!wishlistItem) return Response.notFound("Wishlist item not found");
 
@@ -379,7 +338,6 @@ export default class AccountsController {
 
     public async getCart(_req: NextRequest, params: { id: string }) {
         const { id } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
@@ -393,16 +351,11 @@ export default class AccountsController {
 
     public async getCartItem(_req: NextRequest, params: { id: string, cartItemId: string }) {
         const { id, cartItemId } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
 
-        const repo = new CartRepository();
-        const cartItem = await repo.getAll({
-            id: parseInt(cartItemId, 10) || 0,
-            user_id: account.id
-        }).then(res => res[0]);
+        const cartItem = await this.repo.getCart(account.id).then(res => res.find(w => w.id === parseInt(cartItemId, 10) || 0));
 
         if (!cartItem) return Response.notFound("Cart item not found");
 
@@ -411,7 +364,6 @@ export default class AccountsController {
 
     public async getReviews(_req: NextRequest, params: { id: string }) {
         const { id } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
@@ -425,25 +377,19 @@ export default class AccountsController {
 
     public async getReview(_req: NextRequest, params: { id: string, reviewId: string }) {
         const { id, reviewId } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
 
-        const repo = new ReviewRepository();
-        const review = await repo.getAll({
-            id: parseInt(reviewId, 10) || 0,
-            user_id: account.id
-        }).then(res => res[0]);
+        const review = await this.repo.getReviews(account.id).then(res => res.find(r => r.id === parseInt(reviewId, 10) || 0));
 
         if (!review) return Response.notFound("Review not found");
 
         return Response.ok("Account review found", review);
     }
 
-    public async getPaymets(_req: NextRequest, params: { id: string }) {
+    public async getPayments(_req: NextRequest, params: { id: string }) {
         const { id } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
@@ -457,17 +403,11 @@ export default class AccountsController {
 
     public async getPayment(_req: NextRequest, params: { id: string, paymentId: string }) {
         const { id, paymentId } = params;
-
         const account = await this.repo.getById(parseInt(id, 10) || 0);
 
         if (!account) return Response.notFound("Account not found");
 
-        const repo = new PaymentRepository();
-
-        const payment = await repo.getAll({
-            id: parseInt(paymentId, 10) || 0,
-            user_id: account.id
-        }).then(res => res[0]);
+        const payment = await this.repo.getPayments(account.id).then(res => res.find(p => p.id === parseInt(paymentId, 10) || 0));
 
         if (!payment) return Response.notFound("Payment not found");
 

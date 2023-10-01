@@ -20,7 +20,7 @@ export default class ProductVariantRepository {
         });
     }
 
-    public async create(data: Prisma.ProductVariantCreateInput): Promise<ProductVariant> {
+    public async create(data: Prisma.ProductVariantCreateInput | ProductVariant): Promise<ProductVariant> {
         return this.prismaClient.productVariant.create({
             data: data
         });
@@ -36,6 +36,12 @@ export default class ProductVariantRepository {
     public async delete(id: number): Promise<ProductVariant> {
         return this.prismaClient.productVariant.delete({
             where: { id: id }
+        });
+    }
+
+    public async deleteProductVariants(productId: number): Promise<Prisma.BatchPayload> {
+        return this.prismaClient.productVariant.deleteMany({
+            where: { product_id: productId }
         });
     }
 }

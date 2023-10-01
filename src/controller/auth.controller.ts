@@ -4,7 +4,6 @@ import humps from "humps";
 
 import * as Constants from "@lib/constants";
 import { UserSession } from "@lib/types";
-import UserRepository from "@repository/user.repo";
 import {
     generateAccessToken,
     generateOTP,
@@ -14,6 +13,7 @@ import {
 } from "@utils/token";
 import Validators from "@lib/validator/auth.validator";
 import Response from "@lib/http"
+import Repository from "@src/repository";
 import Email from "@utils/email";
 import { compare, hash } from "@utils/hashing";
 import { getDatabaseLogger } from "@utils/logging";
@@ -22,17 +22,16 @@ import { AllowMethod, AllowPermitted, CheckBody, CheckError } from "@utils/decor
 @CheckError
 @AllowPermitted
 export default class AuthController {
-    userRepo = new UserRepository();
+    userRepo = Repository.user;
     private logger = getDatabaseLogger({ name: "controller:auth", class: "AuthController" });
 
     @AllowMethod("POST")
     @CheckBody
     public async signup(req: NextRequest) {
         const body = await req.json()
-
         const requestData = Validators.registerSchema.safeParse(body);
 
-        if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
+        if (!requestData.success) return Response.validationError(requestData.error.errors);
 
         if (body.password !== body.confirmPassword) return Response.badRequest("Passwords do not match");
 
@@ -89,10 +88,9 @@ export default class AuthController {
     @CheckBody
     public async login(req: NextRequest) {
         const body = await req.json()
-
         const requestData = Validators.loginSchema.safeParse(body);
 
-        if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
+        if (!requestData.success) return Response.validationError(requestData.error.errors);
 
         let user = await this.userRepo.getByEmail(body.email);
 
@@ -129,10 +127,9 @@ export default class AuthController {
     @CheckBody
     public async resetPassword(req: NextRequest) {
         const body = await req.json()
-
         const requestData = Validators.resetPasswordSchema.safeParse(body);
 
-        if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
+        if (!requestData.success) return Response.validationError(requestData.error.errors);
 
         let user = await this.userRepo.getByEmail(requestData.data.email);
 
@@ -143,7 +140,6 @@ export default class AuthController {
         }
 
         const token = requestData.data.type === "otp" ? generateOTP() : generateRandomToken();
-
         const resetPasswordToken = await this.userRepo.generateTokenOTP(
             user.id,
             token,
@@ -172,10 +168,9 @@ export default class AuthController {
     @CheckBody
     public async confirmResetPassword(req: NextRequest) {
         const body = await req.json()
-
         const requestData = Validators.confirmResetPasswordSchema.safeParse(body);
 
-        if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
+        if (!requestData.success) return Response.validationError(requestData.error.errors);
 
         const { success, data } = await this.userRepo.verifyTokenOTP(
             requestData.data.token,
@@ -187,7 +182,6 @@ export default class AuthController {
         if (!success) return Response.unauthorized("Invalid token");
 
         await this.userRepo.changePassword(data.id, requestData.data.password);
-
         await this.logger.debug(data, `User ${data.email} changed password`)
         await this.logger.info(`${data.email} changed password`, undefined, true);
 
@@ -198,10 +192,9 @@ export default class AuthController {
     @CheckBody
     public async confirmEmail(req: NextRequest) {
         const body = await req.json()
-
         const requestData = Validators.confirmEmailSchema.safeParse(body);
 
-        if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
+        if (!requestData.success) return Response.validationError(requestData.error.errors);
 
         const { success, data } = await this.userRepo.verifyTokenOTP(
             requestData.data.token,
@@ -215,7 +208,6 @@ export default class AuthController {
         if (data.confirmed) return Response.badRequest("Email already confirmed");
 
         await this.userRepo.update(data.id, { confirmed: true });
-
         await this.logger.debug(data, `User ${data.email} confirmed email`)
         await this.logger.info(`${data.email} confirmed`, undefined, true);
 
@@ -226,10 +218,9 @@ export default class AuthController {
     @CheckBody
     public async resendEmailConfirmation(req: NextRequest) {
         const body = await req.json()
-
         const requestData = Validators.resendEmailSchema.safeParse(body);
 
-        if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
+        if (!requestData.success) return Response.validationError(requestData.error.errors);
 
         let user = await this.userRepo.getByEmail(requestData.data.email);
 
@@ -242,7 +233,6 @@ export default class AuthController {
         if (user.confirmed) return Response.badRequest("Email already confirmed");
 
         const token = requestData.data.type === "token" ? generateRandomToken() : generateOTP();
-
         const emailConfirmationToken = await this.userRepo.generateTokenOTP(
             user.id,
             token,
@@ -269,17 +259,13 @@ export default class AuthController {
     @CheckBody
     public async refreshToken(req: NextRequest) {
         const body = await req.json()
-
         const requestData = Validators.refreshTokenSchema.safeParse(body);
 
-        if (!requestData.success) return Response.validationError("Validation error", requestData.error.errors);
+        if (!requestData.success) return Response.validationError(requestData.error.errors);
 
-        let session: UserSession;
-        try {
-            session = await verifyRefreshToken(requestData.data.token);
-        } catch (err) {
-            return Response.unauthorized("Invalid token");
-        }
+        const session = await verifyRefreshToken(requestData.data.token);
+
+        if (!session) return Response.unauthorized("Invalid refresh token");
 
         await this.logger.debug(session, `User ${session.email} refreshed token`)
         await this.logger.info(`${session.email} refreshed token`, undefined, true);

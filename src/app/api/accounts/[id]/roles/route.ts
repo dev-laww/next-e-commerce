@@ -10,10 +10,7 @@ const logger = getLogger({ name: "api:auth:accounts" });
 
 async function handler(req: NextRequest, { params }: { params: { id: string } }) {
     const method = req.method;
-    let statusCode: number;
-    let response: any;
-    let success: boolean;
-
+    let statusCode, response, success;
     const controller = new AccountsController();
 
     switch (method) {

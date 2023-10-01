@@ -6,9 +6,6 @@ on:
       - main
       - preview
 
-  pull_request:
-    types: [ opened, synchronize, reopened ]
-
 jobs:
   eslint-check:
     name: ESlint check
@@ -51,7 +48,7 @@ jobs:
           CI: true
 
   nextjs-build-check:
-    name: Build nextjs application
+    name: Build NextJS application
     needs: [ eslint-check, jest-check ]
     runs-on: ubuntu-latest
     env:

@@ -2,11 +2,15 @@ import { NextRequest } from "next/server";
 
 import Validators from "@lib/validator/{{kebabCase name}}.validator";
 import Response from "@lib/http";
-import { CheckError } from "@utils/decorator";
+import { AllowPermitted, CheckError } from "@utils/decorator";
+import { getDatabaseLogger } from "@utils/logging";
 
+@AllowPermitted
 @CheckError
 export default class {{pascalCase name}}Controller {
-    public async hello(req: NextApiRequest) {
+    private logger = getDatabaseLogger({ name: "controller:{{kebabCase name}}", class: "{{pascalCase name}}Controller" });
+
+    public async hello(req: NextRequest) {
         return Response.ok("Hello World");
     }
 }

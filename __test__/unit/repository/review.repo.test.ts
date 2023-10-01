@@ -45,6 +45,14 @@ describe("ReviewRepository", () => {
         expect(result).toMatchObject([]);
     });
 
+    it("Test getVariantReviews", async () => {
+        (prisma.review.findMany as jest.Mock).mockResolvedValueOnce([]);
+
+        const result = await repo.getVariantReviews(1);
+
+        expect(result).toMatchObject([]);
+    });
+
     it("Test create", async () => {
         (prisma.review.create as jest.Mock).mockResolvedValueOnce({});
 
@@ -65,6 +73,30 @@ describe("ReviewRepository", () => {
         (prisma.review.delete as jest.Mock).mockResolvedValueOnce({});
 
         const result = await repo.delete(1);
+
+        expect(result).toEqual({});
+    });
+
+    it("Test deleteVariantReviews", async () => {
+        (prisma.review.deleteMany as jest.Mock).mockResolvedValueOnce({});
+
+        const result = await repo.deleteVariantReviews(1);
+
+        expect(result).toEqual({});
+    });
+
+    it("Test deleteUserReviews", async () => {
+        (prisma.review.deleteMany as jest.Mock).mockResolvedValueOnce({});
+
+        const result = await repo.deleteUserReviews(1);
+
+        expect(result).toEqual({});
+    });
+
+    it("Test deleteProductReviews", async () => {
+        (prisma.review.deleteMany as jest.Mock).mockResolvedValueOnce({});
+
+        const result = await repo.deleteProductReviews(1);
 
         expect(result).toEqual({});
     });

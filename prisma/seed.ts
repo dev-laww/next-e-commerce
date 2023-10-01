@@ -1,8 +1,23 @@
+import humps from "humps";
+import { parseArgs } from 'util';
+import pino from 'pino';
+import pretty from "pino-pretty";
 import { PrismaClient } from '@prisma/client';
 
 import seeders from './seeders';
 
 const prisma = new PrismaClient()
+
+const stream = pretty({
+    colorize: true,
+    ignore: "hostname,pid",
+    translateTime: "SYS:standard"
+})
+const logger = pino({ level: 'debug', name: 'Seeder' }, stream);
+
+const options = {
+    environment: { type: 'string' },
+};
 
 interface SeedMap {
     [key: string]: any;
@@ -32,35 +47,59 @@ const seedMap: SeedMap = {
 }
 
 async function main() {
-    console.log('Start seeding ...')
+    const {
+        values: { environment },
+        // @ts-ignore
+    } = parseArgs({ options });
+
+    const env = environment ?? 'development';
+
+    logger.info('Start seeding ...')
+    Object.keys(seeders).filter(entityName => {
+        if (env === 'development') return false;
+
+        return !['roles', 'permissions', 'rolePermissions'].includes(entityName);
+    }).forEach(entityName => delete seeders[entityName]);
 
     for (const entityName in seeders) {
 
         const func = seedMap[entityName];
+        const entity = humps.decamelize(entityName).replace(/_/g, " ");
 
         if (!func) {
-            console.log(`Invalid entity name: ${entityName}`);
-            return;
+            logger.info(`Invalid entity name: ${entityName}`);
+            continue;
         }
 
-        const entity = await func.findMany({
-            take: 1
-        });
+        logger.info(`Seeding [${entity}]`);
 
-        if (entity.length === 1) return;
+        for (const seeder of seeders[entityName]) {
+            const existing = await func.findUnique({ where: { id: seeder.id } });
 
-        await func.createMany({ data: seeders[entityName] });
+            if (existing) {
+                logger.debug(existing, `Skipping existing [${entity}] with id: ${seeder.id}`);
+                continue;
+            }
+
+            await func.create({
+                data: seeder
+            });
+        }
+
+        logger.info(`Seeded [${entity}]`);
     }
+
+    logger.info(`Seeded ${env} environment successfully`);
+    logger.info(`Seeded ${Object.keys(seeders).length} entities`);
 }
 
 main()
     .then(async () => {
-        console.info('Seeding done.')
         await prisma.$disconnect()
     })
-    .catch(async (e) => {
+    .catch(async e => {
         await prisma.$disconnect()
-        console.error(e)
+        logger.error(e)
         process.exit(1)
     })
 

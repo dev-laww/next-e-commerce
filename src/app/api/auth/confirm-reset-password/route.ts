@@ -8,11 +8,10 @@ const logger = getLogger({ name: "api:auth:confirm-reset-password" });
 
 async function handler(req: NextRequest) {
     const controller = new AuthController();
-
     const { statusCode, response } = await controller.confirmResetPassword(req);
     const success = statusCode == STATUS_CODE.OK;
-    logger.info(success ? response.message : response, success ? undefined : `Confirm reset password failed: ${response.message}`);
 
+    logger.info(success ? response.message : response, success ? undefined : `Confirm reset password failed: ${response.message}`);
     return NextResponse.json(response, { status: statusCode })
 }
 
