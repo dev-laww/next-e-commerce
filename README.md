@@ -42,7 +42,10 @@ Then, apply migrations and generate Prisma client (make sure you have a PostgreS
 npm run prisma:generate
 
 # This will apply migrations and seed the database
-npm run migrate:dev
+npm run prisma:migrate:dev
+
+# If seed fails, run this command
+npm run prisma:seed:dev
 ```
 
 Then, run the development server:
@@ -88,7 +91,7 @@ npm run start
 ```
 
 ### NOTE: This project is still a work in progress. I will be adding more features and functionality in the future.
-
+- You can import postman collection from [postman](./postman) directory to test the API endpoints. Also import the environment as the collection depends on it.
 - See [Documentation](./docs/README.md) for more information.
 
 
