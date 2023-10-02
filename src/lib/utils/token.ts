@@ -92,3 +92,14 @@ export function parsePageToken<T>(token: string): PageToken<T> | undefined {
     }
 }
 
+export function generateCouponCode(length: number = 10) {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let coupon = "";
+
+    for (let i = 0; i < length; i++) {
+        coupon += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+
+    return coupon;
+}
+
