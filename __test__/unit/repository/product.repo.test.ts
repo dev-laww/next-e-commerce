@@ -108,6 +108,6 @@ describe("ProductRepository", () => {
 
         const result = await repo.deleteCategory(1, 1);
 
-        expect(result).toEqual({id: 1})
+        expect(result).toEqual({ id: 1 })
     });
 });

@@ -74,11 +74,11 @@ export default class LogsController {
         const meta = {
             hasNextPage,
             hasPreviousPage,
-            previousPageUrl: hasPreviousPage ? `${req.nextUrl.origin}/${req.nextUrl.pathname}?${previousSearchParams.toString()}` : undefined,
-            nextPageUrl: hasNextPage ? `${req.nextUrl.origin}/${req.nextUrl.pathname}?${nextSearchParams.toString()}` : undefined,
+            previousPageUrl: hasPreviousPage ? `${ req.nextUrl.origin }/${ req.nextUrl.pathname }?${ previousSearchParams.toString() }` : undefined,
+            nextPageUrl: hasNextPage ? `${ req.nextUrl.origin }/${ req.nextUrl.pathname }?${ nextSearchParams.toString() }` : undefined,
         };
 
-        await this.logger.info(`Retrieved ${result.length} logs`);
+        await this.logger.info(`Retrieved ${ result.length } logs`);
         return Response.ok("Logs found", {
             result,
             meta,

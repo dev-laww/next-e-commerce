@@ -14,12 +14,12 @@ async function handler(req: NextRequest, { params }: { params: { id: string, per
         case "POST":
             ({ statusCode, response } = await controller.addRolePermission(req, params));
             success = statusCode === STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Add role permission failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Add role permission failed: ${ response.message }`);
             break;
         case "DELETE":
             ({ statusCode, response } = await controller.removeRolePermission(req, params));
             success = statusCode === STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Remove role permission failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Remove role permission failed: ${ response.message }`);
             break;
         default:
             ({ statusCode, response } = Response.methodNotAllowed);

@@ -14,17 +14,17 @@ async function handler(req: NextRequest, { params }: { params: { id: string } })
         case "GET":
             ({ statusCode, response } = await controller.getCartItem(req, params));
             success = statusCode === STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Get cart item failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Get cart item failed: ${ response.message }`);
             break;
         case "PUT":
             ({ statusCode, response } = await controller.updateQuantity(req, params));
             success = statusCode === STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Update quantity failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Update quantity failed: ${ response.message }`);
             break;
         case "DELETE":
             ({ statusCode, response } = await controller.deleteCartItem(req, params));
             success = statusCode === STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Delete cart item failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Delete cart item failed: ${ response.message }`);
             break;
         default:
             ({ statusCode, response } = Response.methodNotAllowed);

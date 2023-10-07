@@ -14,6 +14,7 @@ This is a project that I am working on to learn more about Next.js, Prisma, and 
 to learn more about TypeScript and how to use it with Next.js.
 
 ## Features
+
 - [x] Authentication
 - [x] Authorization (JWT)
 - [x] Data validation
@@ -49,6 +50,7 @@ to learn more about TypeScript and how to use it with Next.js.
 - `npm run generate`: Generates new files (uses plop)
 
 ## TODO
+
 - [ ] Add prettier
 - [ ] Implement GraphQL api (Apollo)
 - [ ] Docker integration
@@ -59,5 +61,6 @@ to learn more about TypeScript and how to use it with Next.js.
 - [ ] Integrate redis
 
 ## NOTES
+
 - After installing dependencies, it will automatically install husky git hooks to ensure the code format.
 - This project is still a work in progress. I will be adding more features and functionality in the future.

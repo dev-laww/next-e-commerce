@@ -14,12 +14,12 @@ async function handler(req: NextRequest, { params }: { params: { id: string } })
         case "GET":
             ({ statusCode, response } = await controller.getReview(req, params));
             success = statusCode === STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Get review failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Get review failed: ${ response.message }`);
             break;
         case "DELETE":
             ({ statusCode, response } = await controller.deleteReview(req, params));
             success = statusCode === STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Delete review failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Delete review failed: ${ response.message }`);
             break;
         default:
             ({ statusCode, response } = Response.methodNotAllowed);

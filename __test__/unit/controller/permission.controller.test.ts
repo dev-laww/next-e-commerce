@@ -44,7 +44,7 @@ describe("PermissionController", () => {
     it("Allows if user has permission to access the resource", async () => {
         req = new NextRequest("http://localhost:3000/api/accounts", {
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${ token }`
             }
         });
 
@@ -59,7 +59,7 @@ describe("PermissionController", () => {
     it("Allows access to profile resources", async () => {
         req = new NextRequest("http://localhost:3000/api/profile", {
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${ token }`
             }
         });
 
@@ -91,7 +91,7 @@ describe("PermissionController", () => {
     it("Denies access if resource is not available", async () => {
         req = new NextRequest("http://localhost:3000/api/accounts", {
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${ token }`
             }
         });
 
@@ -105,7 +105,7 @@ describe("PermissionController", () => {
     it("Denies access if user has no permission", async () => {
         req = new NextRequest("http://localhost:3000/api/accounts", {
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${ token }`
             }
         });
 
@@ -127,7 +127,7 @@ describe("PermissionController", () => {
     it("Denies if user has no permission to access the resource", async () => {
         req = new NextRequest("http://localhost:3000/api/accounts", {
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${ token }`
             }
         });
 

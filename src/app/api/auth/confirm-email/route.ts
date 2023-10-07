@@ -11,7 +11,7 @@ async function handler(req: NextRequest) {
     const { statusCode, response } = await controller.confirmEmail(req);
     const success = statusCode == STATUS_CODE.OK;
 
-    logger.info(success ? response.message : response, success ? undefined : `Confirm email failed: ${response.message}`);
+    logger.info(success ? response.message : response, success ? undefined : `Confirm email failed: ${ response.message }`);
     return NextResponse.json(response, { status: statusCode })
 }
 

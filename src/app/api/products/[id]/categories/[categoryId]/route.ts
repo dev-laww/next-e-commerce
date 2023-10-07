@@ -16,16 +16,16 @@ async function handler(req: NextRequest, { params }: { params: { id: string, cat
         case "POST":
             ({ statusCode, response } = await controller.addCategory(req, params));
             success = statusCode == STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Add product category failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Add product category failed: ${ response.message }`);
             break;
         case "DELETE":
             ({ statusCode, response } = await controller.deleteCategory(req, params));
             success = statusCode == STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Delete product category failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Delete product category failed: ${ response.message }`);
             break;
         default:
             ({ statusCode, response } = Response.methodNotAllowed);
-            logger.warn(`Method ${method} not supported`);
+            logger.warn(`Method ${ method } not supported`);
     }
 
     return NextResponse.json(response, { status: statusCode });

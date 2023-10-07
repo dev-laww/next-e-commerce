@@ -17,16 +17,16 @@ async function handler(req: NextRequest, { params }: { params: { id: string } })
         case "GET":
             ({ statusCode, response } = await controller.getAccountRoles(req, params));
             success = statusCode == STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Get account roles failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Get account roles failed: ${ response.message }`);
             break;
         case "PUT":
             ({ statusCode, response } = await controller.updateAccountRoles(req, params));
             success = statusCode == STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Update account roles failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Update account roles failed: ${ response.message }`);
             break;
         default:
             ({ statusCode, response } = Response.methodNotAllowed);
-            logger.warn(`Method ${method} not supported`);
+            logger.warn(`Method ${ method } not supported`);
     }
 
     return NextResponse.json(response, { status: statusCode })

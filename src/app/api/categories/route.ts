@@ -15,12 +15,12 @@ async function handler(req: NextRequest) {
         case "GET":
             ({ statusCode, response } = await controller.getCategories(req));
             success = statusCode === STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Get categories failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Get categories failed: ${ response.message }`);
             break;
         case "POST":
             ({ statusCode, response } = await controller.createCategory(req));
             success = statusCode === STATUS_CODE.CREATED;
-            logger.info(success ? response.message : response, success ? undefined : `Create category failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Create category failed: ${ response.message }`);
             break;
         default:
             ({ statusCode, response } = Response.methodNotAllowed);

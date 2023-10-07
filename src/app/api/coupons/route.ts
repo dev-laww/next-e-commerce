@@ -14,12 +14,12 @@ async function handler(req: NextRequest) {
         case "GET":
             ({ statusCode, response } = await controller.getCoupons(req));
             success = statusCode === STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Get coupons failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Get coupons failed: ${ response.message }`);
             break;
         case "POST":
             ({ statusCode, response } = await controller.createCoupon(req));
             success = statusCode === STATUS_CODE.CREATED;
-            logger.info(success ? response.message : response, success ? undefined : `Create coupon failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Create coupon failed: ${ response.message }`);
             break;
         default:
             ({ statusCode, response } = Response.methodNotAllowed);

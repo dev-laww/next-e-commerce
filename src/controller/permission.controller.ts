@@ -18,8 +18,8 @@ export default class PermissionController {
         const path = req.nextUrl.pathname;
         const token = req.headers.get("Authorization")?.split(" ")[1];
 
-        let resource = `${req.method}${path}`;
-        await this.logger.info(`Checking permission for ${resource}`);
+        let resource = `${ req.method }${ path }`;
+        await this.logger.info(`Checking permission for ${ resource }`);
 
         if (path.startsWith("/api/auth")) return Response.ok();
 
@@ -44,11 +44,11 @@ export default class PermissionController {
 
         if (!permissions || permissions.length === 0) return Response.forbidden;
 
-        await this.logger.debug(permissions.map(permission => permission.resource), `${session.username} allowed resources`);
+        await this.logger.debug(permissions.map(permission => permission.resource), `${ session.username } allowed resources`);
 
         const allowed = permissions.some(permission => permission.resource === requestedResource);
 
-        await this.logger.info(`${allowed ? "Allowed" : "Denied"} ${session.username} to access ${requestedResource}`, undefined, allowed);
+        await this.logger.info(`${ allowed ? "Allowed" : "Denied" } ${ session.username } to access ${ requestedResource }`, undefined, allowed);
 
         return allowed ? Response.ok() : Response.forbidden;
     }
@@ -56,7 +56,7 @@ export default class PermissionController {
     private static getRequestedResource(resource: string, availableResource: string[]): string | undefined {
         for (const available of availableResource) {
             const pattern = available.replace(/:[^/]+/g, '([^/]+)')
-            const regex = new RegExp(`^${pattern}$`);
+            const regex = new RegExp(`^${ pattern }$`);
 
             if (resource.match(regex)) return available;
         }

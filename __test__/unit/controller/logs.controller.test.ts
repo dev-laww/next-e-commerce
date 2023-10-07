@@ -21,7 +21,7 @@ describe("LogsController", () => {
     describe("Test getLogs", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/logs", {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${ token }` }
             })
         });
 

@@ -22,7 +22,7 @@ describe("RolesController", () => {
     describe("Test getRoles", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/roles", {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${ token }` }
             });
         });
 
@@ -74,7 +74,7 @@ describe("RolesController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/roles", {
                 method: "POST",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
                 body: JSON.stringify(role)
             });
         });
@@ -92,7 +92,7 @@ describe("RolesController", () => {
         it("returns 400 if invalid body", async () => {
             req = new NextRequest("http://localhost:3000/api/roles", {
                 method: "POST",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
             });
             isAllowed.mockResolvedValueOnce(Response.ok());
 
@@ -123,7 +123,7 @@ describe("RolesController", () => {
         it("returns 422 if wrong body", async () => {
             req = new NextRequest("http://localhost:3000/api/roles", {
                 method: "POST",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
                 body: "{}"
             });
             isAllowed.mockResolvedValueOnce(Response.ok());
@@ -144,8 +144,8 @@ describe("RolesController", () => {
         const params = { id: "1" };
 
         beforeEach(() => {
-            req = new NextRequest(`http://localhost:3000/api/roles/${role.id}`, {
-                headers: { Authorization: `Bearer ${token}` }
+            req = new NextRequest(`http://localhost:3000/api/roles/${ role.id }`, {
+                headers: { Authorization: `Bearer ${ token }` }
             });
         });
 
@@ -196,9 +196,9 @@ describe("RolesController", () => {
         const params = { id: "1" };
 
         beforeEach(() => {
-            req = new NextRequest(`http://localhost:3000/api/roles/${role.id}`, {
+            req = new NextRequest(`http://localhost:3000/api/roles/${ role.id }`, {
                 method: "PUT",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
                 body: JSON.stringify(role)
             });
         });
@@ -215,9 +215,9 @@ describe("RolesController", () => {
         });
 
         it("returns 400 if invalid body", async () => {
-            req = new NextRequest(`http://localhost:3000/api/roles/${role.id}`, {
+            req = new NextRequest(`http://localhost:3000/api/roles/${ role.id }`, {
                 method: "PUT",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
             });
             isAllowed.mockResolvedValueOnce(Response.ok());
 
@@ -265,9 +265,9 @@ describe("RolesController", () => {
         const params = { id: "1" };
 
         beforeEach(() => {
-            req = new NextRequest(`http://localhost:3000/api/roles/${role.id}`, {
+            req = new NextRequest(`http://localhost:3000/api/roles/${ role.id }`, {
                 method: "DELETE",
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${ token }` }
             });
         });
 
@@ -326,8 +326,8 @@ describe("RolesController", () => {
         const params = { id: "1" };
 
         beforeEach(() => {
-            req = new NextRequest(`http://localhost:3000/api/roles/${role.id}/permissions`, {
-                headers: { Authorization: `Bearer ${token}` }
+            req = new NextRequest(`http://localhost:3000/api/roles/${ role.id }/permissions`, {
+                headers: { Authorization: `Bearer ${ token }` }
             });
         });
 
@@ -397,9 +397,9 @@ describe("RolesController", () => {
         const params = { id: "1", permissionId: "1" };
 
         beforeEach(() => {
-            req = new NextRequest(`http://localhost:3000/api/roles/${role.id}/permissions/${permission.id}`, {
+            req = new NextRequest(`http://localhost:3000/api/roles/${ role.id }/permissions/${ permission.id }`, {
                 method: "POST",
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${ token }` }
             });
         });
 
@@ -470,9 +470,9 @@ describe("RolesController", () => {
         const params = { id: "1", permissionId: "1" };
 
         beforeEach(() => {
-            req = new NextRequest(`http://localhost:3000/api/roles/${role.id}/permissions/${permission.id}`, {
+            req = new NextRequest(`http://localhost:3000/api/roles/${ role.id }/permissions/${ permission.id }`, {
                 method: "DELETE",
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${ token }` }
             });
         });
 
@@ -542,8 +542,8 @@ describe("RolesController", () => {
         const params = { id: "1" };
 
         beforeEach(() => {
-            req = new NextRequest(`http://localhost:3000/api/roles/${role.id}/users`, {
-                headers: { Authorization: `Bearer ${token}` }
+            req = new NextRequest(`http://localhost:3000/api/roles/${ role.id }/users`, {
+                headers: { Authorization: `Bearer ${ token }` }
             });
         });
 

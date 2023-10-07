@@ -16,20 +16,20 @@ async function handler(req: NextRequest, { params }: { params: { id: string } })
         case "GET":
             ({ statusCode, response } = await controller.getProduct(req, params));
             success = statusCode == STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Get product failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Get product failed: ${ response.message }`);
             break;
         case "PUT":
             ({ statusCode, response } = await controller.updateProduct(req, params));
             success = statusCode == STATUS_CODE.CREATED;
-            logger.info(success ? response.message : response, success ? undefined : `Update product failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Update product failed: ${ response.message }`);
             break;
         case "DELETE":
             ({ statusCode, response } = await controller.deleteProduct(req, params));
-            logger.info(success ? response.message : response, success ? undefined : `Delete product failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Delete product failed: ${ response.message }`);
             break;
         default:
             ({ statusCode, response } = Response.methodNotAllowed);
-            logger.warn(`Method ${method} not supported`);
+            logger.warn(`Method ${ method } not supported`);
     }
 
     return NextResponse.json(response, { status: statusCode });

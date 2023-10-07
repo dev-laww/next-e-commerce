@@ -78,8 +78,8 @@ export default class AccountsController {
         const meta = {
             hasNextPage,
             hasPreviousPage,
-            previousPageUrl: hasPreviousPage ? `${req.nextUrl.origin}/${req.nextUrl.pathname}?${previousSearchParams.toString()}` : undefined,
-            nextPageUrl: hasNextPage ? `${req.nextUrl.origin}/${req.nextUrl.pathname}?${nextSearchParams.toString()}` : undefined,
+            previousPageUrl: hasPreviousPage ? `${ req.nextUrl.origin }/${ req.nextUrl.pathname }?${ previousSearchParams.toString() }` : undefined,
+            nextPageUrl: hasNextPage ? `${ req.nextUrl.origin }/${ req.nextUrl.pathname }?${ nextSearchParams.toString() }` : undefined,
         };
 
         return Response.ok("Accounts found", {
@@ -184,7 +184,7 @@ export default class AccountsController {
 
         const updatedAccount = await this.repo.update(account.id, data);
 
-        await this.logger.info(updatedAccount, `Account [${id}] has been updated`, true);
+        await this.logger.info(updatedAccount, `Account [${ id }] has been updated`, true);
         return Response.ok("Account account update successful", updatedAccount);
     }
 
@@ -196,7 +196,7 @@ export default class AccountsController {
 
         const deletedAccount = await this.repo.delete(account.id);
 
-        await this.logger.info(deletedAccount, `Account [${id}] deleted`, true);
+        await this.logger.info(deletedAccount, `Account [${ id }] deleted`, true);
         return Response.ok("Account delete successful", deletedAccount);
     }
 
@@ -228,7 +228,7 @@ export default class AccountsController {
         const updatedAccount = await this.repo.updateRoles(account.id, roles.data.roles);
         const accountRoles = await this.repo.getRoles(updatedAccount.id);
 
-        await this.logger.info(accountRoles, `Account [${id}] roles updated`, true);
+        await this.logger.info(accountRoles, `Account [${ id }] roles updated`, true);
         return Response.ok("Updated account roles", accountRoles);
     }
 

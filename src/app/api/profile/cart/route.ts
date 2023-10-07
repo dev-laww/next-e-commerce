@@ -14,12 +14,12 @@ async function handler(req: NextRequest) {
         case "GET":
             ({ statusCode, response } = await controller.getCart(req));
             success = statusCode === STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Get cart failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Get cart failed: ${ response.message }`);
             break;
         case "DELETE":
             ({ statusCode, response } = await controller.deleteCart(req));
             success = statusCode === STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Delete cart failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Delete cart failed: ${ response.message }`);
             break;
         default:
             ({ statusCode, response } = Response.methodNotAllowed);

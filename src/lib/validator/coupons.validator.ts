@@ -29,7 +29,7 @@ namespace Validators {
             required_error: "Type is required",
             invalid_type_error: "Invalid type must be either fixed or percent"
         }),
-        discount: z.number({required_error: "Discount is required"})
+        discount: z.number({ required_error: "Discount is required" })
             .positive("Discount must be positive")
     });
 

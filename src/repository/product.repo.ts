@@ -1,4 +1,4 @@
-import { Category, Prisma, Product, ProductVariant, Review } from "@prisma/client";
+import { Category, Prisma, Product, ProductVariant } from "@prisma/client";
 
 import prisma from "@src/lib/prisma";
 

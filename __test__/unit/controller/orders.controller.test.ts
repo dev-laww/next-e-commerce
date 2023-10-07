@@ -30,7 +30,7 @@ describe("OrdersController", () => {
     describe("Test getOrders", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/orders", {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${ token }` }
             })
         });
 
@@ -78,7 +78,7 @@ describe("OrdersController", () => {
 
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/orders/1", {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${ token }` }
             })
         })
 
@@ -127,7 +127,7 @@ describe("OrdersController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/orders/1/cancel", {
                 method: "POST",
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${ token }` }
             });
         });
 

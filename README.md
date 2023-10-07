@@ -91,7 +91,9 @@ npm run start
 ```
 
 ### NOTE: This project is still a work in progress. I will be adding more features and functionality in the future.
-- You can import postman collection from [postman](./postman) directory to test the API endpoints. Also import the environment as the collection depends on it.
+
+- You can import postman collection from [postman](./postman) directory to test the API endpoints. Also import the
+  environment as the collection depends on it.
 - See [Documentation](./docs/README.md) for more information.
 
 

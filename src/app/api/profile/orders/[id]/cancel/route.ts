@@ -10,7 +10,7 @@ async function handler(req: NextRequest, { params }: { params: { id: string } })
     const { statusCode, response } = await controller.cancelOrder(req, params);
     const success = statusCode === STATUS_CODE.OK;
 
-    logger.info(success ? response.message : response, success ? undefined : `Cancel order failed: ${response.message}`);
+    logger.info(success ? response.message : response, success ? undefined : `Cancel order failed: ${ response.message }`);
     return NextResponse.json(response, { status: statusCode });
 }
 

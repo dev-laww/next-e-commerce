@@ -16,16 +16,16 @@ async function handler(req: NextRequest, { params }: { params: { id: string, rev
         case "PUT":
             ({ statusCode, response } = await controller.updateReview(req, params));
             success = statusCode == STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Update product reviews failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Update product reviews failed: ${ response.message }`);
             break;
         case "DELETE":
             ({ statusCode, response } = await controller.deleteReview(req, params));
             success = statusCode == STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Delete product reviews failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Delete product reviews failed: ${ response.message }`);
             break;
         default:
             ({ statusCode, response } = Response.methodNotAllowed);
-            logger.warn(`Method ${method} not supported`);
+            logger.warn(`Method ${ method } not supported`);
     }
 
     return NextResponse.json(response, { status: statusCode });

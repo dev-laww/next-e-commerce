@@ -14,12 +14,12 @@ async function handler(req: NextRequest) {
         case "GET":
             ({ statusCode, response } = await controller.getProfile(req));
             success = statusCode === STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Get profile failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Get profile failed: ${ response.message }`);
             break;
         case "PUT":
             ({ statusCode, response } = await controller.updateProfile(req));
             success = statusCode === STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Update profile failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Update profile failed: ${ response.message }`);
             break;
         default:
             ({ statusCode, response } = Response.methodNotAllowed);

@@ -74,11 +74,11 @@ export default class CouponsController {
         const meta = {
             hasNextPage,
             hasPreviousPage,
-            previousPageUrl: hasPreviousPage ? `${req.nextUrl.origin}/${req.nextUrl.pathname}?${previousSearchParams.toString()}` : undefined,
-            nextPageUrl: hasNextPage ? `${req.nextUrl.origin}/${req.nextUrl.pathname}?${nextSearchParams.toString()}` : undefined,
+            previousPageUrl: hasPreviousPage ? `${ req.nextUrl.origin }/${ req.nextUrl.pathname }?${ previousSearchParams.toString() }` : undefined,
+            nextPageUrl: hasNextPage ? `${ req.nextUrl.origin }/${ req.nextUrl.pathname }?${ nextSearchParams.toString() }` : undefined,
         };
 
-        await this.logger.info(`Retrieved ${result.length} variants`);
+        await this.logger.info(`Retrieved ${ result.length } variants`);
         return Response.ok("Coupons found", {
             result,
             meta,
@@ -91,7 +91,7 @@ export default class CouponsController {
 
         if (!coupon) return Response.notFound("Coupon not found");
 
-        await this.logger.info(`Retrieved coupon [${coupon.code}]`);
+        await this.logger.info(`Retrieved coupon [${ coupon.code }]`);
         return Response.ok("Coupon found", coupon);
     }
 
@@ -119,7 +119,7 @@ export default class CouponsController {
             code: code,
         } as Coupon);
 
-        await this.logger.info(`User [${session.username}] created coupon [${coupon.code}]`);
+        await this.logger.info(`User [${ session.username }] created coupon [${ coupon.code }]`);
         return Response.created("Coupon created", coupon);
     }
 
@@ -139,7 +139,7 @@ export default class CouponsController {
 
         const updatedCoupon = await this.repo.update(coupon.id, reqData.data);
 
-        await this.logger.info(`User [${session.username}] updated coupon [${coupon.code}]`);
+        await this.logger.info(`User [${ session.username }] updated coupon [${ coupon.code }]`);
         return Response.ok("Coupon updated", updatedCoupon);
     }
 
@@ -153,7 +153,7 @@ export default class CouponsController {
 
         coupon = await this.repo.delete(coupon.id);
 
-        await this.logger.info(`User [${session.username}] deleted coupon [${coupon.code}]`);
+        await this.logger.info(`User [${ session.username }] deleted coupon [${ coupon.code }]`);
         return Response.ok("Coupon deleted", coupon);
     }
 }

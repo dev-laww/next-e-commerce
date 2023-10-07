@@ -16,10 +16,10 @@ namespace Validators {
     });
 
     export const create = z.object({
-        name: z.string({required_error: "Name is required"})
+        name: z.string({ required_error: "Name is required" })
             .min(3, "Name must be at least 3 characters long")
             .max(255, "Name must be at most 255 characters long"),
-        code: z.string({required_error: "Code is required"})
+        code: z.string({ required_error: "Code is required" })
             .min(3, "Code must be at least 3 characters long")
             .max(255, "Code must be at most 255 characters long"),
     });

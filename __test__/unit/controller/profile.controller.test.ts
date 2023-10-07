@@ -37,7 +37,7 @@ describe("ProfileController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/profile", {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 }
             });
         });
@@ -66,7 +66,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile", {
                 method: "PUT",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 },
                 body: JSON.stringify({
                     username: "test",
@@ -109,7 +109,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile", {
                 method: "PUT",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 }
             });
             isAllowed.mockResolvedValueOnce(Response.ok());
@@ -124,7 +124,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile", {
                 method: "PUT",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 },
                 body: "{}"
             });
@@ -143,7 +143,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile/change-email", {
                 method: "PUT",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 },
                 body: JSON.stringify({
                     email: "test@mail.com",
@@ -187,7 +187,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile/change-email", {
                 method: "PUT",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 }
             });
             isAllowed.mockResolvedValueOnce(Response.ok());
@@ -202,7 +202,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile/change-email", {
                 method: "PUT",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 },
                 body: "{}"
             });
@@ -221,7 +221,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile/change-username", {
                 method: "PUT",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 },
                 body: JSON.stringify({
                     username: "test",
@@ -264,7 +264,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile/change-username", {
                 method: "PUT",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 }
             });
             isAllowed.mockResolvedValueOnce(Response.ok());
@@ -279,7 +279,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile/change-username", {
                 method: "PUT",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 },
                 body: "{}"
             });
@@ -298,7 +298,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile/change-email", {
                 method: "PUT",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 },
                 body: JSON.stringify({
                     currentPassword: "test",
@@ -341,7 +341,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile", {
                 method: "PUT",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 }
             });
             isAllowed.mockResolvedValueOnce(Response.ok());
@@ -356,7 +356,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile", {
                 method: "PUT",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 },
                 body: "{}"
             });
@@ -374,7 +374,7 @@ describe("ProfileController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/profile/addresses", {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 }
             });
         });
@@ -427,7 +427,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile/addresses", {
                 method: "POST",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 },
                 body: JSON.stringify(address)
             });
@@ -447,7 +447,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile/addresses", {
                 method: "POST",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 }
             });
             isAllowed.mockResolvedValueOnce(Response.ok());
@@ -471,7 +471,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile/addresses", {
                 method: "POST",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 },
                 body: "{}"
             });
@@ -489,7 +489,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile/addresses/1", {
                 method: "DELETE",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 }
             });
         });
@@ -541,7 +541,7 @@ describe("ProfileController", () => {
 
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/profile/addresses/1", {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${ token }` }
             });
         });
 
@@ -591,7 +591,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile/addresses/1", {
                 method: "PUT",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 },
                 body: JSON.stringify(address)
             });
@@ -612,7 +612,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile/addresses/1", {
                 method: "PUT",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 }
             });
             isAllowed.mockResolvedValueOnce(Response.ok());
@@ -658,7 +658,7 @@ describe("ProfileController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/profile/addresses/1", {
                 method: "DELETE",
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${ token }` }
             });
         });
 
@@ -698,7 +698,7 @@ describe("ProfileController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/profile/payment-methods", {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 }
             });
         });
@@ -750,7 +750,7 @@ describe("ProfileController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/profile/payment-methods/1", {
                 method: "DELETE",
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${ token }` }
             });
         });
 
@@ -789,7 +789,7 @@ describe("ProfileController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/profile/payment-methods", {
                 method: "POST",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
                 body: JSON.stringify({
                     name: "Name",
                     email: "test@mail.com",
@@ -820,7 +820,7 @@ describe("ProfileController", () => {
         it("returns 400 if request body is invalid", async () => {
             req = new NextRequest("http://localhost:3000/api/profile/payment-methods", {
                 method: "POST",
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${ token }` }
             })
             isAllowed.mockResolvedValueOnce(Response.ok());
 
@@ -833,7 +833,7 @@ describe("ProfileController", () => {
         it("returns 422 if wrong body", async () => {
             req = new NextRequest("http://localhost:3000/api/profile/payment-methods", {
                 method: "POST",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
                 body: "{}"
             })
             isAllowed.mockResolvedValueOnce(Response.ok());
@@ -861,7 +861,7 @@ describe("ProfileController", () => {
 
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/profile/payment-methods/1", {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${ token }` }
             });
         });
 
@@ -901,7 +901,7 @@ describe("ProfileController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/profile/payment-methods/1", {
                 method: "PUT",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
                 body: JSON.stringify({
                     name: "Updated name",
                     email: "updated@mail.com",
@@ -933,7 +933,7 @@ describe("ProfileController", () => {
         it("returns 400 if request body is invalid", async () => {
             req = new NextRequest("http://localhost:3000/api/profile/payment-methods/1", {
                 method: "PUT",
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${ token }` }
             });
             isAllowed.mockResolvedValueOnce(Response.ok());
 
@@ -956,7 +956,7 @@ describe("ProfileController", () => {
         it("returns 422 if wrong body", async () => {
             req = new NextRequest("http://localhost:3000/api/profile/payment-methods/1", {
                 method: "PUT",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
                 body: "{}"
             });
             isAllowed.mockResolvedValueOnce(Response.ok());
@@ -984,7 +984,7 @@ describe("ProfileController", () => {
 
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/profile/payment-methods/1", {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${ token }` }
             });
         });
 
@@ -1034,7 +1034,7 @@ describe("ProfileController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/profile/orders", {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 }
             });
         });
@@ -1082,7 +1082,7 @@ describe("ProfileController", () => {
 
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/profile/orders/1", {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${ token }` }
             });
         });
 
@@ -1132,7 +1132,7 @@ describe("ProfileController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/profile/orders/1/cancel", {
                 method: "PUT",
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${ token }` }
             });
         });
 
@@ -1188,7 +1188,7 @@ describe("ProfileController", () => {
 
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/profile/wishlist", {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${ token }` }
             });
         });
 
@@ -1231,7 +1231,7 @@ describe("ProfileController", () => {
 
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/profile/wishlist/1", {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${ token }` }
             });
         });
 
@@ -1275,7 +1275,7 @@ describe("ProfileController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/profile/wishlist/1", {
                 method: "DELETE",
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${ token }` }
             });
         });
 
@@ -1334,7 +1334,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile/wishlist/1/move-to-cart", {
                 method: "POST",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 },
                 body: JSON.stringify({
                     variantId: 1,
@@ -1369,7 +1369,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile/wishlist/1/move-to-cart", {
                 method: "POST",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 }
             });
             isAllowed.mockResolvedValueOnce(Response.ok());
@@ -1417,7 +1417,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile/wishlist/1/move-to-cart", {
                 method: "POST",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 },
                 body: "{}"
             });
@@ -1442,7 +1442,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile/wishlist", {
                 method: "DELETE",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 }
             });
         });
@@ -1490,7 +1490,7 @@ describe("ProfileController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/profile/cart", {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 }
             });
         });
@@ -1537,7 +1537,7 @@ describe("ProfileController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/profile/cart/1", {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 }
             });
         });
@@ -1586,7 +1586,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile/cart/1/quantity", {
                 method: "PUT",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 },
                 body: JSON.stringify({
                     quantity: 20
@@ -1609,7 +1609,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile/cart/1/quantity", {
                 method: "PUT",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 }
             });
             isAllowed.mockResolvedValueOnce(Response.ok());
@@ -1643,7 +1643,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile/cart/1/quantity", {
                 method: "PUT",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 },
                 body: "{}"
             });
@@ -1671,7 +1671,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile/cart/1", {
                 method: "DELETE",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 }
             });
         });
@@ -1720,7 +1720,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile/cart", {
                 method: "DELETE",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 }
             });
         });
@@ -1799,7 +1799,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile/checkout", {
                 method: "POST",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 },
                 body: JSON.stringify({
                     addressId: 1,
@@ -1830,7 +1830,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile/checkout", {
                 method: "POST",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 }
             });
             isAllowed.mockResolvedValueOnce(Response.ok());
@@ -1900,7 +1900,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile/checkout", {
                 method: "POST",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 },
                 body: "{}"
             });
@@ -1966,7 +1966,7 @@ describe("ProfileController", () => {
             req = new NextRequest("http://localhost:3000/api/profile/reviews", {
                 method: "DELETE",
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 }
             });
         });
@@ -2015,7 +2015,7 @@ describe("ProfileController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/profile/reviews/1", {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 }
             });
         });
@@ -2103,7 +2103,7 @@ describe("ProfileController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/profile/payments", {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 }
             });
         });
@@ -2151,7 +2151,7 @@ describe("ProfileController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/profile/payments/1", {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${ token }`
                 }
             });
         });

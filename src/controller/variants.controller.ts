@@ -74,11 +74,11 @@ export default class VariantsController {
         const meta = {
             hasNextPage,
             hasPreviousPage,
-            previousPageUrl: hasPreviousPage ? `${req.nextUrl.origin}/${req.nextUrl.pathname}?${previousSearchParams.toString()}` : undefined,
-            nextPageUrl: hasNextPage ? `${req.nextUrl.origin}/${req.nextUrl.pathname}?${nextSearchParams.toString()}` : undefined,
+            previousPageUrl: hasPreviousPage ? `${ req.nextUrl.origin }/${ req.nextUrl.pathname }?${ previousSearchParams.toString() }` : undefined,
+            nextPageUrl: hasNextPage ? `${ req.nextUrl.origin }/${ req.nextUrl.pathname }?${ nextSearchParams.toString() }` : undefined,
         };
 
-        await this.logger.info(`Retrieved ${result.length} variants`);
+        await this.logger.info(`Retrieved ${ result.length } variants`);
         return Response.ok("Variants found", {
             result,
             meta,
@@ -98,7 +98,7 @@ export default class VariantsController {
             imageUrl: "https://via.placeholder.com/150",
         }) as ProductVariant);
 
-        await this.logger.info(result, `User ${session.id} created variant ${result.id}`, true);
+        await this.logger.info(result, `User ${ session.id } created variant ${ result.id }`, true);
         return Response.created("Variant created", result);
     }
 
@@ -108,7 +108,7 @@ export default class VariantsController {
 
         if (!result) return Response.notFound("Variant not found");
 
-        await this.logger.info(`Retrieved variant ${result.id}`);
+        await this.logger.info(`Retrieved variant ${ result.id }`);
         return Response.ok("Variant found", result);
     }
 
@@ -128,7 +128,7 @@ export default class VariantsController {
 
         result = await this.repo.update(result.id, humps.decamelizeKeys(data.data) as ProductVariant);
 
-        await this.logger.info(result, `User ${session.id} updated variant ${result.id}`, true);
+        await this.logger.info(result, `User ${ session.id } updated variant ${ result.id }`, true);
         return Response.ok("Variant updated", result);
     }
 
@@ -141,7 +141,7 @@ export default class VariantsController {
 
         result = await this.repo.delete(result.id);
 
-        await this.logger.info(result, `User ${session.id} deleted variant ${result.id}`, true);
+        await this.logger.info(result, `User ${ session.id } deleted variant ${ result.id }`, true);
         return Response.ok("Variant deleted", result);
     }
 
@@ -156,7 +156,7 @@ export default class VariantsController {
 
         if (!result.length) return Response.notFound("Variant not found");
 
-        await this.logger.info(`Retrieved reviews for variant ${id}`);
+        await this.logger.info(`Retrieved reviews for variant ${ id }`);
         return Response.ok("Reviews found", result);
     }
 
@@ -169,8 +169,8 @@ export default class VariantsController {
 
         const result = await Repository.review.deleteVariantReviews(variant.id);
 
-        await this.logger.info(`User ${session.id} deleted reviews for variant ${variant.id}`, undefined,true);
-        return Response.ok(`${result.count} review${result.count > 1 ? "s" : ""} deleted successfully`);
+        await this.logger.info(`User ${ session.id } deleted reviews for variant ${ variant.id }`, undefined, true);
+        return Response.ok(`${ result.count } review${ result.count > 1 ? "s" : "" } deleted successfully`);
     }
 
     public async getReview(_req: NextRequest, params: { id: string, reviewId: string }) {
@@ -183,7 +183,7 @@ export default class VariantsController {
 
         if (!result) return Response.notFound("Review not found");
 
-        await this.logger.info(`Retrieved review ${result.id} for variant ${variant.id}`);
+        await this.logger.info(`Retrieved review ${ result.id } for variant ${ variant.id }`);
         return Response.ok("Review found", result);
     }
 
@@ -208,7 +208,7 @@ export default class VariantsController {
             productId: variant.product_id,
         }) as Review);
 
-        await this.logger.info(result, `User ${session.id} created review ${result.id}`, true)
+        await this.logger.info(result, `User ${ session.id } created review ${ result.id }`, true)
         return Response.created("Review created", result);
     }
 
@@ -231,7 +231,7 @@ export default class VariantsController {
 
         const result = await Repository.review.update(Number(reviewId) || 0, humps.decamelizeKeys(data.data) as Review);
 
-        await this.logger.info(result, `User ${session.id} updated review ${result.id}`, true)
+        await this.logger.info(result, `User ${ session.id } updated review ${ result.id }`, true)
         return Response.ok("Review updated", result);
     }
 
@@ -248,7 +248,7 @@ export default class VariantsController {
 
         const result = await Repository.review.delete(Number(reviewId) || 0);
 
-        await this.logger.info(result, `User ${session.id} deleted review ${result.id}`, true)
+        await this.logger.info(result, `User ${ session.id } deleted review ${ result.id }`, true)
         return Response.ok("Review deleted", result);
     }
 }

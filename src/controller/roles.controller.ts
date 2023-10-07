@@ -74,11 +74,11 @@ export default class RolesController {
         const meta = {
             hasNextPage,
             hasPreviousPage,
-            previousPageUrl: hasPreviousPage ? `${req.nextUrl.origin}/${req.nextUrl.pathname}?${previousSearchParams.toString()}` : undefined,
-            nextPageUrl: hasNextPage ? `${req.nextUrl.origin}/${req.nextUrl.pathname}?${nextSearchParams.toString()}` : undefined,
+            previousPageUrl: hasPreviousPage ? `${ req.nextUrl.origin }/${ req.nextUrl.pathname }?${ previousSearchParams.toString() }` : undefined,
+            nextPageUrl: hasNextPage ? `${ req.nextUrl.origin }/${ req.nextUrl.pathname }?${ nextSearchParams.toString() }` : undefined,
         };
 
-        await this.logger.info(`User ${session.id} fetched roles`)
+        await this.logger.info(`User ${ session.id } fetched roles`)
         return Response.ok("Roles found", {
             result,
             meta,
@@ -92,7 +92,7 @@ export default class RolesController {
 
         if (!result) return Response.notFound("Role not found");
 
-        await this.logger.info(`User ${session.id} fetched role ${id}`)
+        await this.logger.info(`User ${ session.id } fetched role ${ id }`)
         return Response.ok("Role found", result);
     }
 
@@ -106,7 +106,7 @@ export default class RolesController {
 
         const result = await this.repo.create(data.data);
 
-        await this.logger.info(result, `User ${session.id} created role ${result.id}`, true)
+        await this.logger.info(result, `User ${ session.id } created role ${ result.id }`, true)
         return Response.created("Role created", result);
     }
 
@@ -125,7 +125,7 @@ export default class RolesController {
 
         result = await this.repo.update(id, data.data);
 
-        await this.logger.info(result, `User ${session.id} updated role ${id}`, true)
+        await this.logger.info(result, `User ${ session.id } updated role ${ id }`, true)
         return Response.ok("Role updated", result);
     }
 
@@ -139,7 +139,7 @@ export default class RolesController {
 
         result = await this.repo.delete(Number(id) || 0);
 
-        await this.logger.info(result, `User ${session.id} deleted role ${id}`, true)
+        await this.logger.info(result, `User ${ session.id } deleted role ${ id }`, true)
         return Response.ok("Role deleted", result);
     }
 
@@ -154,7 +154,7 @@ export default class RolesController {
 
         if (!result.length) return Response.notFound("Permissions not found");
 
-        await this.logger.info(`User ${session.id} fetched role ${id} permissions`)
+        await this.logger.info(`User ${ session.id } fetched role ${ id } permissions`)
         return Response.ok("Role permissions found", result);
     }
 
@@ -173,7 +173,7 @@ export default class RolesController {
 
         if (!result) return Response.notFound("Role not found");
 
-        await this.logger.info(result, `User ${session.id} added permission ${permissionId} to role ${id}`, true)
+        await this.logger.info(result, `User ${ session.id } added permission ${ permissionId } to role ${ id }`, true)
         return Response.ok("Role permission added", result);
     }
 
@@ -190,7 +190,7 @@ export default class RolesController {
 
         const result = await this.repo.removePermission(Number(id) || 0, Number(permissionId) || 0);
 
-        await this.logger.info(result, `User ${session.id} removed permission ${permissionId} from role ${id}`, true)
+        await this.logger.info(result, `User ${ session.id } removed permission ${ permissionId } from role ${ id }`, true)
         return Response.ok("Role permission removed", result);
     }
 
@@ -201,7 +201,7 @@ export default class RolesController {
 
         if (!result) return Response.notFound("Role not found");
 
-        await this.logger.info(`User ${session.id} fetched role ${id} users`)
+        await this.logger.info(`User ${ session.id } fetched role ${ id } users`)
         return Response.ok("Role users found", result);
     }
 }

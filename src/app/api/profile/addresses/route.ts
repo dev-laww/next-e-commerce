@@ -14,17 +14,17 @@ async function handler(req: NextRequest) {
         case "GET":
             ({ statusCode, response } = await controller.getAddresses(req));
             success = statusCode === STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Get addresses failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Get addresses failed: ${ response.message }`);
             break;
         case "POST":
             ({ statusCode, response } = await controller.addAddress(req));
             success = statusCode === STATUS_CODE.CREATED;
-            logger.info(success ? response.message : response, success ? undefined : `Add address failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Add address failed: ${ response.message }`);
             break;
         case "DELETE":
             ({ statusCode, response } = await controller.deleteAddresses(req));
             success = statusCode === STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Delete addresses failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Delete addresses failed: ${ response.message }`);
             break;
         default:
             ({ statusCode, response } = Response.methodNotAllowed);

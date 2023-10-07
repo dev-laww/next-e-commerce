@@ -88,8 +88,8 @@ export default class ProductsController {
         });
 
         // Generate urls
-        const nextUrl = `${req.nextUrl.origin}/${req.nextUrl.pathname}?${nextSearchParams.toString()}`;
-        const previousUrl = `${req.nextUrl.origin}/${req.nextUrl.pathname}?${previousSearchParams.toString()}`;
+        const nextUrl = `${ req.nextUrl.origin }/${ req.nextUrl.pathname }?${ nextSearchParams.toString() }`;
+        const previousUrl = `${ req.nextUrl.origin }/${ req.nextUrl.pathname }?${ previousSearchParams.toString() }`;
 
         await this.logger.info("Products found");
         return Response.ok("Products found", {
@@ -110,7 +110,7 @@ export default class ProductsController {
 
         if (!product) return Response.notFound("Product not found");
 
-        await this.logger.info(`Product found [${product.id}]`);
+        await this.logger.info(`Product found [${ product.id }]`);
         return Response.ok("Product found", product);
     };
 
@@ -124,7 +124,7 @@ export default class ProductsController {
 
         const product = await this.repo.create(humps.decamelizeKeys(body) as Product);
 
-        await this.logger.info(product, `User [${session.id}] created product [${product.id}]`, true);
+        await this.logger.info(product, `User [${ session.id }] created product [${ product.id }]`, true);
         return Response.created("Product created successfully", product)
     }
 
@@ -143,7 +143,7 @@ export default class ProductsController {
 
         const updatedProduct = await this.repo.update(productInfo.id, humps.decamelizeKeys(product.data) as Product)
 
-        await this.logger.info(updatedProduct, `User [${session.id}] updated product [${id}]`, true);
+        await this.logger.info(updatedProduct, `User [${ session.id }] updated product [${ id }]`, true);
         return Response.ok("Product update successful", updatedProduct);
     }
 
@@ -156,7 +156,7 @@ export default class ProductsController {
 
         const deletedProduct = await this.repo.delete(product.id);
 
-        await this.logger.info(deletedProduct, `User [${session.id}] deleted product [${id}]`, true);
+        await this.logger.info(deletedProduct, `User [${ session.id }] deleted product [${ id }]`, true);
         return Response.ok("Product delete successful", deletedProduct);
     }
 
@@ -170,7 +170,7 @@ export default class ProductsController {
 
         if (!variants.length) return Response.notFound("Product variants not found");
 
-        await this.logger.info(`Product variants found for product [${product.id}]`);
+        await this.logger.info(`Product variants found for product [${ product.id }]`);
         return Response.ok("Product variants found", variants);  // idk if we need to check the length, we should just return the result as is, empty or not
     }
 
@@ -190,7 +190,7 @@ export default class ProductsController {
 
         const productVariant = await this.repo.addVariant(product.id, humps.decamelizeKeys(variant.data) as ProductVariant);
 
-        await this.logger.info(productVariant, `User [${session.id}] added product variant [${productVariant.id}] for product [${product.id}]`, true);
+        await this.logger.info(productVariant, `User [${ session.id }] added product variant [${ productVariant.id }] for product [${ product.id }]`, true);
         return Response.created("Product variant added", productVariant);
     }
 
@@ -213,7 +213,7 @@ export default class ProductsController {
 
         const updatedVariant = await Repository.productVariant.update(variantInfo.id, humps.decamelizeKeys(variant.data) as ProductVariant);
 
-        await this.logger.info(updatedVariant, `User [${session.id}] updated product variant [${variantInfo.id}] for product [${product.id}]`, true);
+        await this.logger.info(updatedVariant, `User [${ session.id }] updated product variant [${ variantInfo.id }] for product [${ product.id }]`, true);
         return Response.ok("Product variant update successful", updatedVariant);
     }
 
@@ -228,7 +228,7 @@ export default class ProductsController {
 
         if (!deletedVariant) return Response.notFound("Product variant not found")
 
-        await this.logger.info(deletedVariant, `User [${session.id}]product variant [${id}] for product [${product.id}]`, true)
+        await this.logger.info(deletedVariant, `User [${ session.id }]product variant [${ id }] for product [${ product.id }]`, true)
         return Response.ok("Product variant delete successful", deletedVariant)
     }
 
@@ -245,8 +245,8 @@ export default class ProductsController {
 
         const result = await Repository.productVariant.deleteProductVariants(product.id);
 
-        await this.logger.info(undefined, `User [${session.id}] deleted product variants [${id}] for product [${product.id}]`, true)
-        return Response.ok(`${result.count} product variant${result.count > 1 ? "s" : ""} deleted successfully`)
+        await this.logger.info(undefined, `User [${ session.id }] deleted product variants [${ id }] for product [${ product.id }]`, true)
+        return Response.ok(`${ result.count } product variant${ result.count > 1 ? "s" : "" } deleted successfully`)
     }
 
     public async getCategories(_req: NextRequest, params: { id: string }) {
@@ -276,11 +276,11 @@ export default class ProductsController {
 
         let productCategory = await this.repo.getCategories(product.id).then(res => res.find(category => category.id === Number(categoryId) || 0));
 
-        if (productCategory) return Response.badRequest(`Category already in product [${product.id}] exists`);
+        if (productCategory) return Response.badRequest(`Category already in product [${ product.id }] exists`);
 
         productCategory = await this.repo.addCategory(product.id, category.id);
 
-        await this.logger.info(productCategory, `User [${session.id}] added category [${category.id}] to product [${product.id}]`, true);
+        await this.logger.info(productCategory, `User [${ session.id }] added category [${ category.id }] to product [${ product.id }]`, true);
         return Response.ok("Category added to product");
     }
 
@@ -297,7 +297,7 @@ export default class ProductsController {
 
         const deletedCategory = await this.repo.deleteCategory(product.id, Number(categoryId) || 0);
 
-        await this.logger.info(deletedCategory, `User [${session.id}] removed category [${categoryId}] from product [${product.id}]`, true);
+        await this.logger.info(deletedCategory, `User [${ session.id }] removed category [${ categoryId }] from product [${ product.id }]`, true);
         return Response.ok("Product category removed")
     }
 
@@ -311,7 +311,7 @@ export default class ProductsController {
 
         if (!reviews.length) return Response.notFound("Product reviews not found");
 
-        await this.logger.info(`Product reviews found for product [${product.id}]`);
+        await this.logger.info(`Product reviews found for product [${ product.id }]`);
         return Response.ok("Product reviews found", reviews);
     }
 
@@ -328,8 +328,8 @@ export default class ProductsController {
 
         const result = await Repository.review.deleteProductReviews(product.id);
 
-        await this.logger.info(`User [${session.id}] deleted reviews for product [${product.id}]`, undefined, true);
-        return Response.ok(`${result.count} review${result.count > 1 ? "s" : ""} deleted successfully`);
+        await this.logger.info(`User [${ session.id }] deleted reviews for product [${ product.id }]`, undefined, true);
+        return Response.ok(`${ result.count } review${ result.count > 1 ? "s" : "" } deleted successfully`);
     }
 
     @CheckBody
@@ -352,7 +352,7 @@ export default class ProductsController {
             userId: session.id,
         }) as Review);
 
-        await this.logger.info(productReview, `User [${session.id}] added review [${productReview.id}] for product [${product.id}]`, true);
+        await this.logger.info(productReview, `User [${ session.id }] added review [${ productReview.id }] for product [${ product.id }]`, true);
         return Response.created("Product review added", productReview);
     }
 
@@ -375,7 +375,7 @@ export default class ProductsController {
 
         const updatedReview = await Repository.review.update(reviewInfo.id, humps.decamelizeKeys(review.data) as Review);
 
-        await this.logger.info(updatedReview, `User [${session.id}] updated review [${reviewId}] for product [${product.id}]`, true);
+        await this.logger.info(updatedReview, `User [${ session.id }] updated review [${ reviewId }] for product [${ product.id }]`, true);
         return Response.ok("Product review update successful", updatedReview);
     }
 
@@ -392,7 +392,7 @@ export default class ProductsController {
 
         const deletedReview = await Repository.review.delete(review.id);
 
-        await this.logger.info(deletedReview, `User [${session.id}] removed review [${reviewId}] from product [${product.id}]`, true);
+        await this.logger.info(deletedReview, `User [${ session.id }] removed review [${ reviewId }] from product [${ product.id }]`, true);
         return Response.ok("Product review removed", deletedReview)
     }
 }

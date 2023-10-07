@@ -447,9 +447,9 @@ List of all API endpoints.
     - **Reviews**
         - `GET /accounts/:id/reviews`: Get a list of all reviews for a specific user.
         - `GET /accounts/:id/reviews/:reviewId`: Get a specific review for a specific user.
-  - **Payments**
-      - `GET /accounts/:id/payments`: Get a list of all reviews for a specific user.
-      - `GET /accounts/:id/payments/:paymentId`: Get a specific review for a specific user.
+    - **Payments**
+        - `GET /accounts/:id/payments`: Get a list of all reviews for a specific user.
+        - `GET /accounts/:id/payments/:paymentId`: Get a specific review for a specific user.
 
 ## Profile
 

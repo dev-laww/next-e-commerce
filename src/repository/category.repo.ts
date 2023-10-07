@@ -1,4 +1,4 @@
-import { Category, Prisma, Product, ProductCategory } from "@prisma/client";
+import { Category, Prisma, Product } from "@prisma/client";
 
 import prisma from "@lib/prisma";
 
@@ -46,7 +46,7 @@ export default class CategoryRepository {
             }
         });
 
-        return category ? category.products.map(({product}) => product as Product) : [];
+        return category ? category.products.map(({ product }) => product as Product) : [];
     }
 
     public async create(data: Prisma.CategoryCreateInput): Promise<Category> {

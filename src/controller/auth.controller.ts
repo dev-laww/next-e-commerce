@@ -75,7 +75,7 @@ export default class AuthController {
             return Response.internalServerError("Failed to send confirmation email");
         }
 
-        await this.logger.info(`${user.email} created an account`, undefined, true);
+        await this.logger.info(`${ user.email } created an account`, undefined, true);
 
         return Response.created("Signup successful", {
             ...userSession,
@@ -113,8 +113,8 @@ export default class AuthController {
             image_url: user.image_url
         }
 
-        await this.logger.debug(userSession, `User ${user.email} logged in`)
-        await this.logger.info(`${user.email} logged in`, undefined, true);
+        await this.logger.debug(userSession, `User ${ user.email } logged in`)
+        await this.logger.info(`${ user.email } logged in`, undefined, true);
 
         return Response.ok("Login successful", {
             ...userSession,
@@ -159,8 +159,8 @@ export default class AuthController {
             return Response.internalServerError("Failed to send confirmation email");
         }
 
-        await this.logger.debug(user, `User [${user.email}] requested password reset`)
-        await this.logger.info(`${user.email} requested password reset`, undefined, true);
+        await this.logger.debug(user, `User [${ user.email }] requested password reset`)
+        await this.logger.info(`${ user.email } requested password reset`, undefined, true);
         return Response.ok("Password reset sent successfully");
     }
 
@@ -182,8 +182,8 @@ export default class AuthController {
         if (!success) return Response.unauthorized("Invalid token");
 
         await this.userRepo.changePassword(data.id, requestData.data.password);
-        await this.logger.debug(data, `User ${data.email} changed password`)
-        await this.logger.info(`${data.email} changed password`, undefined, true);
+        await this.logger.debug(data, `User ${ data.email } changed password`)
+        await this.logger.info(`${ data.email } changed password`, undefined, true);
 
         return Response.ok("Password change successful");
     }
@@ -208,8 +208,8 @@ export default class AuthController {
         if (data.confirmed) return Response.badRequest("Email already confirmed");
 
         await this.userRepo.update(data.id, { confirmed: true });
-        await this.logger.debug(data, `User ${data.email} confirmed email`)
-        await this.logger.info(`${data.email} confirmed`, undefined, true);
+        await this.logger.debug(data, `User ${ data.email } confirmed email`)
+        await this.logger.info(`${ data.email } confirmed`, undefined, true);
 
         return Response.ok("Email confirm successful");
     }
@@ -246,12 +246,12 @@ export default class AuthController {
                 await Email.sendToken(user.email, token) :
                 await Email.sendOTP(user.email, token);
         } catch (error) {
-            await this.logger.error(error, `User ${user.email} failed to send confirmation email`, true);
+            await this.logger.error(error, `User ${ user.email } failed to send confirmation email`, true);
             return Response.internalServerError("Failed to send confirmation email");
         }
 
-        await this.logger.debug(user, `User ${user.email} requested email confirmation`)
-        await this.logger.info(`${user.email} requested email confirmation`, undefined, true);
+        await this.logger.debug(user, `User ${ user.email } requested email confirmation`)
+        await this.logger.info(`${ user.email } requested email confirmation`, undefined, true);
         return Response.ok("Email confirmation sent");
     }
 
@@ -267,8 +267,8 @@ export default class AuthController {
 
         if (!session) return Response.unauthorized("Invalid refresh token");
 
-        await this.logger.debug(session, `User ${session.email} refreshed token`)
-        await this.logger.info(`${session.email} refreshed token`, undefined, true);
+        await this.logger.debug(session, `User ${ session.email } refreshed token`)
+        await this.logger.info(`${ session.email } refreshed token`, undefined, true);
         return Response.ok(
             "Token refresh successful",
             { accessToken: generateAccessToken(session) }

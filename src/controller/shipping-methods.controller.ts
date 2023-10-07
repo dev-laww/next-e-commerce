@@ -74,24 +74,24 @@ export default class ShippingMethodsController {
         const meta = {
             hasNextPage,
             hasPreviousPage,
-            previousPageUrl: hasPreviousPage ? `${req.nextUrl.origin}/${req.nextUrl.pathname}?${previousSearchParams.toString()}` : undefined,
-            nextPageUrl: hasNextPage ? `${req.nextUrl.origin}/${req.nextUrl.pathname}?${nextSearchParams.toString()}` : undefined,
+            previousPageUrl: hasPreviousPage ? `${ req.nextUrl.origin }/${ req.nextUrl.pathname }?${ previousSearchParams.toString() }` : undefined,
+            nextPageUrl: hasNextPage ? `${ req.nextUrl.origin }/${ req.nextUrl.pathname }?${ nextSearchParams.toString() }` : undefined,
         };
 
-        await this.logger.info(`Retrieved ${result.length} shipping methods`);
+        await this.logger.info(`Retrieved ${ result.length } shipping methods`);
         return Response.ok("Shipping methods found", {
             result,
             meta,
         });
     }
 
-    public async getShippingMethod(req: NextRequest, params: {id: string}) {
+    public async getShippingMethod(req: NextRequest, params: { id: string }) {
         const { id } = params;
         const shippingMethod = await this.repo.getById(Number(id) || 0);
 
         if (!shippingMethod) return Response.notFound("Shipping method not found");
 
-        await this.logger.info(`Retrieved shipping method ${shippingMethod.id}`);
+        await this.logger.info(`Retrieved shipping method ${ shippingMethod.id }`);
         return Response.ok("Shipping method found", shippingMethod);
     }
 
@@ -105,12 +105,12 @@ export default class ShippingMethodsController {
 
         const shippingMethod = await this.repo.create(reqData.data);
 
-        await this.logger.info(shippingMethod, `User [${session.id}] created shipping method [${shippingMethod.id}]`, true);
+        await this.logger.info(shippingMethod, `User [${ session.id }] created shipping method [${ shippingMethod.id }]`, true);
         return Response.created("Shipping method created", shippingMethod);
     }
 
     @CheckBody
-    public async updateShippingMethod(req: NextRequest, params: {id: string}) {
+    public async updateShippingMethod(req: NextRequest, params: { id: string }) {
         const session = await getSession(req);
         const { id } = params;
 
@@ -125,11 +125,11 @@ export default class ShippingMethodsController {
 
         const shippingMethod = await this.repo.update(Number(id) || 0, reqData.data);
 
-        await this.logger.info(shippingMethod, `User [${session.id}] updated shipping method [${shippingMethod.id}]`, true);
+        await this.logger.info(shippingMethod, `User [${ session.id }] updated shipping method [${ shippingMethod.id }]`, true);
         return Response.ok("Shipping method updated", shippingMethod);
     }
 
-    public async deleteShippingMethod(req: NextRequest, params: {id: string}) {
+    public async deleteShippingMethod(req: NextRequest, params: { id: string }) {
         const session = await getSession(req);
         const { id } = params;
 
@@ -139,11 +139,11 @@ export default class ShippingMethodsController {
 
         shippingMethod = await this.repo.delete(shippingMethod.id);
 
-        await this.logger.info(shippingMethod, `User [${session.id}] deleted shipping method [${shippingMethod.id}]`, true);
+        await this.logger.info(shippingMethod, `User [${ session.id }] deleted shipping method [${ shippingMethod.id }]`, true);
         return Response.ok("Shipping method deleted", shippingMethod);
     }
 
-    public async getShippingMethodOrders(req: NextRequest, params: {id: string}) {
+    public async getShippingMethodOrders(req: NextRequest, params: { id: string }) {
         const session = await getSession(req);
         const { id } = params;
         const shippingMethod = await this.repo.getById(Number(id) || 0);
@@ -152,7 +152,7 @@ export default class ShippingMethodsController {
 
         const orders = await this.repo.getShippingOrders(shippingMethod.id);
 
-        await this.logger.info(`User [${session.id}] ${orders.length} orders for shipping method {${shippingMethod.id}}`);
+        await this.logger.info(`User [${ session.id }] ${ orders.length } orders for shipping method {${ shippingMethod.id }}`);
         return Response.ok("Orders found", orders);
     }
 }

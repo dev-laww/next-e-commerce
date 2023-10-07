@@ -23,7 +23,7 @@ describe("CategoryController", () => {
     describe("Test getCategories", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/categories", {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${ token }` }
             });
         });
 
@@ -56,7 +56,7 @@ describe("CategoryController", () => {
 
         beforeEach(() => {
             req = new NextRequest("http://localhost/categories/1", {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${ token }` }
             });
         });
 
@@ -92,7 +92,7 @@ describe("CategoryController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/categories", {
                 method: "POST",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
                 body: JSON.stringify({
                     name: "testing",
                 })
@@ -141,7 +141,7 @@ describe("CategoryController", () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
             req = new NextRequest("http://localhost:3000/api/categories", {
                 method: "POST",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
                 body: "{}"
             });
 
@@ -162,7 +162,7 @@ describe("CategoryController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/categories/1", {
                 method: "PUT",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
                 body: JSON.stringify({
                     name: "test",
                     price: 100,
@@ -231,7 +231,7 @@ describe("CategoryController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/category/1", {
                 method: "DELETE",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
             });
         });
 
@@ -285,7 +285,7 @@ describe("CategoryController", () => {
 
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/categories/1/products", {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${ token }` }
             });
         });
 

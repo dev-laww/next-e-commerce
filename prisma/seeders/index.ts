@@ -13,7 +13,7 @@ for (const file of files) {
     // Skip index.ts and non-ts files
     if (file.match(/index\.ts$|(?<!\.ts)$/i)) continue;
 
-    const seederModule = require(`./${file.replace('.ts', '')}`)
+    const seederModule = require(`./${ file.replace('.ts', '') }`)
 
     tempSeeders[humps.camelize(file.replace('.ts', ''))] = seederModule.default
 }

@@ -14,12 +14,12 @@ async function handler(req: NextRequest) {
         case "GET":
             ({ statusCode, response } = await controller.getVariants(req));
             success = statusCode === STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Get variants failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Get variants failed: ${ response.message }`);
             break;
         case "POST":
             ({ statusCode, response } = await controller.createVariant(req));
             success = statusCode === STATUS_CODE.CREATED;
-            logger.info(success ? response.message : response, success ? undefined : `Create variant failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Create variant failed: ${ response.message }`);
             break;
         default:
             ({ statusCode, response } = Response.methodNotAllowed);

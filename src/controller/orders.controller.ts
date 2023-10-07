@@ -76,11 +76,11 @@ export default class OrdersController {
         const meta = {
             hasNextPage,
             hasPreviousPage,
-            previousPageUrl: hasPreviousPage ? `${req.nextUrl.origin}/${req.nextUrl.pathname}?${previousSearchParams.toString()}` : undefined,
-            nextPageUrl: hasNextPage ? `${req.nextUrl.origin}/${req.nextUrl.pathname}?${nextSearchParams.toString()}` : undefined,
+            previousPageUrl: hasPreviousPage ? `${ req.nextUrl.origin }/${ req.nextUrl.pathname }?${ previousSearchParams.toString() }` : undefined,
+            nextPageUrl: hasNextPage ? `${ req.nextUrl.origin }/${ req.nextUrl.pathname }?${ nextSearchParams.toString() }` : undefined,
         };
 
-        await this.logger.info(`Retrieved ${result.length} orders`);
+        await this.logger.info(`Retrieved ${ result.length } orders`);
         return Response.ok("Orders found", {
             result,
             meta,
@@ -96,7 +96,7 @@ export default class OrdersController {
 
         if (!result) return Response.notFound("Order not found");
 
-        await this.logger.info(`Retrieved order ${id}`);
+        await this.logger.info(`Retrieved order ${ id }`);
         return Response.ok("Order found", result);
     }
 
@@ -113,7 +113,7 @@ export default class OrdersController {
 
         if (!result) return Response.notFound("Order not found");
 
-        await this.logger.info(`Cancelled order ${id}`);
+        await this.logger.info(`Cancelled order ${ id }`);
         return Response.ok("Order cancelled", result);
     }
 }

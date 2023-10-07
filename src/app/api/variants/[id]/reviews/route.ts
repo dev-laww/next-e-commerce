@@ -14,17 +14,17 @@ async function handler(req: NextRequest, { params }: { params: { id: string } })
         case "GET":
             ({ statusCode, response } = await controller.getReviews(req, params));
             success = statusCode === STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Get variant reviews failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Get variant reviews failed: ${ response.message }`);
             break;
         case "POST":
             ({ statusCode, response } = await controller.createReview(req, params));
             success = statusCode === STATUS_CODE.CREATED;
-            logger.info(success ? response.message : response, success ? undefined : `Create variant review failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Create variant review failed: ${ response.message }`);
             break;
         case "DELETE":
             ({ statusCode, response } = await controller.deleteReviews(req, params));
             success = statusCode === STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Delete variant reviews failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Delete variant reviews failed: ${ response.message }`);
             break;
         default:
             ({ statusCode, response } = Response.methodNotAllowed);

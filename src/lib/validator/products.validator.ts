@@ -37,15 +37,15 @@ namespace Validators {
 
     // TODO: make this form data to accept file uploads
     export const variant = z.object({
-        imageUrl: z.string({required_error: "Image is required"})
+        imageUrl: z.string({ required_error: "Image is required" })
             .url(),
-        price: z.number({required_error: "Price is required"})
+        price: z.number({ required_error: "Price is required" })
             .positive("Must be positive"),
-        rawPrice: z.number({required_error: "Raw price is required"})
+        rawPrice: z.number({ required_error: "Raw price is required" })
             .positive("Must be positive"),
-        stock: z.number({required_error: "Quantity is required"})
+        stock: z.number({ required_error: "Quantity is required" })
             .positive("Must be positive"),
-        name: z.string({required_error: "Name is required"})
+        name: z.string({ required_error: "Name is required" })
             .min(3, "Name must be at least 3 characters long")
             .max(50, "Name must not exceed 255 characters"),
     });
@@ -70,21 +70,21 @@ namespace Validators {
     });
 
     export const review = z.object({
-        rating: z.number({required_error: "Rating is required"})
+        rating: z.number({ required_error: "Rating is required" })
             .min(1, "Rating must be between 1 and 5")
             .max(5, "Rating must be between 1 and 5"),
-        comment: z.string({required_error: "Comment is required"})
+        comment: z.string({ required_error: "Comment is required" })
             .min(3, "Comment must be at least 3 characters long")
             .max(255, "Comment must not exceed 255 characters"),
-        variantId: z.number({required_error: "Variant ID is required"})
+        variantId: z.number({ required_error: "Variant ID is required" })
     });
 
     export const reviewUpdate = z.object({
-        rating: z.number({required_error: "Rating is required"})
+        rating: z.number({ required_error: "Rating is required" })
             .min(1, "Rating must be between 1 and 5")
             .max(5, "Rating must be between 1 and 5")
             .optional(),
-        comment: z.string({required_error: "Comment is required"})
+        comment: z.string({ required_error: "Comment is required" })
             .min(3, "Comment must be at least 3 characters long")
             .max(255, "Comment must not exceed 255 characters")
             .optional(),

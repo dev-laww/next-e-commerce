@@ -14,12 +14,12 @@ async function handler(req: NextRequest) {
         case "GET":
             ({ statusCode, response } = await controller.getShippingMethods(req));
             success = statusCode === STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Get shipping methods failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Get shipping methods failed: ${ response.message }`);
             break;
         case "POST":
             ({ statusCode, response } = await controller.createShippingMethod(req));
             success = statusCode === STATUS_CODE.CREATED;
-            logger.info(success ? response.message : response, success ? undefined : `Create shipping method failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Create shipping method failed: ${ response.message }`);
             break;
         default:
             ({ statusCode, response } = Response.methodNotAllowed);

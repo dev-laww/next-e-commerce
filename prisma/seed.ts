@@ -67,17 +67,17 @@ async function main() {
         const entity = humps.decamelize(entityName).replace(/_/g, " ");
 
         if (!func) {
-            logger.info(`Invalid entity name: ${entityName}`);
+            logger.info(`Invalid entity name: ${ entityName }`);
             continue;
         }
 
-        logger.info(`Seeding [${entity}]`);
+        logger.info(`Seeding [${ entity }]`);
 
         for (const seeder of seeders[entityName]) {
             const existing = await func.findUnique({ where: { id: seeder.id } });
 
             if (existing) {
-                logger.debug(existing, `Skipping existing [${entity}] with id: ${seeder.id}`);
+                logger.debug(existing, `Skipping existing [${ entity }] with id: ${ seeder.id }`);
                 continue;
             }
 
@@ -86,11 +86,11 @@ async function main() {
             });
         }
 
-        logger.info(`Seeded [${entity}]`);
+        logger.info(`Seeded [${ entity }]`);
     }
 
-    logger.info(`Seeded ${env} environment successfully`);
-    logger.info(`Seeded ${Object.keys(seeders).length} entities`);
+    logger.info(`Seeded ${ env } environment successfully`);
+    logger.info(`Seeded ${ Object.keys(seeders).length } entities`);
 }
 
 main()

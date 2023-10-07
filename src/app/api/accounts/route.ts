@@ -17,16 +17,16 @@ async function handler(req: NextRequest) {
         case "GET":
             ({ statusCode, response } = await controller.getAccounts(req));
             success = statusCode == STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Get accounts failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Get accounts failed: ${ response.message }`);
             break;
         case "POST":
             ({ statusCode, response } = await controller.createAccount(req));
             success = statusCode == STATUS_CODE.CREATED;
-            logger.info(success ? response.message : response, success ? undefined : `Create account failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Create account failed: ${ response.message }`);
             break;
         default:
             ({ statusCode, response } = Response.methodNotAllowed);
-            logger.warn(`Method ${method} not supported`);
+            logger.warn(`Method ${ method } not supported`);
     }
 
     return NextResponse.json(response, { status: statusCode })

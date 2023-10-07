@@ -11,7 +11,7 @@ async function handler(req: NextRequest) {
     const { statusCode, response } = await controller.signup(req);
     const success = statusCode == STATUS_CODE.CREATED;
 
-    logger.info(success ? response.message : response, success ? undefined : `Signup failed: ${response.message}`);
+    logger.info(success ? response.message : response, success ? undefined : `Signup failed: ${ response.message }`);
 
     return NextResponse.json(response, { status: statusCode })
 }

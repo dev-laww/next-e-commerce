@@ -23,7 +23,7 @@ describe("ProductsController", () => {
     describe("Test getProducts", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/products", {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${ token }` }
             });
         });
 
@@ -57,7 +57,7 @@ describe("ProductsController", () => {
 
         beforeEach(() => {
             req = new NextRequest("http://localhost/products/1", {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${ token }` }
             });
         });
 
@@ -94,7 +94,7 @@ describe("ProductsController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/products", {
                 method: "POST",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
                 body: JSON.stringify({
                     name: "testing",
                     description: "Testing product description"
@@ -144,7 +144,7 @@ describe("ProductsController", () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
             req = new NextRequest("http://localhost:3000/api/products", {
                 method: "POST",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
                 body: "{}"
             });
 
@@ -166,7 +166,7 @@ describe("ProductsController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/products/1", {
                 method: "PUT",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
                 body: JSON.stringify({
                     name: "test",
                     price: 100,
@@ -236,7 +236,7 @@ describe("ProductsController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/product/1", {
                 method: "DELETE",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
             });
         });
 
@@ -346,7 +346,7 @@ describe("ProductsController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/products/1/variants", {
                 method: "DELETE",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
             });
         });
 
@@ -354,7 +354,7 @@ describe("ProductsController", () => {
             (isAllowed as jest.Mock).mockResolvedValueOnce(Response.ok());
             (Repository.product.getById as jest.Mock).mockResolvedValueOnce(product);
             (Repository.product.getVariants as jest.Mock).mockResolvedValueOnce([variant]);
-            (Repository.productVariant.deleteProductVariants as jest.Mock).mockResolvedValueOnce({count: 1});
+            (Repository.productVariant.deleteProductVariants as jest.Mock).mockResolvedValueOnce({ count: 1 });
 
             const res = await controller.deleteVariants(req, params);
 
@@ -418,7 +418,7 @@ describe("ProductsController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/products/1/variants", {
                 method: "POST",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
                 body: JSON.stringify({
                     name: "test",
                     imageUrl: "https://via.placeholder.com/150",
@@ -483,7 +483,7 @@ describe("ProductsController", () => {
             (Repository.product.getById as jest.Mock).mockResolvedValueOnce(product);
             req = new NextRequest("http://localhost:3000/api/products/1/variants", {
                 method: "POST",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
                 body: "{}"
             });
 
@@ -510,7 +510,7 @@ describe("ProductsController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/products/1/variants/1", {
                 method: "PUT",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
                 body: JSON.stringify({
                     name: "test",
                     imageUrl: "https://via.placeholder.com/150",
@@ -598,7 +598,7 @@ describe("ProductsController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/products/1/variants/1", {
                 method: "DELETE",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
             });
         });
 
@@ -718,7 +718,7 @@ describe("ProductsController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/products/1/categories/1", {
                 method: "POST",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
             });
         });
 
@@ -802,7 +802,7 @@ describe("ProductsController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/products/1/categories/1", {
                 method: "DELETE",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
             });
         });
 
@@ -927,7 +927,7 @@ describe("ProductsController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/products/1/reviews", {
                 method: "DELETE",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
             });
         });
 
@@ -935,7 +935,7 @@ describe("ProductsController", () => {
             isAllowed.mockResolvedValueOnce(Response.ok());
             (Repository.product.getById as jest.Mock).mockResolvedValueOnce(product);
             (Repository.review.getProductReviews as jest.Mock).mockResolvedValueOnce([review]);
-            (Repository.review.deleteProductReviews as jest.Mock).mockResolvedValueOnce({count: 1});
+            (Repository.review.deleteProductReviews as jest.Mock).mockResolvedValueOnce({ count: 1 });
 
             const res = await controller.deleteReviews(req, params);
 
@@ -1000,7 +1000,7 @@ describe("ProductsController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/products/1/reviews", {
                 method: "POST",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
                 body: JSON.stringify({
                     rating: 5,
                     comment: "test comment",
@@ -1063,7 +1063,7 @@ describe("ProductsController", () => {
             (Repository.product.getById as jest.Mock).mockResolvedValueOnce(product);
             req = new NextRequest("http://localhost:3000/api/products/1/reviews", {
                 method: "POST",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
                 body: "{}"
             });
 
@@ -1092,7 +1092,7 @@ describe("ProductsController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/products/1/reviews", {
                 method: "PUT",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
                 body: JSON.stringify({
                     rating: 5,
                     comment: "test comment"
@@ -1180,7 +1180,7 @@ describe("ProductsController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/products/1/reviews", {
                 method: "DELETE",
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${ token }` }
             });
         });
 

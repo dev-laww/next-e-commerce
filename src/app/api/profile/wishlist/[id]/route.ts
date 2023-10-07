@@ -14,12 +14,12 @@ async function handler(req: NextRequest, { params }: { params: { id: string } })
         case "GET":
             ({ statusCode, response } = await controller.getWishlistItem(req, params));
             success = statusCode === STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Get wishlist item failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Get wishlist item failed: ${ response.message }`);
             break;
         case "DELETE":
             ({ statusCode, response } = await controller.deleteWishlistItem(req, params));
             success = statusCode === STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Delete wishlist item failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Delete wishlist item failed: ${ response.message }`);
             break;
         default:
             ({ statusCode, response } = Response.methodNotAllowed);

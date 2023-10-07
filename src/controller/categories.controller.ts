@@ -71,8 +71,8 @@ export default class CategoriesController {
         const meta = {
             hasNextPage,
             hasPreviousPage,
-            previousPageUrl: hasPreviousPage ? `${req.nextUrl.origin}/${req.nextUrl.pathname}?${previousSearchParams.toString()}` : undefined,
-            nextPageUrl: hasNextPage ? `${req.nextUrl.origin}/${req.nextUrl.pathname}?${nextSearchParams.toString()}` : undefined,
+            previousPageUrl: hasPreviousPage ? `${ req.nextUrl.origin }/${ req.nextUrl.pathname }?${ previousSearchParams.toString() }` : undefined,
+            nextPageUrl: hasNextPage ? `${ req.nextUrl.origin }/${ req.nextUrl.pathname }?${ nextSearchParams.toString() }` : undefined,
         };
 
         return Response.ok("Categories found", {
@@ -100,7 +100,7 @@ export default class CategoriesController {
 
         const category = await this.repo.create(humps.decamelizeKeys(body) as Category);
 
-        await this.logger.info(category, `User [${session.id}] created category [${category.id}] `, true);
+        await this.logger.info(category, `User [${ session.id }] created category [${ category.id }] `, true);
         return Response.created("Category created successfully", category)
     }
 
@@ -119,7 +119,7 @@ export default class CategoriesController {
 
         const updatedCategory = await this.repo.update(categoryInfo.id, humps.decamelizeKeys(body) as Category)
 
-        await this.logger.info(updatedCategory, `User [${session.id}] updated category [${id}] `, true);
+        await this.logger.info(updatedCategory, `User [${ session.id }] updated category [${ id }] `, true);
         return Response.ok("Category update successful", updatedCategory);
     }
 
@@ -132,7 +132,7 @@ export default class CategoriesController {
 
         const deletedCategory = await this.repo.delete(category.id);
 
-        await this.logger.info(deletedCategory, `User [${session.id}] deleted category [${id}] `, true);
+        await this.logger.info(deletedCategory, `User [${ session.id }] deleted category [${ id }] `, true);
         return Response.ok("Category delete successful", deletedCategory);
     }
 

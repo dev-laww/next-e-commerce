@@ -63,7 +63,7 @@ describe("RoleRepository", () => {
     });
 
     it("Test getRolePermissions", async () => {
-        (prisma.role.findUnique as jest.Mock).mockResolvedValueOnce({permissions: [{ permission }]});
+        (prisma.role.findUnique as jest.Mock).mockResolvedValueOnce({ permissions: [{ permission }] });
 
         let result = await repo.getPermissions(1);
 
@@ -77,7 +77,7 @@ describe("RoleRepository", () => {
     });
 
     it("Test addRolePermission", async () => {
-        (prisma.role.update as jest.Mock).mockResolvedValueOnce({permissions: [{ permission }]});
+        (prisma.role.update as jest.Mock).mockResolvedValueOnce({ permissions: [{ permission }] });
 
         const result = await repo.addPermission(1, 1);
 

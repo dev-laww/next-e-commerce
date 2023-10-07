@@ -94,7 +94,7 @@ describe("ShippingMethodsController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/shipping-methods", {
                 method: "POST",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
                 body: JSON.stringify({
                     name: "test",
                     price: 9.99
@@ -143,7 +143,7 @@ describe("ShippingMethodsController", () => {
         it("returns 422 if wrong body", async () => {
             req = new NextRequest("http://localhost:3000/api/shipping-methods", {
                 method: "POST",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
                 body: "{}"
             });
             isAllowed.mockResolvedValueOnce(Response.ok());
@@ -166,7 +166,7 @@ describe("ShippingMethodsController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/shipping-methods", {
                 method: "PUT",
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${ token }` },
                 body: JSON.stringify({
                     name: "test",
                     price: 9.99
@@ -235,7 +235,7 @@ describe("ShippingMethodsController", () => {
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/shipping-methods", {
                 method: "DELETE",
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${ token }` }
             });
         });
 
@@ -294,7 +294,7 @@ describe("ShippingMethodsController", () => {
 
         beforeEach(() => {
             req = new NextRequest("http://localhost:3000/api/shipping-methods/1/orders", {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${ token }` }
             });
         });
 

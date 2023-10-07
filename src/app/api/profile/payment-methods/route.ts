@@ -14,17 +14,17 @@ async function handler(req: NextRequest) {
         case "GET":
             ({ statusCode, response } = await controller.getPaymentMethods(req));
             success = statusCode === STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Get payment methods failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Get payment methods failed: ${ response.message }`);
             break;
         case "POST":
             ({ statusCode, response } = await controller.addPaymentMethod(req));
             success = statusCode === STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Add payment method failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Add payment method failed: ${ response.message }`);
             break;
         case "DELETE":
             ({ statusCode, response } = await controller.deletePaymentMethods(req));
             success = statusCode === STATUS_CODE.OK;
-            logger.info(success ? response.message : response, success ? undefined : `Delete payment methods failed: ${response.message}`);
+            logger.info(success ? response.message : response, success ? undefined : `Delete payment methods failed: ${ response.message }`);
             break;
         default:
             ({ statusCode, response } = Response.methodNotAllowed);
