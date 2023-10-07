@@ -79,7 +79,7 @@ export default class CouponsController {
         };
 
         await this.logger.info(`Retrieved ${result.length} variants`);
-        return Response.ok("Variants found", {
+        return Response.ok("Coupons found", {
             result,
             meta,
         });
@@ -102,10 +102,10 @@ export default class CouponsController {
         let code = body.code;
 
         if (code) {
-            const coupon = await this.repo.getByCode(code.toUpperCase());
+            const coupon = await this.repo.getByCode(code);
             if (coupon) return Response.badRequest("Coupon code already exists");
 
-            code ??= code.toUpperCase();
+            code ??= code;
         }
 
         code ??= generateCouponCode(6);

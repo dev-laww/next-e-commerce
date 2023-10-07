@@ -14,7 +14,10 @@ namespace Validators {
             z.number().positive("Discount must be positive")
         ).optional(),
         pageToken: z.string().optional(),
-        limit: z.number().optional()
+        limit: z.preprocess(
+            a => parseInt(a as string, 10),
+            z.number().positive("Limit must be positive")
+        ).optional()
     });
 
     export const create = z.object({
