@@ -74,7 +74,7 @@ export const verifyRefreshToken = async (
 
 export const generateRandomToken = () => crypto.randomBytes(32).toString('hex');
 
-export const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
+export const generateOTP = () => crypto.randomInt(100000, 999999).toString();
 
 export function generatePageToken<T>(token: T) {
     const userJson = JSON.stringify(token);
@@ -93,7 +93,7 @@ export function parsePageToken<T>(token: string): PageToken<T> | undefined {
 }
 
 export function generateCouponCode(length: number = 10) {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    const chars = "AaBbCcDdEeFfGgHhJjKkLlMmNnPpQqRrSsTtUuVvWwXxYyZz1234567890";
     let coupon = "";
 
     for (let i = 0; i < length; i++) {
